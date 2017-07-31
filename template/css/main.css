@@ -15,6 +15,11 @@
   overflow: hidden;
 }
 
+#landing-page .intro-text {
+	background-color: #000;
+	opacity: 0.9;
+}
+
 #landing-page .input-field {
 	margin-top: 0;
 }
