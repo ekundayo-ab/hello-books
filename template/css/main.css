@@ -119,3 +119,19 @@ nav a {
 .category-select {
 	border: 2px solid red;
 }
+
+.tabs .tab a{
+	color: #00A8A8;
+}
+
+.tabs .tab a:hover, .tabs .tab a.active {
+	color:teal;
+}
+
+.tabs .indicator {
+	background-color: teal;
+}
+
+.book-detail {
+	padding-left:30px !important;
+}
