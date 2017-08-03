@@ -1,0 +1,54 @@
+{
+  "name": "hello-books",
+  "version": "1.0.0",
+  "description": "Hello-Books​ is a simple application that helps manage a library and its processes like stocking, tracking and renting books",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon ./bin/www",
+    "test": "mocha || true",
+    "test:watch": "npm run test --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ekundayo-ab/hello-books.git"
+  },
+  "keywords": [
+    "library",
+    "books",
+    "book"
+  ],
+  "author": "Ekundayo Abiona",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ekundayo-ab/hello-books/issues"
+  },
+  "homepage": "https://github.com/ekundayo-ab/hello-books#readme",
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "chai": "^4.1.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.1.0",
+    "mocha": "^3.5.0",
+    "prettier-eslint": "^6.4.2"
+  },
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.2",
+    "eslint": "^4.3.0",
+    "express": "^4.15.3",
+    "jsonwebtoken": "^7.4.1",
+    "lodash": "^4.17.4",
+    "morgan": "^1.8.2",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
+    "pg": "^7.0.2",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.4.2",
+    "sequelize-cli": "^2.7.0"
+  },
+  "directories": {
+    "test": "test"
+  }
+}
