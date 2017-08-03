@@ -1,7 +1,6 @@
 const User = require('../models').User;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const app = require('../../app');
 
 module.exports = {
   create(req, res) {
@@ -29,13 +28,18 @@ module.exports = {
             res.send({ success: false, message: 'Authentication failed. Wrong password' });
           } else {
             const token = jwt.sign({
-              exp: 1440,
               data: user,
-            }, `${user.username} hello-books`);
-            res.send({ success: true, message: `Hi ${user.username}, you are logged in`, token });
+            }, 'hello-books', { expiresIn: 60 * 60 });
+            res.json({ success: true, message: `Hi ${user.username}, you are logged in`, token });
           }
         }
       })
       .catch((error) => { res.status(404).send(error); });
+  },
+  list(req, res) {
+    return User
+      .findAll({}).then((user) => {
+        res.send({ user });
+      });
   },
 };

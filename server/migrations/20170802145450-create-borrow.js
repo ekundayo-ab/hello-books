@@ -15,6 +15,7 @@ module.exports = {
           key: 'id',
           as: 'userId',
         },
+        allowNull: false,
       },
       bookId: {
         type: Sequelize.INTEGER,
@@ -24,6 +25,7 @@ module.exports = {
           key: 'id',
           as: 'bookId',
         },
+        allowNull: false,
       },
       quantity: {
         type: Sequelize.INTEGER,
