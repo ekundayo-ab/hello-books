@@ -35,6 +35,39 @@ class BorrowController {
       })
       .catch((error) => { res.status(404).send(error); });
   }
+
+  static returnBook(req, res) {
+    return Borrow
+      .update({
+        returned: true,
+      }, {
+        where: {
+          id: req.body.bookId,
+          userId: req.decoded.data.id,
+        },
+      })
+      .then((book) => {
+        if (!book) {
+          res.send.status(404).send({ success: false, message: 'Book not found' });
+        }
+        res.status(201).send({ success: true, message: 'Book, returned but would be verified by admin' });
+      })
+      .catch((error) => { res.status(404).send(error); });
+  }
+
+  static listNotReturned(req, res) {
+    return Borrow
+      .findAll({
+        where: {
+          userId: req.params.userId,
+          returned: false,
+        },
+      })
+      .then((borrow) => {
+        res.status(200).send(borrow);
+      })
+      .catch((error) => { res.send(error); });
+  }
 }
 
 export default BorrowController;

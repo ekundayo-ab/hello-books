@@ -3,8 +3,6 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import router from './server/routes/';
 
-require('dotenv').config();
-
 const port = process.env.PORT || 8000;
 const app = express();
 app.use(morgan('dev'));
