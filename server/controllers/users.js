@@ -33,7 +33,7 @@ class UserController {
       })
       .then((user) => {
         if (!user) {
-          res.send({ success: true, message: 'Authentication failed. User not found' });
+          res.send({ success: false, message: 'Authentication failed. User not found' });
         } else if (user) {
           if (!bcrypt.compareSync(req.body.password, user.password)) {
             res.send({ success: false, message: 'Authentication failed. Wrong password' });
@@ -54,8 +54,15 @@ class UserController {
    * @param {*} res 
    */
   static list(req, res) {
+    if (req.decoded.data.role !== 2) {
+      res.status(403).send({ success: false, message: 'You are not allowed to view all users' });
+    }
     return User
-      .findAll({}).then((user) => {
+      .findAll({
+        order: [
+          ['createdAt', 'ASC'],
+        ],
+      }).then((user) => {
         res.send({ user });
       });
   }
