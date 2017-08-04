@@ -1,19 +1,23 @@
-const usersController = require('../controllers').users;
-const booksController = require('../controllers').books;
-const borrowsController = require('../controllers').borrows;
-const usersMiddleware = require('../middlewares').users;
+import express from 'express';
+import usersController from '../controllers/users';
+import booksController from '../controllers/books';
+import borrowsController from '../controllers/borrows';
+import authMiddleware from '../middlewares/auth';
 
-module.exports = (app) => {
-  app.get('/api', (req, res) => res.status(200).send({
-    message: 'Welcome to the Todos API!',
-  }));
+const Router = express.Router();
 
-  app.post('/api/users/signup', usersController.create);
-  app.post('/api/users/signin', usersController.retrieve);
-  app.use(usersMiddleware.authenticate);
-  app.get('/api/users', usersController.list);
-  app.post('/api/books', booksController.create);
-  app.put('/api/books/:bookId', booksController.update);
-  app.get('/api/books', booksController.list);
-  app.post('/api/users/:userId/books', borrowsController.create);
-};
+Router.get('/api', (req, res) => res.status(200).send({
+  message: 'Welcome to the Todos API!',
+}));
+
+Router.post('/api/users/signup', usersController.create); // Route to sign up
+Router.post('/api/users/signin', usersController.retrieve); // Route to sign in
+Router.use(authMiddleware.authenticate); // Authentication middleware
+Router.get('/api/users', usersController.list);
+Router.post('/api/books', booksController.create); // Route to add new book
+Router.put('/api/books/:bookId', booksController.update); // Route to modify a book information
+Router.delete('/api/books/:bookId', booksController.destroy); // Route to delete a book 
+Router.get('/api/books', booksController.list); // Route to list all books in library
+Router.post('/api/users/:userId/books', borrowsController.create); // Route to borrow a book
+
+export default Router;

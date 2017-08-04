@@ -1,23 +1,22 @@
-const express = require('express');
-const logger = require('morgan');
-const bodyParser = require('body-parser');
-const _ = require('lodash');
+import express from 'express';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
+import router from './server/routes/';
 
-// Set up the express app
+require('dotenv').config();
+
+const port = process.env.PORT || 8000;
 const app = express();
-
-// Log requests to the console.
-app.use(logger('dev'));
-
-// Parse incoming requests data (https://github.com/expressjs/body-parser)
-app.use(bodyParser.json());
+app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-// Setup a default catch-all route that sends back a welcome message in JSON format.
-require('./server/routes')(app);
+app.use(router);
 
-app.get('*', (req, res) => res.status(200).send({
-  message: 'Welcome to the beginning of nothingness.',
-}));
+app.listen(port, (err) => {
+  /* eslint-disable no-console */
+  if (err) console.log(err);
+  console.log('started');
+});
 
-module.exports = app;
+export default app;

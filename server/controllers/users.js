@@ -1,9 +1,14 @@
-const User = require('../models').User;
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { User } from '../models';
 
-module.exports = {
-  create(req, res) {
+class UserController {
+  /**
+   * 
+   * @param {*} req 
+   * @param {*} res 
+   */
+  static create(req, res) {
     return User
       .create({
         username: req.body.username,
@@ -12,8 +17,14 @@ module.exports = {
       })
       .then((user) => { res.status(201).send({ success: true, message: `Hi ${user.username}, registration successful!` }); })
       .catch((error) => { res.status(400).send(error); });
-  },
-  retrieve(req, res) {
+  }
+
+  /**
+   * 
+   * @param {*} req 
+   * @param {*} res 
+   */
+  static retrieve(req, res) {
     return User
       .findOne({
         where: {
@@ -35,11 +46,19 @@ module.exports = {
         }
       })
       .catch((error) => { res.status(404).send(error); });
-  },
-  list(req, res) {
+  }
+
+  /**
+   * 
+   * @param {*} req 
+   * @param {*} res 
+   */
+  static list(req, res) {
     return User
       .findAll({}).then((user) => {
         res.send({ user });
       });
-  },
-};
+  }
+}
+
+export default UserController;

@@ -1,7 +1,16 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
-module.exports = {
-  authenticate(req, res, next) {
+/**
+ * 
+ */
+class Authenticate {
+  /**
+   * 
+   * @param {*} req 
+   * @param {*} res 
+   * @param {*} next 
+   */
+  static authenticate(req, res, next) {
     // check header or url parameters or post parameters for token
     const token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (token) {
@@ -16,5 +25,7 @@ module.exports = {
     } else {
       res.status(403).send({ success: false, message: 'No token provided' });
     }
-  },
-};
+  }
+}
+
+module.exports = Authenticate;
