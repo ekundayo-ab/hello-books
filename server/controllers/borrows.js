@@ -1,9 +1,16 @@
-const Borrow = require('../models').Borrow;
-const User = require('../models').User;
-const Book = require('../models').Book;
+import { User, Book, Borrow } from '../models';
+import Helper from '../helpers';
 
-module.exports = {
-  create(req, res) {
+/**
+ * 
+ */
+class BorrowController {
+  /**
+   * 
+   * @param {*} req 
+   * @param {*} res 
+   */
+  static create(req, res) {
     return User
       .find({
         where: {
@@ -22,22 +29,12 @@ module.exports = {
             bookId: req.body.bookId,
           })
           .then(() => {
-            return Book
-              .find({
-                where: {
-                  id: req.body.bookId,
-                },
-              })
-              .then((book) => {
-                if (!book) {
-                  res.status(404).send({ success: false, message: 'Book not found' });
-                }
-                res.status(201).send({ success: true, message: `${book.title}, just borrowed` });
-              })
-              .catch((error) => { res.status(404).send({ error }); });
+            Helper.findBook(Book, req.body.bookId, req, res);
           })
           .catch(() => { res.status(404).send({ success: false, message: 'Book not found' }); });
       })
       .catch((error) => { res.status(404).send(error); });
-  },
-};
+  }
+}
+
+export default BorrowController;
