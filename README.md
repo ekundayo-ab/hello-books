@@ -1,37 +1,27 @@
-## Welcome to GitHub Pages
+## Welcome to HelloBooks
 
-You can use the [editor on GitHub](https://github.com/ekundayo-ab/hello-books/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+HelloBooks is an application that helps manage a library and its processes like stocking, tracking and renting books.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+With this application users are able to find and rent books. The application also has an admin section where the admin can do things like add books, delete books, increase the quantity of a book etc.
 
-### Markdown
+### Technology Stack
+**UI & Templates**
+1. HTML & CSS
+2. Materialize CSS Framework
+3. Javascript
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+**Server Side**
+1. NodeJs-Express
+2. Express
+3. Sequelize
 
-```markdown
-Syntax highlighted code block
+**Client Side**
+1. React(Redux)
 
-# Header 1
-## Header 2
-### Header 3
+_Project still in progress_
 
-- Bulleted
-- List
+### Questions
+For more details contact ekprogs@gmail.com
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ekundayo-ab/hello-books/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+### Support or New Features
+Having new features you feel I can add to HelloBooks? Kindly contact as above, I'll look into it. Thanks.
