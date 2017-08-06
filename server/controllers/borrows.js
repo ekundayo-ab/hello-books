@@ -59,14 +59,21 @@ class BorrowController {
     return Borrow
       .findAll({
         where: {
-          userId: req.params.userId,
+          userId: req.decoded.data.id,
           returned: false,
         },
+        include: [
+          { model: Book, as: 'book', required: true },
+        ],
       })
       .then((borrow) => {
-        res.status(200).send(borrow);
+        const p = [];
+        for (let i = 0; i < borrow.length; i += 1) {
+          p[i] = borrow[i].book;
+        }
+        res.status(200).send(p);
       })
-      .catch((error) => { res.send(error); });
+      .catch((error) => { res.send(error.toString()); });
   }
 }
 

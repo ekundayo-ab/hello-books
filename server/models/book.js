@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   Book.associate = (models) => {
     Book.hasMany(models.Borrow, {
       foreignKey: 'bookId',
-      as: 'borrow',
+      as: 'book',
     });
   };
   return Book;

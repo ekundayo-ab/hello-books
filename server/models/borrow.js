@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Borrow.associate = (models) => {
     Borrow.belongsTo(models.Book, {
       foreignKey: 'bookId',
+      as: 'book',
       onDelete: 'CASCADE',
     });
     Borrow.belongsTo(models.User, {
