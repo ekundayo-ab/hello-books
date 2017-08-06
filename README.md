@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/ekundayo-ab/hello-books.svg?branch=master)](https://travis-ci.org/ekundayo-ab/hello-books)
 [![Coverage Status](https://coveralls.io/repos/github/ekundayo-ab/hello-books/badge.svg?branch=master)](https://coveralls.io/github/ekundayo-ab/hello-books?branch=master)
 ## Welcome to HelloBooks
 
