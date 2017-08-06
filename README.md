@@ -1,3 +1,4 @@
+[![Coverage Status](https://coveralls.io/repos/github/ekundayo-ab/hello-books/badge.svg?branch=master)](https://coveralls.io/github/ekundayo-ab/hello-books?branch=master)
 ## Welcome to HelloBooks
 
 HelloBooks is an application that helps manage a library and its processes like stocking, tracking and renting books.
