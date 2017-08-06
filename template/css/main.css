@@ -4,49 +4,63 @@
         url("../fonts/chunkfive/Chunkfive.otf"); /* IE */
 }
 
+.page-bg {
+  background: url('../images/bg_landing.jpg');
+  -moz-filter: blur(0.5px);
+  -o-filter: blur(0.5px);
+  -ms-filter: blur(0.5px);
+  filter: blur(0.5px);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
 /* For the landing page */
-#landing-page { 
+.landing-page { 
   background: url(../images/bg_landing.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
   padding: 0 20px 0 20px;
-  overflow: hidden;
 }
 
-#landing-page .intro-text {
-	background-color: #000;
-	opacity: 0.9;
+.landing-page .intro-text {
+	-webkit-text-stroke: 1px teal; 
+	-moz-text-stroke: 1px #999;
+	text-stroke:1px #999;
 }
 
-#landing-page .input-field {
+.landing-page .input-field {
 	margin-top: 0;
 }
 
-#landing-page nav .brand-logo {
+.landing-page nav .brand-logo {
 	font-family: Chunkfive;
 	margin-left: 20px;
 	padding: 0 0 0 20px;
 }
 
-#landing-page .intro-text {
+.landing-page .intro-text {
 	padding: 20px;
 	text-shadow: 5px 5px 5px #000; 
 }
 
-#landing-page .intro-text h1 {
-	color: #fff;
+.landing-page .intro-text h1 {
+	font-size: 6em;
 }
 
-#landing-page .or {
+.landing-page .or {
 	color: #666;
 	font-weight: bold;
 	font-size: 20px;
 }
 
 /* For shelf page */
-#shelf-page { 
+.shelf-page { 
   background: url(../images/bg_shelf.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -77,11 +91,11 @@
 
 .nav-top-marker { color: #0097FF; }
 
-#shelf-page nav {
+.shelf-page nav {
 	background-color: #fff;
 }
 
-#shelf-page nav ul li a {
+.shelf-page nav ul li a {
 	color: #666;
 	font-size: 16px;
 }
@@ -134,4 +148,65 @@ nav a {
 
 .book-detail {
 	padding-left:30px !important;
+}
+
+.input-field.suffix i {
+  position: absolute;
+  width: 3rem;
+  font-size: 2rem;
+  transition: color .2s;
+  top: 0px;
+  right: 0px;
+}
+
+.input-field.suffix i.active {
+  color: #26a69a;
+}
+
+.input-field.suffix input,
+.input-field.suffix textarea {
+  margin-right: 3rem;
+  width: 92%;
+  width: calc(100% - 3rem);
+}
+
+.input-field.suffix textarea {
+  padding-top: .8rem;
+}
+
+.input-field.suffix label {
+  margin-right: 3rem;
+}
+
+@media only screen and (max-width: 992px) {
+  .input-field.suffix input {
+    width: 86%;
+    width: calc(100% - 3rem);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .input-field.suffix input {
+    width: 80%;
+    width: calc(100% - 3rem);
+  }
+}
+
+/* Book Listing */
+.book .card-content {
+	padding:0;
+	text-align: center;
+}
+
+.book .card-content .card-title {
+	font-size:16px;
+	font-weight:bold;
+	margin-bottom: 0;
+}
+.book-title {
+	font-size:16px;
+}
+.book-author {
+	font-size:14px;
+	font-weight:bold;
 }
