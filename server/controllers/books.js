@@ -114,4 +114,4 @@ class BookController {
   }
 }
 
-module.exports = BookController;
+export default BookController;

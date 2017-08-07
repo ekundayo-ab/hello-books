@@ -1,5 +1,6 @@
-module.exports = {
-  up: (queryInterface, Sequelize) => {
+
+class Migration {
+  static up(queryInterface, Sequelize) {
     queryInterface.createTable('Borrows', {
       id: {
         allowNull: false,
@@ -45,8 +46,10 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
-  },
-  down: (queryInterface /* , Sequelize */) => {
+  }
+  static down(queryInterface /* , Sequelize */) {
     queryInterface.dropTable('Borrows');
-  },
-};
+  }
+}
+
+export default Migration;
