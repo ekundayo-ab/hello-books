@@ -1,7 +1,6 @@
-[![Issue Count](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/issue_count.svg)](https://codeclimate.com/github/codeclimate/codeclimate)
+[![Build Status](https://travis-ci.org/ekundayo-ab/hello-books.svg?branch=master)](https://travis-ci.org/ekundayo-ab/hello-books)
 [![Test Coverage](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/coverage.svg)](https://codeclimate.com/github/codeclimate/codeclimate/coverage)
 [![Code Climate](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate)
-[![Build Status](https://travis-ci.org/ekundayo-ab/hello-books.svg?branch=master)](https://travis-ci.org/ekundayo-ab/hello-books)
 [![Coverage Status](https://coveralls.io/repos/github/ekundayo-ab/hello-books/badge.svg?branch=master)](https://coveralls.io/github/ekundayo-ab/hello-books?branch=master)
 ## Welcome to HelloBooks
 
