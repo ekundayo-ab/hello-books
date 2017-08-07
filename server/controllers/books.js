@@ -7,12 +7,12 @@ const Book = model.Book;
  */
 class BookController {
   /**
-   * 
-   * @param {*} req 
-   * @param {*} res 
+   *
+   * @param {*} req
+   * @param {*} res
    */
   static create(req, res) {
-    // Check if user has administrative priviledges 
+    // Check if user has administrative priviledges
     if (req.decoded.data.role !== 2) {
       res.status(403).send({ success: false, message: 'You are not allowed to add book' });
     }
@@ -29,9 +29,9 @@ class BookController {
       .catch((error) => { res.status(400).send(error); });
   }
   /**
-   * 
-   * @param {*} req 
-   * @param {*} res 
+   *
+   * @param {*} req
+   * @param {*} res
    */
   static update(req, res) {
     if (req.decoded.data.role !== 2) {
@@ -71,9 +71,9 @@ class BookController {
       .catch((error) => { res.status(400).send(error); });
   }
   /**
-   * 
-   * @param {*} req 
-   * @param {*} res 
+   *
+   * @param {*} req
+   * @param {*} res
    */
   static destroy(req, res) {
     if (req.decoded.data.role !== 2) {
@@ -90,14 +90,15 @@ class BookController {
           return res.status(404).send({ success: false, message: 'Book not found' });
         }
         return book.destroy();
-      }).then(() => {
-        return res.status(200).send({ success: true, message: 'Book successfully deleted' });
+      })
+      .then(() => {
+        res.status(200).send({ success: true, message: 'Book successfully deleted' });
       }).catch(error => res.status(400).send(error));
   }
   /**
-   * 
-   * @param {*} req 
-   * @param {*} res 
+   *
+   * @param {*} req
+   * @param {*} res
    */
   static list(req, res) {
     return Book
