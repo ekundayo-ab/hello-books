@@ -4,9 +4,10 @@
   "description": "Hello-Books​ is a simple application that helps manage a library and its processes like stocking, tracking and renting books",
   "main": "index.js",
   "scripts": {
+    "start": "babel-node bin/www",
     "start:dev": "babel-watch app.js",
-    "test": "mocha || true",
-    "test:watch": "npm run test --watch"
+    "test": "mocha --compilers js:babel-register",
+    "test:watch": "npm test -- --watch"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const Borrow = sequelize.define('Borrow', {
     quantity: {
       type: DataTypes.INTEGER,
