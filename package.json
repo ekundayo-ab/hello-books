@@ -7,10 +7,10 @@
     "test": "test"
   },
   "scripts": {
+    "start": "babel-node app.js",
+    "start:dev": "babel-watch app.js",
     "test": "mocha test/* --compilers js:babel-register || true ",
-    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "start": "npm run build && node dist/app.js",
-    "s": "babel-watch app.js"
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files"
   },
   "repository": {
     "type": "git",
