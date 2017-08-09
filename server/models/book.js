@@ -25,6 +25,11 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    category: {
+      type: DataTypes.STRING,
+      defaultValue: 'Unsorted',
+      allowNull: false,
+    },
   });
 
   Book.associate = (models) => {

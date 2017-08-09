@@ -1,13 +1,16 @@
 export default (sequelize, DataTypes) => {
   const Borrow = sequelize.define('Borrow', {
-    quantity: {
-      type: DataTypes.INTEGER,
-      defaultValue: 1,
-      allowNull: false,
-    },
     returned: {
       type: DataTypes.BOOLEAN,
-      defaultValue: 0,
+      defaultValue: false,
+      allowNull: false,
+    },
+    dueDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    actualReturnDate: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
   });

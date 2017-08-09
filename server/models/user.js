@@ -16,14 +16,15 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
-      validate: {
-        isEmail: true,
-      },
     },
     role: {
-      type: DataTypes.INTEGER,
-      defaultValue: 1,
+      type: DataTypes.STRING,
+      defaultValue: 'normal',
       allowNull: false,
+    },
+    level: {
+      type: DataTypes.STRING,
+      defaultValue: 'bronze',
     },
   });
 
