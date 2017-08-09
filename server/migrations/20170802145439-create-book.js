@@ -25,11 +25,16 @@ module.exports = {
       },
       status: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        defaultValue: true,
         allowNull: true,
       },
       quantity: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      category: {
+        type: Sequelize.STRING,
+        defaultValue: 'Unsorted',
         allowNull: false,
       },
       createdAt: {
