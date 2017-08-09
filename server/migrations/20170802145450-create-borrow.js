@@ -28,13 +28,17 @@ module.exports = {
         },
         allowNull: false,
       },
-      quantity: {
-        type: Sequelize.INTEGER,
-        defaultValue: 1,
-        allowNull: false,
-      },
       returned: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
+      dueDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      actualReturnDate: {
+        type: Sequelize.DATE,
         allowNull: false,
       },
       createdAt: {

@@ -1,6 +1,9 @@
-import { User, Book, Borrow } from '../models';
+import model from '../models';
 import Helper from '../helpers';
 
+const Book = model.Book;
+// const User = model.User;
+const Borrow = model.Borrow;
 /**
  * 
  */
@@ -11,48 +14,55 @@ class BorrowController {
    * @param {*} res 
    */
   static create(req, res) {
-    return User
-      .find({
+    return Borrow
+      .findOrCreate({
         where: {
-          id: req.params.userId,
+          userId: req.params.userId,
+          bookId: req.body.bookId,
+          returned: false,
+        },
+        defaults: {
+          returned: false,
+          userId: req.params.userId,
+          bookId: req.body.bookId,
+          dueDate: Helper.addDays(3),
+          actualReturnDate: Date.now(),
         },
       })
-      .then((user) => {
-        if (!user) {
-          res.status(403).send({ success: false, message: 'Forbidden, not allowed!' });
+      .spread((borrow, created) => {
+        if (created) {
+          return res.status(200).send({ success: 'Book successfully borrowed, enjoy!' });
         }
-        return Borrow
-          .create({
-            quantity: req.body.quantity,
-            returned: 0,
-            userId: user.id,
-            bookId: req.body.bookId,
-          })
-          .then(() => {
-            Helper.findBook(Book, req.body.bookId, req, res);
-          })
-          .catch(() => { res.status(404).send({ success: false, message: 'Book not found' }); });
+        return res.status(400).send({ success: 'false', message: 'You have borrowed this book before!' });
       })
-      .catch((error) => { res.status(404).send(error); });
+      .then(() => {
+        res.status(200).send({ success: true, message: 'Book successfully borrowed' });
+      })
+      .catch((error) => {
+        res.status(400).send(error);
+      });
   }
 
   static returnBook(req, res) {
     return Borrow
-      .update({
-        returned: true,
-      }, {
+      .findOne({
         where: {
           id: req.body.bookId,
-          userId: req.decoded.data.id,
         },
       })
-      .then((book) => {
-        if (!book) {
-          res.send.status(404).send({ success: false, message: 'Book not found' });
-        }
-        res.status(201).send({ success: true, message: 'Book, returned but would be verified by admin' });
+      .then((borrow) => {
+        return borrow
+          .update({
+            returned: true,
+            actualReturnDate: Date.now(),
+          })
+          .then(() => {
+            Helper.addReturnedBook(Book, req.body.bookId, req, res);
+            res.status(200).send({ success: true, message: 'Book successfully returned' });
+          })
+          .catch(error => res.status(400).send(error));
       })
-      .catch((error) => { res.status(404).send(error); });
+      .catch(error => res.status(400).send(error));
   }
 
   static listNotReturned(req, res) {
