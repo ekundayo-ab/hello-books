@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User } from '../models';
+import models from '../models';
+
+const User = models.User;
 
 class UserController {
   /**
@@ -9,14 +11,18 @@ class UserController {
    * @param {*} res 
    */
   static create(req, res) {
-    return User
+    if (req.body.password === undefined || req.body.username === undefined
+      || req.body.email === undefined) {
+      res.status(400).send({ success: false, message: 'Bad request data, enter valid inputs.' });
+    }
+    User
       .create({
         username: req.body.username,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 10),
       })
       .then((user) => { res.status(201).send({ success: true, message: `Hi ${user.username}, registration successful!` }); })
-      .catch((error) => { res.status(400).send(error); });
+      .catch((error) => { res.status(400).send({ success: false, message: `Oops! something happened ${error.message}` }); });
   }
 
   /**
@@ -28,7 +34,7 @@ class UserController {
     return User
       .findOne({
         where: {
-          email: req.body.email,
+          username: req.body.username,
         },
       })
       .then((user) => {
