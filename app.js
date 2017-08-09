@@ -11,6 +11,10 @@ app.use(bodyParser.json());
 
 app.use('/api/v1', router);
 
+app.get('*', (req, res) => {
+  res.status(404).send('Ooops, and that was surprising, you might want to come in at /api/v1. See you!');
+});
+
 app.listen(port, (err) => {
   /* eslint-disable no-console */
   if (err) console.log(err);
