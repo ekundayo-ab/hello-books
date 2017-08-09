@@ -26,8 +26,13 @@ module.exports = {
         allowNull: false,
       },
       role: {
-        type: Sequelize.INTEGER,
-        defaultValue: 1,
+        type: Sequelize.STRING,
+        defaultValue: 'normal',
+        allowNull: false,
+      },
+      level: {
+        type: Sequelize.STRING,
+        defaultValue: 'bronze',
         allowNull: false,
       },
       createdAt: {
