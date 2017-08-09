@@ -16,29 +16,30 @@ class BookController {
     if (req.decoded.data.role !== 'admin') {
       return res.status(403).send({ success: false, message: 'You are not allowed to add book' });
     }
-    return Book
-      .create({
-        title: req.body.title,
-        author: req.body.author,
-        description: req.body.description,
-        image: req.body.image,
-        status: 1,
-        quantity: req.body.quantity,
+    return Book.findOne({
+      where: { title: req.body.title },
+    })
+      .then((foundBook) => {
+        if (foundBook) {
+          return res.status(409).send({ success: false, messsage: `Conflict! ${req.body.title} exists already`, foundBook });
+        }
+        return Book
+          .create({
+            title: req.body.title,
+            author: req.body.author,
+            description: req.body.description,
+            image: req.body.image,
+            status: 1,
+            quantity: req.body.quantity,
+          })
+          .then((book) => {
+            res.status(200).send({ success: true, message: `${book.title}, succesfully added` });
+          })
+          .catch((error) => { res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` }); });
       })
-      .then((book) => {
-        Book.findOne({
-          where: { title: req.body.title },
-        }).then((foundBook) => {
-          if (foundBook) {
-            return res.status(409).send({ success: false, messsage: `Conflict! ${req.body.title} exists already`, foundBook });
-          }
-          return res.status(200).send({ success: true, message: `${book.title}, succesfully added` });
-        })
-          .catch((error) => { 
-            res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
-          });
-      })
-      .catch((error) => { res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` }); });
+      .catch((error) => {
+        res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
+      });
   }
   /**
    *
