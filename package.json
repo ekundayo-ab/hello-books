@@ -7,10 +7,12 @@
     "test": "test"
   },
   "scripts": {
-    "start": "babel-node app.js",
+    "db:migrate": "cross-env DATABASE_URL=postgres://tkopkwlmyxbcdm:5170b4ad44d4faa540d5d26e8a6c7710b7779f8f2cc44afaf5b79aa4defc19e5@ec2-107-20-188-239.compute-1.amazonaws.com:5432/d698t2uetpa3gf sequelize db:migrate",
+    "start": "node dist/app.js",
     "start:dev": "babel-watch app.js",
     "test": "mocha test/* --compilers js:babel-register || true ",
-    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files"
+    "heroku-postbuild": "NODE_ENV=production && npm run build && NODE_END=production sequelize db:migrate",
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./npm-debug.log --copy-files"
   },
   "repository": {
     "type": "git",
