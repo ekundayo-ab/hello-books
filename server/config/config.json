@@ -9,7 +9,7 @@
   "test": {
     "username": "ekundayo",
     "password": "ekundayo",
-    "database": "hello-books-test",
+    "database": "testdb",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
