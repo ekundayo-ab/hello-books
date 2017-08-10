@@ -23,7 +23,7 @@ class Authenticate {
         }
       });
     } else {
-      res.status(403).send({ success: false, message: 'Forbidden! Not allowed' });
+      res.status(404).send({ success: false, message: 'Looking for? Not Found!' });
     }
   }
 }
