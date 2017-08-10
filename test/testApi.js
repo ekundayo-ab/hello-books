@@ -11,10 +11,8 @@ const server = supertest.agent(app);
 let loggedInToken;
 let normalToken;
 
-
 User.destroy({ where: {} });
 Book.destroy({ where: {} });
-
 describe('A typical User registration', () => {
   it('Should allow admin user to be created', (done) => {
     server
@@ -208,5 +206,41 @@ describe('A library with books', () => {
         expect(res.statusCode).to.equal(200);
         done();
       });
+  });
+  it('should prevent not authenticated user from viewing all books', (done) => {
+    server
+      .get('/api/v1/books')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .expect(401)
+      .end((err, res) => {
+        expect(res.body).to.have.property('success');
+        expect(res.body).to.have.property('message');
+        expect(res.body.success).to.equal(false);
+        expect(res.statusCode).to.equal(401);
+        expect(res.body.message).to.equal('Unauthenticated, token not found');
+        done();
+      });
+  });
+  it('should allow authenticated users to view all books', (done) => {
+    server
+      .get('/api/v1/books')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .set('x-access-token', normalToken)
+      .expect(200)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        expect(res.body).to.be.a('array');
+        done();
+      });
+  });
+  it('should allow only authenticated users to modify book information', (done) => {
+    const editBook = { title: 'Learn Heroku', author: 'Heroks Master', description: 'Learn and master heroku', quantity: 30 };
+    server
+      .put(`/api/v1/books/${+25}`)
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .set('x-access-token', loggedInToken)
+      .send(editBook)
+      .expect(200);
+    done();
   });
 });
