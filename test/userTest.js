@@ -3,7 +3,6 @@ import chai from 'chai';
 import app from '../app';
 import models from '../server/models/';
 
-const should = chai.should;
 const expect = chai.expect;
 
 const server = supertest.agent(app);
