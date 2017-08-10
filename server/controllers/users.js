@@ -13,9 +13,9 @@ class UserController {
   static create(req, res) {
     if (req.body.password === undefined || req.body.username === undefined
       || req.body.email === undefined) {
-      res.status(400).send({ success: false, message: 'Bad request data, enter valid inputs.' });
+      return res.status(400).send({ success: false, message: 'Bad request data, enter valid inputs.' });
     }
-    User
+    return User
       .create({
         username: req.body.username,
         email: req.body.email,

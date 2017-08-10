@@ -20,11 +20,7 @@ app.get('*', (req, res) => {
 app.listen(port, (err) => {
   /* eslint-disable no-console */
   if (err) console.log(err);
-  console.log('started');
-  console.log(process.env.USER_DEV);
-  console.log(process.env.PASS_DEV);
-  console.log(process.env.HOST_DEV);
-  console.log(process.env.DB_DEV);
+  console.log(`app started on port ${port} running in ${app.get('env')}`);
 });
 
 export default app;
