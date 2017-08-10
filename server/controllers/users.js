@@ -31,6 +31,9 @@ class UserController {
    * @param {*} res 
    */
   static retrieve(req, res) {
+    if (!req.body.password || !req.body.username) {
+      return res.status(400).send({ success: false, message: 'Bad request, check your inputs.' });
+    }
     return User
       .findOne({
         where: {

@@ -1,16 +1,43 @@
-import chai from 'chai';
 import supertest from 'supertest';
+import chai from 'chai';
+import faker from 'faker';
+import app from '../app';
+import models from '../server/models/';
 
-process.env.NODE_ENV = 'test';
+const should = chai.should;
+const expect = chai.expect;
 
-const should = chai.should();
-const expect = chai.expect();
-const api = supertest('http://localhost:8000');
+// const user = {
+//   username: faker.name.findName(),
+//   email: faker.internet.email(),
+//   password: '123456',
+// };
 
-describe('API', () => {
-  it('should return a 404 response with instructions', (done) => {
-    api.get('/')
-      .set('Accept', 'application/json')
-      .expect(404, done);
+const server = supertest.agent(app);
+
+before((done) => {
+  models.sequelize.sync({ force: true }).then(() => {
+    done(null);
+  }).catch((errors) => {
+    done(errors);
+  });
+});
+
+describe('A typical User registration', () => {
+  it('Should allow user to register', (done) => {
+    server
+      .post('/api/v1/users/signup')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .send({
+        username: 'ekundayo',
+        email: 'ekprogs@gmail.com',
+        password: '123456',
+      })
+      .expect(201)
+      .end((err, res) => {
+        expect(res.body.success).to.equal(true);
+        expect(res.body.message).to.equal('ekprogs@gmail.com');
+        done();
+      });
   });
 });
