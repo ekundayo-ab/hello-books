@@ -20,6 +20,7 @@ class UserController {
         username: req.body.username,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 10),
+        role: req.body.role,
       })
       .then((user) => { res.status(201).send({ success: true, message: `Hi ${user.username}, registration successful!` }); })
       .catch((error) => { res.status(400).send({ success: false, message: `Oops! something happened ${error.message}` }); });
