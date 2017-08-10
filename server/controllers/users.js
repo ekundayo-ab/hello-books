@@ -13,7 +13,7 @@ class UserController {
   static create(req, res) {
     if (req.body.password === undefined || req.body.username === undefined
       || req.body.email === undefined) {
-      return res.status(400).send({ success: false, message: 'Bad request data, enter valid inputs.' });
+      return res.status(400).send({ success: false, message: 'Bad request data, enter valid inputs or valid key-value pairs.' });
     }
     return User
       .create({
@@ -31,6 +31,9 @@ class UserController {
    * @param {*} res 
    */
   static retrieve(req, res) {
+    if (!req.body.password || !req.body.username) {
+      return res.status(400).send({ success: false, message: 'Bad request data, enter valid inputs or valid key-value pairs.' });
+    }
     return User
       .findOne({
         where: {
