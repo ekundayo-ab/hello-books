@@ -23,7 +23,7 @@ class Authenticate {
         }
       });
     } else {
-      res.status(403).send({ success: false, message: 'No token provided' });
+      res.status(403).send({ success: false, message: 'Forbidden! Not allowed' });
     }
   }
 }

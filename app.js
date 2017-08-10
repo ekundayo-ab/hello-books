@@ -3,6 +3,8 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import router from './server/routes/';
 
+require('dotenv').config();
+
 const port = process.env.PORT || 8000;
 const app = express();
 app.use(morgan('dev'));
@@ -18,7 +20,7 @@ app.get('*', (req, res) => {
 app.listen(port, (err) => {
   /* eslint-disable no-console */
   if (err) console.log(err);
-  console.log('started');
+  console.log(`app started on port ${port} running in ${app.get('env')}`);
 });
 
 export default app;
