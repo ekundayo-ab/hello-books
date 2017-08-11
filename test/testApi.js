@@ -60,7 +60,7 @@ describe('A typical User registration', () => {
       .expect(201)
       .end((err, res) => {
         expect(res.body.success).to.equal(false);
-        expect(res.body.message).to.equal('Bad request data, enter valid inputs or valid key-value pairs.');
+        expect(res.body.message).to.equal('Check your username, email or password and try again!');
         done();
       });
   });
@@ -77,7 +77,7 @@ describe('A typical User registration', () => {
       .expect(400)
       .end((err, res) => {
         expect(res.body.success).to.equal(false);
-        expect(res.body.message).to.equal('Bad request data, enter valid inputs or valid key-value pairs.');
+        expect(res.body.message).to.equal('Check your username, email or password and try again!');
         done();
       });
   });
@@ -95,7 +95,7 @@ describe('A typical User Logging In', () => {
       .expect(400)
       .end((err, res) => {
         expect(res.body.success).to.equal(false);
-        expect(res.body.message).to.equal('Bad request data, enter valid inputs or valid key-value pairs.');
+        expect(res.body.message).to.equal('Bad request!, Check your username or email.');
         done();
       });
   });
