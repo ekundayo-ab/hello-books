@@ -177,6 +177,7 @@ describe('A library with books', () => {
       .set('Accept', 'application/x-www-form-urlencoded')
       .set('x-access-token', loggedInToken)
       .send({
+        isbn: 20234,
         title: 'Learn JAVA',
         author: 'Java Master',
         description: 'Learn & Master Java in 28 days',
@@ -189,12 +190,112 @@ describe('A library with books', () => {
         done();
       });
   });
+  it('should not allow admin to create same book again', (done) => {
+    server
+      .post('/api/v1/books')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .set('x-access-token', loggedInToken)
+      .send({
+        isbn: 20234,
+        title: 'Learn JAVA',
+        author: 'Java Master',
+        description: 'Learn & Master Java in 28 days',
+        quantity: 30,
+      })
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body.success).to.equal(false);
+        expect(res.statusCode).to.equal(409);
+        done();
+      });
+  });
+  it('should raise error if quantity of book to be created is not specified', (done) => {
+    server
+      .post('/api/v1/books')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .set('x-access-token', loggedInToken)
+      .send({
+        isbn: 20238,
+        title: 'Learn JAVA',
+        author: 'Java Master',
+        description: 'Learn & Master Java in 28 days',
+        quantity: undefined,
+      })
+      .expect(400)
+      .end((err, res) => {
+        expect(res.body.success).to.equal(false);
+        expect(res.body.message).to.equal('Please enter the quantity field');
+        expect(res.statusCode).to.equal(400);
+        done();
+      });
+  });
+  it('should raise error if author of book to be created is not specified', (done) => {
+    server
+      .post('/api/v1/books')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .set('x-access-token', loggedInToken)
+      .send({
+        isbn: 7394389,
+        title: 'Learn JAVA',
+        author: '',
+        description: 'Learn & Master Java in 28 days',
+        quantity: 90,
+      })
+      .expect(400)
+      .end((err, res) => {
+        expect(res.body.success).to.equal(false);
+        expect(res.body.message).to.equal('Please enter the author field');
+        expect(res.statusCode).to.equal(400);
+        done();
+      });
+  });
+  it('should raise error if description of book to be created is not specified', (done) => {
+    server
+      .post('/api/v1/books')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .set('x-access-token', loggedInToken)
+      .send({
+        isbn: 7394380,
+        title: 'Learn JAVA',
+        author: 'Lambda Master',
+        description: '',
+        quantity: 90,
+      })
+      .expect(400)
+      .end((err, res) => {
+        expect(res.body.success).to.equal(false);
+        expect(res.body.message).to.equal('Please enter the description field');
+        expect(res.statusCode).to.equal(400);
+        done();
+      });
+  });
+  it('should raise error if title of book to be created is not specified', (done) => {
+    server
+      .post('/api/v1/books')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .set('x-access-token', loggedInToken)
+      .send({
+        isbn: 732360,
+        title: '',
+        author: 'Android Master',
+        description: 'Learn Android in 6 weeks',
+        quantity: 90,
+      })
+      .expect(400)
+      .end((err, res) => {
+        expect(res.body.success).to.equal(false);
+        expect(res.body.message).to.equal('Please enter the title field');
+        expect(res.statusCode).to.equal(400);
+        done();
+      });
+  });
   it('should prevent non admin user from creating books', (done) => {
     server
       .post('/api/v1/books')
       .set('Accept', 'application/x-www-form-urlencoded')
       .set('x-access-token', normalToken)
       .send({
+        isbn: 839483,
         title: 'Learn SQL',
         author: 'SQL Master',
         description: 'Learn & Master SQL in 48hours',
@@ -233,14 +334,26 @@ describe('A library with books', () => {
         done();
       });
   });
-  it('should allow only authenticated users to modify book information', (done) => {
-    const editBook = { title: 'Learn Heroku', author: 'Heroks Master', description: 'Learn and master heroku', quantity: 30 };
-    server
-      .put(`/api/v1/books/${+25}`)
-      .set('Accept', 'application/x-www-form-urlencoded')
-      .set('x-access-token', loggedInToken)
-      .send(editBook)
-      .expect(200);
-    done();
-  });
 });
+
+// describe('A library that borrow books', () => {
+//   it('should allow authenticated user to borrow books', (done) => {
+//     server
+//       .post('/api/v1/books')
+//       .set('Accept', 'application/x-www-form-urlencoded')
+//       .set('x-access-token', loggedInToken)
+//       .send({
+//         isbn: 20234,
+//         title: 'Learn JAVA',
+//         author: 'Java Master',
+//         description: 'Learn & Master Java in 28 days',
+//         quantity: 30,
+//       })
+//       .expect(200)
+//       .end((err, res) => {
+//         expect(res.body.success).to.equal(true);
+//         expect(res.statusCode).to.equal(200);
+//         done();
+//       });
+//   });
+// });

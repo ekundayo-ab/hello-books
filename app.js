@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use('/api/v1', router);
 
 app.get('*', (req, res) => {
-  res.status(404).send('Ooops, and that was surprising, you might want to come in at /api/v1. See you!');
+  res.status(404).send('Ooops, Route not found, Come in at /api/v1.');
 });
 // handling 404 errors
 app.use((err, req, res, next) => {
