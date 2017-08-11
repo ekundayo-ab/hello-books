@@ -10,7 +10,7 @@ Router.get('/', (req, res) => res.status(200).send({
 }));
 
 Router.post('/users/signup', usersController.create); // Route to sign up
-Router.post('/users/signin', usersController.retrieve); // Route to sign in
+Router.post('/users/signin', usersController.signin); // Route to sign in
 Router.use(authMiddleware.authenticate); // Authentication middleware
 Router.get('/users', usersController.list); // Listing all users
 Router.post('/books', booksController.create); // Route to add new book
