@@ -63,27 +63,43 @@ class BookController {
     if (req.decoded.data.role !== 'admin') {
       res.status(403).send({ success: false, message: 'You are not allowed to modify book' });
     }
+
     return Book
-      .update({
-        isbn: req.body.isbn,
-        title: req.body.title,
-        author: req.body.author,
-        description: req.body.description,
-        image: req.body.image,
-        status: 1,
-        quantity: req.body.quantity,
-      }, {
+      .findOne({
         where: {
-          id: req.params.bookId,
+          id: req.body.bookId,
         },
       })
       .then((book) => {
         if (!book) {
-          return res.send.status(404).send({ success: false, message: 'Book not found' });
+          return res.status(404).send({ success: false, message: 'Book not found, try again!' });
         }
-        return res.status(200).send({ success: true, message: `${req.body.title}, successfully updated`, book });
-      })
-      .catch(() => { res.status(400).send({ success: false, message: 'Enter valid inputs!' }); });
+        return Book
+          .update({
+            isbn: req.body.isbn,
+            title: req.body.title,
+            author: req.body.author,
+            description: req.body.description,
+            image: req.body.image,
+            status: 1,
+            quantity: req.body.quantity,
+          }, {
+            where: {
+              id: req.params.bookId,
+            },
+          })
+          .then((book) => {
+            if (!book) {
+              return res.send.status(404).send({ success: false, message: 'Book not found' });
+            }
+            return res.status(200).send({ success: true, message: `${req.body.title}, successfully updated` });
+          })
+          .catch((error) => {
+            res.status(400).send({ success: false, message: 'Enter valid inputs!', error: error.toString() });
+          });
+      }).catch((error) => {
+        return res.status(404).send({ success: false, message: 'Book not found' });
+      });
   }
   /**
    * 
