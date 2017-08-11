@@ -71,7 +71,7 @@ class UserController {
    * @param {*} res 
    */
   static list(req, res) {
-    if (req.decoded.data.role !== 2) {
+    if (req.decoded.data.role !== 'admin') {
       res.status(403).send({ success: false, message: 'You are not allowed to view all users' });
     }
     return User
