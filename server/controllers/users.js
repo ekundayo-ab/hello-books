@@ -23,7 +23,7 @@ class UserController {
         role: req.body.role,
       })
       .then((user) => { res.status(201).send({ success: true, message: `Hi ${user.username}, registration successful!` }); })
-      .catch((error) => { res.status(409).send({ success: false, message: 'Conflicts! User exists already!' }); });
+      .catch(() => { res.status(409).send({ success: false, message: 'Conflicts! User exists already!' }); });
   }
 
   /**

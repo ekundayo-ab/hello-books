@@ -1,7 +1,6 @@
 import model from '../models';
 
 const Book = model.Book;
-const User = model.User;
 const Borrow = model.Borrow;
 /**
  * 
@@ -60,7 +59,7 @@ class BorrowController {
                 res.status(400).send({ success: false, message: `Oops! something happenned ${error.message}` });
               });
           })
-          .catch((error) => { res.status(400).send({ success: false, message: 'Oops! Check entered UserId or BookId and ensure its valid input' }); });
+          .catch(() => { res.status(400).send({ success: false, message: 'Oops! Check entered UserId or BookId and ensure its valid input' }); });
       })
       .catch((error) => {
         res.status(400).send({ success: false, message: `drOops! something happened, ${error.message}` });
