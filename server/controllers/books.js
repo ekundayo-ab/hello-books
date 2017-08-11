@@ -14,13 +14,22 @@ class BookController {
   static create(req, res) {
     // Check if user has administrative priviledges
     if (req.decoded.data.role !== 'admin') {
-      return res.status(403).send({ success: false, message: 'You are not allowed to add book' });
+      return res.status(400).send({ success: false, message: 'You are not allowed to add book' });
     }
-    if (req.body.quantity === undefined) {
-      return res.status(403).send({ success: false, message: 'Please enter the quantity field' });
+    if (req.body.author === '' || null || undefined) {
+      return res.status(400).send({ success: false, message: 'Please enter the author field' });
+    }
+    if (req.body.title === '' || null || undefined) {
+      return res.status(400).send({ success: false, message: 'Please enter the title field' });
+    }
+    if (req.body.description === '' || null || undefined) {
+      return res.status(400).send({ success: false, message: 'Please enter the description field' });
+    }
+    if (req.body.quantity === undefined || '' || null) {
+      return res.status(400).send({ success: false, message: 'Please enter the quantity field' });
     }
     return Book.findOne({
-      where: { title: req.body.title },
+      where: { isbn: req.body.isbn },
     })
       .then((foundBook) => {
         if (foundBook) {
@@ -28,6 +37,7 @@ class BookController {
         }
         return Book
           .create({
+            isbn: req.body.isbn,
             title: req.body.title,
             author: req.body.author,
             description: req.body.description,
@@ -55,6 +65,7 @@ class BookController {
     }
     return Book
       .update({
+        isbn: req.body.isbn,
         title: req.body.title,
         author: req.body.author,
         description: req.body.description,
