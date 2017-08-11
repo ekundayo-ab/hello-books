@@ -3,15 +3,15 @@ import chai from 'chai';
 import app from '../app';
 import models from '../server/models/';
 
-const User = models.User;
-const Book = models.Book;
-const expect = chai.expect;
+const User = models.User; // Makes User model available globally in this file
+const Book = models.Book; // Makes Book model available globally in this file
+const expect = chai.expect; // Provides interface to ascertain expected results are true 
 
 const server = supertest.agent(app);
-let loggedInToken;
-let normalToken;
+let loggedInToken; // Token for an Admin User
+let normalToken; // Token for a Normal User
 
-User.destroy({ where: {} });
+User.destroy({ where: {} }); // Purges Data already in the table before testing
 Book.destroy({ where: {} });
 describe('A typical User registration', () => {
   it('Should allow admin user to be created', (done) => {
