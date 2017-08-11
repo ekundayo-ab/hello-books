@@ -1,7 +1,6 @@
 import model from '../models';
 
 const Book = model.Book;
-// const User = model.User;
 const Borrow = model.Borrow;
 /**
  * 
@@ -60,10 +59,10 @@ class BorrowController {
                 res.status(400).send({ success: false, message: `Oops! something happenned ${error.message}` });
               });
           })
-          .catch((error) => { res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` }); });
+          .catch(() => { res.status(400).send({ success: false, message: 'Oops! Check entered UserId or BookId and ensure its valid input' }); });
       })
       .catch((error) => {
-        res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
+        res.status(400).send({ success: false, message: `drOops! something happened, ${error.message}` });
       });
   }
 
@@ -134,11 +133,14 @@ class BorrowController {
         ],
       })
       .then((borrow) => {
+        if (borrow.length < 1) {
+          return res.status(404).send({ success: false, message: 'You have no books to return' });
+        }
         const p = [];
         for (let i = 0; i < borrow.length; i += 1) {
           p[i] = borrow[i].book;
         }
-        res.status(200).send(p);
+        return res.status(200).send(p);
       })
       .catch((error) => { res.send(error.toString()); });
   }

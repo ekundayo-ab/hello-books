@@ -16,6 +16,9 @@ class BookController {
     if (req.decoded.data.role !== 'admin') {
       return res.status(403).send({ success: false, message: 'You are not allowed to add book' });
     }
+    if (req.body.quantity === undefined) {
+      return res.status(403).send({ success: false, message: 'Please enter the quantity field' });
+    }
     return Book.findOne({
       where: { title: req.body.title },
     })

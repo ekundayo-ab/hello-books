@@ -13,7 +13,7 @@ class UserController {
   static create(req, res) {
     if (req.body.password === undefined || req.body.username === undefined
       || req.body.email === undefined) {
-      return res.status(400).send({ success: false, message: 'Bad request data, enter valid inputs or valid key-value pairs.' });
+      return res.status(400).send({ success: false, message: 'Check your username, email or password and try again!' });
     }
     return User
       .create({
@@ -23,7 +23,7 @@ class UserController {
         role: req.body.role,
       })
       .then((user) => { res.status(201).send({ success: true, message: `Hi ${user.username}, registration successful!` }); })
-      .catch((error) => { res.status(400).send({ success: false, message: `Oops! something happened ${error.message}` }); });
+      .catch(() => { res.status(409).send({ success: false, message: 'Conflicts! User exists already!' }); });
   }
 
   /**
@@ -31,9 +31,9 @@ class UserController {
    * @param {*} req 
    * @param {*} res 
    */
-  static retrieve(req, res) {
+  static signin(req, res) {
     if (!req.body.password || !req.body.username) {
-      return res.status(400).send({ success: false, message: 'Bad request data, enter valid inputs or valid key-value pairs.' });
+      return res.status(400).send({ success: false, message: 'Bad request!, Check your username or email.' });
     }
     return User
       .findOne({
