@@ -1,6 +1,9 @@
 import model from '../models';
+import helpers from '../helpers';
 
 const Book = model.Book;
+const isAdmin = helpers.isAdmin;
+const validateInput = helpers.validateInput;
 
 /**
  * 
@@ -13,20 +16,8 @@ class BookController {
    */
   static create(req, res) {
     // Check if user has administrative priviledges
-    if (req.decoded.data.role !== 'admin') {
-      return res.status(400).send({ success: false, message: 'You are not allowed to add book' });
-    }
-    if (req.body.author === '' || null || undefined) {
-      return res.status(400).send({ success: false, message: 'Please enter the author field' });
-    }
-    if (req.body.title === '' || null || undefined) {
-      return res.status(400).send({ success: false, message: 'Please enter the title field' });
-    }
-    if (req.body.description === '' || null || undefined) {
-      return res.status(400).send({ success: false, message: 'Please enter the description field' });
-    }
-    if (req.body.quantity === undefined || '' || null) {
-      return res.status(400).send({ success: false, message: 'Please enter the quantity field' });
+    if (!isAdmin(req)) {
+      return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
     return Book.findOne({
       where: { isbn: req.body.isbn },
@@ -48,11 +39,9 @@ class BookController {
           .then((book) => {
             res.status(200).send({ success: true, message: `${book.title}, succesfully added` });
           })
-          .catch((error) => { res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` }); });
+          .catch(() => { validateInput(req, res); });
       })
-      .catch((error) => {
-        res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
-      });
+      .catch(() => { validateInput(req, res); });
   }
   /**
    *
@@ -60,30 +49,43 @@ class BookController {
    * @param {*} res
    */
   static update(req, res) {
-    if (req.decoded.data.role !== 'admin') {
-      res.status(403).send({ success: false, message: 'You are not allowed to modify book' });
+    if (!isAdmin(req)) {
+      return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
     return Book
-      .update({
-        isbn: req.body.isbn,
-        title: req.body.title,
-        author: req.body.author,
-        description: req.body.description,
-        image: req.body.image,
-        status: 1,
-        quantity: req.body.quantity,
-      }, {
+      .findOne({
         where: {
           id: req.params.bookId,
         },
       })
       .then((book) => {
         if (!book) {
-          return res.send.status(404).send({ success: false, message: 'Book not found' });
+          return res.status(404).send({ success: false, message: 'Book not found!' });
         }
-        return res.status(200).send({ success: true, message: `${req.body.title}, successfully updated`, book });
-      })
-      .catch(() => { res.status(400).send({ success: false, message: 'Enter valid inputs!' }); });
+        return Book
+          .update({
+            isbn: req.body.isbn,
+            title: req.body.title,
+            author: req.body.author,
+            description: req.body.description,
+            image: req.body.image,
+            status: 1,
+            quantity: req.body.quantity,
+          }, {
+            where: {
+              id: req.params.bookId,
+            },
+          })
+          .then(() => {
+            if (!book) {
+              return res.send.status(404).send({ success: false, message: 'Book not found' });
+            }
+            return res.status(200).send({ success: true, message: `${req.body.title}, successfully updated`, old: book });
+          })
+          .catch(() => {
+            validateInput(req, res);
+          });
+      });
   }
   /**
    * 

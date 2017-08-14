@@ -17,6 +17,7 @@ class BorrowController {
         where: {
           userId: req.params.userId,
           bookId: req.body.bookId,
+          returned: false,
         },
         include: [
           { model: Book, as: 'book', required: true },
@@ -107,17 +108,17 @@ class BorrowController {
                     res.status(200).send({ success: true, message: `${updatedBorrowedBook.title} succesfully returned but pending review by Administrator`, updatedBorrowedBook });
                   })
                   .catch((error) => {
-                    res.status(400).send({ success: false, message: `Oops! something 1happened, ${error.message}` });
+                    res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
                   });
               })
               .catch((error) => {
-                res.status(400).send({ success: false, message: `Oops! something 2happenned ${error.message}` });
+                res.status(400).send({ success: false, message: `Oops! something happenned ${error.message}` });
               });
           })
-          .catch((error) => { res.status(400).send({ success: false, message: `Oops! something 3happened, ${error.message}` }); });
+          .catch((error) => { res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` }); });
       })
       .catch((error) => {
-        res.status(400).send({ success: false, message: `Oops! something 4happened, ${error.message}` });
+        res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
       });
   }
 
@@ -125,7 +126,7 @@ class BorrowController {
     return Borrow
       .findAll({
         where: {
-          userId: req.decoded.data.id,
+          userId: req.body.userId,
           returned: false,
         },
         include: [
