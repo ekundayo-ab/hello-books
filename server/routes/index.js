@@ -21,4 +21,11 @@ Router.post('/users/:userId/books', borrowsController.create); // Route to borro
 Router.put('/users/:userId/books', borrowsController.returnBook); // Route to return a book
 Router.get('/users/:userId/books', borrowsController.listNotReturned); // Route to list borrowed but not returned book
 
+Router.route('*')
+  .post((req, res) => {
+    res.send('This is an invalid route');
+  })
+  .get((req, res) => {
+    res.send('This is an invalid route');
+  });
 export default Router;

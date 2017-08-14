@@ -52,10 +52,11 @@ class BookController {
     if (!isAdmin(req)) {
       return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
+
     return Book
       .findOne({
         where: {
-          id: req.params.bookId,
+          id: req.body.bookId,
         },
       })
       .then((book) => {
