@@ -1,0 +1,27 @@
+{
+  "development": {
+    "username": "ekundayo",
+    "password": "ekundayo",
+    "database": "hello-books",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "ekundayo",
+    "password": "ekundayo",
+    "database": "testdb",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test-travis": {
+    "username": "postgres",
+    "password": "",
+    "database": "travis",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "logging": false
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL"
+  }
+}

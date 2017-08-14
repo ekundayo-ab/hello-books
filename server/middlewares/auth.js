@@ -13,6 +13,9 @@ class Authenticate {
   static authenticate(req, res, next) {
     // check header or url parameters or post parameters for token
     const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    if (!token) {
+      res.status(401).send({ success: false, message: 'Unauthenticated, token not found' });
+    }
     if (token) {
       jwt.verify(token, 'hello-books', (err, decoded) => {
         if (err) {
@@ -23,7 +26,7 @@ class Authenticate {
         }
       });
     } else {
-      res.status(403).send({ success: false, message: 'No token provided' });
+      res.status(404).send({ success: false, message: 'Looking for? Not Found!' });
     }
   }
 }

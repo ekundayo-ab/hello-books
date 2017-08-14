@@ -1,6 +1,9 @@
 import model from '../models';
+import helpers from '../helpers';
 
 const Book = model.Book;
+const isAdmin = helpers.isAdmin;
+const validateInput = helpers.validateInput;
 
 /**
  * 
@@ -13,32 +16,32 @@ class BookController {
    */
   static create(req, res) {
     // Check if user has administrative priviledges
-    if (req.decoded.data.role !== 'admin') {
-      return res.status(403).send({ success: false, message: 'You are not allowed to add book' });
+    if (!isAdmin(req)) {
+      return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
-    return Book
-      .create({
-        title: req.body.title,
-        author: req.body.author,
-        description: req.body.description,
-        image: req.body.image,
-        status: 1,
-        quantity: req.body.quantity,
+    return Book.findOne({
+      where: { isbn: req.body.isbn },
+    })
+      .then((foundBook) => {
+        if (foundBook) {
+          return res.status(409).send({ success: false, messsage: `Conflict! ${req.body.title} exists already`, foundBook });
+        }
+        return Book
+          .create({
+            isbn: req.body.isbn,
+            title: req.body.title,
+            author: req.body.author,
+            description: req.body.description,
+            image: req.body.image,
+            status: 1,
+            quantity: req.body.quantity,
+          })
+          .then((book) => {
+            res.status(200).send({ success: true, message: `${book.title}, succesfully added` });
+          })
+          .catch(() => { validateInput(req, res); });
       })
-      .then((book) => {
-        Book.findOne({
-          where: { title: req.body.title },
-        }).then((foundBook) => {
-          if (foundBook) {
-            return res.status(409).send({ success: false, messsage: `Conflict! ${req.body.title} exists already`, foundBook });
-          }
-          return res.status(200).send({ success: true, message: `${book.title}, succesfully added` });
-        })
-          .catch((error) => { 
-            res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
-          });
-      })
-      .catch((error) => { res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` }); });
+      .catch(() => { validateInput(req, res); });
   }
   /**
    *
@@ -46,29 +49,43 @@ class BookController {
    * @param {*} res
    */
   static update(req, res) {
-    if (req.decoded.data.role !== 'admin') {
-      res.status(403).send({ success: false, message: 'You are not allowed to modify book' });
+    if (!isAdmin(req)) {
+      return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
     return Book
-      .update({
-        title: req.body.title,
-        author: req.body.author,
-        description: req.body.description,
-        image: req.body.image,
-        status: 1,
-        quantity: req.body.quantity,
-      }, {
+      .findOne({
         where: {
           id: req.params.bookId,
         },
       })
       .then((book) => {
         if (!book) {
-          return res.send.status(404).send({ success: false, message: 'Book not found' });
+          return res.status(404).send({ success: false, message: 'Book not found!' });
         }
-        return res.status(200).send({ success: true, message: `${req.body.title}, successfully updated`, book });
-      })
-      .catch(() => { res.status(400).send({ success: false, message: 'Enter valid inputs!' }); });
+        return Book
+          .update({
+            isbn: req.body.isbn,
+            title: req.body.title,
+            author: req.body.author,
+            description: req.body.description,
+            image: req.body.image,
+            status: 1,
+            quantity: req.body.quantity,
+          }, {
+            where: {
+              id: req.params.bookId,
+            },
+          })
+          .then(() => {
+            if (!book) {
+              return res.send.status(404).send({ success: false, message: 'Book not found' });
+            }
+            return res.status(200).send({ success: true, message: `${req.body.title}, successfully updated`, old: book });
+          })
+          .catch(() => {
+            validateInput(req, res);
+          });
+      });
   }
   /**
    * 

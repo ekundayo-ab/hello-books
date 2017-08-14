@@ -7,10 +7,14 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf /dist && babel ./dist --out-dir / --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "start": "npm run build && node dist/app.js",
-    "s": "babel-watch app.js"
+    "test:db": "sequelize db:migrate",
+    "db:migrate": "cross-env DATABASE_URL=postgres://tkopkwlmyxbcdm:5170b4ad44d4faa540d5d26e8a6c7710b7779f8f2cc44afaf5b79aa4defc19e5@ec2-107-20-188-239.compute-1.amazonaws.com:5432/d698t2uetpa3gf sequelize db:migrate",
+    "start": "node dist/app.js",
+    "start:dev": "babel-watch app.js",
+    "db:seed": "DATABASE_URL=postgres://tkopkwlmyxbcdm:5170b4ad44d4faa540d5d26e8a6c7710b7779f8f2cc44afaf5b79aa4defc19e5@ec2-107-20-188-239.compute-1.amazonaws.com:5432/d698t2uetpa3gf sequelize db:seed:all",
+    "test": "NODE_ENV=test mocha test/* --compilers js:babel-register",
+    "heroku-postbuild": "NODE_ENV=production && npm run build && NODE_END=production sequelize db:migrate:undo:all && NODE_END=production sequelize db:migrate && npm run db:seed",
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./npm-debug.log --copy-files"
   },
   "repository": {
     "type": "git",
@@ -34,19 +38,27 @@
     "babel-watch": "^2.0.7",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
+    "dotenv": "^4.0.0",
     "eslint": "^4.4.1",
     "express": "^4.15.4",
     "jsonwebtoken": "^7.4.2",
     "morgan": "^1.8.2",
     "pg": "^7.1.0",
     "pg-hstore": "^2.3.2",
+    "rimraf": "^2.6.1",
     "sequelize": "^4.4.2",
     "sequelize-cli": "^2.8.0"
   },
   "devDependencies": {
+    "babel-register": "^6.24.1",
+    "chai": "^4.1.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.1.0"
+    "eslint-plugin-react": "^7.2.0",
+    "faker": "^4.1.0",
+    "mocha": "^3.5.0",
+    "should": "^11.2.1",
+    "supertest": "^3.0.0"
   }
 }

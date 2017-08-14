@@ -1,8 +1,6 @@
 import model from '../models';
-import Helper from '../helpers';
 
 const Book = model.Book;
-// const User = model.User;
 const Borrow = model.Borrow;
 /**
  * 
@@ -15,31 +13,57 @@ class BorrowController {
    */
   static create(req, res) {
     return Borrow
-      .findOrCreate({
+      .findOne({
         where: {
           userId: req.params.userId,
           bookId: req.body.bookId,
           returned: false,
         },
-        defaults: {
-          returned: false,
-          userId: req.params.userId,
-          bookId: req.body.bookId,
-          dueDate: Helper.addDays(3),
-          actualReturnDate: Date.now(),
-        },
-      })
-      .spread((borrow, created) => {
-        if (created) {
-          return res.status(200).send({ success: 'Book successfully borrowed, enjoy!' });
+        include: [
+          { model: Book, as: 'book', required: true },
+        ],
+      }).then((foundBorrow) => {
+        if (foundBorrow) {
+          return res.status(409).send({ success: false, messsage: 'Conflict! Book borrowed already', foundBorrow });
         }
-        return res.status(400).send({ success: 'false', message: 'You have borrowed this book before!' });
-      })
-      .then(() => {
-        res.status(200).send({ success: true, message: 'Book successfully borrowed' });
+        return Borrow
+          .create({
+            returned: false,
+            userId: req.params.userId,
+            bookId: req.body.bookId,
+            dueDate: new Date(Date.now() + (3 * 24 * 60 * 60 * 1000)),
+            actualReturnDate: Date.now(),
+          })
+          .then(() => {
+            Book
+              .findOne({
+                where: {
+                  id: req.body.bookId,
+                },
+              })
+              .then((foundBorrowedBook) => {
+                if (!foundBorrowedBook || foundBorrowedBook.quantity === 0) {
+                  return res.status(404).send({ success: false, message: 'Book not found' });
+                }
+                return foundBorrowedBook
+                  .update({
+                    quantity: foundBorrowedBook.quantity - 1,
+                  })
+                  .then((updatedBorrowedBook) => {
+                    res.status(200).send({ success: true, message: `${updatedBorrowedBook.title} succesfully borrowed`, updatedBorrowedBook });
+                  })
+                  .catch((error) => {
+                    res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
+                  });
+              })
+              .catch((error) => {
+                res.status(400).send({ success: false, message: `Oops! something happenned ${error.message}` });
+              });
+          })
+          .catch(() => { res.status(400).send({ success: false, message: 'Oops! Check entered UserId or BookId and ensure its valid input' }); });
       })
       .catch((error) => {
-        res.status(400).send(error);
+        res.status(400).send({ success: false, message: `drOops! something happened, ${error.message}` });
       });
   }
 
@@ -47,29 +71,62 @@ class BorrowController {
     return Borrow
       .findOne({
         where: {
-          id: req.body.bookId,
+          userId: req.params.userId,
+          bookId: req.body.bookId,
+          returned: true,
         },
-      })
-      .then((borrow) => {
-        return borrow
+        include: [
+          { model: Book, as: 'book', required: true },
+        ],
+      }).then((foundBorrow) => {
+        if (foundBorrow) {
+          return res.status(409).send({ success: false, messsage: 'Conflict! Book returned already', foundBorrow });
+        }
+        return Borrow
           .update({
             returned: true,
             actualReturnDate: Date.now(),
+          }, {
+            where: { userId: req.params.userId, bookId: req.body.bookId },
           })
           .then(() => {
-            Helper.addReturnedBook(Book, req.body.bookId, req, res);
-            res.status(200).send({ success: true, message: 'Book successfully returned' });
+            Book
+              .findOne({
+                where: {
+                  id: req.body.bookId,
+                },
+              })
+              .then((foundBorrowedBook) => {
+                if (!foundBorrowedBook || foundBorrowedBook.quantity === 0) {
+                  return res.status(404).send({ success: false, message: 'Book not found' });
+                }
+                return foundBorrowedBook
+                  .update({
+                    quantity: foundBorrowedBook.quantity + 1,
+                  })
+                  .then((updatedBorrowedBook) => {
+                    res.status(200).send({ success: true, message: `${updatedBorrowedBook.title} succesfully returned but pending review by Administrator`, updatedBorrowedBook });
+                  })
+                  .catch((error) => {
+                    res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
+                  });
+              })
+              .catch((error) => {
+                res.status(400).send({ success: false, message: `Oops! something happenned ${error.message}` });
+              });
           })
-          .catch(error => res.status(400).send(error));
+          .catch((error) => { res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` }); });
       })
-      .catch(error => res.status(400).send(error));
+      .catch((error) => {
+        res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
+      });
   }
 
   static listNotReturned(req, res) {
     return Borrow
       .findAll({
         where: {
-          userId: req.decoded.data.id,
+          userId: req.body.userId,
           returned: false,
         },
         include: [
@@ -77,11 +134,14 @@ class BorrowController {
         ],
       })
       .then((borrow) => {
+        if (borrow.length < 1) {
+          return res.status(404).send({ success: false, message: 'You have no books to return' });
+        }
         const p = [];
         for (let i = 0; i < borrow.length; i += 1) {
           p[i] = borrow[i].book;
         }
-        res.status(200).send(p);
+        return res.status(200).send(p);
       })
       .catch((error) => { res.send(error.toString()); });
   }

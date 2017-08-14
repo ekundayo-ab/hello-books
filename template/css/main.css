@@ -210,3 +210,8 @@ nav a {
 	font-size:14px;
 	font-weight:bold;
 }
+
+.book-detail img {
+	padding:5px;
+	width: 250px;
+}
