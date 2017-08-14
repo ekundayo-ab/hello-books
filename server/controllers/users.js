@@ -11,17 +11,6 @@ class UserController {
    * @param {*} res 
    */
   static create(req, res) {
-    function validateEmail(email) {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
-    }
-    if (req.body.password === undefined || req.body.username === undefined
-      || req.body.email === undefined) {
-      return res.status(400).send({ success: false, message: 'Check your username, email or password and try again!' });
-    }
-    if (!validateEmail(req.body.email)) {
-      return res.status(400).send({ success: false, message: 'Invalid email address, try again' });
-    }
     return User
       .create({
         username: req.body.username,
@@ -30,7 +19,7 @@ class UserController {
         role: req.body.role,
       })
       .then((user) => { res.status(201).send({ success: true, message: `Hi ${user.username}, registration successful!` }); })
-      .catch(() => { res.status(409).send({ success: false, message: 'Conflicts! User exists already!' }); });
+      .catch((error) => { res.status(409).send(error); });
   }
 
   /**

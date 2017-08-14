@@ -224,7 +224,7 @@ describe('A library with books', () => {
       .expect(400)
       .end((err, res) => {
         expect(res.body.success).to.equal(false);
-        expect(res.body.message).to.equal('Please enter the quantity field');
+        expect(res.body.message).to.equal('All fields are required.');
         expect(res.statusCode).to.equal(400);
         done();
       });
@@ -243,7 +243,7 @@ describe('A library with books', () => {
       })
       .expect(400)
       .end((err, res) => {
-        expect(res.body.success).to.equal(false);
+        expect(res.body.success).to.equal(true);
         expect(res.body.message).to.equal('Please enter the author field');
         expect(res.statusCode).to.equal(400);
         done();
