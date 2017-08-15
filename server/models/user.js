@@ -4,6 +4,9 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
+      validate: {
+        is: /^[a-z0-9_-]+$/i,
+      },
     },
     password: {
       type: DataTypes.STRING,
@@ -33,4 +36,3 @@ export default (sequelize, DataTypes) => {
   };
   return User;
 };
-

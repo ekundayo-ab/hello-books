@@ -1,4 +1,10 @@
 module.exports = {
+  /**
+   * 
+   * 
+   * @param {any} queryInterface 
+   * @param {any} Sequelize 
+   */
   up: (queryInterface, Sequelize) => {
     queryInterface.createTable('Users', {
       id: {
@@ -45,6 +51,11 @@ module.exports = {
       },
     });
   },
+  /**
+   * 
+   * 
+   * @param {any} queryInterface 
+   */
   down: (queryInterface /* , Sequelize */) => {
     queryInterface.dropTable('Users');
   },

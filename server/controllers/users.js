@@ -4,11 +4,21 @@ import models from '../models';
 
 const User = models.User;
 
+/**
+ * 
+ * 
+ * @class UserController
+ */
 class UserController {
   /**
    * 
-   * @param {*} req 
-   * @param {*} res 
+   * 
+   * @static
+   * @param {any} req 
+   * @param {any} res 
+   * @returns 
+   * 
+   * @memberOf UserController
    */
   static create(req, res) {
     return User
@@ -21,16 +31,22 @@ class UserController {
       .then((user) => { res.status(201).send({ success: true, message: `Hi ${user.username}, registration successful!` }); })
       .catch((error) => { res.status(409).send(error); });
   }
-
   /**
    * 
-   * @param {*} req 
-   * @param {*} res 
+   * 
+   * @static
+   * @param {any} req 
+   * @param {any} res 
+   * @returns 
+   * 
+   * @memberOf UserController
    */
   static signin(req, res) {
+    // Ensures expected inputs are gotten
     if (!req.body.password || !req.body.username) {
       return res.status(400).send({ success: false, message: 'Bad request!, Check your username or email.' });
     }
+    // Queries the database if user exists with supplied credentials
     return User
       .findOne({
         where: {
@@ -38,9 +54,17 @@ class UserController {
         },
       })
       .then((user) => {
+        // If User does not exist, output User not found.
         if (!user) {
           res.send({ success: false, message: 'Authentication failed. User not found' });
         } else if (user) {
+          /**
+           * if User exists, compares supplied credentials
+           * with one found in the database, 
+           * Authentication fails if no match. But, if all goes well
+           * User is signed in with a json web token
+           * consisting of User's data and the phrase "hello-books"
+           */
           if (!bcrypt.compareSync(req.body.password, user.password)) {
             res.send({ success: false, message: 'Authentication failed. Wrong password' });
           } else {
@@ -53,16 +77,22 @@ class UserController {
       })
       .catch((error) => { res.status(404).send(error); });
   }
-
   /**
    * 
-   * @param {*} req 
-   * @param {*} res 
+   * 
+   * @static
+   * @param {any} req 
+   * @param {any} res 
+   * @returns 
+   * 
+   * @memberOf UserController
    */
   static list(req, res) {
+    // Ensures only Administrative User can do this
     if (req.decoded.data.role !== 2) {
       res.status(403).send({ success: false, message: 'You are not allowed to view all users' });
     }
+    // Get all users.
     return User
       .findAll({
         order: [
