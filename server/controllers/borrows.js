@@ -10,6 +10,7 @@ class BorrowController {
    * 
    * 
    * @static
+   * @description Borrow a book
    * @param {any} req 
    * @param {any} res 
    * @returns 
@@ -87,6 +88,7 @@ class BorrowController {
    * 
    * 
    * @static
+   * @description Return borrowed book
    * @param {any} req 
    * @param {any} res 
    * @returns 
@@ -156,6 +158,7 @@ class BorrowController {
    * 
    * 
    * @static
+   * @description List all books borrowed but not returned by a User.
    * @param {any} req 
    * @param {any} res 
    * @returns 
@@ -163,7 +166,6 @@ class BorrowController {
    * @memberOf BorrowController
    */
   static listNotReturned(req, res) {
-    // List all books borrowed but not returned by a User.
     return Borrow
       .findAll({
         where: {

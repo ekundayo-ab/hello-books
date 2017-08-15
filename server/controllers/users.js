@@ -12,11 +12,11 @@ const User = models.User;
 class UserController {
   /**
    * 
-   * 
    * @static
+   * @description Signs up a user
    * @param {any} req 
    * @param {any} res 
-   * @returns 
+   * @returns registered user and success: true message
    * 
    * @memberOf UserController
    */
@@ -28,9 +28,9 @@ class UserController {
     }
     /**
      * 
-     * Ensures email supplied is a valid email address
+     * @description Ensures email supplied is a valid email address
      * @param {any} email 
-     * @returns 
+     * @returns {boolean} true or false
      */
     function validateEmail(email) {
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -51,11 +51,11 @@ class UserController {
   }
   /**
    * 
-   * 
    * @static
+   * @description Signs In in a User
    * @param {any} req 
    * @param {any} res 
-   * @returns 
+   * @returns token and success: true message
    * 
    * @memberOf UserController
    */
@@ -97,11 +97,11 @@ class UserController {
   }
   /**
    * 
-   * 
    * @static
+   * @description Lists all users
    * @param {any} req 
    * @param {any} res 
-   * @returns 
+   * @returns users list
    * 
    * @memberOf UserController
    */

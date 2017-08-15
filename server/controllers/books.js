@@ -10,6 +10,7 @@ class BookController {
    * 
    * 
    * @static
+   * @description Adds new book to the library
    * @param {any} req 
    * @param {any} res 
    * @returns 
@@ -65,6 +66,7 @@ class BookController {
    * 
    * 
    * @static
+   * @description Modifies existing book in the library
    * @param {any} req 
    * @param {any} res 
    * @returns 
@@ -129,6 +131,7 @@ class BookController {
    * 
    * 
    * @static
+   * @description Deletes book from the library
    * @param {any} req 
    * @param {any} res 
    * @returns 
@@ -162,6 +165,7 @@ class BookController {
    * 
    * 
    * @static
+   * @description Lists all books in the library
    * @param {any} req 
    * @param {any} res 
    * @returns 
