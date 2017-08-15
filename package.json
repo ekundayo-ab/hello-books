@@ -50,6 +50,7 @@
     "sequelize-cli": "^2.8.0"
   },
   "devDependencies": {
+    "babel-istanbul": "^0.12.2",
     "babel-register": "^6.24.1",
     "chai": "^4.1.1",
     "codeclimate-test-reporter": "^0.5.0",
