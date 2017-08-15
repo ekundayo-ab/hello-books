@@ -96,7 +96,7 @@ class BookController {
     return Book
       .findOne({
         where: {
-          id: req.params.bookId,
+          id: req.body.bookId,
         },
       })
       .then((book) => {

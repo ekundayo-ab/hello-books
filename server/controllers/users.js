@@ -106,8 +106,7 @@ class UserController {
    * @memberOf UserController
    */
   static list(req, res) {
-    // Ensures only Administrative User can do this
-    if (req.decoded.data.role !== 2) {
+    if (req.decoded.data.role !== 'admin') {
       res.status(403).send({ success: false, message: 'You are not allowed to view all users' });
     }
     // Get all users.

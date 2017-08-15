@@ -16,13 +16,7 @@ app.use('/api/v1', router);
 app.get('*', (req, res) => {
   res.status(404).send('Ooops, Route not found, Come in at /api/v1.');
 });
-// handling 404 errors
-app.use((err, req, res, next) => {
-  if (err.status !== 404) {
-    return next();
-  }
-  return res.send(err.message || '** NOT FOUND, Visit properly **');
-});
+
 
 app.listen(port, (err) => {
   /* eslint-disable no-console */
