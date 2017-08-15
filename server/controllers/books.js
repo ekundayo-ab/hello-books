@@ -33,7 +33,7 @@ class BookController {
       }
     }
     // Error(s) is/are outputted if any is pushed to the array
-    if (errors.length > 0) return res.status(400).send(errors);
+    if (errors.length > 0) return res.status(400).send({ success: false, errors });
 
     // Searches if book exists in the database
     return Book.findOne({
@@ -88,7 +88,7 @@ class BookController {
       }
     }
     // Error(s) is/are outputted if any is pushed to the array
-    if (errors.length > 0) return res.status(400).send(errors);
+    if (errors.length > 0) return res.status(400).send({ success: false, errors });
 
     // Checks if book exists in the database
     return Book

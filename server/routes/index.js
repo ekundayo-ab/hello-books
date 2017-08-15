@@ -9,7 +9,7 @@ Router.get('/', (req, res) => res.status(200).send({
   message: 'Welcome to Hello Books Library',
 }));
 
-Router.post('/users/signup', usersController.create); // Route to sign up
+Router.post('/users/signup', usersController.signup); // Route to sign up
 Router.post('/users/signin', usersController.signin); // Route to sign in
 Router.use(authMiddleware.authenticate); // Authentication middleware
 Router.get('/users', usersController.list); // Listing all users

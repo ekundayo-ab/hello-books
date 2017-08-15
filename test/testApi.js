@@ -243,8 +243,8 @@ describe('A library with books', () => {
       })
       .expect(400)
       .end((err, res) => {
-        expect(res.body.success).to.equal(true);
-        expect(res.body.message).to.equal('Please enter the author field');
+        expect(res.body.success).to.equal(false);
+        expect(res.body).to.be.a('object');
         expect(res.statusCode).to.equal(400);
         done();
       });
@@ -264,7 +264,7 @@ describe('A library with books', () => {
       .expect(400)
       .end((err, res) => {
         expect(res.body.success).to.equal(false);
-        expect(res.body.message).to.equal('Please enter the description field');
+        expect(res.body).to.be.a('object');
         expect(res.statusCode).to.equal(400);
         done();
       });
@@ -284,7 +284,7 @@ describe('A library with books', () => {
       .expect(400)
       .end((err, res) => {
         expect(res.body.success).to.equal(false);
-        expect(res.body.message).to.equal('Please enter the title field');
+        expect(res.body).to.be.a('object');
         expect(res.statusCode).to.equal(400);
         done();
       });
