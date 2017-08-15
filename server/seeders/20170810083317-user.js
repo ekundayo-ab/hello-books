@@ -2,6 +2,13 @@
 const bcrypt = require('bcrypt');
 'use strict';
 module.exports = {
+  /**
+   * 
+   * 
+   * @param {any} queryInterface 
+   * @param {any} Sequelize 
+   * @returns 
+   */
   up : function (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('Users', [{
       username : 'ekundayo',
@@ -13,6 +20,12 @@ module.exports = {
     }], {});
   },
 
+  /**
+   * 
+   * 
+   * @param {any} queryInterface 
+   * @param {any} Sequelize 
+   */
   down : function (queryInterface, Sequelize) {
     queryInterface.bulkDelete('Users', [{
       username :'ekundayo'

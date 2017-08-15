@@ -4,20 +4,37 @@ import models from '../models';
 
 const User = models.User;
 
+/**
+ * 
+ * 
+ * @class UserController
+ */
 class UserController {
   /**
    * 
-   * @param {*} req 
-   * @param {*} res 
+   * @static
+   * @description Signs up a user
+   * @param {any} req 
+   * @param {any} res 
+   * @returns registered user and success: true message
+   * 
+   * @memberOf UserController
    */
-  static create(req, res) {
-    function validateEmail(email) {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
-    }
+  static signup(req, res) {
+    // Validates and ensure expected inputs are gotten
     if (req.body.password === undefined || req.body.username === undefined
       || req.body.email === undefined) {
       return res.status(400).send({ success: false, message: 'Check your username, email or password and try again!' });
+    }
+    /**
+     * 
+     * @description Ensures email supplied is a valid email address
+     * @param {any} email 
+     * @returns {boolean} true or false
+     */
+    function validateEmail(email) {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
     }
     if (!validateEmail(req.body.email)) {
       return res.status(400).send({ success: false, message: 'Invalid email address, try again' });
@@ -30,18 +47,24 @@ class UserController {
         role: req.body.role,
       })
       .then((user) => { res.status(201).send({ success: true, message: `Hi ${user.username}, registration successful!` }); })
-      .catch(() => { res.status(409).send({ success: false, message: 'Conflicts! User exists already!' }); });
+      .catch((error) => { res.status(409).send(error); });
   }
-
   /**
    * 
-   * @param {*} req 
-   * @param {*} res 
+   * @static
+   * @description Signs In in a User
+   * @param {any} req 
+   * @param {any} res 
+   * @returns token and success: true message
+   * 
+   * @memberOf UserController
    */
   static signin(req, res) {
+    // Ensures expected inputs are gotten
     if (!req.body.password || !req.body.username) {
       return res.status(400).send({ success: false, message: 'Bad request!, Check your username or email.' });
     }
+    // Queries the database if user exists with supplied credentials
     return User
       .findOne({
         where: {
@@ -49,9 +72,17 @@ class UserController {
         },
       })
       .then((user) => {
+        // If User does not exist, output User not found.
         if (!user) {
           res.send({ success: false, message: 'Authentication failed. User not found' });
         } else if (user) {
+          /**
+           * if User exists, compares supplied credentials
+           * with one found in the database, 
+           * Authentication fails if no match. But, if all goes well
+           * User is signed in with a json web token
+           * consisting of User's data and the phrase "hello-books"
+           */
           if (!bcrypt.compareSync(req.body.password, user.password)) {
             res.send({ success: false, message: 'Authentication failed. Wrong password' });
           } else {
@@ -64,16 +95,21 @@ class UserController {
       })
       .catch((error) => { res.status(404).send(error); });
   }
-
   /**
    * 
-   * @param {*} req 
-   * @param {*} res 
+   * @static
+   * @description Lists all users
+   * @param {any} req 
+   * @param {any} res 
+   * @returns users list
+   * 
+   * @memberOf UserController
    */
   static list(req, res) {
     if (req.decoded.data.role !== 'admin') {
       res.status(403).send({ success: false, message: 'You are not allowed to view all users' });
     }
+    // Get all users.
     return User
       .findAll({
         order: [
