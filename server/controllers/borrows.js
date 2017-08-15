@@ -169,8 +169,8 @@ class BorrowController {
     return Borrow
       .findAll({
         where: {
-          userId: req.body.userId,
-          returned: false,
+          userId: req.params.userId,
+          returned: req.query.returned,
         },
         include: [
           { model: Book, as: 'book', required: true },
@@ -182,9 +182,9 @@ class BorrowController {
         }
         const p = [];
         for (let i = 0; i < borrow.length; i += 1) {
-          p[i] = borrow[i].book;
+          p[i] = borrow[i].book; // For now let's not use this
         }
-        return res.status(200).send(p);
+        return res.status(200).send({ success: true, borrow });
       })
       .catch((error) => { res.send(error.toString()); });
   }
