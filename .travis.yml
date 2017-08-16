@@ -1,6 +1,15 @@
+global:
+    - CC_TEST_REPORTER_ID=$CC_TEST_REPORTER_ID
+    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
 language: node_js
 node_js:
   - node
+notifications:
+  email: false
+    recipients:
+      - ekprogs@gmail.com
+    on_success: never # default: change
+    on_failure: always # default: always
 services:
   - postgresql
 before_script:
@@ -11,6 +20,6 @@ before_script:
   - NODE_ENV=test npm run test:db
 script:
   - npm test
-after_script: babel-istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
 after_success:
   - codeclimate-test-reporter < coverage/lcov.info
+  - ./node_modules/.bin/mocha YOUR_TESTS/**.js -R mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js

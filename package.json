@@ -7,12 +7,13 @@
     "test": "test"
   },
   "scripts": {
+    "coverage":"cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text --reporter=lcovonly mocha --compilers js:babel-register test/*.js",
     "test:db": "sequelize db:migrate",
     "db:migrate": "cross-env DATABASE_URL=postgres://tkopkwlmyxbcdm:5170b4ad44d4faa540d5d26e8a6c7710b7779f8f2cc44afaf5b79aa4defc19e5@ec2-107-20-188-239.compute-1.amazonaws.com:5432/d698t2uetpa3gf sequelize db:migrate",
     "start": "node dist/app.js",
     "start:dev": "babel-watch app.js",
     "db:seed": "DATABASE_URL=postgres://tkopkwlmyxbcdm:5170b4ad44d4faa540d5d26e8a6c7710b7779f8f2cc44afaf5b79aa4defc19e5@ec2-107-20-188-239.compute-1.amazonaws.com:5432/d698t2uetpa3gf sequelize db:seed:all",
-    "test": "NODE_ENV=test mocha test/* --compilers js:babel-register",
+    "test": "cross-env NODE_ENV=test mocha --compilers js:babel-register test/*.js",
     "heroku-postbuild": "NODE_ENV=production && npm run build && NODE_END=production sequelize db:migrate:undo:all && NODE_END=production sequelize db:migrate && npm run db:seed",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./npm-debug.log --copy-files"
   },
@@ -50,19 +51,19 @@
     "sequelize-cli": "^2.8.0"
   },
   "devDependencies": {
-    "babel-istanbul": "^0.12.2",
     "babel-register": "^6.24.1",
     "chai": "^4.1.1",
     "codeclimate-test-reporter": "^0.5.0",
     "coveralls": "^2.13.1",
+    "cross-env": "^5.0.5",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.2.1",
     "faker": "^4.1.0",
-    "istanbul": "^0.4.5",
     "mocha": "^3.5.0",
     "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^11.1.0",
     "should": "^11.2.1",
     "supertest": "^3.0.0"
   }
