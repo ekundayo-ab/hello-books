@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/ekundayo-ab/hello-books.svg?branch=develop)](https://travis-ci.org/ekundayo-ab/hello-books)
 [![Code Climate](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/gpa.svg)](https://codeclimate.com/github/ekundayo-ab/hello-books)
+[![Test Coverage](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/coverage.svg)](https://codeclimate.com/github/ekundayo-ab/hello-books/coverage)
+[![Issue Count](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/issue_count.svg)](https://codeclimate.com/github/ekundayo-ab/hello-books)
 [![Coverage Status](https://coveralls.io/repos/github/ekundayo-ab/hello-books/badge.svg?branch=develop)](https://coveralls.io/github/ekundayo-ab/hello-books?branch=develop)
 # HelloBooks
 
