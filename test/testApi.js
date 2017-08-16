@@ -5,7 +5,7 @@ import models from '../server/models/';
 
 const User = models.User; // Makes User model available globally in this file
 const Book = models.Book; // Makes Book model available globally in this file
-const expect = chai.expect; // Provides interface to ascertain expected results are true 
+const expect = chai.expect; // Provides interface to ascertain expected results are true
 
 const server = supertest.agent(app);
 let loggedInToken; // Token for an Admin User

@@ -15,7 +15,7 @@ Router.use(authMiddleware.authenticate); // Authentication middleware
 Router.get('/users', usersController.list); // Listing all users
 Router.post('/books', booksController.create); // Route to add new book
 Router.put('/books/:bookId', booksController.update); // Route to modify a book information
-Router.delete('/books/:bookId', booksController.destroy); // Route to delete a book 
+Router.delete('/books/:bookId', booksController.destroy); // Route to delete a book
 Router.get('/books', booksController.list); // Route to list all books in library
 Router.post('/users/:userId/books', borrowsController.create); // Route to borrow a book
 Router.put('/users/:userId/books', borrowsController.returnBook); // Route to return a book
