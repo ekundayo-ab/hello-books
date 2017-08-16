@@ -1,7 +1,17 @@
 engines:
-  duplication:
+  eslint:
     enabled: true
+    channel: "eslint-3"
+    checks:
+      import/no-unresolved:
+        enabled: false
+  duplication:
+    enabled: false
     config:
       languages:
-        javascript:
-          mass_threshold: 500
+      - javascript
+ratings:
+  paths:
+  - "**.js"
+exclude_paths:
+- server/test/
