@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/ekundayo-ab/hello-books.svg?branch=develop)](https://travis-ci.org/ekundayo-ab/hello-books)
 [![Code Climate](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/gpa.svg)](https://codeclimate.com/github/ekundayo-ab/hello-books)
 [![Test Coverage](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/coverage.svg)](https://codeclimate.com/github/ekundayo-ab/hello-books/coverage)
-[![Issue Count](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/issue_count.svg)](https://codeclimate.com/github/ekundayo-ab/hello-books)
 [![Coverage Status](https://coveralls.io/repos/github/ekundayo-ab/hello-books/badge.svg?branch=develop)](https://coveralls.io/github/ekundayo-ab/hello-books?branch=develop)
+[![Issue Count](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/issue_count.svg)](https://codeclimate.com/github/ekundayo-ab/hello-books)
 # HelloBooks
 
 HelloBooks is an application that helps manage a library and its processes like stocking, tracking and renting of books.
@@ -10,7 +10,7 @@ HelloBooks is an application that helps manage a library and its processes like 
 With this application users are able to find and rent books. The application also has an admin section where the admin can do things like add books, delete books, increase the quantity of a book etc.
 
 ## Features
-HelloBookds consists of the following features:
+HelloBooks consists of the following features:
 
 ### Authentication
 - It uses JSON Web Token (JWT) for authentication.
@@ -35,7 +35,7 @@ HelloBookds consists of the following features:
 - Admin Users sort & categorize books
 
 ## Installation
-- Install NodeJs, Sequelize and Postgres on computer
+- Install NodeJs, Sequelize and Postgres on local machine
 - Clone this repository `git clone https://github.com/ekundayo-ab/hello-books`
 - Change into cloned directory and run `npm install` to install all dependencies
 
@@ -71,7 +71,7 @@ GET	         | /api/v1/users/:userId/books?returned=false | Authenticated User b
 3. Javascript
 
 **Server Side**
-1. NodeJs-Express
+1. NodeJs
 2. Express
 3. Sequelize
 
