@@ -6,6 +6,10 @@ engines:
         enabled: false
       max-len:
         enabled: false
+      import/extensions:
+        enabled: false
+      vars-on-top:
+        enabled: false
   duplication:
     enabled: false
     config:
