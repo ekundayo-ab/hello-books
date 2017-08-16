@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.org/ekundayo-ab/hello-books.svg?branch=develop)](https://travis-ci.org/ekundayo-ab/hello-books)
 [![Code Climate](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate)
-[![Coverage Status](https://coveralls.io/repos/github/ekundayo-ab/hello-books/badge.svg?branch=develop)](https://coveralls.io/github/ekundayo-ab/hello-books?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/ekundayo-ab/hello-books/badge.svg?branch=develop)](https://coveralls.io/github/ekundayo-ab/hello-books?branch=develop)
 # HelloBooks
 
-HelloBooks is an application that helps manage a library and its processes like stocking, tracking and renting books.
+HelloBooks is an application that helps manage a library and its processes like stocking, tracking and renting of books.
 
 With this application users are able to find and rent books. The application also has an admin section where the admin can do things like add books, delete books, increase the quantity of a book etc.
 
@@ -58,7 +58,7 @@ POST	     | /api/v1/books	                          | Admin user create/add book
 PUT	         | /api/v1/books/:bookId	                  | Admin user modify book information
 POST         | /api/v1/users/:userId/books                | Authenticated User Borrow book
 PUT          | /api/v1/users/:userId/books                | Authenticated User Return book
-GET	         | /api/v1/users/:userId/books?returned=false | Authenticated User borrowed books but not retured
+GET	         | /api/v1/users/:userId/books?returned=false | Authenticated User borrowed books but not returned
 
 ## Others
 
