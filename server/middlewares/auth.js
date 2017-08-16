@@ -1,14 +1,14 @@
 import jwt from 'jsonwebtoken';
 
 /**
- * 
+ *
  */
 class Authenticate {
   /**
-   * 
-   * @param {*} req 
-   * @param {*} res 
-   * @param {*} next 
+   *
+   * @param {*} req
+   * @param {*} res
+   * @param {*} next
    */
   static authenticate(req, res, next) {
     // check header or url parameters or post parameters for token

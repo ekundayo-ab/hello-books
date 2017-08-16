@@ -3,18 +3,18 @@ import model from '../models';
 const Book = model.Book;
 
 /**
- * 
+ *
  */
 class BookController {
   /**
-   * 
-   * 
+   *
+   *
    * @static
    * @description Adds new book to the library
-   * @param {any} req 
-   * @param {any} res 
-   * @returns 
-   * 
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
    * @memberOf BookController
    */
   static create(req, res) {
@@ -63,14 +63,14 @@ class BookController {
       .catch(error => res.send(error.message));
   }
   /**
-   * 
-   * 
+   *
+   *
    * @static
    * @description Modifies existing book in the library
-   * @param {any} req 
-   * @param {any} res 
-   * @returns 
-   * 
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
    * @memberOf BookController
    */
   static update(req, res) {
@@ -128,14 +128,14 @@ class BookController {
       });
   }
   /**
-   * 
-   * 
+   *
+   *
    * @static
    * @description Deletes book from the library
-   * @param {any} req 
-   * @param {any} res 
-   * @returns 
-   * 
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
    * @memberOf BookController
    */
   static destroy(req, res) {
@@ -162,14 +162,14 @@ class BookController {
       }).catch(() => res.status(400).send({ success: false, message: 'Enter valid inputs!' }));
   }
   /**
-   * 
-   * 
+   *
+   *
    * @static
    * @description Lists all books in the library
-   * @param {any} req 
-   * @param {any} res 
-   * @returns 
-   * 
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
    * @memberOf BookController
    */
   static list(req, res) {

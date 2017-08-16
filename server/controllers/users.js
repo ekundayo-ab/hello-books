@@ -5,19 +5,19 @@ import models from '../models';
 const User = models.User;
 
 /**
- * 
- * 
+ *
+ *
  * @class UserController
  */
 class UserController {
   /**
-   * 
+   *
    * @static
    * @description Signs up a user
-   * @param {any} req 
-   * @param {any} res 
+   * @param {any} req
+   * @param {any} res
    * @returns registered user and success: true message
-   * 
+   *
    * @memberOf UserController
    */
   static signup(req, res) {
@@ -27,9 +27,9 @@ class UserController {
       return res.status(400).send({ success: false, message: 'Check your username, email or password and try again!' });
     }
     /**
-     * 
+     *
      * @description Ensures email supplied is a valid email address
-     * @param {any} email 
+     * @param {any} email
      * @returns {boolean} true or false
      */
     function validateEmail(email) {
@@ -50,13 +50,13 @@ class UserController {
       .catch((error) => { res.status(409).send(error); });
   }
   /**
-   * 
+   *
    * @static
    * @description Signs In in a User
-   * @param {any} req 
-   * @param {any} res 
+   * @param {any} req
+   * @param {any} res
    * @returns token and success: true message
-   * 
+   *
    * @memberOf UserController
    */
   static signin(req, res) {
@@ -78,7 +78,7 @@ class UserController {
         } else if (user) {
           /**
            * if User exists, compares supplied credentials
-           * with one found in the database, 
+           * with one found in the database,
            * Authentication fails if no match. But, if all goes well
            * User is signed in with a json web token
            * consisting of User's data and the phrase "hello-books"
@@ -96,13 +96,13 @@ class UserController {
       .catch((error) => { res.status(404).send(error); });
   }
   /**
-   * 
+   *
    * @static
    * @description Lists all users
-   * @param {any} req 
-   * @param {any} res 
+   * @param {any} req
+   * @param {any} res
    * @returns users list
-   * 
+   *
    * @memberOf UserController
    */
   static list(req, res) {
