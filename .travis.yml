@@ -6,10 +6,6 @@ node_js:
   - node
 notifications:
   email: false
-    recipients:
-      - ekprogs@gmail.com
-    on_success: never # default: change
-    on_failure: always # default: always
 services:
   - postgresql
 before_script:
