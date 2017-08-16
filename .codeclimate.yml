@@ -4,6 +4,8 @@ engines:
     checks:
       import/no-unresolved:
         enabled: false
+      max-len:
+        enabled: false
   duplication:
     enabled: false
     config:
