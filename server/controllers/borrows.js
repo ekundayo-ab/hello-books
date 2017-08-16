@@ -3,18 +3,18 @@ import model from '../models';
 const Book = model.Book;
 const Borrow = model.Borrow;
 /**
- * 
+ *
  */
 class BorrowController {
   /**
-   * 
-   * 
+   *
+   *
    * @static
    * @description Borrow a book
-   * @param {any} req 
-   * @param {any} res 
-   * @returns 
-   * 
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
    * @memberOf BorrowController
    */
   static create(req, res) {
@@ -62,7 +62,7 @@ class BorrowController {
                 /**
                  * But if book is available, User can borrow book
                  * with the count decreased by one
-                 */ 
+                 */
                 return foundBorrowedBook
                   .update({
                     quantity: foundBorrowedBook.quantity - 1,
@@ -85,14 +85,14 @@ class BorrowController {
       });
   }
   /**
-   * 
-   * 
+   *
+   *
    * @static
    * @description Return borrowed book
-   * @param {any} req 
-   * @param {any} res 
-   * @returns 
-   * 
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
    * @memberOf BorrowController
    */
   static returnBook(req, res) {
@@ -155,14 +155,14 @@ class BorrowController {
       });
   }
   /**
-   * 
-   * 
+   *
+   *
    * @static
    * @description List all books borrowed but not returned by a User.
-   * @param {any} req 
-   * @param {any} res 
-   * @returns 
-   * 
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
    * @memberOf BorrowController
    */
   static listNotReturned(req, res) {
