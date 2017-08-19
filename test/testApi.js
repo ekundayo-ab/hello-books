@@ -335,25 +335,3 @@ describe('A library with books', () => {
       });
   });
 });
-
-// describe('A library that borrow books', () => {
-//   it('should allow authenticated user to borrow books', (done) => {
-//     server
-//       .post('/api/v1/books')
-//       .set('Accept', 'application/x-www-form-urlencoded')
-//       .set('x-access-token', loggedInToken)
-//       .send({
-//         isbn: 20234,
-//         title: 'Learn JAVA',
-//         author: 'Java Master',
-//         description: 'Learn & Master Java in 28 days',
-//         quantity: 30,
-//       })
-//       .expect(200)
-//       .end((err, res) => {
-//         expect(res.body.success).to.equal(true);
-//         expect(res.statusCode).to.equal(200);
-//         done();
-//       });
-//   });
-// });
