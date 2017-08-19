@@ -17,7 +17,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'An application that helps manage a library and its processes like stocking, tracking and renting of books.',
   },
-  host: 'https://hellobooks-ekundayo.herokuapp.com',
+  host: 'hellobooks-ekundayo.herokuapp.com',
   basePath: '/api/v1',
 };
 
