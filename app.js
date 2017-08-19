@@ -35,7 +35,7 @@ const swaggerSpec = swaggerJSDoc(options);
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'server/api-docs/')));
+app.use('server/api-docs/', express.static(path.join(__dirname, 'server/api-docs/')));
 app.use('/api/v1', router);
 // serve swagger
 app.get('/hellobooks.json', (req, res) => {
