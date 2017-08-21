@@ -9,6 +9,11 @@ require('dotenv').config();
 
 const port = process.env.PORT || 8000;
 const app = express();
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 const swaggerJSDoc = swagger;
 // swagger definition
 const swaggerDefinition = {
@@ -17,7 +22,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'An application that helps manage a library and its processes like stocking, tracking and renting of books.',
   },
-  host: 'hellobooks-ekundayo.herokuapp.com',
+  host: 'hellobooks-e.herokuapp.com',
   // host: 'localhost:8000',
   basePath: '/api/v1',
 };
