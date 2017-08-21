@@ -43,6 +43,10 @@ Router.get('/', (req, res) => res.status(200).send({
  *       password:
  *         type: string
  *         default: dayo
+ *     example: {
+ *       "username": ekundayo,
+ *       "password": dayo
+ *     }
  */
 
 /**
@@ -273,10 +277,19 @@ Router.get('/books', booksController.list); // Route to list all books in librar
  *         required: true
  *         type: integer
  *       - name: bookId
- *         description: Book to Borrow
+ *         description: ID of Book to Borrow
  *         in: body
  *         required: true
- *         type: integer
+ *         schema:
+ *           type: object
+ *           required:
+ *             - bookId
+ *           properties:
+ *             bookId:
+ *               type: integer
+ *           example: {
+ *             "bookId": 4
+ *           }
  *       - name: x-access-token
  *         in: header
  *         description: an authentication header
@@ -310,10 +323,19 @@ Router.post('/users/:userId/books', borrowsController.create); // Route to borro
  *         required: true
  *         type: integer
  *       - name: bookId
- *         description: Book to Borrow
+ *         description: ID of Book to Return
  *         in: body
  *         required: true
- *         type: integer
+ *         schema:
+ *           type: object
+ *           required:
+ *             - bookId
+ *           properties:
+ *             bookId:
+ *               type: integer
+ *           example: {
+ *             "bookId": 4
+ *           }
  *       - name: x-access-token
  *         in: header
  *         description: an authentication header
@@ -346,6 +368,11 @@ Router.put('/users/:userId/books', borrowsController.returnBook); // Route to re
  *         required: true
  *         type: boolean
  *         default: false
+ *       - name: userId
+ *         in: path
+ *         description: ID of the User to show list for
+ *         required: true
+ *         type: integer
  *       - name: x-access-token
  *         in: header
  *         description: an authentication header
