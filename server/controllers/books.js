@@ -24,17 +24,18 @@ class BookController {
     }
     // Validates every input by the user.
     if (Object.keys(req.body).length < 5) return res.status(400).send({ success: false, message: 'All fields are required.' });
-    const errors = [];
+    const errors = {};
     for (let i = 0; i < 5; i += 1) {
       if (Object.values(req.body)[i] === (undefined || null || '')) {
-        errors.push(`${Object.keys(req.body)[i]} field is required`);
+        const theKey = Object.keys(req.body)[i]; // eslint-disable-line no-unused-vars
+        errors[theKey] = 'This field is required';
       }
       if (Object.keys(req.body)[i] === 'quantity' && typeof (parseInt(Object.values(req.body)[i], 10)) !== 'number') {
-        errors.push('quantity must be a number');
+        errors.numeric = 'quantity must be a number';
       }
     }
     // Error(s) is/are outputted if any is pushed to the array
-    if (errors.length > 0) return res.status(400).send({ success: false, errors });
+    if (Object.keys(errors).length > 0) return res.status(400).send({ success: false, errors });
 
     // Searches if book exists in the database
     return Book.findOne({
@@ -56,7 +57,7 @@ class BookController {
             quantity: req.body.quantity,
           })
           .then((book) => {
-            res.status(200).send({ success: true, message: `${book.title}, succesfully added` });
+            res.status(200).send({ success: true, message: `${book.title}, successfully added` });
           })
           .catch(error => res.send(error.message));
       })

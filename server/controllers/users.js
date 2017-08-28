@@ -86,7 +86,7 @@ class UserController {
       .then((user) => {
         // If User does not exist, output User not found.
         if (!user) {
-          res.send({ success: false, message: 'Authentication failed. User not found' });
+          res.status(404).send({ success: false, message: 'Authentication failed. User not found' });
         } else if (user) {
           /**
            * if User exists, compares supplied credentials
@@ -96,7 +96,7 @@ class UserController {
            * consisting of User's data and the phrase "hello-books"
            */
           if (!bcrypt.compareSync(req.body.password, user.password)) {
-            res.send({ success: false, message: 'Authentication failed. Wrong password' });
+            res.status(401).send({ success: false, message: 'Authentication failed. Wrong password' });
           } else {
             const token = jwt.sign({
               data: user,
