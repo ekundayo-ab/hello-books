@@ -5,13 +5,11 @@ import models from '../server/models/';
 
 const User = models.User; // Makes User model available globally in this file
 const Book = models.Book; // Makes Book model available globally in this file
+const Borrow = models.Borrow; // Makes Borrow model available globally in this file
 const expect = chai.expect; // Provides interface to ascertain expected results are true
 
 const server = supertest.agent(app);
 let loggedInToken; // Token for an Admin User
-
-User.destroy({ where: {} }); // Purges Data already in the table before testing
-Book.destroy({ where: {} });
 
 beforeEach(() => {
   server
@@ -30,7 +28,6 @@ beforeEach(() => {
       username: 'bootcamp',
       email: 'bootcamp@gmail.com',
       password: '123456',
-      role: 'admin',
     });
 });
 
@@ -78,3 +75,7 @@ describe('An Authentication middleware', () => {
       });
   });
 });
+
+User.destroy({ where: {} }); // Purges Data already in the table after testing
+Book.destroy({ where: {} }); // Purges Data already in the table after testing
+Borrow.destroy({ where: {} }); // Purges Data already in the table after testing

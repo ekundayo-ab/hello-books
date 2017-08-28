@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import models from '../models';
+import Helper from '../helpers/index';
 
 const User = models.User;
 
@@ -26,28 +27,39 @@ class UserController {
       || req.body.email === undefined) {
       return res.status(400).send({ success: false, message: 'Check your username, email or password and try again!' });
     }
-    /**
-     *
-     * @description Ensures email supplied is a valid email address
-     * @param {any} email
-     * @returns {boolean} true or false
-     */
-    function validateEmail(email) {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
-    }
-    if (!validateEmail(req.body.email)) {
+
+    if (!Helper.validateEmail(req.body.email)) {
       return res.status(400).send({ success: false, message: 'Invalid email address, try again' });
     }
     return User
-      .create({
-        username: req.body.username,
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 10),
-        role: req.body.role,
+      .findOne({
+        where: {
+          email: req.body.email,
+        },
       })
-      .then((user) => { res.status(201).send({ success: true, message: `Hi ${user.username}, registration successful!` }); })
-      .catch((error) => { res.status(409).send(error); });
+      .then((foundEmail) => {
+        if (foundEmail) {
+          return res.status(409).send({ success: false, message: 'User with that email exists' });
+        }
+        return User.findOne({
+          where: {
+            username: req.body.username,
+          },
+        }).then((foundUsername) => {
+          if (foundUsername) {
+            return res.status(409).send({ success: false, message: 'Username already taken' });
+          }
+          return User
+            .create({
+              username: req.body.username,
+              email: req.body.email,
+              password: bcrypt.hashSync(req.body.password, 10),
+              role: req.body.role,
+            })
+            .then((user) => { res.status(201).send({ success: true, message: `Hi ${user.username}, registration successful!` }); })
+            .catch((error) => { res.status(409).send(error.message); });
+        });
+      });
   }
   /**
    *

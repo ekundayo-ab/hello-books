@@ -5,16 +5,15 @@ import models from '../server/models/';
 
 const User = models.User; // Makes User model available globally in this file
 const Book = models.Book; // Makes Book model available globally in this file
+const Borrow = models.Borrow; // Makes Borrow model available globally in this file
 const expect = chai.expect; // Provides interface to ascertain expected results are true
 
 const server = supertest.agent(app);
-let loggedInToken; // Token for an Admin User
+let adminToken; // Token for an Admin User
 let normalToken; // Token for a Normal User
 
-User.destroy({ where: {} }); // Purges Data already in the table before testing
-Book.destroy({ where: {} });
 describe('A typical User registration', () => {
-  it('should allow admin user to be created', (done) => {
+  it('should allow admin user to be seeded', (done) => {
     server
       .post('/api/v1/users/signup')
       .set('Accept', 'application/x-www-form-urlencoded')
@@ -24,10 +23,10 @@ describe('A typical User registration', () => {
         password: '123456',
         role: 'admin',
       })
-      .expect(201)
       .end((err, res) => {
         expect(res.body.success).to.equal(true);
         expect(res.body.message).to.equal('Hi ekundayo, registration successful!');
+        expect(res.statusCode).to.equal(201);
         done();
       });
   });
@@ -39,11 +38,11 @@ describe('A typical User registration', () => {
         username: 'bootcamp',
         email: 'bootcamp@gmail.com',
         password: '123456',
-        role: 'admin',
       })
-      .expect(201)
       .end((err, res) => {
         expect(res.body.success).to.equal(true);
+        expect(res.body.message).to.equal('Hi bootcamp, registration successful!');
+        expect(res.statusCode).to.equal(201);
         done();
       });
   });
@@ -57,10 +56,10 @@ describe('A typical User registration', () => {
         mail: 'ekprogs@gmail.com',
         pasword: '123456',
       })
-      .expect(201)
       .end((err, res) => {
         expect(res.body.success).to.equal(false);
         expect(res.body.message).to.equal('Check your username, email or password and try again!');
+        expect(res.statusCode).to.equal(400);
         done();
       });
   });
@@ -74,7 +73,6 @@ describe('A typical User registration', () => {
         email: '',
         password: '',
       })
-      .expect(400)
       .end((err, res) => {
         expect(res.body.success).to.equal(false);
         expect(res.body.message).to.equal('Check your username, email or password and try again!');
@@ -91,11 +89,44 @@ describe('A typical User registration', () => {
         email: 'testuser',
         password: 'testuser',
       })
-      .expect(400)
       .end((err, res) => {
         expect(res.body.success).to.equal(false);
         expect(res.body.message).to.equal('Invalid email address, try again');
         expect(res.statusCode).to.equal(400);
+        done();
+      });
+  });
+
+  it('should ensure email is unique', (done) => {
+    server
+      .post('/api/v1/users/signup')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .send({
+        username: 'spartan',
+        email: 'bootcamp@gmail.com',
+        password: '123456',
+      })
+      .end((err, res) => {
+        expect(res.body.success).to.equal(false);
+        expect(res.body.message).to.equal('User with that email exists');
+        expect(res.statusCode).to.equal(409);
+        done();
+      });
+  });
+
+  it('should ensure username is unique', (done) => {
+    server
+      .post('/api/v1/users/signup')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .send({
+        username: 'bootcamp',
+        email: 'spartan@gmail.com',
+        password: '123456',
+      })
+      .end((err, res) => {
+        expect(res.body.success).to.equal(false);
+        expect(res.body.message).to.equal('Username already taken');
+        expect(res.statusCode).to.equal(409);
         done();
       });
   });
@@ -118,23 +149,7 @@ describe('A typical User Logging In', () => {
       });
   });
 
-  it('Should allow normal user with correct inputs to sign in and assign token', (done) => {
-    server
-      .post('/api/v1/users/signin')
-      .set('Accept', 'application/x-www-form-urlencoded')
-      .send({
-        username: 'ekundayo',
-        password: '123456',
-      })
-      .expect(200)
-      .end((err, res) => {
-        expect(res.body.success).to.equal(true);
-        expect(res.body.message).to.equal('Hi ekundayo, you are logged in');
-        normalToken = res.body.token;
-        done();
-      });
-  });
-  it('Should allow admin user with correct inputs to sign in', (done) => {
+  it('should allow normal user with correct inputs to sign in and assign token', (done) => {
     server
       .post('/api/v1/users/signin')
       .set('Accept', 'application/x-www-form-urlencoded')
@@ -146,13 +161,30 @@ describe('A typical User Logging In', () => {
       .end((err, res) => {
         expect(res.body.success).to.equal(true);
         expect(res.body.message).to.equal('Hi bootcamp, you are logged in');
-        expect(res.body).not.to.equal(null);
-        loggedInToken = res.body.token;
+        expect(res.statusCode).to.equal(200);
+        normalToken = res.body.token;
+        done();
+      });
+  });
+  it('Should allow admin user with correct inputs to sign in', (done) => {
+    server
+      .post('/api/v1/users/signin')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .send({
+        username: 'ekundayo',
+        password: '123456',
+      })
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body.success).to.equal(true);
+        expect(res.body.message).to.equal('Hi ekundayo, you are logged in');
+        expect(res.statusCode).to.equal(200);
+        adminToken = res.body.token;
         done();
       });
   });
 
-  it('Should prevent user from signing in with wrong password', (done) => {
+  it('should prevent user from signing in with wrong password', (done) => {
     server
       .post('/api/v1/users/signin')
       .set('Accept', 'application/x-www-form-urlencoded')
@@ -190,7 +222,7 @@ describe('A library with books', () => {
     server
       .post('/api/v1/books')
       .set('Accept', 'application/x-www-form-urlencoded')
-      .set('x-access-token', loggedInToken)
+      .set('x-access-token', adminToken)
       .send({
         isbn: 20234,
         title: 'Learn JAVA',
@@ -209,7 +241,7 @@ describe('A library with books', () => {
     server
       .post('/api/v1/books')
       .set('Accept', 'application/x-www-form-urlencoded')
-      .set('x-access-token', loggedInToken)
+      .set('x-access-token', adminToken)
       .send({
         isbn: 20234,
         title: 'Learn JAVA',
@@ -228,7 +260,7 @@ describe('A library with books', () => {
     server
       .post('/api/v1/books')
       .set('Accept', 'application/x-www-form-urlencoded')
-      .set('x-access-token', loggedInToken)
+      .set('x-access-token', adminToken)
       .send({
         isbn: 20238,
         title: 'Learn JAVA',
@@ -248,7 +280,7 @@ describe('A library with books', () => {
     server
       .post('/api/v1/books')
       .set('Accept', 'application/x-www-form-urlencoded')
-      .set('x-access-token', loggedInToken)
+      .set('x-access-token', adminToken)
       .send({
         isbn: 7394389,
         title: 'Learn JAVA',
@@ -268,7 +300,7 @@ describe('A library with books', () => {
     server
       .post('/api/v1/books')
       .set('Accept', 'application/x-www-form-urlencoded')
-      .set('x-access-token', loggedInToken)
+      .set('x-access-token', adminToken)
       .send({
         isbn: 7394380,
         title: 'Learn JAVA',
@@ -288,7 +320,7 @@ describe('A library with books', () => {
     server
       .post('/api/v1/books')
       .set('Accept', 'application/x-www-form-urlencoded')
-      .set('x-access-token', loggedInToken)
+      .set('x-access-token', adminToken)
       .send({
         isbn: 732360,
         title: '',
@@ -316,10 +348,10 @@ describe('A library with books', () => {
         description: 'Learn & Master SQL in 48hours',
         quantity: 39,
       })
-      .expect(200)
       .end((err, res) => {
-        expect(res.body.success).to.equal(true);
-        expect(res.statusCode).to.equal(200);
+        expect(res.body.success).to.equal(false);
+        expect(res.statusCode).to.equal(403);
+        expect(res.body.message).to.equal('Permission Denied');
         done();
       });
   });
@@ -350,3 +382,7 @@ describe('A library with books', () => {
       });
   });
 });
+
+User.destroy({ where: {} }); // Purges Data already in the table after testing
+Book.destroy({ where: {} }); // Purges Data already in the table after testing
+Borrow.destroy({ where: {} }); // Purges Data already in the table after testing
