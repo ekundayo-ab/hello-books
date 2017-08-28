@@ -14,7 +14,7 @@ let normalToken; // Token for a Normal User
 User.destroy({ where: {} }); // Purges Data already in the table before testing
 Book.destroy({ where: {} });
 describe('A typical User registration', () => {
-  it('Should allow admin user to be created', (done) => {
+  it('should allow admin user to be created', (done) => {
     server
       .post('/api/v1/users/signup')
       .set('Accept', 'application/x-www-form-urlencoded')
@@ -31,7 +31,7 @@ describe('A typical User registration', () => {
         done();
       });
   });
-  it('Should allow normal user to register', (done) => {
+  it('should allow normal user to register', (done) => {
     server
       .post('/api/v1/users/signup')
       .set('Accept', 'application/x-www-form-urlencoded')
@@ -48,7 +48,7 @@ describe('A typical User registration', () => {
       });
   });
 
-  it('Should raise an error for registration property not available', (done) => {
+  it('should ensure all signup fields are required', (done) => {
     server
       .post('/api/v1/users/signup')
       .set('Accept', 'application/x-www-form-urlencoded')
@@ -65,7 +65,7 @@ describe('A typical User registration', () => {
       });
   });
 
-  it('Should raise an error for invalid inputs', (done) => {
+  it('should ensure all signup fields are defined', (done) => {
     server
       .post('/api/v1/users/signup')
       .set('Accept', 'application/x-www-form-urlencoded')
@@ -81,10 +81,28 @@ describe('A typical User registration', () => {
         done();
       });
   });
+
+  it('should ensure valid email is entered', (done) => {
+    server
+      .post('/api/v1/users/signup')
+      .set('Accept', 'application/x-www-form-urlencoded')
+      .send({
+        username: 'testuser',
+        email: 'testuser',
+        password: 'testuser',
+      })
+      .expect(400)
+      .end((err, res) => {
+        expect(res.body.success).to.equal(false);
+        expect(res.body.message).to.equal('Invalid email address, try again');
+        expect(res.statusCode).to.equal(400);
+        done();
+      });
+  });
 });
 
 describe('A typical User Logging In', () => {
-  it('Should raise error for bad request data on signing in', (done) => {
+  it('should ensure all log in fields are defined', (done) => {
     server
       .post('/api/v1/users/signin')
       .set('Accept', 'application/x-www-form-urlencoded')
@@ -100,7 +118,7 @@ describe('A typical User Logging In', () => {
       });
   });
 
-  it('Should allow normal user to sign in and assign token', (done) => {
+  it('Should allow normal user with correct inputs to sign in and assign token', (done) => {
     server
       .post('/api/v1/users/signin')
       .set('Accept', 'application/x-www-form-urlencoded')
@@ -112,13 +130,11 @@ describe('A typical User Logging In', () => {
       .end((err, res) => {
         expect(res.body.success).to.equal(true);
         expect(res.body.message).to.equal('Hi ekundayo, you are logged in');
-        expect(res.body).to.have.property('token');
-        expect(res.body).not.to.equal(null);
         normalToken = res.body.token;
         done();
       });
   });
-  it('Should allow admin user to sign in and assign token', (done) => {
+  it('Should allow admin user with correct inputs to sign in', (done) => {
     server
       .post('/api/v1/users/signin')
       .set('Accept', 'application/x-www-form-urlencoded')
@@ -130,7 +146,6 @@ describe('A typical User Logging In', () => {
       .end((err, res) => {
         expect(res.body.success).to.equal(true);
         expect(res.body.message).to.equal('Hi bootcamp, you are logged in');
-        expect(res.body).to.have.property('token');
         expect(res.body).not.to.equal(null);
         loggedInToken = res.body.token;
         done();
