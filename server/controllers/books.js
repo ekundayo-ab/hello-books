@@ -1,4 +1,5 @@
 import model from '../models';
+import helper from '../helpers/index';
 
 const Book = model.Book;
 
@@ -19,24 +20,18 @@ class BookController {
    */
   static create(req, res) {
     // Ensure user has administrative priviledges to create book
-    if (req.decoded.data.role !== 'admin') {
+    if (!helper.isAdmin(req)) {
       return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
+
     // Validates every input by the user.
-    if (Object.keys(req.body).length < 5) return res.status(400).send({ success: false, message: 'All fields must exist' });
-    const errors = {};
-    for (let i = 0; i < 5; i += 1) {
-      const field = Object.values(req.body)[i];
-      if (Object.values(req.body)[i] === (undefined || null || '') || /^\s+$/.test(field)) {
-        const theKey = Object.keys(req.body)[i]; // eslint-disable-line no-unused-vars
-        errors[theKey] = 'This field is required';
-      }
-      if (Object.keys(req.body)[i] === 'quantity' && typeof (parseInt(Object.values(req.body)[i], 10)) !== 'number') {
-        errors.numeric = 'quantity must be a number';
-      }
+    if (!helper.isDefined(req)) {
+      return res.status(400).send({ success: false, message: 'All fields must exist' });
     }
+
     // Error(s) is/are outputted if any is pushed to the array
-    if (Object.keys(errors).length > 0) return res.status(400).send({ success: false, errors });
+    const { isValid, errors } = helper.inputValidation(req);
+    if (!isValid) return res.status(400).send({ success: false, errors });
 
     // Searches if book exists in the database
     return Book.findOne({
@@ -77,24 +72,18 @@ class BookController {
    */
   static update(req, res) {
     // Ensure user has administrative priviledges to create book
-    if (req.decoded.data.role !== 'admin') {
+    if (!helper.isAdmin(req)) {
       return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
+
     // Validates every input by the user.
-    if (Object.keys(req.body).length < 5) return res.status(400).send({ success: false, message: 'All fields must exist' });
-    const errors = {};
-    for (let i = 0; i < 5; i += 1) {
-      const field = Object.values(req.body)[i];
-      if (field === (undefined || null || '') || /^\s+$/.test(field)) {
-        const theKey = Object.keys(req.body)[i]; // eslint-disable-line no-unused-vars
-        errors[theKey] = 'This field is required';
-      }
-      if (Object.keys(req.body)[i] === 'quantity' && typeof (parseInt(Object.values(req.body)[i], 10)) !== 'number') {
-        errors.numeric = 'quantity must be a number';
-      }
+    if (!helper.isDefined(req)) {
+      return res.status(400).send({ success: false, message: 'All fields must exist' });
     }
+
     // Error(s) is/are outputted if any is pushed to the array
-    if (Object.keys(errors).length > 0) return res.status(400).send({ success: false, errors });
+    const { isValid, errors } = helper.inputValidation(req);
+    if (!isValid) return res.status(400).send({ success: false, errors });
 
     // Checks if book exists in the database
     return Book
@@ -141,7 +130,7 @@ class BookController {
    */
   static destroy(req, res) {
     // Ensures user has administrative priviledges to delete book
-    if (req.decoded.data.role !== 'admin') {
+    if (!helper.isAdmin(req)) {
       return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
     // Ensures Book ID is present in the path

@@ -42,6 +42,7 @@
     "eslint": "^4.4.1",
     "express": "^4.15.4",
     "jsonwebtoken": "^7.4.3",
+    "lodash": "^4.17.4",
     "morgan": "^1.8.2",
     "pg": "^7.1.2",
     "pg-hstore": "^2.3.2",
