@@ -540,6 +540,89 @@ describe('API Operations', () => {
     });
   });
 
+  describe('Upon returning of book', () => {
+    before((done) => {
+      jwt.verify(adminToken, 'hello-books', (error, decoded) => {
+        userId = decoded.data.id;
+      });
+      done();
+    });
+    it('should disallow unauthenticated user from returning', (done) => {
+      server
+        .put('/api/v1/users/2/books')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .send({
+          bookId,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.status).to.equal(401);
+          expect(res.body.message).to.equal('Unauthenticated, token not found');
+          done();
+        });
+    });
+    it('should allow authenticated user to return book', (done) => {
+      server
+        .put(`/api/v1/users/${userId}/books`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          bookId,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(true);
+          expect(res.status).to.equal(200);
+          expect(res.body.message).to.equal('Learn Haskell succesfully returned but pending review by Administrator');
+          done();
+        });
+    });
+    it('should notify if user does not exist', (done) => {
+      server
+        .put(`/api/v1/users/${userId}1/books`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          bookId,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.status).to.equal(404);
+          expect(res.body.message).to.equal('User does not exist');
+          done();
+        });
+    });
+    it('should notify if book is not available', (done) => {
+      server
+        .put(`/api/v1/users/${userId}/books`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          bookId: 24,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('You have not borrowed this book');
+          expect(res.status).to.equal(404);
+          done();
+        });
+    });
+    it('should notify if book has been returned', (done) => {
+      server
+        .put(`/api/v1/users/${userId}/books`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          bookId,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Book returned already');
+          expect(res.status).to.equal(409);
+          done();
+        });
+    });
+  });
+
   describe('Upon modification of books', () => {
     before((done) => {
       jwt.verify(adminToken, 'hello-books', (error, decoded) => {
@@ -582,7 +665,7 @@ describe('API Operations', () => {
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
           expect(res.status).to.equal(400);
-          expect(res.body.message).to.equal('Failed to authenticate token.');
+          expect(res.body.message).to.equal('Failed to authenticate token');
           done();
         });
     });
@@ -735,6 +818,105 @@ describe('API Operations', () => {
           expect(res.body.success).to.equal(false);
           expect(res.body.errors.quantity).to.equal('This field is required');
           expect(res.status).to.equal(400);
+          done();
+        });
+    });
+  });
+
+  describe('Upon listing of all books', () => {
+    it('should ensure only authenticated user can view all books', (done) => {
+      server
+        .get('/api/v1/books')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body).to.be.a('array');
+          done();
+        });
+    });
+    it('should ensure only authenticated user can view all books', (done) => {
+      server
+        .get('/api/v1/books')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', normalToken)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body).to.be.a('array');
+          done();
+        });
+    });
+    it('should disallow unauthenticated user from viewing all books', (done) => {
+      server
+        .get('/api/v1/books')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Unauthenticated, token not found');
+          done();
+        });
+    });
+    it('should disallow user with altered token from viewing all books', (done) => {
+      server
+        .get('/api/v1/books')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', `${adminToken}gibberish`)
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Failed to authenticate token');
+          done();
+        });
+    });
+  });
+
+  describe('Upon deleting of a book', () => {
+    it('should ensure only admin can delete book', (done) => {
+      server
+        .delete(`/api/v1/books/${bookId}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', normalToken)
+        .end((err, res) => {
+          expect(res.status).to.equal(403);
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Permission Denied');
+          done();
+        });
+    });
+    it('should allow only authenticated admin to delete book', (done) => {
+      server
+        .delete(`/api/v1/books/${bookId}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.success).to.equal(true);
+          expect(res.body.message).to.equal('Book successfully deleted');
+          done();
+        });
+    });
+    it('should notify if book to be deleted is not found', (done) => {
+      server
+        .delete('/api/v1/books/003')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Book not found');
+          done();
+        });
+    });
+    it('should notify if parameter specified is undefined', (done) => {
+      server
+        .delete(`/api/v1/books/${undefined}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Book not found');
           done();
         });
     });

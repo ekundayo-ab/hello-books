@@ -116,7 +116,7 @@ class BorrowController {
         }).then((foundBorrow) => {
           // If borrowed and returned, then you have no business returning again.
           if (foundBorrow) {
-            return res.status(409).send({ success: false, messsage: 'Conflict! Book returned already', foundBorrow });
+            return res.status(409).send({ success: false, message: 'Book returned already', foundBorrow });
           }
           // Else, allows to return
           return Borrow

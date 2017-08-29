@@ -19,7 +19,7 @@ class Authenticate {
     if (token) {
       jwt.verify(token, 'hello-books', (err, decoded) => {
         if (err) {
-          res.status(400).send({ success: false, message: 'Failed to authenticate token.' });
+          res.status(400).send({ success: false, message: 'Failed to authenticate token' });
         } else {
           req.decoded = decoded;
           next();

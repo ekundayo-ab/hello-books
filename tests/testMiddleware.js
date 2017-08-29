@@ -67,7 +67,7 @@ describe('Middleware Operations', () => {
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
           expect(res.statusCode).to.equal(400);
-          expect(res.body.message).to.equal('Failed to authenticate token.');
+          expect(res.body.message).to.equal('Failed to authenticate token');
           done();
         });
     });

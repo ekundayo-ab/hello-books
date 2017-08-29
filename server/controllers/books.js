@@ -144,6 +144,10 @@ class BookController {
     if (req.decoded.data.role !== 'admin') {
       return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
+    // Ensures Book ID is present in the path
+    if (req.params.bookId === 'undefined') {
+      return res.status(404).send({ success: false, message: 'Book not found' });
+    }
     // Searches for book in the database
     return Book
       .find({
