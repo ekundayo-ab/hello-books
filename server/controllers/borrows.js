@@ -65,6 +65,10 @@ class BorrowController {
                     quantity: foundBooktoBorrow.quantity - 1,
                   })
                   .then((updatedBorrowedBook) => {
+                    // If book is borrowed out, then No book to borrow
+                    if (!foundBooktoBorrow || foundBooktoBorrow.quantity === 0) {
+                      return res.status(404).send({ success: false, message: 'Book not found' });
+                    }
                     // Else, user is eligible to borrow book
                     return Borrow
                       .create({
