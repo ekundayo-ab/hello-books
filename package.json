@@ -13,7 +13,7 @@
     "start": "babel-node app.js",
     "start:dev": "babel-watch app.js",
     "db:seed": "DATABASE_URL=$DATABASE_URL sequelize db:seed:all",
-    "test": "cross-env NODE_ENV=test mocha --compilers js:babel-register tests/*.js",
+    "test": "cross-env NODE_ENV=test mocha --compilers js:babel-register server/tests/*.js",
     "heroku-postbuild": "NODE_ENV=production && NODE_END=production sequelize db:migrate:undo:all && NODE_END=production sequelize db:migrate && npm run db:seed"
   },
   "repository": {

@@ -1,5 +1,4 @@
 import { isEmpty } from 'lodash';
-
 /**
  *
  * @description Abstracts validation functions
