@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 import chai from 'chai';
-import app from '../app';
-import models from '../server/models/';
+import app from '../../app';
+import models from '../models/';
 
 const User = models.User; // Makes User model available globally in this file
 const Book = models.Book; // Makes Book model available globally in this file
