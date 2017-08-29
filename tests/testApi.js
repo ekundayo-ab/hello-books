@@ -1,5 +1,6 @@
 import supertest from 'supertest';
 import chai from 'chai';
+import jwt from 'jsonwebtoken';
 import app from '../app';
 import models from '../server/models/';
 
@@ -11,12 +12,23 @@ const expect = chai.expect; // Provides interface to ascertain expected results 
 const server = supertest.agent(app);
 let adminToken; // Token for an Admin User
 let normalToken; // Token for a Normal User
-
+let userId;
+let bookId;
 describe('API Operations', () => {
   before((done) => {
     User.destroy({ where: {} }); // Purges Data already in the table after testing
     Book.destroy({ where: {} }); // Purges Data already in the table after testing
     Borrow.destroy({ where: {} }); // Purges Data already in the table after testing
+    Book
+      .create({
+        isbn: '001',
+        title: 'Learn Haskell',
+        author: 'Haskell Master',
+        description: 'Learn and Master Haskell in 16 Months',
+        quantity: '30',
+      }).then((book) => {
+        bookId = book.id;
+      });
     done();
   });
 
@@ -240,7 +252,7 @@ describe('API Operations', () => {
     });
   });
 
-  describe('Upon adding books library', () => {
+  describe('Upon adding of books', () => {
     it('should ensure admin user is authenticated', (done) => {
       server
         .post('/api/v1/books')
@@ -310,7 +322,7 @@ describe('API Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('All fields are required.');
+          expect(res.body.message).to.equal('All fields must exist');
           expect(res.status).to.equal(400);
           done();
         });
@@ -455,6 +467,274 @@ describe('API Operations', () => {
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('array');
+          done();
+        });
+    });
+  });
+
+  describe('Upon borrowing of books', () => {
+    before((done) => {
+      jwt.verify(adminToken, 'hello-books', (error, decoded) => {
+        userId = decoded.data.id;
+      });
+      done();
+    });
+    it('should disallow unauthenticated user from borrowing', (done) => {
+      server
+        .post('/api/v1/users/2/books')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .send({
+          bookId,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.status).to.equal(401);
+          expect(res.body.message).to.equal('Unauthenticated, token not found');
+          done();
+        });
+    });
+    it('should allow authenticated user to borrow', (done) => {
+      server
+        .post(`/api/v1/users/${userId}/books`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          bookId,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(true);
+          expect(res.status).to.equal(200);
+          expect(res.body.message).to.equal('Learn Haskell succesfully borrowed');
+          done();
+        });
+    });
+    it('should notify if book is not available', (done) => {
+      server
+        .post(`/api/v1/users/${userId}/books`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          bookId: 24,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Book not found');
+          expect(res.status).to.equal(404);
+          done();
+        });
+    });
+    it('should notify if book was borrowed but not returned by same user', (done) => {
+      server
+        .post(`/api/v1/users/${userId}/books`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          bookId,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Book borrowed already');
+          expect(res.status).to.equal(409);
+          done();
+        });
+    });
+  });
+
+  describe('Upon modification of books', () => {
+    before((done) => {
+      jwt.verify(adminToken, 'hello-books', (error, decoded) => {
+        userId = decoded.data.id;
+      });
+      done();
+    });
+
+    it('should ensure only admin user can modify books', (done) => {
+      server
+        .put(`/api/v1/books/${bookId}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', normalToken)
+        .send({
+          isbn: '001',
+          title: 'Learn Haskell New Edition',
+          author: 'Haskell Master',
+          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          quantity: '30',
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.status).to.equal(403);
+          expect(res.body.message).to.equal('Permission Denied');
+          done();
+        });
+    });
+    it('should ensure only authenticated admin user can modify books', (done) => {
+      server
+        .put(`/api/v1/books/${bookId}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', `${adminToken}giberrish`)
+        .send({
+          isbn: '001',
+          title: 'Learn Haskell New Edition',
+          author: 'Haskell Master',
+          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          quantity: '30',
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.status).to.equal(400);
+          expect(res.body.message).to.equal('Failed to authenticate token.');
+          done();
+        });
+    });
+    it('should allow authenticated admin user to modify books', (done) => {
+      server
+        .put(`/api/v1/books/${bookId}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          isbn: '001',
+          title: 'Learn Haskell New Edition',
+          author: 'Haskell Master',
+          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          quantity: 30,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(true);
+          expect(res.status).to.equal(200);
+          expect(res.body.message).to.equal('Learn Haskell successfully updated to Learn Haskell New Edition');
+          done();
+        });
+    });
+    it('should notify if book is not available', (done) => {
+      server
+        .put('/api/v1/books/345')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          isbn: '001',
+          title: 'Learn Haskell New Edition',
+          author: 'Haskell Master',
+          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          quantity: 30,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.status).to.equal(404);
+          expect(res.body.message).to.equal('Book not found');
+          done();
+        });
+    });
+    it('should ensure all fields exists', (done) => {
+      server
+        .put(`/api/v1/books/${bookId}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          isbn: '001',
+          title: 'Learn Haskell New Edition',
+          author: 'Haskell Master',
+          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          quantity: undefined,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.status).to.equal(400);
+          expect(res.body.message).to.equal('All fields must exist');
+          done();
+        });
+    });
+    it('should ensure isbn field is required', (done) => {
+      server
+        .put(`/api/v1/books/${bookId}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          isbn: '',
+          title: 'Learn Haskell New Edition',
+          author: 'Haskell Master',
+          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          quantity: 40,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.body.errors.isbn).to.equal('This field is required');
+          expect(res.status).to.equal(400);
+          done();
+        });
+    });
+    it('should ensure title field is required', (done) => {
+      server
+        .put(`/api/v1/books/${bookId}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          isbn: 456,
+          title: '',
+          author: 'Haskell Master',
+          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          quantity: 40,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.body.errors.title).to.equal('This field is required');
+          expect(res.status).to.equal(400);
+          done();
+        });
+    });
+    it('should ensure author field is required', (done) => {
+      server
+        .put(`/api/v1/books/${bookId}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          isbn: 456,
+          title: 'Learn Haskell New Edition',
+          author: '',
+          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          quantity: 40,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.body.errors.author).to.equal('This field is required');
+          expect(res.status).to.equal(400);
+          done();
+        });
+    });
+    it('should ensure description field is required', (done) => {
+      server
+        .put(`/api/v1/books/${bookId}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          isbn: 456,
+          title: 'Learn Haskell New Edition',
+          author: 'Haskell Master',
+          description: '',
+          quantity: 40,
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.body.errors.description).to.equal('This field is required');
+          expect(res.status).to.equal(400);
+          done();
+        });
+    });
+    it('should ensure quantity field is required', (done) => {
+      server
+        .put(`/api/v1/books/${bookId}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .send({
+          isbn: 456,
+          title: 'Learn Haskell New Edition',
+          author: 'Haskell Master',
+          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          quantity: '',
+        })
+        .end((err, res) => {
+          expect(res.body.success).to.equal(false);
+          expect(res.body.errors.quantity).to.equal('This field is required');
+          expect(res.status).to.equal(400);
           done();
         });
     });

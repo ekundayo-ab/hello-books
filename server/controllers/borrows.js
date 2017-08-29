@@ -20,7 +20,7 @@ class BorrowController {
    */
   static create(req, res) {
     // Checks if user exists
-    return User.findById(req.params.userId)
+    return User.findById(req.decoded.data.id)
       .then((userFound) => {
         if (!userFound) {
           return res.status(404).send({ success: false, message: 'User does not exist' });
@@ -29,7 +29,7 @@ class BorrowController {
         return Borrow
           .findOne({
             where: {
-              userId: req.params.userId,
+              userId: req.decoded.data.id,
               bookId: req.body.bookId,
               returned: false,
             },
@@ -42,53 +42,45 @@ class BorrowController {
              * User cannot borrow same book again.
              */
             if (foundBorrow) {
-              return res.status(409).send({ success: false, messsage: 'Conflict! Book borrowed already', foundBorrow });
+              return res.status(409).send({ success: false, message: 'Book borrowed already' });
             }
-            // Else, user is eligible to borrow book
-            return Borrow
-              .create({
-                returned: false,
-                userId: req.params.userId,
-                bookId: req.body.bookId,
-                dueDate: new Date(Date.now() + (3 * 24 * 60 * 60 * 1000)),
-                actualReturnDate: Date.now(),
+            // Check if book is available and not borrowed out.
+            return Book
+              .findOne({
+                where: {
+                  id: req.body.bookId,
+                },
               })
-              .then(() => {
-                // Ensures book is available and not borrowed out.
-                Book
-                  .findOne({
-                    where: {
-                      id: req.body.bookId,
-                    },
+              .then((foundBooktoBorrow) => {
+                // If book is borrowed out, then No book to borrow
+                if (!foundBooktoBorrow || foundBooktoBorrow.quantity === 0) {
+                  return res.status(404).send({ success: false, message: 'Book not found' });
+                }
+                /**
+                 * But if book is available, User can borrow book
+                 * with the count decreased by one
+                 */
+                return foundBooktoBorrow
+                  .update({
+                    quantity: foundBooktoBorrow.quantity - 1,
                   })
-                  .then((foundBorrowedBook) => {
-                    // If book is borrowed out, then No book to borrow
-                    if (!foundBorrowedBook || foundBorrowedBook.quantity === 0) {
-                      return res.status(404).send({ success: false, message: 'Book not found' });
-                    }
-                    /**
-                     * But if book is available, User can borrow book
-                     * with the count decreased by one
-                     */
-                    return foundBorrowedBook
-                      .update({
-                        quantity: foundBorrowedBook.quantity - 1,
-                      })
-                      .then((updatedBorrowedBook) => {
+                  .then((updatedBorrowedBook) => {
+                    // Else, user is eligible to borrow book
+                    return Borrow
+                      .create({
+                        returned: false,
+                        userId: req.decoded.data.id,
+                        bookId: req.body.bookId,
+                        dueDate: new Date(Date.now() + (3 * 24 * 60 * 60 * 1000)),
+                        actualReturnDate: Date.now(),
+                      }).then(() => {
                         res.status(200).send({ success: true, message: `${updatedBorrowedBook.title} succesfully borrowed`, updatedBorrowedBook });
-                      })
-                      .catch((error) => {
-                        res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
                       });
-                  })
-                  .catch((error) => {
-                    res.status(400).send({ success: false, message: `Oops! something happenned ${error.message}` });
                   });
-              })
-              .catch(() => { res.status(400).send({ success: false, message: 'Oops! Check entered UserId or BookId and ensure its valid input' }); });
+              });
           })
           .catch((error) => {
-            res.status(400).send({ success: false, message: `drOops! something happened, ${error.message}` });
+            res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
           });
       })
       .catch(e => res.send(e.message));
