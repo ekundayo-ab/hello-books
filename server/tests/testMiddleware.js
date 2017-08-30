@@ -11,7 +11,7 @@ const expect = chai.expect; // Provides interface to ascertain expected results 
 const server = supertest.agent(app);
 let loggedInToken; // Token for an Admin User
 describe('Middleware', () => {
-  before((done) => {
+  after((done) => {
     User.destroy({ where: {} }); // Purges Data already in the table after testing
     Book.destroy({ where: {} }); // Purges Data already in the table after testing
     Borrow.destroy({ where: {} }); // Purges Data already in the table after testing
@@ -73,4 +73,3 @@ describe('Middleware', () => {
     });
   });
 });
-
