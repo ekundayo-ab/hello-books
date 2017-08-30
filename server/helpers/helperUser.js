@@ -7,14 +7,11 @@ const user1 = {
       email: 'ekprogs@gmail.com',
       role: 'admin',
       level: 'bronze',
-      createdAt: '2017-08-28T15:32:57.582Z',
-      updatedAt: '2017-08-28T15:32:57.582Z',
     },
     iat: 1504038990,
     exp: 1504042590,
   },
 };
-
 const user2 = {
   decoded: {
     data: {
@@ -24,51 +21,53 @@ const user2 = {
       email: 'ekprogs@gmail.com',
       role: 'normal',
       level: 'bronze',
-      createdAt: '2017-08-28T15:32:57.582Z',
-      updatedAt: '2017-08-28T15:32:57.582Z',
     },
     iat: 1504038990,
     exp: 1504042590,
   },
 };
-
 const user3 = {
-  decoded: {
-    data: {
-      id: 10,
-      username: 'ekundayo',
-      password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
-      email: 'ekprogs',
-      role: 'normal',
-      level: 'bronze',
-      createdAt: '2017-08-28T15:32:57.582Z',
-      updatedAt: '2017-08-28T15:32:57.582Z',
-    },
-    iat: 1504038990,
-    exp: 1504042590,
-  },
+  username: 'ekundayo',
+  password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
+  email: 'ekprogs@gmail.com',
+};
+const user4 = {
+  username: 'ekundayo',
+  password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
+  email: 'ekprogs',
+};
+const user5 = {
+  username: 'ekundayo',
+  password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
+  email: 'ekprogs@gmail',
+};
+const user6 = {
+  username: 'emma',
+  password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
+  email: 'emma@gmail.com',
+};
+const user7 = {
+  username: 'kate',
+  password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
+  email: 'emma@gmail.com',
+};
+const user8 = {
+  username: '',
+  password: 'calmsecret',
+  email: 'calm@gmail.com',
+};
+const user8a = {
+  username: 'good',
+  password: '',
+  email: 'good@gmail.com',
+};
+const user8b = {
+  username: 'gentle',
+  password: 'gentlesecret',
+  email: '',
 };
 
-const user4 = {
-  decoded: {
-    data: {
-      id: 10,
-      username: 'ekundayo',
-      password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
-      email: 'ekprogs@gmail',
-      role: 'normal',
-      level: 'bronze',
-      createdAt: '2017-08-28T15:32:57.582Z',
-      updatedAt: '2017-08-28T15:32:57.582Z',
-    },
-    iat: 1504038990,
-    exp: 1504042590,
-  },
-};
 
 export default {
-  user1,
-  user2,
-  user3,
-  user4,
+  user1, user2, user3, user4, user5, user6, user7, user8, user8a, user8b,
 };
