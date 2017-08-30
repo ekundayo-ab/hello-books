@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
-import dbconfig from '../config/config.json';
+import dbconfig from '../config/config';
 
 const env = process.env.NODE_ENV || 'development';
 const config = dbconfig[env];
