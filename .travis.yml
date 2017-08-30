@@ -24,7 +24,7 @@ services:
 before_script:
   - npm install -g codeclimate-test-reporter
   - npm install -g sequelize
-  - psql -c 'drop database if exists travis;' -U postgres
+  - psql -c 'drop database if exists testdb;' -U postgres
   - psql -c 'create database testdb;' -U postgres
   - psql -c "CREATE USER ekundayo WITH PASSWORD 'ekundayo';" -U postgres
   - NODE_ENV=test npm run test:db
