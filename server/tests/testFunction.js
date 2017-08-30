@@ -54,13 +54,13 @@ describe('Helper Functions', () => {
   });
   describe('Validates email for sign up & sign in', () => {
     it('should return true for ekprogs@gmail.com', () => {
-      assert.equal(validateEmail(helperUser.user1.decoded.data.email), true);
+      assert.equal(validateEmail(helperUser.user3.email), true);
     });
     it('should return false for ekprogs', () => {
-      assert.equal(validateEmail(helperUser.user3.decoded.data.email), false);
+      assert.equal(validateEmail(helperUser.user4.email), false);
     });
     it('should return false for ekprogs@gmail', () => {
-      assert.equal(validateEmail(helperUser.user4.decoded.data.email), false);
+      assert.equal(validateEmail(helperUser.user5.email), false);
     });
   });
 });
