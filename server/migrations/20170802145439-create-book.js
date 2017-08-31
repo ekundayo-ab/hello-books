@@ -15,6 +15,7 @@ module.exports = {
       },
       isbn: {
         allowNull: false,
+        unique: true,
         type: Sequelize.INTEGER,
       },
       title: {
