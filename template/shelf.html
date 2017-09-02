@@ -18,15 +18,8 @@
 	</head>
 	<body>
 		<div class="nav-top row">
-			<div class="col s6">
-				<h4>Hello<span class="nav-top-marker">books</span></h4>
-			</div>
-			<div class="right-bar col s6 right-align">
-				<ul>
-					<li><a href="admin.html"><i class="fa fa-gear"></i> Admin Dashboard</a></li>
-					<li><a href="profile.html">| &nbsp;<i class="fa fa-user"></i> Profile</a></li>
-					<li><a href="index.html">| &nbsp;<i class="fa fa-sign-out"></i> Logout</a></li>
-				</ul>
+			<div class="col s12 center-align">
+				<a href="index.html"><h4>Hello<span class="nav-top-marker">books</span></h4></a>
 			</div>
 		</div>
 		<nav>
@@ -34,27 +27,32 @@
 		    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 		    <ul class="right hide-on-med-and-down">
 		      <li class="active"><a href="shelf.html">Shelf</a></li>
-		      <li><a href="borrow.html">Borrow</a></li>
-		      <li><a href="history.html">History</a></li>
+					<li><a href="history.html">History</a></li>
+					<li><a href="admin.html"><i class="fa fa-gear"></i> Admin Dashboard</a></li>
+					<li><a href="profile.html"><i class="fa fa-user"></i> Profile</a></li>
+					<li><a href="index.html"><i class="fa fa-sign-out"></i> Logout</a></li>
 		    </ul>
 		    <ul class="side-nav" id="mobile-demo">
+					<li class="mobile-header"><a href="">HelloBooks</a></li>
 		      <li><a href="shelf.html">Shelf</a></li>
-		      <li><a href="borrow.html">Borrow</a></li>
-		      <li><a href="history.html">History</a></li>
+					<li><a href="history.html">History</a></li>
+					<li><a href="admin.html"><i class="fa fa-gear"></i> Admin Dashboard</a></li>
+					<li><a href="profile.html"><i class="fa fa-user"></i> Profile</a></li>
+					<li><a href="index.html"><i class="fa fa-sign-out"></i> Logout</a></li>
 		    </ul>
 		  </div>
 		</nav>
 		<div class="nav-bottom">
-			
+
 		</div>
 		<div class="row available-books">
 			<h3>Available Books</h3>
 			<div class="col s12 m12 l3">
 				<div class="row">
-					<div class="input-field suffix col s12">
-						<input placeholder="Search.." type="tel" class="white-text validate">
-						<i class="fa fa-search suffix white-text"></i>
-					</div>
+					<form action="" class="search-form">
+						<input class="col s9 white-text validate" placeholder="Search.." type="tel">
+						<button type="submit" class="btn col s3"><i class="fa fa-search"></i></button>
+					</form>
 
 					<div class="card-panel white col s12">
 						<h6 class="teal-text">SELECT A CATEGORY</h6>
@@ -80,13 +78,9 @@
 									<img class="activator" src="images/1.png">
 								</div>
 								<div class="card-content">
-									<span class="card-title activator grey-text text-darken-4">Cavaler & Clay &nbsp;&nbsp;<i class="fa fa-ellipsis-v"></i></span>
+									<span class="card-title activator grey-text text-darken-4">Cavaler & Clay</span>
 									<span>Michael Chabon</span>
 									<p><a href="book.html" class="btn">Borrow Now</a></p>
-								</div>
-								<div class="card-reveal">
-									<span class="card-title grey-text text-darken-4">Cavaler & Clay<i class="material-icons right">close</i></span>
-									<p>Cavaler and Clay was written by Michael Chabon.. Lorem Ipsum Dolor, Ameti</p>
 								</div>
 							</div>
 						</div>
@@ -97,13 +91,9 @@
 									<img class="activator" src="images/5.png">
 								</div>
 								<div class="card-content">
-									<span class="card-title activator grey-text text-darken-4">Jonathan Franzen &nbsp;&nbsp;<i class="fa fa-ellipsis-v"></i></span>
+									<span class="card-title activator grey-text text-darken-4">Jonathan Franzen</span>
 									<span>The Corrections</span>
 									<p><a href="book.html" class="btn">Borrow Now</a></p>
-								</div>
-								<div class="card-reveal">
-									<span class="card-title grey-text text-darken-4">Cavaler & Clay<i class="material-icons right">close</i></span>
-									<p>Cavaler and Clay was written by Michael Chabon.. Lorem Ipsum Dolor, Ameti</p>
 								</div>
 							</div>
 						</div>
@@ -114,13 +104,9 @@
 									<img class="activator" src="images/3.png">
 								</div>
 								<div class="card-content">
-									<span class="card-title activator grey-text text-darken-4">Wolf Hall &nbsp;&nbsp;<i class="fa fa-ellipsis-v"></i></span>
+									<span class="card-title activator grey-text text-darken-4">Wolf Hall</span>
 									<span>Hilary Mantel</span>
 									<p><a href="book.html" class="btn">Borrow Now</a></p>
-								</div>
-								<div class="card-reveal">
-									<span class="card-title grey-text text-darken-4">Cavaler & Clay<i class="material-icons right">close</i></span>
-									<p>Cavaler and Clay was written by Michael Chabon.. Lorem Ipsum Dolor, Ameti</p>
 								</div>
 							</div>
 						</div>
@@ -131,13 +117,9 @@
 									<img class="activator" src="images/6.png">
 								</div>
 								<div class="card-content">
-									<span class="card-title activator grey-text text-darken-4">Gilead &nbsp;&nbsp;<i class="fa fa-ellipsis-v"></i></span>
+									<span class="card-title activator grey-text text-darken-4">Gilead</span>
 									<span>Marilynne Robinson</span>
 									<p><a href="book.html" class="btn">Borrow Now</a></p>
-								</div>
-								<div class="card-reveal">
-									<span class="card-title grey-text text-darken-4">Cavaler & Clay<i class="material-icons right">close</i></span>
-									<p>Cavaler and Clay was written by Michael Chabon.. Lorem Ipsum Dolor, Ameti</p>
 								</div>
 							</div>
 						</div>
@@ -152,13 +134,9 @@
 									<img class="activator" src="images/4.png">
 								</div>
 								<div class="card-content">
-									<span class="card-title activator grey-text text-darken-4">White Teeth &nbsp;&nbsp;<i class="fa fa-ellipsis-v"></i></span>
+									<span class="card-title activator grey-text text-darken-4">White Teeth</span>
 									<span>Zadie Smith</span>
 									<p><a href="book.html" class="btn">Borrow Now</a></p>
-								</div>
-								<div class="card-reveal">
-									<span class="card-title grey-text text-darken-4">Cavaler & Clay<i class="material-icons right">close</i></span>
-									<p>Cavaler and Clay was written by Michael Chabon.. Lorem Ipsum Dolor, Ameti</p>
 								</div>
 							</div>
 						</div>
@@ -169,13 +147,9 @@
 									<img class="activator" src="images/5.png">
 								</div>
 								<div class="card-content">
-									<span class="card-title activator grey-text text-darken-4">Jonathan Franzen &nbsp;&nbsp;<i class="fa fa-ellipsis-v"></i></span>
+									<span class="card-title activator grey-text text-darken-4">Jonathan Franzen</span>
 									<span>The Corrections</span>
 									<p><a href="book.html" class="btn">Borrow Now</a></p>
-								</div>
-								<div class="card-reveal">
-									<span class="card-title grey-text text-darken-4">Cavaler & Clay<i class="material-icons right">close</i></span>
-									<p>Cavaler and Clay was written by Michael Chabon.. Lorem Ipsum Dolor, Ameti</p>
 								</div>
 							</div>
 						</div>
@@ -186,13 +160,9 @@
 									<img class="activator" src="images/6.png">
 								</div>
 								<div class="card-content">
-									<span class="card-title activator grey-text text-darken-4">Gilead &nbsp;&nbsp;<i class="fa fa-ellipsis-v"></i></span>
+									<span class="card-title activator grey-text text-darken-4">Gilead</span>
 									<span>Marilynne Robinson</span>
 									<p><a href="book.html" class="btn">Borrow Now</a></p>
-								</div>
-								<div class="card-reveal">
-									<span class="card-title grey-text text-darken-4">Cavaler & Clay<i class="material-icons right">close</i></span>
-									<p>Cavaler and Clay was written by Michael Chabon.. Lorem Ipsum Dolor, Ameti</p>
 								</div>
 							</div>
 						</div>
@@ -203,19 +173,15 @@
 									<img class="activator" src="images/4.png">
 								</div>
 								<div class="card-content">
-									<span class="card-title activator grey-text text-darken-4">White Teeth &nbsp;&nbsp;<i class="fa fa-ellipsis-v"></i></span>
+									<span class="card-title activator grey-text text-darken-4">White Teeth</span>
 									<span>Zadie Smith</span>
 									<p><a href="book.html" class="btn">Borrow Now</a></p>
-								</div>
-								<div class="card-reveal">
-									<span class="card-title grey-text text-darken-4">Cavaler & Clay<i class="material-icons right">close</i></span>
-									<p>Cavaler and Clay was written by Michael Chabon.. Lorem Ipsum Dolor, Ameti</p>
 								</div>
 							</div>
 						</div>
 
 					</div>
-				</div>	
+				</div>
 			</div>
 			<ul class="pagination center-align">
 				<li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
@@ -244,7 +210,7 @@
             </div>
           </div>
     </footer>
-		
+
 
 		<!--Import jQuery before materialize.js-->
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
