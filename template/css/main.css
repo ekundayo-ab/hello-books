@@ -269,3 +269,9 @@
  .return-image img {
   height: 100%;
  }
+ @media (max-width:768px) {
+     .return-image {
+         height: 50px;
+         overflow: hidden;
+     }
+ }
