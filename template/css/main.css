@@ -21,6 +21,7 @@
  .search-form button {
 	 margin-top: 10px;
  }
+
  /* For the landing page */
 
  .landing-page {
@@ -70,6 +71,10 @@
      -moz-background-size: cover;
      -o-background-size: cover;
      background-size: cover;
+ }
+
+ .admin-page {
+  background: none !important;
  }
 
  .nav-top {
@@ -143,9 +148,8 @@
  }
 
  .available-books {
-     background-color: #000;
+     background-color: #222;
      padding: 0 10px 0 10px;
-     opacity: 0.9;
  }
 
  .available-books h3 {
@@ -253,4 +257,10 @@
  .book-detail img {
      padding: 5px;
      width: 250px;
+ }
+
+ .redded {
+  background-color: red;
+  color:#fff;
+  font-weight: bold;
  }
