@@ -8,7 +8,7 @@
 		<!--Import Font Awesome-->
 		<link rel="stylesheet" href="fonts/fa/css/font-awesome.min.css">
 		<!--Import materialize.css-->
-		<link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+		<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 
 		<!--import custom css main.css-->
 		<link type="text/css" rel="stylesheet" href="css/main.css"  media="screen,projection"/>
@@ -17,91 +17,76 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	</head>
 	<body>
-		<div class="nav-top row">
-			<div class="col s6">
-				<h4>Hello<span class="nav-top-marker">books</span></h4>
-			</div>
-			<div class="right-bar col s6 right-align">
-				<ul>
+  	<div class="nav-top row">
+  		<div class="col s12 center-align">
+  			<a href="index.html"><h4>Hello<span class="nav-top-marker">books</span></h4></a>
+  		</div>
+  	</div>
+		<nav>
+			<div class="nav-wrapper">
+				<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+				<ul class="right hide-on-med-and-down">
+					<li class="active"><a href="shelf.html">Shelf</a></li>
+					<li><a href="history.html">History</a></li>
 					<li><a href="admin.html"><i class="fa fa-gear"></i> Admin Dashboard</a></li>
-					<li><a href="profile.html">| &nbsp;<i class="fa fa-user"></i> Profile</a></li>
-					<li><a href="landing.html">| &nbsp;<i class="fa fa-sign-out"></i> Logout</a></li>
+					<li><a href="profile.html"><i class="fa fa-user"></i> Profile</a></li>
+					<li><a href="index.html"><i class="fa fa-sign-out"></i> Logout</a></li>
+				</ul>
+				<ul class="side-nav" id="mobile-demo">
+					<li class="mobile-header"><a href="">HelloBooks</a></li>
+					<li><a href="shelf.html">Shelf</a></li>
+					<li><a href="history.html">History</a></li>
+					<li><a href="admin.html"><i class="fa fa-gear"></i> Admin Dashboard</a></li>
+					<li><a href="profile.html"><i class="fa fa-user"></i> Profile</a></li>
+					<li><a href="index.html"><i class="fa fa-sign-out"></i> Logout</a></li>
 				</ul>
 			</div>
-		</div>
-		<nav>
-		  <div class="nav-wrapper">
-		    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-		    <ul class="right hide-on-med-and-down">
-		      <li class="active"><a href="shelf.html">Shelf</a></li>
-		      <li><a href="borrow.html">Borrow</a></li>
-		      <li><a href="contact.html">History</a></li>
-		    </ul>
-		    <ul class="side-nav" id="mobile-demo">
-		      <li><a href="shelf.html">Shelf</a></li>
-		      <li><a href="borrow.html">Borrow</a></li>
-		      <li><a href="contact.html">History</a></li>
-		    </ul>
-		  </div>
 		</nav>
-		<div class="nav-bottom">
-			
+		<div class="nav-bottom"></div>
+
+    <div class="row available-books">
+		  <h3 class="col s12">Book Details</h3>
+      <div class="row">   
+        <div class="book-detail col s12 m6 l4">
+            <img class="detail responsive-img" src="images/3.png" alt="" />
+        </div>
+        <div class="col white-text s12 m6 l6">
+          <h1>Wolf Hall</h1>
+          <h5 class="teal-text">Hilary Mantel</h5>
+          <p>
+              Lorem Ipsum dolor ameti, story of Wolf hall has a good ending
+              with accompanying drama, suspense and intrigue, this is a real
+              master deal, you'll like it.
+          </p>
+          <p class="white-text badge green" style="display:block; padding:5px !important;">
+            <b>Total:</b> 28&nbsp;&nbsp;&nbsp;&nbsp; <b>Borrowed:</b> 17&nbsp;&nbsp;&nbsp;&nbsp; <b>Available:</b> 11
+          </p>
+          <blockquote style="border-left: 5px solid green;">Added on 16th of January, 2016</blockquote>
+        </div>
+      </div>
 		</div>
-		<h3 class="col s12 white-text">Book Details</h3>
-		<div class="row available-books">
-                
-            <div class="row card">
-                <div class="center-align book-detail col s12 m6 l4">
-                    <img class="center-align detail responsive-img" src="images/3.png" alt="">
-                </div>
-                <div class="col s12 m6 l6">
-                    <h1>Wolf Hall</h1>
-                    <h5 class="teal-text">Hilary Mantel</h5>
-                    <p>
-                        Lorem Ipsum dolor ameti, story of Wolf hall has a good ending
-                        with accompanying drama, suspense and intrigue, this is a real
-												master deal, you'll like it.
-										</p>
-											<label for="return-date">Enter date to return</label><input type="text" class="datepicker" name="return-date" value="">
-										<span><a href="#!" onclick="Materialize.toast('Book successfully borrowed.', 3000, 'red')" class="btn secondary-content align-center"><i class="fa fa-2x fa-mail-forward"></i> Borrow Now</a></span>
-										<span class="white-text badge red">Available</span>
-                    <blockquote>Added on 16th of January, 2016</blockquote>
-                    
-                </div>
-            </div>
-			
-		</div>
+
 		<footer class="teal page-footer">
-          <div class="container">
-            <div class="row">
-              <div class="col l6 s12">
-                <h5 class="white-text">Grow by reading</h5>
-                <p class="grey-text text-lighten-4">You can donate books also from your location. Thanks</p>
-              </div>
-            </div>
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="white-text">Grow by reading</h5>
+            <p class="grey-text text-lighten-4">You can donate books also from your location. Thanks</p>
           </div>
-          <div class="footer-copyright">
-            <div class="container">
-            &copy; 2017 Hello books
-            <a class="grey-text text-lighten-4 right" href="#!">Ekundayo</a>
-            </div>
-          </div>
-        </footer>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+        &copy; 2017 Hello books
+        <a class="grey-text text-lighten-4 right" href="#!">Ekundayo</a>
+        </div>
+      </div>
+    </footer>
 		
 
 		<!--Import jQuery before materialize.js-->
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-		<script type="text/javascript" src="js/materialize.js"></script>
+		<script type="text/javascript" src="js/materialize.min.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
-		<script>
-			 $('.datepicker').pickadate({
-    selectMonths: true, // Creates a dropdown to control month
-    selectYears: 15, // Creates a dropdown of 15 years to control year,
-    today: 'Today',
-    clear: 'Clear',
-    close: 'Ok',
-    closeOnSelect: false // Close upon selecting a date,
-  });
-		</script>
 	</body>
 </html>

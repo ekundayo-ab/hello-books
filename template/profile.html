@@ -8,7 +8,7 @@
 		<!--Import Font Awesome-->
 		<link rel="stylesheet" href="fonts/fa/css/font-awesome.min.css">
 		<!--Import materialize.css-->
-		<link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+		<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 
 		<!--import custom css main.css-->
 		<link type="text/css" rel="stylesheet" href="css/main.css"  media="screen,projection"/>
@@ -18,42 +18,37 @@
 	</head>
 	<body>
 		<div class="nav-top row">
-			<div class="col s6">
-				<h4>Hello<span class="nav-top-marker">books</span></h4>
-			</div>
-			<div class="right-bar col s6 right-align">
-				<ul>
-					<li><a href="admin.html"><i class="fa fa-gear"></i> Admin Dashboard</a></li>
-					<li class="top-menu-active"><a href="profile.html">| &nbsp;<i class="fa fa-user"></i> Profile</a></li>
-					<li><a href="index.html">| &nbsp;<i class="fa fa-sign-out"></i> Logout</a></li>
-				</ul>
+			<div class="col s12 center-align">
+				<a href="index.html"><h4>Hello<span class="nav-top-marker">books</span></h4></a>
 			</div>
 		</div>
 		<nav>
 		  <div class="nav-wrapper">
 		    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 		    <ul class="right hide-on-med-and-down">
-		      <li><a href="shelf.html">Shelf</a></li>
-		      <li><a href="borrow.html">Borrow</a></li>
-		      <li><a href="history.html">History</a></li>
+		      <li class="active"><a href="shelf.html">Shelf</a></li>
+					<li><a href="history.html">History</a></li>
+					<li><a href="admin.html"><i class="fa fa-gear"></i> Admin Dashboard</a></li>
+					<li class="active"><a href="profile.html"><i class="fa fa-user"></i> Profile</a></li>
+					<li><a href="index.html"><i class="fa fa-sign-out"></i> Logout</a></li>
 		    </ul>
 		    <ul class="side-nav" id="mobile-demo">
+					<li class="mobile-header"><a href="">HelloBooks</a></li>
 		      <li><a href="shelf.html">Shelf</a></li>
-		      <li class="active"><a href="borrow.html">Borrow</a></li>
-		      <li><a href="contact.html">History</a></li>
+					<li><a href="history.html">History</a></li>
+					<li><a href="admin.html"><i class="fa fa-gear"></i> Admin Dashboard</a></li>
+					<li class="active"><a href="profile.html"><i class="fa fa-user"></i> Profile</a></li>
+					<li><a href="index.html"><i class="fa fa-sign-out"></i> Logout</a></li>
 		    </ul>
 		  </div>
 		</nav>
-		<div class="nav-bottom">
-			
-		</div>
+		<div class="nav-bottom"></div>
 		<div class="row available-books">
 			<h3 class="col s12">Profile</h3>
 
 			<div class="row">
-
 				<div class="col s12 m12 l3">
-					<div class="col s12">
+					<div class="col s12 card">
 		          <div class="card">
                   <div class="card-image">
                     <img src="images/dayo.png">
@@ -110,68 +105,82 @@
 			<div class="row">
       <h3 class="col s12">Unreturned Books</h3>
 				<div class="col s12 m12 l3">
-					<div class="col s12">
-						<i class="white-text fa fa-search"></i>
-						<input type="text" class="white-text input-field" placeholder="Search..">
-					</div>
-					<div class="col s12">
-			          <div class="card-panel white">
-			          <h6 class="teal-text">SELECT A CATEGORY</h6>
-			          <div class="collection">
-			            <a href="#!" class="collection-item"><span class="new badge">14</span>Finance</a>
-			            <a href="#!" class="collection-item"><span class="new badge">311</span>Science</a>
-			            <a href="#!" class="collection-item"><span class="new badge">24</span>Computers</a>
-			            <a href="#!" class="collection-item"><span class="new badge">32</span>Arts</a>
-			            <a href="#!" class="collection-item"><span class="new badge">30</span>History</a>
-			            <a href="#!" class="collection-item"><span class="new badge">10</span>Animal</a>
-			          </div>
-			        </div>
-					</div>
+					<div class="row">
+            <form action="" class="search-form">
+              <input class="col s9 white-text validate" placeholder="Search.." type="tel">
+              <button type="submit" class="btn col s3"><i class="fa fa-search"></i></button>
+            </form>
+  
+            <div class="card-panel white col s12">
+              <h6 class="teal-text">SELECT A CATEGORY</h6>
+              <div class="collection">
+                <a href="#!" class="collection-item"><span class="new badge">14</span>Finance</a>
+                <a href="#!" class="collection-item"><span class="new badge">311</span>Science</a>
+                <a href="#!" class="collection-item"><span class="new badge">24</span>Computers</a>
+                <a href="#!" class="collection-item"><span class="new badge">32</span>Arts</a>
+                <a href="#!" class="collection-item"><span class="new badge">30</span>History</a>
+                <a href="#!" class="collection-item"><span class="new badge">10</span>Animal</a>
+              </div>
+            </div>
+          </div>
 				</div>
 				<div class="col s12 m12 l9">
 					<div class="card-panel row">
-						<ul class="collection">
-						    <li class="collection-item avatar">
-						      <img src="images/1.png" alt="" class="circle">
-						      <span class="title">Kaveller & Clay</span>
-						      <p>Thomas Jenkins</p>
-						      <span><a href="#!" class="btn secondary-content"><i class="fa fa-2x fa-mail-forward"></i> Return</a></span>
-						    </li>
-						    <li class="collection-item avatar">
-						      <img src="images/2.png" alt="" class="circle">
-						      <span class="title">Half of a yellow sun</span>
-						      <p>Chimamanda Adichie</p>
-						      <a href="#!" class="btn secondary-content"><i class="fa fa-2x fa-mail-forward"></i> Return</a>
-						    </li>
-						    <li class="collection-item avatar">
-						      <img src="images/3.png" alt="" class="circle">
-						      <span class="title">Half of a yellow sun</span>
-						      <p>Chimamanda Adichie</p>
-						      </p>
-						      <a href="#!" class="btn secondary-content"><i class="fa fa-2x fa-mail-forward"></i> Return</a>
-						    </li>
-						    <li class="collection-item avatar">
-						      <img src="images/4.png" alt="" class="circle">
-						      <span class="title">Title Marks</span>
-						      <p>First Line finish
-						      </p>
-						      <a href="#!" class="btn secondary-content"><i class="fa fa-2x fa-mail-forward"></i> Return</a>
-						    </li>
-						    <li class="collection-item avatar">
-						      <img src="images/5.png" alt="" class="circle">
-						      <span class="title">Kaveller & Clay</span>
-						      <p>Thomas Jenkins</p>
-						      </p>
-						      <a href="#!" class="btn secondary-content"><i class="fa fa-2x fa-mail-forward"></i> Return</a>
-						    </li>
-						    <li class="collection-item avatar">
-						      <img src="images/6.png" alt="" class="circle">
-						      <span class="title">Kaveller & Clay</span>
-						      <p>Thomas Jenkins</p>
-						      </p>
-						      <a href="#!" class="btn secondary-content"><i class="fa fa-2x fa-mail-forward"></i> Return</a>
-						    </li>
-						  </ul>
+            <table class="responsive-table">
+              <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Date Borrowed</th>
+                    <th>Return</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td class="return-image"><img src="images/1.png" alt=""></td>
+                  <td>Kaveller & Clay</td>
+                  <td>Thomas Jenkins</td>
+                  <td>March 13th, 2016</td>
+                  <td><a href="#" class="btn"><i class="fa fa-2x fa-mail-forward"></i> Return</a></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td class="return-image"><img src="images/2.png" alt=""></td>
+                  <td>Half of a yellow sun</td>
+                  <td>Chimamanda Adichie</td>
+                  <td>March 13th, 2016</td>
+                  <td><a href="#" class="btn"><i class="fa fa-2x fa-mail-forward"></i> Return</a></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td class="return-image"><img src="images/3.png" alt=""></td>
+                  <td>Half of a yellow sun</td>
+                  <td>Chimamanda Adichie</td>
+                  <td>March 13th, 2016</td>
+                  <td><a href="#" class="btn"><i class="fa fa-2x fa-mail-forward"></i> Return</a></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td class="return-image"><img src="images/4.png" alt=""></td>
+                  <td>Title Marks</td>
+                  <td>First Line finish</td>
+                  <td>March 13th, 2016</td>
+                  <td><a href="#" class="btn"><i class="fa fa-2x fa-mail-forward"></i> Return</a></td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td class="return-image"><img src="images/5.png" alt=""></td>
+                  <td>Kaveller & Clay</td>
+                  <td>Thomas Jenkins</td>
+                  <td>March 13th, 2016</td>
+                  <td><a href="#" class="btn"><i class="fa fa-2x fa-mail-forward"></i> Return</a></td>
+                </tr>
+              </tbody>
+            </table>
 					</div>
 					  <ul class="pagination center-align">
 					    <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
@@ -206,7 +215,7 @@
 
 		<!--Import jQuery before materialize.js-->
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-		<script type="text/javascript" src="js/materialize.js"></script>
+		<script type="text/javascript" src="js/materialize.min.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 	</body>
 </html>
