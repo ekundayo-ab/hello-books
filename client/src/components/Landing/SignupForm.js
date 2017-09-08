@@ -1,8 +1,14 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class SignUp extends Component {
+  static propTypes = {
+    location: PropTypes.object.isRequired,
+  }
+
   render() {
+    const { location } = this.props;
     return (
       <div id="register">
         <div className="row">
@@ -25,7 +31,7 @@ class SignUp extends Component {
             </div>
             <div className="col s12 right-align">
               <button type="submit" className="right-align btn teal"><i className="fa fa-user" /> Register</button>
-            </div>
+            </div>{location.pathname}
           </form>
         </div>
       </div>

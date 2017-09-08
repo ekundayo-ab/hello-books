@@ -5,6 +5,74 @@
 }
 $font-specific: Chunkfive;
 
+/* Landing Page Specials */
+.mod-tabs.mod-tabs-fixed-width {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.mod-tabs {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 48px;
+  width: 100%;
+  background-color: #fff;
+  margin: 0 auto;
+  white-space: nowrap;
+}
+
+.mod-tabs.mod-tabs-fixed-width .mod-tab {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+
+.mod-tabs .mod-tab {
+  display: inline-block;
+  text-align: center;
+  line-height: 48px;
+  height: 48px;
+  padding: 0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.mod-tabs .mod-tab a {
+  color: #00A8A8;
+}
+
+.mod-tabs .mod-tab a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0 24px;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-transition: color .28s ease;
+  transition: color .28s ease;
+}
+
+.mod-tabs .indicator {
+  background-color: teal;
+}
+
+.mod-tabs .indicator {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background-color: #f6b2b5;
+  will-change: left, right;
+}
+
+.mod-active {
+  border-bottom: 2px solid teal;
+}
+
 @mixin background-size($bg-size) {
     -webkit-background-size: $bg-size;
        -moz-background-size: $bg-size;
@@ -26,7 +94,7 @@ $font-specific: Chunkfive;
     height: 100%;
     top: 0;
     left: 0;
-    z-index: -1;    
+    z-index: -1;
     @include background-size(cover);
     padding: 0 20px 0 20px;
     overflow: auto;
@@ -37,7 +105,7 @@ $font-specific: Chunkfive;
     .input-field {
         margin-top:0;
     }
-    
+
     nav .brand-logo {
         font-family: Chunkfive;
         margin-left: 20px;
@@ -48,7 +116,7 @@ $font-specific: Chunkfive;
         padding: 20px;
         text-shadow: 5px 5px 5px #000;
     }
-    
+
     @media (max-width: 768px) {
         .intro-text h1 {
             font-size: 5em;
@@ -92,13 +160,13 @@ $font-specific: Chunkfive;
         font-family: Chunkfive;
         color: #fff;
     }
-    
+
     @media (max-width: 768px) {
         h4 {
             font-size: 2em;
         }
     }
-    
+
 }
 .nav-top.row {
     margin-bottom: 0;
@@ -128,7 +196,7 @@ $font-specific: Chunkfive;
         background-color: teal;
         color: #fff
     }
-    
+
     .mobile-header a {
         color: #fff;
         font-size: 2em;
@@ -139,7 +207,7 @@ $font-specific: Chunkfive;
     nav {
         background-color: #fff;
     }
-   
+
     nav ul li a {
         color: #666;
         font-size: 16px;
@@ -164,7 +232,7 @@ $font-specific: Chunkfive;
         color: #fff;
         margin-top: 0;
     }
-    
+
 }
 .available-books.row {
     margin-bottom: 0;
@@ -245,7 +313,7 @@ nav a {
         font-weight: bold;
         margin-bottom: 0;
     }
-} 
+}
 
 
 .book-title {
