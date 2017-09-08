@@ -26,7 +26,7 @@ $font-specific: Chunkfive;
     height: 100%;
     top: 0;
     left: 0;
-    z-index: -1;    
+    z-index: -1;
     @include background-size(cover);
     padding: 0 20px 0 20px;
     overflow: auto;
@@ -37,7 +37,7 @@ $font-specific: Chunkfive;
     .input-field {
         margin-top:0;
     }
-    
+
     nav .brand-logo {
         font-family: Chunkfive;
         margin-left: 20px;
@@ -48,7 +48,7 @@ $font-specific: Chunkfive;
         padding: 20px;
         text-shadow: 5px 5px 5px #000;
     }
-    
+
     @media (max-width: 768px) {
         .intro-text h1 {
             font-size: 5em;
@@ -92,13 +92,13 @@ $font-specific: Chunkfive;
         font-family: Chunkfive;
         color: #fff;
     }
-    
+
     @media (max-width: 768px) {
         h4 {
             font-size: 2em;
         }
     }
-    
+
 }
 .nav-top.row {
     margin-bottom: 0;
@@ -128,7 +128,7 @@ $font-specific: Chunkfive;
         background-color: teal;
         color: #fff
     }
-    
+
     .mobile-header a {
         color: #fff;
         font-size: 2em;
@@ -139,7 +139,7 @@ $font-specific: Chunkfive;
     nav {
         background-color: #fff;
     }
-   
+
     nav ul li a {
         color: #666;
         font-size: 16px;
@@ -164,7 +164,7 @@ $font-specific: Chunkfive;
         color: #fff;
         margin-top: 0;
     }
-    
+
 }
 .available-books.row {
     margin-bottom: 0;
@@ -245,7 +245,7 @@ nav a {
         font-weight: bold;
         margin-bottom: 0;
     }
-} 
+}
 
 
 .book-title {
