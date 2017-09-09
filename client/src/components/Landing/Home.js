@@ -30,7 +30,7 @@ class Home extends Component {
                   <ul className="mod-tabs mod-tabs-fixed-width">
                     <li className="mod-tab"><NavLink className={theActiveClass} activeClassName={'mod-active'} to="/register">Register</NavLink></li>
                     <li className="mod-tab"><NavLink activeClassName="mod-active" to="/login">Login</NavLink></li>
-                    <li className="mod-tab"><NavLink activeClassName="mod-active" to="/forgot">Forgot Password</NavLink></li>
+                    <li className="mod-tab hide-on-small-only"><NavLink activeClassName="mod-active" to="/forgot">Forgot Password</NavLink></li>
                   </ul>
                 </div>
                 <div className="card-content">

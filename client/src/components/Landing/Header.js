@@ -15,8 +15,8 @@ class Header extends Component {
           </ul>
           <ul className="side-nav" id="mobile-demo">
             <li className="mobile-header"><Link to="/">HelloBooks</Link></li>
-            <li><NavLink activeClassName="teal darken-2" to="/register"><i className="fa fa-users" /> REGISTER</NavLink></li>
-            <li><NavLink activeClassName="teal darken-2" to="/login"><i className="fa fa-sign-in" /> LOGIN</NavLink></li>
+            <li><NavLink activeClassName="teal white-text" to="/register"><i className="fa fa-users" /> REGISTER</NavLink></li>
+            <li><NavLink activeClassName="teal white-text" to="/login"><i className="fa fa-sign-in" /> LOGIN</NavLink></li>
           </ul>
         </div>
       </nav>

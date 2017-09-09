@@ -1,133 +1,143 @@
 @font-face {
-  font-family: "Chunkfive";
-  src: url("../fonts/chunkfive/Chunkfive.otf"), url("../fonts/chunkfive/Chunkfive.otf");
-  /* IE */
+  font-family: 'Chunkfive';
+  src: url('../fonts/chunkfive/Chunkfive.otf'), url('../fonts/chunkfive/Chunkfive.otf');
+  // IE
 }
-$primary-color:#008080;
+$primary-color: #008080;
+$pure-white: #fff;
+$pure-red:  #f00;
+$gray-color: #666;
+$black-color: #000;
+$top-marker-color: #0097ff;
 
-/* Landing Page Specials */
-.mod-tabs.mod-tabs-fixed-width {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-}
-
+// Landing Page Specials
 .mod-tabs {
-  position: relative;
-  overflow-x: auto;
-  overflow-y: hidden;
-  height: 48px;
-  width: 100%;
-  background-color: #fff;
-  margin: 0 auto;
-  white-space: nowrap;
-}
+	background-color: $pure-white;
+	height: 48px;
+	margin: 0 auto;
+	overflow-x: auto;
+	overflow-y: hidden;
+	position: relative;
+	white-space: nowrap;
+	width: 100%;
 
-.mod-tabs.mod-tabs-fixed-width .mod-tab {
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-}
+	&.mod-tabs-fixed-width {
+		display: flex;
 
-.mod-tabs .mod-tab {
-  display: inline-block;
-  height: 48px;
-  line-height: 48px;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  text-transform: uppercase;
-}
+		.mod-tab {
+			flex-grow: 1;
+		}
 
-.mod-tabs .mod-tab a {
-  color: #00A8A8;
-}
+	}
 
-.mod-tabs .mod-tab a {
-  display: block;
-  font-size: 14px;
-  height: 100%;
-  overflow: hidden;
-  padding: 0 24px;
-  text-overflow: ellipsis;
-  transition: color 0.28s ease;
-  width: 100%;
+  .mod-tab {
+    display: inline-block;
+    height: 48px;
+    line-height: 48px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    text-transform: uppercase;
+
+    a {
+      color: $primary-color;
+      display: block;
+      font-size: 14px;
+      height: 100%;
+      overflow: hidden;
+      padding: 0 24px;
+      text-overflow: ellipsis;
+      transition: color 0.28s ease;
+      width: 100%;
+    }
+  }
 }
 
 .mod-active {
   border-bottom: 2px solid $primary-color;
 }
 
-@mixin background-size($bg-size) {
-  -webkit-background-size: $bg-size;
-      -moz-background-size: $bg-size;
-      -ms-background-size: $bg-size;
-          background-size: $bg-size;
-}
-
-/* Search Form */
-.search-form button {
+// Search Form
+.search-form {
+  button {
     margin-top: 10px;
+  }
 }
 
-/* For the landing page */
+// For the landing page
 
 .landing-page {
-  background: url(../images/bg_landing.jpg) no-repeat center center fixed;
-  position: fixed;
-  width: 100%;
+  background: url('../images/bg_landing.jpg') no-repeat center center fixed;
+  background-size: cover;
   height: 100%;
-  top: 0;
   left: 0;
-  z-index: -1;
-  @include background-size(cover);
-  padding: 0 20px 0 20px;
   overflow: auto;
-}
-
-.landing-page {
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: -1;
 
   .input-field {
-      margin-top:0;
+    margin-top: 0;
   }
 
-  nav .brand-logo {
-    font-family: Chunkfive;
-    margin-left: 20px;
-    padding: 0 0 0 20px;
+  nav {
+    .brand-logo {
+      font-family: Chunkfive;
+      margin-left: 20px;
+      padding: 0 0 0 20px;
+    }
   }
 
   .intro-text {
     padding: 20px;
-    text-shadow: 5px 5px 5px #000;
+    text-shadow: 5px 5px 5px $black-color;
+
+    h1 {
+      font-size: 6em;
+    }
   }
 
   @media (max-width: 768px) {
-    .intro-text h1 {
+    .intro-text {
+      h1 {
         font-size: 5em;
+      }
     }
   }
-  .or {
-    color: #666;
-    font-weight: bold;
-    font-size: 20px;
-  }
 
-  .intro-text h1 {
-    font-size: 6em;
+  .or {
+    color: $gray-color;
+    font-size: 20px;
+    font-weight: bold;
   }
 }
 
-/* For shelf page */
+// Mobile Navbar hack
+#sidenav-overlay {
+  display: none;
+}
+
+// For shelf page
 
 .shelf-page {
-  background: url(../images/bg_shelf.jpg) no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
+  background: url('../images/bg_shelf.jpg') no-repeat center center fixed;
   background-size: cover;
+
+  nav {
+    background-color: $pure-white;
+
+    ul {
+      li {
+        a {
+          color: $gray-color;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
 }
 
 .admin-page {
@@ -135,78 +145,71 @@ $primary-color:#008080;
 }
 
 .nav-top {
-  width: 100%;
   background-color: #000;
   border: 1px solid transparent;
-  padding: 0 0 0 20px;
   opacity: 0.9;
-}
+  padding: 0 0 0 20px;
+  width: 100%;
 
-.nav-top {
+  &.row {
+    margin-bottom: 0;
+  }
+
   h4 {
+    color: $pure-white;
     font-family: Chunkfive;
-    color: #fff;
   }
 
   @media (max-width: 768px) {
     h4 {
-        font-size: 2em;
+      font-size: 2em;
     }
   }
 
 }
-.nav-top.row {
-    margin-bottom: 0;
-}
 
 .nav-bottom {
-  width: 100%;
-  height: 30px;
   background-color: #000;
   border: 1px solid transparent;
+  height: 30px;
   opacity: 0.9;
+  width: 100%;
 }
 
 .nav-top-marker {
-  color: #0097FF;
+  color: $top-marker-color;
 }
 
-.right-bar ul li {
-  margin-left: 10px;
+.right-bar {
+  ul {
+    li {
+      color: $gray-color;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+  }
 }
 
 .side-nav {
   li>a>i {
     margin: 0;
   }
+
   .mobile-header {
     background-color: $primary-color;
-    color: #fff
-  }
-  .mobile-header a {
-    color: #fff;
-    font-size: 2em;
-  }
-}
+    color: $pure-white;
 
-.shelf-page {
-  nav {
-    background-color: #fff;
+    a {
+      color: $pure-white;
+      font-size: 2em;
+    }
   }
 
-  nav ul li a {
-    color: #666;
-    font-size: 16px;
-  }
 }
 
 .right-bar {
-  ul li {
-    color: #666;
-    font-size: 16px;
-  }
   ul li a {
-    color: #fff;
+    color: $pure-white;
   }
 }
 
@@ -215,7 +218,7 @@ $primary-color:#008080;
   padding: 0 10px 0 10px;
 
   h3 {
-    color: #fff;
+    color: $pure-white;
     margin-top: 0;
   }
 }
@@ -232,7 +235,7 @@ nav a {
 }
 
 .category-select {
-  border: 2px solid red;
+  border: 2px solid $pure-red;
 }
 
 .tabs .tab a {
@@ -316,8 +319,8 @@ nav a {
 }
 
 .redded {
-  background-color: red;
-  color:#fff;
+  background-color: $pure-red;
+  color:$pure-white;
   font-weight: bold;
 }
 
