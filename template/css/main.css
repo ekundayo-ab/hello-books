@@ -90,7 +90,8 @@
   .side-nav .mobile-header a {
     color: #fff;
     font-size: 2em; }
-.side-nav li > a > i {
+
+.icon-link .margin-0 {
   margin: 0; }
 
 .available-books {
