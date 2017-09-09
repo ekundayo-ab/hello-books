@@ -1,172 +1,154 @@
 @font-face {
-  font-family: "Chunkfive";
-  src: url("../fonts/chunkfive/Chunkfive.otf"), url("../fonts/chunkfive/Chunkfive.otf");
-  /* IE */ }
-/* Search Form */
+  font-family: 'Chunkfive';
+  src: url("../fonts/chunkfive/Chunkfive.otf"), url("../fonts/chunkfive/Chunkfive.otf"); }
 .search-form button {
   margin-top: 10px; }
 
-/* For the landing page */
 .landing-page {
-  background: url(../images/bg_landing.jpg) no-repeat center center fixed;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -ms-background-size: cover;
+  background: url("../images/bg_landing.jpg") no-repeat center center fixed;
   background-size: cover;
-  padding: 0 20px 0 20px;
-  overflow: auto; }
+  height: 100%;
+  left: 0;
+  overflow: auto;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: -1; }
+  .landing-page .input-field {
+    margin-top: 0; }
+  .landing-page nav .brand-logo {
+    font-family: Chunkfive;
+    margin-left: 20px;
+    padding: 0 0 0 20px; }
+  .landing-page .intro-text {
+    padding: 20px;
+    text-shadow: 5px 5px 5px #000; }
+    .landing-page .intro-text h1 {
+      font-size: 6em; }
+  @media (max-width: 768px) {
+    .landing-page .intro-text h1 {
+      font-size: 5em; } }
+  .landing-page .or {
+    color: #666;
+    font-size: 20px;
+    font-weight: bold; }
 
-.landing-page .input-field {
-  margin-top: 0; }
-.landing-page nav .brand-logo {
-  font-family: Chunkfive;
-  margin-left: 20px;
-  padding: 0 0 0 20px; }
-.landing-page .intro-text {
-  padding: 20px;
-  text-shadow: 5px 5px 5px #000; }
-@media (max-width: 768px) {
-  .landing-page .intro-text h1 {
-    font-size: 5em; } }
-.landing-page .or {
-  color: #666;
-  font-weight: bold;
-  font-size: 20px; }
-.landing-page .intro-text h1 {
-  font-size: 6em; }
+#sidenav-overlay {
+  display: none; }
 
-/* For shelf page */
 .shelf-page {
-  background: url(../images/bg_shelf.jpg) no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
+  background: url("../images/bg_shelf.jpg") no-repeat center center fixed;
   background-size: cover; }
+  .shelf-page nav {
+    background-color: #fff; }
+    .shelf-page nav ul > li > a {
+      color: #666;
+      font-size: 16px; }
 
 .admin-page {
-  background: none !important; }
+  background: none; }
 
 .nav-top {
-  width: 100%;
   background-color: #000;
   border: 1px solid transparent;
+  opacity: 0.9;
   padding: 0 0 0 20px;
-  opacity: 0.9; }
-
-.nav-top h4 {
-  font-family: Chunkfive;
-  color: #fff; }
-@media (max-width: 768px) {
+  width: 100%; }
+  .nav-top.row {
+    margin-bottom: 0; }
   .nav-top h4 {
-    font-size: 2em; } }
-
-.nav-top.row {
-  margin-bottom: 0; }
+    color: #fff;
+    font-family: Chunkfive; }
+  @media (max-width: 768px) {
+    .nav-top h4 {
+      font-size: 2em; } }
 
 .nav-bottom {
-  width: 100%;
-  height: 30px;
   background-color: #000;
   border: 1px solid transparent;
-  opacity: 0.9; }
+  height: 30px;
+  opacity: 0.9;
+  width: 100%; }
 
 .nav-top-marker {
-  color: #0097FF; }
+  color: #0097ff; }
 
 .right-bar ul li {
+  color: #666;
+  font-size: 16px;
   margin-left: 10px; }
+.right-bar ul > li > a {
+  color: #fff; }
 
 .side-nav li > a > i {
   margin: 0; }
 .side-nav .mobile-header {
-  background-color: teal;
+  background-color: #008080;
   color: #fff; }
-.side-nav .mobile-header a {
-  color: #fff;
-  font-size: 2em; }
-
-.shelf-page nav {
-  background-color: #fff; }
-.shelf-page nav ul li a {
-  color: #666;
-  font-size: 16px; }
-
-.right-bar ul li {
-  color: #666;
-  font-size: 16px; }
-.right-bar ul li a {
-  color: #fff; }
+  .side-nav .mobile-header a {
+    color: #fff;
+    font-size: 2em; }
 
 .available-books {
   background-color: #222;
-  padding: 0 10px 0 10px; }
+  padding: 0 10px; }
+  .available-books.row {
+    margin-bottom: 0; }
   .available-books h3 {
     color: #fff;
     margin-top: 0; }
-
-.available-books.row {
-  margin-bottom: 0; }
 
 nav a {
   color: #222; }
 
 .top-menu-active {
-  background-color: teal !important;
+  background-color: #008080;
   padding: 5px; }
 
 .category-select {
-  border: 2px solid red; }
+  border: 2px solid #f00; }
 
-.tabs .tab a {
-  color: #00A8A8; }
-
-.tabs .tab a:hover,
-.tabs .tab a.active {
-  color: teal; }
+.tabs > .tab a {
+  color: #00a8a8; }
+  .tabs > .tab a:hover {
+    color: #008080; }
+  .tabs > .tab a.active {
+    color: #008080; }
 
 .tabs .indicator {
-  background-color: teal; }
+  background-color: #008080; }
 
 .input-field .suffix i {
-  position: absolute;
-  width: 3rem;
   font-size: 2rem;
-  transition: color .2s;
-  top: 0px;
-  right: 0px; }
-.input-field .suffix i.active {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: color 0.2s;
+  width: 3rem; }
+.input-field .suffix i > .active {
   color: #26a69a; }
 .input-field .suffix input,
 .input-field .suffix textarea {
   margin-right: 3rem;
-  width: 92%;
-  width: calc(100% - 3rem);
-  padding-top: .8rem; }
+  padding-top: .8rem;
+  width: calc(100% - 3rem); }
 .input-field .suffix label {
   margin-right: 3rem; }
 @media only screen and (max-width: 992px) {
   .input-field .suffix input {
-    width: 86%;
     width: calc(100% - 3rem); } }
 @media only screen and (max-width: 600px) {
   .input-field .suffix input {
-    width: 80%;
     width: calc(100% - 3rem); } }
 
-/* Book Listing */
 .book .card-content {
   padding: 0;
   text-align: center; }
-.book .card-content .card-title {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 0; }
+  .book .card-content .card-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0; }
 
 .book-title {
   font-size: 16px; }
@@ -180,19 +162,17 @@ nav a {
   width: 250px; }
 
 .redded {
-  background-color: red;
+  background-color: #f00;
   color: #fff;
   font-weight: bold; }
 
 .return-image {
   height: 70px;
   overflow: hidden; }
+  .return-image img {
+    height: 100%; }
 
 @media (max-width: 768px) {
   .return-image {
     height: 50px;
     overflow: hidden; } }
-.return-image img {
-  height: 100%; }
-
-/*# sourceMappingURL=main.css.map */
