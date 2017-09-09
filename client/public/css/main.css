@@ -1,95 +1,122 @@
 @font-face {
-  font-family: "Chunkfive";
-  src: url("../fonts/chunkfive/Chunkfive.otf"), url("../fonts/chunkfive/Chunkfive.otf");
-  /* IE */ }
-/* Search Form */
+  font-family: 'Chunkfive';
+  src: url("../fonts/chunkfive/Chunkfive.otf"), url("../fonts/chunkfive/Chunkfive.otf"); }
+.mod-tabs {
+  background-color: #fff;
+  height: 48px;
+  margin: 0 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  white-space: nowrap;
+  width: 100%; }
+  .mod-tabs.mod-tabs-fixed-width {
+    display: flex; }
+    .mod-tabs.mod-tabs-fixed-width .mod-tab {
+      flex-grow: 1; }
+  .mod-tabs .mod-tab {
+    display: inline-block;
+    height: 48px;
+    line-height: 48px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    text-transform: uppercase; }
+    .mod-tabs .mod-tab a {
+      color: #008080;
+      display: block;
+      font-size: 14px;
+      height: 100%;
+      overflow: hidden;
+      padding: 0 24px;
+      text-overflow: ellipsis;
+      transition: color 0.28s ease;
+      width: 100%; }
+
+.mod-active {
+  border-bottom: 2px solid #008080; }
+
 .search-form button {
   margin-top: 10px; }
 
-/* For the landing page */
 .landing-page {
-  background: url(../images/bg_landing.jpg) no-repeat center center fixed;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -ms-background-size: cover;
+  background: url("../images/bg_landing.jpg") no-repeat center center fixed;
   background-size: cover;
-  padding: 0 20px 0 20px;
-  overflow: auto; }
+  height: 100%;
+  left: 0;
+  overflow: auto;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: -1; }
+  .landing-page .input-field {
+    margin-top: 0; }
+  .landing-page nav .brand-logo {
+    font-family: Chunkfive;
+    margin-left: 20px;
+    padding: 0 0 0 20px; }
+  .landing-page .intro-text {
+    padding: 20px;
+    text-shadow: 5px 5px 5px #000; }
+    .landing-page .intro-text h1 {
+      font-size: 6em; }
+  @media (max-width: 768px) {
+    .landing-page .intro-text h1 {
+      font-size: 5em; } }
+  .landing-page .or {
+    color: #666;
+    font-size: 20px;
+    font-weight: bold; }
 
-.landing-page .input-field {
-  margin-top: 0; }
-.landing-page nav .brand-logo {
-  font-family: Chunkfive;
-  margin-left: 20px;
-  padding: 0 0 0 20px; }
-.landing-page .intro-text {
-  padding: 20px;
-  text-shadow: 5px 5px 5px #000; }
-@media (max-width: 768px) {
-  .landing-page .intro-text h1 {
-    font-size: 5em; } }
-.landing-page .or {
-  color: #666;
-  font-weight: bold;
-  font-size: 20px; }
-.landing-page .intro-text h1 {
-  font-size: 6em; }
+#sidenav-overlay {
+  display: none; }
 
-/* For shelf page */
 .shelf-page {
-  background: url(../images/bg_shelf.jpg) no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
+  background: url("../images/bg_shelf.jpg") no-repeat center center fixed;
   background-size: cover; }
 
 .admin-page {
   background: none !important; }
 
 .nav-top {
-  width: 100%;
   background-color: #000;
   border: 1px solid transparent;
+  opacity: 0.9;
   padding: 0 0 0 20px;
-  opacity: 0.9; }
-
-.nav-top h4 {
-  font-family: Chunkfive;
-  color: #fff; }
-@media (max-width: 768px) {
+  width: 100%; }
+  .nav-top.row {
+    margin-bottom: 0; }
   .nav-top h4 {
-    font-size: 2em; } }
-
-.nav-top.row {
-  margin-bottom: 0; }
+    color: #fff;
+    font-family: Chunkfive; }
+  @media (max-width: 768px) {
+    .nav-top h4 {
+      font-size: 2em; } }
 
 .nav-bottom {
-  width: 100%;
-  height: 30px;
   background-color: #000;
   border: 1px solid transparent;
-  opacity: 0.9; }
+  height: 30px;
+  opacity: 0.9;
+  width: 100%; }
 
 .nav-top-marker {
-  color: #0097FF; }
+  color: #0097ff; }
 
 .right-bar ul li {
-  margin-left: 10px; }
+  margin-left: 10px;
+  color: #666;
+  font-size: 16px; }
 
 .side-nav li > a > i {
   margin: 0; }
 .side-nav .mobile-header {
-  background-color: teal;
+  background-color: #008080;
   color: #fff; }
-.side-nav .mobile-header a {
-  color: #fff;
-  font-size: 2em; }
+  .side-nav .mobile-header a {
+    color: #fff;
+    font-size: 2em; }
 
 .shelf-page nav {
   background-color: #fff; }
@@ -97,9 +124,6 @@
   color: #666;
   font-size: 16px; }
 
-.right-bar ul li {
-  color: #666;
-  font-size: 16px; }
 .right-bar ul li a {
   color: #fff; }
 
@@ -117,21 +141,21 @@ nav a {
   color: #222; }
 
 .top-menu-active {
-  background-color: teal !important;
+  background-color: #008080 !important;
   padding: 5px; }
 
 .category-select {
-  border: 2px solid red; }
+  border: 2px solid #f00; }
 
 .tabs .tab a {
   color: #00A8A8; }
 
 .tabs .tab a:hover,
 .tabs .tab a.active {
-  color: teal; }
+  color: #008080; }
 
 .tabs .indicator {
-  background-color: teal; }
+  background-color: #008080; }
 
 .input-field .suffix i {
   position: absolute;
@@ -180,7 +204,7 @@ nav a {
   width: 250px; }
 
 .redded {
-  background-color: red;
+  background-color: #f00;
   color: #fff;
   font-weight: bold; }
 
@@ -194,5 +218,3 @@ nav a {
     overflow: hidden; } }
 .return-image img {
   height: 100%; }
-
-/*# sourceMappingURL=main.css.map */

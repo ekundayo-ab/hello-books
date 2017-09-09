@@ -65,7 +65,10 @@
     "mocha": "^3.5.0",
     "mocha-lcov-reporter": "^1.3.0",
     "nyc": "^11.1.0",
+    "sass-lint": "^1.11.1",
     "should": "^11.2.1",
+    "stylelint": "^8.1.1",
+    "stylelint-config-recommended": "^1.0.0",
     "supertest": "^3.0.0"
   }
 }
