@@ -46,9 +46,6 @@
       color: #666;
       font-size: 16px; }
 
-.admin-page {
-  background: none; }
-
 .nav-top {
   background-color: #000;
   border: 1px solid transparent;
@@ -71,7 +68,7 @@
   background-color: #000;
   border: 1px solid transparent;
   height: 30px;
-  opacity: 0.9;
+  opacity: .9;
   width: 100%; }
 
 .nav-top-marker {
@@ -84,14 +81,15 @@
 .right-bar a {
   color: #fff; }
 
-.side-nav i {
-  margin: 0; }
 .side-nav .mobile-header {
   background-color: #008080;
   color: #fff; }
   .side-nav .mobile-header a {
     color: #fff;
     font-size: 2em; }
+
+.icon-link .margin-0 {
+  margin: 0; }
 
 .available-books {
   background-color: #222;
@@ -127,14 +125,14 @@ nav a {
   position: absolute;
   right: 0;
   top: 0;
-  transition: color 0.2s;
+  transition: color .2s;
   width: 3rem; }
 .input-field .active {
   color: #26a69a; }
 .input-field input,
 .input-field textarea {
   margin-right: 3rem;
-  padding-top: 0.8rem;
+  padding-top: .8rem;
   width: calc(100% - 3rem); }
 .input-field label {
   margin-right: 3rem; }
