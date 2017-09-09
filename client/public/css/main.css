@@ -30,7 +30,7 @@
       overflow: hidden;
       padding: 0 24px;
       text-overflow: ellipsis;
-      transition: color .28s ease;
+      transition: color 0.28s ease;
       width: 100%; }
 
 .mod-active {
@@ -106,7 +106,7 @@
   background-color: #000;
   border: 1px solid transparent;
   height: 30px;
-  opacity: .9;
+  opacity: 0.9;
   width: 100%; }
 
 .nav-top-marker {
@@ -163,14 +163,14 @@ nav a {
   position: absolute;
   right: 0;
   top: 0;
-  transition: color .2s;
+  transition: color 0.2s;
   width: 3rem; }
 .input-field .active {
   color: #26a69a; }
 .input-field input,
 .input-field textarea {
   margin-right: 3rem;
-  padding-top: .8rem;
+  padding-top: 0.8rem;
   width: calc(100% - 3rem); }
 .input-field label {
   margin-right: 3rem; }
