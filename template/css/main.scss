@@ -152,10 +152,6 @@ $teal-variant: #00a8a8;
 }
 
 .side-nav {
-  li>a>i {
-    margin: 0;
-  }
-
   .mobile-header {
     background-color: $primary-color;
     color: $pure-white;
@@ -165,7 +161,14 @@ $teal-variant: #00a8a8;
       font-size: 2em;
     }
   }
+
+  li>a>i {
+    margin: 0;
+  }
 }
+
+
+
 
 .available-books {
   background-color: $slight-black-color;

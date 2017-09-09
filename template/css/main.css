@@ -84,14 +84,14 @@
 .right-bar a {
   color: #fff; }
 
-.side-nav li > a > i {
-  margin: 0; }
 .side-nav .mobile-header {
   background-color: #008080;
   color: #fff; }
   .side-nav .mobile-header a {
     color: #fff;
     font-size: 2em; }
+.side-nav li > a > i {
+  margin: 0; }
 
 .available-books {
   background-color: #222;
