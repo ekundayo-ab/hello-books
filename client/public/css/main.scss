@@ -267,7 +267,6 @@ nav a {
     input,
     textarea {
       margin-right: 3rem;
-      width: 92%;
       width: calc(100% - 3rem);
       padding-top: .8rem;
     }
@@ -276,13 +275,11 @@ nav a {
     }
     @media only screen and (max-width: 992px) {
       input {
-        width: 86%;
         width: calc(100% - 3rem);
       }
     }
     @media only screen and (max-width: 600px) {
       input {
-        width: 80%;
         width: calc(100% - 3rem);
       }
     }
@@ -320,7 +317,7 @@ nav a {
 
 .redded {
   background-color: $pure-red;
-  color:$pure-white;
+  color: $pure-white;
   font-weight: bold;
 }
 
