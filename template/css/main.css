@@ -116,7 +116,7 @@ nav a {
   .tabs > .tab a.active {
     color: #008080; }
 
-.tabs .indicator {
+.tabs > .indicator {
   background-color: #008080; }
 
 .input-field .suffix i {
@@ -131,7 +131,7 @@ nav a {
 .input-field .suffix input,
 .input-field .suffix textarea {
   margin-right: 3rem;
-  padding-top: .8rem;
+  padding-top: 0.8rem;
   width: calc(100% - 3rem); }
 .input-field .suffix label {
   margin-right: 3rem; }

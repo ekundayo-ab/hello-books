@@ -209,10 +209,8 @@ nav {
   }
 }
 
-.tabs {
-  .indicator {
+.tabs > .indicator {
     background-color: $primary-color;
-  }
 }
 
 .input-field {
@@ -233,23 +231,26 @@ nav {
     input,
     textarea {
       margin-right: 3rem;
-      padding-top: .8rem;
+      padding-top: 0.8rem;
       width: calc(100% - 3rem);
     }
 
     label {
       margin-right: 3rem;
     }
+
     @media only screen and (max-width: 992px) {
       input {
         width: calc(100% - 3rem);
       }
     }
+
     @media only screen and (max-width: 600px) {
       input {
         width: calc(100% - 3rem);
       }
     }
+
   }
 }
 
