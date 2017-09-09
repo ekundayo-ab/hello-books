@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './components/Landing/Home';
 
+require('../dist/index.html');
+
 ReactDOM.render(
   <Router>
     <App />
