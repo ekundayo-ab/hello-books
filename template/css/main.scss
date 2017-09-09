@@ -104,7 +104,10 @@ $teal-variant: #00a8a8;
   background-color: $black-color;
   border: 1px solid transparent;
   opacity: 0.9;
-  padding: 0 0 0 20px;
+  padding-bottom: 0;
+  padding-left: 20px;
+  padding-right: 0;
+  padding-top:0;
   width: 100%;
 
   &.row {
@@ -137,21 +140,19 @@ $teal-variant: #00a8a8;
 }
 
 .right-bar {
-  ul {
-    li {
-      color: $gray-color;
-      font-size: 16px;
-      margin-left: 10px;
-    }
+  li {
+    color: $gray-color;
+    font-size: 16px;
+    margin-left: 10px;
   }
 
-  ul>li>a {
+  a {
     color: $pure-white;
   }
 }
 
 .side-nav {
-  li>a>i {
+  i {
     margin: 0;
   }
 
@@ -214,43 +215,40 @@ nav {
 }
 
 .input-field {
-  .suffix {
-    i {
-      font-size: 2rem;
-      position: absolute;
-      right: 0;
-      top: 0;
-      transition: color 0.2s;
-      width: 3rem;
-    }
+  i {
+    font-size: 2rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: color 0.2s;
+    width: 3rem;
+  }
 
-    i>.active {
-      color: $input-active;
-    }
+  .active {
+    color: $input-active;
+  }
 
-    input,
-    textarea {
-      margin-right: 3rem;
-      padding-top: 0.8rem;
+  input,
+  textarea {
+    margin-right: 3rem;
+    padding-top: 0.8rem;
+    width: calc(100% - 3rem);
+  }
+
+  label {
+    margin-right: 3rem;
+  }
+
+  @media only screen and (max-width: 992px) {
+    input {
       width: calc(100% - 3rem);
     }
+  }
 
-    label {
-      margin-right: 3rem;
+  @media only screen and (max-width: 600px) {
+    input {
+      width: calc(100% - 3rem);
     }
-
-    @media only screen and (max-width: 992px) {
-      input {
-        width: calc(100% - 3rem);
-      }
-    }
-
-    @media only screen and (max-width: 600px) {
-      input {
-        width: calc(100% - 3rem);
-      }
-    }
-
   }
 }
 

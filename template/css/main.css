@@ -53,7 +53,10 @@
   background-color: #000;
   border: 1px solid transparent;
   opacity: 0.9;
-  padding: 0 0 0 20px;
+  padding-bottom: 0;
+  padding-left: 20px;
+  padding-right: 0;
+  padding-top: 0;
   width: 100%; }
   .nav-top.row {
     margin-bottom: 0; }
@@ -74,14 +77,14 @@
 .nav-top-marker {
   color: #0097ff; }
 
-.right-bar ul li {
+.right-bar li {
   color: #666;
   font-size: 16px;
   margin-left: 10px; }
-.right-bar ul > li > a {
+.right-bar a {
   color: #fff; }
 
-.side-nav li > a > i {
+.side-nav i {
   margin: 0; }
 .side-nav .mobile-header {
   background-color: #008080;
@@ -119,27 +122,27 @@ nav a {
 .tabs > .indicator {
   background-color: #008080; }
 
-.input-field .suffix i {
+.input-field i {
   font-size: 2rem;
   position: absolute;
   right: 0;
   top: 0;
   transition: color 0.2s;
   width: 3rem; }
-.input-field .suffix i > .active {
+.input-field .active {
   color: #26a69a; }
-.input-field .suffix input,
-.input-field .suffix textarea {
+.input-field input,
+.input-field textarea {
   margin-right: 3rem;
   padding-top: 0.8rem;
   width: calc(100% - 3rem); }
-.input-field .suffix label {
+.input-field label {
   margin-right: 3rem; }
 @media only screen and (max-width: 992px) {
-  .input-field .suffix input {
+  .input-field input {
     width: calc(100% - 3rem); } }
 @media only screen and (max-width: 600px) {
-  .input-field .suffix input {
+  .input-field input {
     width: calc(100% - 3rem); } }
 
 .book .card-content {
