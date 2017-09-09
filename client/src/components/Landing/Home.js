@@ -8,9 +8,9 @@ import SignIn from './SigninForm';
 import ForgotPassword from './ForgotPasswordForm';
 
 class Home extends Component {
-  static propTypes = {
-    location: PropTypes.object.isRequired,
-  }
+  // static propTypes = {
+  //   location: PropTypes.object.isRequired,
+  // }
   render() {
     const isCurrent = this.props.location.pathname === '/';
     let theActiveClass;
@@ -47,5 +47,9 @@ class Home extends Component {
     );
   }
 }
+
+Home.PropTypes = {
+  location: PropTypes.object.isRequired,
+};
 
 export default withRouter(Home);
