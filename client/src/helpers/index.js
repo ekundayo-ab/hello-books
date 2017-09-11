@@ -74,9 +74,9 @@ class Helper {
   static userValidation(req) {
     const errors = {};
     for (let i = 0; i < 4; i += 1) {
-      const field = Object.values(req.body)[i];
+      const field = Object.values(req)[i];
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
-        const theKey = Object.keys(req.body)[i]; // eslint-disable-line no-unused-vars
+        const theKey = Object.keys(req)[i]; // eslint-disable-line no-unused-vars
         errors[theKey] = 'This field is required';
       }
     }
