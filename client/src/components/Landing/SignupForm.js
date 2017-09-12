@@ -2,6 +2,7 @@
 /* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classname from 'classnames';
 import signUpAction from '../../actions/signUpActions';
@@ -42,11 +43,15 @@ class SignUp extends Component {
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
       this.props.userSignUpRequest(this.state)
+        .then(() => {
+          this.props.history.push('/shelf');
+        })
         .catch((err) => {
           this.setState({ errors: err.response.data.errors, isLoading: false });
         });
     }
   }
+
   render() {
     const { errors } = this.state;
     return (
@@ -117,6 +122,7 @@ class SignUp extends Component {
 
 SignUp.propTypes = {
   userSignUpRequest: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
-export default connect(null, { userSignUpRequest })(SignUp);
+export default connect(null, { userSignUpRequest })(withRouter(SignUp));
