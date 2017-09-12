@@ -1,5 +1,6 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { NavLink, Route, withRouter } from 'react-router-dom';
 import Header from './Header';
 import SignUp from './SignupForm';
@@ -45,7 +46,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  location: React.PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 export default withRouter(Home);
