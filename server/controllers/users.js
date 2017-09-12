@@ -22,15 +22,16 @@ class UserController {
    * @memberOf UserController
    */
   static signup(req, res) {
-    // Error(s) is/are outputted if any is pushed to the array
-    const { isValid, errors } = Helper.userValidation(req);
-    if (!isValid) return res.status(400).send({ success: false, errors });
-
     // Validates and ensure expected inputs are gotten
     if (req.body.password === undefined || req.body.username === undefined
       || req.body.email === undefined) {
       return res.status(400).send({ success: false, message: 'Check your username, email or password and try again!' });
     }
+
+    // Error(s) is/are outputted if any is pushed to the array
+    const { isValid, errors } = Helper.userValidation(req);
+    if (!isValid) return res.status(400).send({ success: false, errors });
+
 
     if (!Helper.validateEmail(req.body.email)) {
       return res.status(400).send({ success: false, message: 'Invalid email address, try again' });
