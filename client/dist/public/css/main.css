@@ -112,11 +112,11 @@
 .nav-top-marker {
   color: #0097ff; }
 
-.right-bar li {
+.right-bar ul li {
   color: #666;
   font-size: 16px;
   margin-left: 10px; }
-.right-bar a {
+.right-bar ul > li > a {
   color: #fff; }
 
 .side-nav .mobile-header {
@@ -125,9 +125,6 @@
   .side-nav .mobile-header a {
     color: #fff;
     font-size: 2em; }
-
-.icon-link .margin-0 {
-  margin: 0; }
 
 .available-books {
   background-color: #222;
@@ -155,30 +152,30 @@ nav a {
   .tabs > .tab a.active {
     color: #008080; }
 
-.tabs > .indicator {
+.tabs .indicator {
   background-color: #008080; }
 
-.input-field i {
+.input-field .suffix i {
   font-size: 2rem;
   position: absolute;
   right: 0;
   top: 0;
   transition: color 0.2s;
   width: 3rem; }
-.input-field .active {
+.input-field .suffix i > .active {
   color: #26a69a; }
 .input-field input,
 .input-field textarea {
   margin-right: 3rem;
-  padding-top: 0.8rem;
+  padding-top: .8rem;
   width: calc(100% - 3rem); }
-.input-field label {
+.input-field .suffix label {
   margin-right: 3rem; }
 @media only screen and (max-width: 992px) {
-  .input-field input {
+  .input-field .suffix input {
     width: calc(100% - 3rem); } }
 @media only screen and (max-width: 600px) {
-  .input-field input {
+  .input-field .suffix input {
     width: calc(100% - 3rem); } }
 
 .book .card-content {
@@ -215,3 +212,14 @@ nav a {
   .return-image {
     height: 50px;
     overflow: hidden; } }
+.has-error input {
+  border-color: #f00; }
+  .has-error input[type='text'] {
+    margin: 3px; }
+  .has-error input[type='email'] {
+    margin: 3px; }
+  .has-error input[type='password'] {
+    margin: 3px; }
+.has-error span {
+  color: #f00;
+  margin: 0; }
