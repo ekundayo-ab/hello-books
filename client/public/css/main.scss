@@ -12,9 +12,19 @@ $slight-black-color: #222;
 $top-marker-color: #0097ff;
 $input-active: #26a69a;
 $teal-variant: #00a8a8;
+$active-background: rgba(0, 0, 0, 0.1);
 
 @mixin background-size($bg-size) {
   background-size: $bg-size;
+}
+
+// For active menu in library
+nav {
+  a {
+    &.active {
+      background-color: $active-background;
+    }
+  }
 }
 
 // Landing Page Specials

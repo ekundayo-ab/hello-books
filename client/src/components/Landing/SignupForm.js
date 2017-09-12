@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classname from 'classnames';
 import signUpAction from '../../actions/signUpActions';
+import { addFlashMessage } from '../../actions/flashMessages';
 import Helper from './../../helpers/index';
 
 const userSignUpRequest = signUpAction.userSignUpRequest;
@@ -43,7 +44,11 @@ class SignUp extends Component {
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
       this.props.userSignUpRequest(this.state)
-        .then(() => {
+        .then((done) => {
+          this.props.addFlashMessage({
+            type: 'success',
+            text: done,
+          });
           this.props.history.push('/shelf');
         })
         .catch((err) => {
@@ -123,6 +128,7 @@ class SignUp extends Component {
 SignUp.propTypes = {
   userSignUpRequest: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
+  addFlashMessage: PropTypes.func.isRequired,
 };
 
-export default connect(null, { userSignUpRequest })(withRouter(SignUp));
+export default connect(null, { userSignUpRequest, addFlashMessage })(withRouter(SignUp));

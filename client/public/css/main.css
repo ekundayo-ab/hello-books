@@ -1,6 +1,9 @@
 @font-face {
   font-family: 'Chunkfive';
   src: url("../fonts/chunkfive/Chunkfive.otf"), url("../fonts/chunkfive/Chunkfive.otf"); }
+nav a.active {
+  background-color: rgba(0, 0, 0, 0.1); }
+
 .mod-tabs {
   background-color: #fff;
   height: 48px;
@@ -112,11 +115,11 @@
 .nav-top-marker {
   color: #0097ff; }
 
-.right-bar ul li {
+.right-bar li {
   color: #666;
   font-size: 16px;
   margin-left: 10px; }
-.right-bar ul > li > a {
+.right-bar a {
   color: #fff; }
 
 .side-nav .mobile-header {
@@ -125,6 +128,9 @@
   .side-nav .mobile-header a {
     color: #fff;
     font-size: 2em; }
+
+.icon-link .margin-0 {
+  margin: 0; }
 
 .available-books {
   background-color: #222;
@@ -152,30 +158,30 @@ nav a {
   .tabs > .tab a.active {
     color: #008080; }
 
-.tabs .indicator {
+.tabs > .indicator {
   background-color: #008080; }
 
-.input-field .suffix i {
+.input-field i {
   font-size: 2rem;
   position: absolute;
   right: 0;
   top: 0;
   transition: color 0.2s;
   width: 3rem; }
-.input-field .suffix i > .active {
+.input-field .active {
   color: #26a69a; }
 .input-field input,
 .input-field textarea {
   margin-right: 3rem;
-  padding-top: .8rem;
+  padding-top: 0.8rem;
   width: calc(100% - 3rem); }
-.input-field .suffix label {
+.input-field label {
   margin-right: 3rem; }
 @media only screen and (max-width: 992px) {
-  .input-field .suffix input {
+  .input-field input {
     width: calc(100% - 3rem); } }
 @media only screen and (max-width: 600px) {
-  .input-field .suffix input {
+  .input-field input {
     width: calc(100% - 3rem); } }
 
 .book .card-content {
