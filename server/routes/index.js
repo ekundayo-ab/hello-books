@@ -3,6 +3,7 @@ import usersController from '../controllers/users';
 import booksController from '../controllers/books';
 import borrowsController from '../controllers/borrows';
 import authMiddleware from '../middlewares/auth';
+import catController from '../controllers/category';
 
 const Router = express.Router();
 /**
@@ -386,6 +387,8 @@ Router.put('/users/:userId/books', borrowsController.returnBook); // Route to re
  *           $ref: '#/definitions/Book'
  */
 Router.get('/users/:userId/books', borrowsController.listNotReturned); // Route to list borrowed but not returned book
+
+Router.post('/category', catController.create);
 
 Router.route('*')
   .post((req, res) => {
