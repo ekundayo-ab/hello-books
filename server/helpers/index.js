@@ -73,6 +73,9 @@ class Helper {
    */
   static userValidation(req) {
     const errors = {};
+    if (!/^[a-z_]+$/i.test(req.username)) {
+      errors.username = 'MUST be one word (letters/underscores)';
+    }
     for (let i = 0; i < 4; i += 1) {
       const field = Object.values(req.body)[i];
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {

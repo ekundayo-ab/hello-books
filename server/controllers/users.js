@@ -37,7 +37,6 @@ class UserController {
       return res.status(400).send({ success: false, message: 'Invalid email address, try again' });
     }
 
-
     return User
       .findOne({
         where: {
@@ -137,6 +136,26 @@ class UserController {
       }).then((user) => {
         res.send({ user });
       });
+  }
+
+  static findUser(req, res) {
+    // Get all users.
+    return User
+      .findOne({
+        where: {
+          $or: {
+            username: req.body.username,
+            email: req.body.email,
+          },
+        },
+      })
+      .then((user) => {
+        if (user) {
+          return res.status(200).send(user);
+        }
+        return res.status(200).send({ success: true, message: 'Available' });
+      })
+      .catch(err => res.status(400).send(err));
   }
 }
 

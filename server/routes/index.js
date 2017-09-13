@@ -115,6 +115,7 @@ Router.post('/users/signup', usersController.signup); // Route to sign up
  *         description: Bad Username, Password or Email
  */
 Router.post('/users/signin', usersController.signin); // Route to sign in
+Router.post('/users', usersController.findUser); // Checks if a User exists in the database
 
 Router.use(authMiddleware.authenticate); // Authentication middleware
 

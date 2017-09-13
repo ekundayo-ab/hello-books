@@ -104,7 +104,7 @@ class Shelf extends Component {
                       <td>Kaveller & Clay</td>
                       <td>Thomas Jenkins</td>
                       <td>March 13th, 2016</td>
-                      <td><a href="#" className="btn"><i className="fa fa-2x fa-mail-forward" />> Return</a></td>
+                      <td><a href="" className="btn"><i className="fa fa-2x fa-mail-forward" />> Return</a></td>
                     </tr>
                     <tr>
                       <td>2</td>
@@ -112,7 +112,7 @@ class Shelf extends Component {
                       <td>Half of a yellow sun</td>
                       <td>Chimamanda Adichie</td>
                       <td>March 13th, 2016</td>
-                      <td><a href="#" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
+                      <td><a href="" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
                     </tr>
                     <tr>
                       <td>3</td>
@@ -120,7 +120,7 @@ class Shelf extends Component {
                       <td>Half of a yellow sun</td>
                       <td>Chimamanda Adichie</td>
                       <td>March 13th, 2016</td>
-                      <td><a href="#" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
+                      <td><a href="" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
                     </tr>
                     <tr>
                       <td>4</td>
@@ -128,7 +128,7 @@ class Shelf extends Component {
                       <td>Title Marks</td>
                       <td>First Line finish</td>
                       <td>March 13th, 2016</td>
-                      <td><a href="#" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
+                      <td><a href="" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
                     </tr>
                     <tr>
                       <td>5</td>
@@ -136,7 +136,7 @@ class Shelf extends Component {
                       <td>Kaveller & Clay</td>
                       <td>Thomas Jenkins</td>
                       <td>March 13th, 2016</td>
-                      <td><a href="#" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
+                      <td><a href="" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
                     </tr>
                   </tbody>
                 </table>

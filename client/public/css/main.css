@@ -76,7 +76,6 @@ nav a.active {
   display: none; }
 
 .shelf-page {
-  background: url("../images/bg_shelf.jpg") no-repeat center center fixed;
   background-size: cover; }
   .shelf-page nav {
     background-color: #fff; }
@@ -229,3 +228,20 @@ nav a {
 .has-error span {
   color: #f00;
   margin: 0; }
+
+.alert-success {
+  background-color: #dff0d8;
+  color: #3c763d;
+  font-weight: bold;
+  padding: 20px;
+  text-align: center; }
+
+.alert-danger {
+  background-color: #a94442;
+  color: #f2dede;
+  font-weight: bold;
+  padding: 20px;
+  text-align: center; }
+
+.alert .close {
+  float: right; }

@@ -5,11 +5,9 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classname from 'classnames';
-import signUpAction from '../../actions/signUpActions';
+import { userSignUpRequest, isUserExists } from '../../actions/signUpActions';
 import { addFlashMessage } from '../../actions/flashMessages';
 import Helper from './../../helpers/index';
-
-const userSignUpRequest = signUpAction.userSignUpRequest;
 
 class SignUp extends Component {
   constructor(props) {
@@ -21,14 +19,36 @@ class SignUp extends Component {
       passwordConfirmation: '',
       errors: {},
       isLoading: false,
+      invalid: false,
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.checkUserExists = this.checkUserExists.bind(this);
   }
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  checkUserExists(e) {
+    const field = e.target.name;
+    const val = e.target.value;
+    if (val !== '') {
+      this.props.isUserExists(this.state)
+        .then((res) => {
+          const errors = this.state.errors;
+          let invalid;
+          if (res.data.username || res.data.email) {
+            errors[field] = `User exists with this ${field}`;
+            invalid = true;
+          } else {
+            errors[field] = '';
+            invalid = false;
+          }
+          this.setState({ errors, invalid });
+        });
+    }
   }
 
   isValid() {
@@ -73,25 +93,27 @@ class SignUp extends Component {
                 id="username"
                 type="text"
                 className="validate"
+                onBlur={this.checkUserExists}
                 name="username"
                 onChange={this.onChange}
                 value={this.state.username}
               />
               {errors.username && <span className="help-block">{errors.username}</span> }
             </div>
-            <div className={classname('input-field', 'col s12', { 'has-error': errors.username })}>
+            <div className={classname('input-field', 'col s12', { 'has-error': errors.email })}>
               <input
                 placeholder="Email Address"
                 id="email"
                 type="email"
                 className="validate"
+                onBlur={this.checkUserExists}
                 name="email"
                 onChange={this.onChange}
                 value={this.state.email}
               />
               {errors.email && <span className="help-block">{errors.email}</span> }
             </div>
-            <div className={classname('input-field', 'col s12', { 'has-error': errors.username })}>
+            <div className={classname('input-field', 'col s12', { 'has-error': errors.password })}>
               <input
                 placeholder="Password"
                 id="password"
@@ -103,7 +125,7 @@ class SignUp extends Component {
               />
               {errors.password && <span className="help-block">{errors.password}</span> }
             </div>
-            <div className={classname('input-field', 'col s12', { 'has-error': errors.username })}>
+            <div className={classname('input-field', 'col s12', { 'has-error': errors.passwordConfirmation })}>
               <input
                 placeholder="Confirm Password"
                 id="passwordConfirmation"
@@ -116,7 +138,7 @@ class SignUp extends Component {
               {errors.passwordConfirmation && <span className="help-block">{errors.passwordConfirmation}</span> }
             </div>
             <div className={classname('input-field', 'col s12', { 'has-error': errors.username })}>
-              <button type="submit" disabled={this.state.isLoading} className="right-align btn teal"><i className="fa fa-user" /> Register</button>
+              <button type="submit" disabled={this.state.isLoading || this.state.invalid} className="right-align btn teal"><i className="fa fa-user" /> Register</button>
             </div>
           </form>
         </div>
@@ -129,6 +151,8 @@ SignUp.propTypes = {
   userSignUpRequest: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
+  isUserExists: PropTypes.func.isRequired,
 };
 
-export default connect(null, { userSignUpRequest, addFlashMessage })(withRouter(SignUp));
+export default
+connect(null, { userSignUpRequest, addFlashMessage, isUserExists })(withRouter(SignUp));
