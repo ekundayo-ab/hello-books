@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-function login(data) {
+function authActions(data) {
   return () => axios.post('/api/v1/users/signin', data);
 }
 
-export default login;
+export default authActions;

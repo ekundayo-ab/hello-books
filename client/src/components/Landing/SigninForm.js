@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Helper from './../../helpers/index';
-import login from '../../actions/login';
+import login from '../../actions/authActions';
 import { addFlashMessage } from '../../actions/flashMessages';
 import FlashMessagesList from '../../components/flash/FlashMessagesList';
 
