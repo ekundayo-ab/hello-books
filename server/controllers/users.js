@@ -108,7 +108,7 @@ class UserController {
             res.status(401).send({ success: false, message: 'Authentication failed. Wrong password' });
           } else {
             const token = jwt.sign({
-              data: user,
+              data: { id: user.id, role: user.role, username: user.username },
             }, 'hello-books', { expiresIn: 60 * 60 });
             res.json({ success: true, message: `Hi ${user.username}, you are logged in`, token });
           }

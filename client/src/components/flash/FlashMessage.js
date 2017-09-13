@@ -21,7 +21,7 @@ class FlashMessage extends Component {
         'alert-danger': type === 'error' })}
       >
         <button onClick={this.onClick} className="close"><span>&times;</span></button>
-        {text.data.message}
+        {text}
       </div>
     );
   }

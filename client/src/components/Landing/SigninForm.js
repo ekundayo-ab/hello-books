@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Helper from './../../helpers/index';
-import login from '../../actions/authActions';
+import { login } from '../../actions/authActions';
 import { addFlashMessage } from '../../actions/flashMessages';
 import FlashMessagesList from '../../components/flash/FlashMessagesList';
 
@@ -18,7 +18,6 @@ class SignIn extends Component {
       errors: {},
       isLoading: false,
     };
-
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -34,26 +33,21 @@ class SignIn extends Component {
     }
     return isValid;
   }
-
   onSubmit(e) {
     e.preventDefault();
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
-      this.props.login(this.state)
-        .then((done) => {
-          this.props.history.push('/shelf');
-          this.props.addFlashMessage({
-            type: 'success',
-            text: done,
-          });
-        })
-        .catch((err) => {
-          this.setState({ errors: err.response.data, isLoading: false });
+      this.props.login(this.state).then(
+        () => this.props.history.push('/shelf'),
+        (err) => {
+          console.log(err.response.data.message);
+          this.setState({ errors: err.response.data.message, isLoading: false });
           this.props.addFlashMessage({
             type: 'error',
-            text: err.response,
+            text: err.response.data.message,
           });
-        });
+        },
+      );
     }
   }
 

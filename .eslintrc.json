@@ -17,6 +17,7 @@
     "mocha": true,
     "jquery": true,
     "commonjs": true,
-    "es6": true
+    "es6": true,
+    "browser": true
   }
 }
