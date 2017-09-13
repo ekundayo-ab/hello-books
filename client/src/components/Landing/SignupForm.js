@@ -1,4 +1,3 @@
-/* eslint-disable react/prefer-stateless-function */
 /* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -137,7 +136,7 @@ class SignUp extends Component {
               />
               {errors.passwordConfirmation && <span className="help-block">{errors.passwordConfirmation}</span> }
             </div>
-            <div className={classname('input-field', 'col s12', { 'has-error': errors.username })}>
+            <div className="input-field col s12">
               <button type="submit" disabled={this.state.isLoading || this.state.invalid} className="right-align btn teal"><i className="fa fa-user" /> Register</button>
             </div>
           </form>

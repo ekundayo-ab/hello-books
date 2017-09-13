@@ -242,6 +242,8 @@ nav a {
   font-weight: bold;
   padding: 20px;
   text-align: center; }
+  .alert-danger .close {
+    color: #f00; }
 
 .alert .close {
   float: right; }

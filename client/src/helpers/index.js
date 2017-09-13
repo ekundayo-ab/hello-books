@@ -90,6 +90,22 @@ class Helper {
     };
   }
 
+  static loginValidation(req) {
+    const errors = {};
+
+    for (let i = 0; i < 2; i += 1) {
+      const field = Object.values(req)[i];
+      if (field === (undefined || null || '') || /^\s+$/.test(field)) {
+        const theKey = Object.keys(req)[i]; // eslint-disable-line no-unused-vars
+        errors[theKey] = 'This field is required';
+      }
+    }
+    return {
+      isValid: isEmpty(errors),
+      errors,
+    };
+  }
+
   /**
    *
    *

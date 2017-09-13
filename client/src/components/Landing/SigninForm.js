@@ -1,17 +1,92 @@
-/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
+import classnames from 'classnames';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Helper from './../../helpers/index';
+import login from '../../actions/login';
+import { addFlashMessage } from '../../actions/flashMessages';
+import FlashMessagesList from '../../components/flash/FlashMessagesList';
 
 class SignIn extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      password: '',
+      errors: {},
+      isLoading: false,
+    };
+
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  isValid() {
+    const { errors, isValid } = Helper.loginValidation(this.state);
+    if (!isValid) {
+      this.setState({ errors });
+    }
+    return isValid;
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    if (this.isValid()) {
+      this.setState({ errors: {}, isLoading: true });
+      this.props.login(this.state)
+        .then((done) => {
+          this.props.history.push('/shelf');
+          this.props.addFlashMessage({
+            type: 'success',
+            text: done,
+          });
+        })
+        .catch((err) => {
+          this.setState({ errors: err.response.data, isLoading: false });
+          this.props.addFlashMessage({
+            type: 'error',
+            text: err.response,
+          });
+        });
+    }
+  }
+
   render() {
+    const { errors } = this.state;
     return (
       <div id="login">
+        <FlashMessagesList />
         <div className="row">
-          <form method="get" action="shelf.html">
-            <div className="input-field col s12">
-              <input placeholder="Email Address" id="email" type="email" className="validate" />
+          <form onSubmit={this.onSubmit}>
+            <div className={classnames('input-field', 'col s12', { 'has-error': errors.username })}>
+              <input
+                placeholder="Username"
+                id="username"
+                type="text"
+                className="validate"
+                name="username"
+                onChange={this.onChange}
+                value={this.state.username}
+              />
+              {errors.username && <span className="help-block">{errors.username}</span> }
             </div>
-            <div className="input-field col s12">
-              <input placeholder="Password" id="password" type="password" className="validate" />
+            <div className={classnames('input-field', 'col s12', { 'has-error': errors.password })}>
+              <input
+                placeholder="Password"
+                id="password"
+                type="password"
+                className="validate"
+                name="password"
+                onChange={this.onChange}
+                value={this.state.password}
+              />
+              {errors.password && <span className="help-block">{errors.password}</span> }
             </div>
             <div className="col s6">
               <p>
@@ -19,8 +94,8 @@ class SignIn extends Component {
                 <label htmlFor="check-log"><i>Keep me logged in</i></label>
               </p>
             </div>
-            <div className="col s6 right-align">
-              <button type="submit" className="btn"><i className="fa fa-sign-in" />Login</button>
+            <div className="input-field col s12">
+              <button type="submit" disabled={this.state.isLoading || this.state.invalid} className="right-align btn teal"><i className="fa fa-user" /> Login</button>
             </div>
           </form>
         </div>
@@ -29,4 +104,10 @@ class SignIn extends Component {
   }
 }
 
-export default SignIn;
+SignIn.propTypes = {
+  login: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  addFlashMessage: PropTypes.func.isRequired,
+};
+
+export default connect(null, { login, addFlashMessage })(withRouter(SignIn));
