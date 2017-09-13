@@ -79,14 +79,17 @@ class UserController {
    */
   static signin(req, res) {
     // Ensures expected inputs are gotten
-    if (!req.body.password || !req.body.username) {
+    if (!req.body.password || !req.body.identifier) {
       return res.status(400).send({ success: false, message: 'Bad request!, Check your username or email.' });
     }
     // Queries the database if user exists with supplied credentials
     return User
       .findOne({
         where: {
-          username: req.body.username,
+          $or: {
+            username: req.body.identifier,
+            email: req.body.identifier,
+          },
         },
       })
       .then((user) => {

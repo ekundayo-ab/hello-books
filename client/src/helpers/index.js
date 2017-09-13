@@ -77,6 +77,10 @@ class Helper {
       errors.username = 'MUST be one word (letters/underscores)';
     }
 
+    if (req.password !== req.passwordConfirmation) {
+      errors.password = 'Passwords do not match';
+    }
+
     for (let i = 0; i < 4; i += 1) {
       const field = Object.values(req)[i];
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {

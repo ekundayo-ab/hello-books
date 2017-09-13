@@ -25,7 +25,7 @@ Router.get('/', (req, res) => res.status(200).send({
  * definitions:
  *   Register:
  *     properties:
- *       username:
+ *       identifier:
  *         type: string
  *       email:
  *         type: string
@@ -37,14 +37,14 @@ Router.get('/', (req, res) => res.status(200).send({
  * definitions:
  *   Login:
  *     properties:
- *       username:
+ *       identifier:
  *         type: string
  *         default: ekundayo
  *       password:
  *         type: string
  *         default: dayo
  *     example: {
- *       "username": ekundayo,
+ *       "identifier": ekundayo,
  *       "password": dayo
  *     }
  */
