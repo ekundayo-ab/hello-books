@@ -13,7 +13,7 @@ class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
+      identifier: '',
       password: '',
       errors: {},
       isLoading: false,
@@ -64,17 +64,17 @@ class SignIn extends Component {
         <FlashMessagesList />
         <div className="row">
           <form onSubmit={this.onSubmit}>
-            <div className={classnames('input-field', 'col s12', { 'has-error': errors.username })}>
+            <div className={classnames('input-field', 'col s12', { 'has-error': errors.identifier })}>
               <input
                 placeholder="Username"
-                id="username"
+                id="identifier"
                 type="text"
                 className="validate"
-                name="username"
+                name="identifier"
                 onChange={this.onChange}
                 value={this.state.username}
               />
-              {errors.username && <span className="help-block">{errors.username}</span> }
+              {errors.identifier && <span className="help-block">{errors.identifier}</span> }
             </div>
             <div className={classnames('input-field', 'col s12', { 'has-error': errors.password })}>
               <input

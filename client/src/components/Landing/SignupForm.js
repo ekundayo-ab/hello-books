@@ -71,6 +71,9 @@ class SignUp extends Component {
           this.props.history.push('/shelf');
         })
         .catch((err) => {
+          if (err.response) {
+            this.setState({ errors: err.response })
+          }
           this.setState({ errors: err.response.data.errors, isLoading: false });
         });
     }
