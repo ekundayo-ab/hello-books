@@ -139,7 +139,7 @@ class SignUp extends Component {
               />
               {errors.passwordConfirmation && <span className="help-block">{errors.passwordConfirmation}</span> }
             </div>
-            <div className="input-field col s12">
+            <div className="col s12">
               <button type="submit" disabled={this.state.isLoading || this.state.invalid} className="right-align btn teal"><i className="fa fa-user" /> Register</button>
             </div>
           </form>

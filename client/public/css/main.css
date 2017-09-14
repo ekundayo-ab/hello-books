@@ -216,14 +216,6 @@ nav a {
   .return-image {
     height: 50px;
     overflow: hidden; } }
-.has-error input {
-  border-color: #f00; }
-  .has-error input[type='text'] {
-    margin: 3px; }
-  .has-error input[type='email'] {
-    margin: 3px; }
-  .has-error input[type='password'] {
-    margin: 3px; }
 .has-error span {
   color: #f00;
   margin: 0; }

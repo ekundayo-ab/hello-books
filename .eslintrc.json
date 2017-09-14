@@ -7,7 +7,8 @@
       "react/prefer-stateless-function": "off",
       "import/no-unresolved": "off",
       "jsx-a11y/href-no-hash": "off",
-      "import/extensions": "off"
+      "import/extensions": "off",
+      "react/sort-comp": "off"
   },
   "globals": {
     "browser": true,

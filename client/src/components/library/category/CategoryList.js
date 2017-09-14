@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 
-class CategoryBar extends Component {
+class CategoryList extends Component {
   render() {
     return (
       <div>
@@ -25,4 +25,4 @@ class CategoryBar extends Component {
   }
 }
 
-export default CategoryBar;
+export default CategoryList;

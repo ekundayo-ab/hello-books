@@ -376,21 +376,21 @@ nav {
 
 // Validation Styling
 .has-error {
-  input {
-    border-color: $pure-red;
+  // input {
+  //   border-color: $pure-red;
 
-    &[type='text'] {
-      margin: 3px;
-    }
+  //   &[type='text'] {
+  //     margin: 3px;
+  //   }
 
-    &[type='email'] {
-      margin: 3px;
-    }
+  //   &[type='email'] {
+  //     margin: 3px;
+  //   }
 
-    &[type='password'] {
-      margin: 3px;
-    }
-  }
+  //   &[type='password'] {
+  //     margin: 3px;
+  //   }
+  // }
 
   span {
     color: $pure-red;

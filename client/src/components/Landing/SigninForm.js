@@ -88,7 +88,7 @@ class SignIn extends Component {
                 <label htmlFor="check-log"><i>Keep me logged in</i></label>
               </p>
             </div>
-            <div className="input-field col s12">
+            <div className="col s12">
               <button type="submit" disabled={this.state.isLoading || this.state.invalid} className="right-align btn teal"><i className="fa fa-user" /> Login</button>
             </div>
           </form>

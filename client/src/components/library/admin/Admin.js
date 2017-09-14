@@ -1,11 +1,16 @@
-/* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import BookForm from './BookForm';
 import CategoryForm from './CategoryForm';
-import CategoryBar from './../category/CategoryBar';
-import BookBar from './BookBar';
+import CategoryList from './../category/CategoryList';
+import BookList from './BookList';
+import { fetchBooks } from './../../../actions/createActions';
 
 class Admin extends Component {
+  componentDidMount() {
+    this.props.fetchBooks();
+  }
   render() {
     return (
       <div>
@@ -15,11 +20,11 @@ class Admin extends Component {
           <div className="row">
             <div className="col s12 m12 l3">
               <div className="row">
-                <CategoryBar />
+                <CategoryList />
               </div>
             </div>
             <div className="col s12 m12 l9">
-              <BookBar />
+              <BookList books={this.props.books} />
             </div>
           </div>
           <div className="row">
@@ -36,4 +41,15 @@ class Admin extends Component {
   }
 }
 
-export default Admin;
+Admin.propTypes = {
+  books: PropTypes.array.isRequired,
+  fetchBooks: PropTypes.func.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    books: state.books,
+  };
+}
+
+export default connect(mapStateToProps, { fetchBooks })(Admin);
