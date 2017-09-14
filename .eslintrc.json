@@ -4,8 +4,10 @@
     "rules": {
       "react/jsx-filename-extension": [0, { "extensions": [".js", ".jsx"] }],
       "react/forbid-prop-types": [0, { "forbid": ["object"] }],
+      "react/prefer-stateless-function": "off",
       "import/no-unresolved": "off",
-      "jsx-a11y/href-no-hash": "off"
+      "jsx-a11y/href-no-hash": "off",
+      "import/extensions": "off"
   },
   "globals": {
     "browser": true,

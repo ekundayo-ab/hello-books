@@ -163,7 +163,6 @@ nav a {
 .input-field i {
   font-size: 2rem;
   position: absolute;
-  right: 0;
   top: 0;
   transition: color 0.2s;
   width: 3rem; }

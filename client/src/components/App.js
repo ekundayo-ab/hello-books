@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import LandingHome from './../../src/components/landing/Home';
-import Home from './../../src/components/library/Home';
+import Home from './../../src/components/library/master/Home';
 
 class App extends Component {
   render() {

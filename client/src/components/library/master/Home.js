@@ -1,14 +1,14 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
-import Header from '../../components/library/Header';
-import Footer from '../../components/library/Footer';
-import Shelf from '../../components/library/Shelf';
-import History from '../../components/library/History';
-import Admin from '../../components/library/Admin';
-import Profile from '../../components/library/Profile';
-import NotFound from '../../components/library/NotFound';
-import FlashMessagesList from '../../components/flash/FlashMessagesList';
+import Header from './Header';
+import Footer from './Footer';
+import Shelf from '../Shelf';
+import History from '../History';
+import Admin from './../admin/Admin';
+import Profile from '../Profile';
+import NotFound from '../NotFound';
+import FlashMessagesList from '../../flash/FlashMessagesList';
 
 class Home extends Component {
   render() {
