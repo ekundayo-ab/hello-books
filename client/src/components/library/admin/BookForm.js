@@ -17,9 +17,11 @@ class BookForm extends Component {
       errors: {},
       loading: false,
     };
+    this.onChange = this.onChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  onChange = (e) => {
+  onChange (e){
     if (!this.state.errors[e.target.name]) {
       const errors = Object.assign({}, this.state.errors);
       delete errors[e.target.name];
@@ -32,7 +34,7 @@ class BookForm extends Component {
     }
   }
 
-  handleSubmit = (e) => {
+  handleSubmit(e) {
     e.preventDefault();
 
     // Validation
