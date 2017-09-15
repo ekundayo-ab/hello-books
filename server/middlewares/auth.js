@@ -16,7 +16,7 @@ class Authenticate {
       res.status(401).send({ success: false, message: 'Unauthenticated, token not found' });
     }
     if (token) {
-      jwt.verify(token, process.env.JWTSECRET, (err, decoded) => {
+      jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
           res.status(400).send({ success: false, message: 'Failed to authenticate token' });
         } else {
