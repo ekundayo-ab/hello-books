@@ -23,8 +23,8 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'An application that helps manage a library and its processes like stocking, tracking and renting of books.',
   },
-  host: 'hellobooks-e.herokuapp.com',
-  // host: 'localhost:8000',
+  // host: 'hellobooks-e.herokuapp.com',
+  host: 'localhost:8000',
   basePath: '/api/v1',
 };
 
@@ -42,10 +42,10 @@ const swaggerSpec = swaggerJSDoc(options);
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'server/api-docs/')));
+app.use('/api/v1', express.static(path.join(__dirname, 'server/api-docs/')));
 app.use('/api/v1', router);
 // serve swagger
-app.get('/hellobooks.json', (req, res) => {
+app.get('/api-docs/hellobooks.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
 });
