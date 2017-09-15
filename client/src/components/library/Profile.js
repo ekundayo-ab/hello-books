@@ -1,5 +1,11 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
+import img1 from '../../../public/images/1.png';
+import img2 from '../../../public/images/2.png';
+import img3 from '../../../public/images/3.png';
+import img4 from '../../../public/images/4.png';
+import img5 from '../../../public/images/5.png';
+import dayo from '../../../public/images/dayo.png';
 
 class Shelf extends Component {
   render() {
@@ -13,7 +19,7 @@ class Shelf extends Component {
               <div className="col s12 card">
                 <div className="card">
                   <div className="card-image">
-                    <img src="images/dayo.png" alt="dayo" />
+                    <img src={dayo} alt="dayo" />
                   </div>
                   <div className="card-content">
                     <p>Ekundayo A. Abiona</p>
@@ -100,7 +106,7 @@ class Shelf extends Component {
                   <tbody>
                     <tr>
                       <td>1</td>
-                      <td className="return-image"><img src="images/1.png" alt="" /> </td>
+                      <td className="return-image"><img src={img1} alt="" /> </td>
                       <td>Kaveller & Clay</td>
                       <td>Thomas Jenkins</td>
                       <td>March 13th, 2016</td>
@@ -108,7 +114,7 @@ class Shelf extends Component {
                     </tr>
                     <tr>
                       <td>2</td>
-                      <td className="return-image"><img src="images/2.png" alt="" /></td>
+                      <td className="return-image"><img src={img2} alt="" /></td>
                       <td>Half of a yellow sun</td>
                       <td>Chimamanda Adichie</td>
                       <td>March 13th, 2016</td>
@@ -116,7 +122,7 @@ class Shelf extends Component {
                     </tr>
                     <tr>
                       <td>3</td>
-                      <td className="return-image"><img src="images/3.png" alt="" /></td>
+                      <td className="return-image"><img src={img3} alt="" /></td>
                       <td>Half of a yellow sun</td>
                       <td>Chimamanda Adichie</td>
                       <td>March 13th, 2016</td>
@@ -124,7 +130,7 @@ class Shelf extends Component {
                     </tr>
                     <tr>
                       <td>4</td>
-                      <td className="return-image"><img src="images/4.png" alt="" /></td>
+                      <td className="return-image"><img src={img4} alt="" /></td>
                       <td>Title Marks</td>
                       <td>First Line finish</td>
                       <td>March 13th, 2016</td>
@@ -132,7 +138,7 @@ class Shelf extends Component {
                     </tr>
                     <tr>
                       <td>5</td>
-                      <td className="return-image"><img src="images/5.png" alt="" /></td>
+                      <td className="return-image"><img src={img5} alt="" /></td>
                       <td>Kaveller & Clay</td>
                       <td>Thomas Jenkins</td>
                       <td>March 13th, 2016</td>

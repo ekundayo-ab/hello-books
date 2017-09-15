@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 import App from './components/App';
 import rootReducer from './rootReducer';
 import { setAuthorizationToken } from './utils/setAuthorizationToken';
+import '../public/css/main.css';
+import '../public/js/main.js';
 
 const store = createStore(
   rootReducer,

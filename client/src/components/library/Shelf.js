@@ -1,5 +1,11 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
+import img1 from '../../../public/images/1.png';
+import img2 from '../../../public/images/2.png';
+import img3 from '../../../public/images/3.png';
+import img4 from '../../../public/images/4.png';
+import img5 from '../../../public/images/5.png';
+import img6 from '../../../public/images/6.png';
 
 class Shelf extends Component {
   render() {
@@ -36,7 +42,7 @@ class Shelf extends Component {
                   <div className="book col s12 m3 l3">
                     <div className="card">
                       <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src="images/1.png" alt="cool-1" />
+                        <img className="activator" src={img1} alt="cool-1" />
                       </div>
                       <div className="card-content">
                         <span className="card-title activator grey-text text-darken-4">Cavaler & Clay</span>
@@ -49,7 +55,7 @@ class Shelf extends Component {
                   <div className="book col s12 m3 l3">
                     <div className="card">
                       <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src="images/5.png" alt="cool-5" />
+                        <img className="activator" src={img2} alt="cool-5" />
                       </div>
                       <div className="card-content">
                         <span className="card-title activator grey-text text-darken-4">Jonathan Franzen</span>
@@ -62,7 +68,7 @@ class Shelf extends Component {
                   <div className="book col s12 m3 l3">
                     <div className="card">
                       <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src="images/3.png" alt="cool-3" />
+                        <img className="activator" src={img3} alt="cool-3" />
                       </div>
                       <div className="card-content">
                         <span className="card-title activator grey-text text-darken-4">Wolf Hall</span>
@@ -75,7 +81,7 @@ class Shelf extends Component {
                   <div className="book col s12 m3 l3">
                     <div className="card">
                       <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src="images/6.png" alt="cool-6" />
+                        <img className="activator" src={img6} alt="cool-6" />
                       </div>
                       <div className="card-content">
                         <span className="card-title activator grey-text text-darken-4">Gilead</span>
@@ -92,7 +98,7 @@ class Shelf extends Component {
                   <div className="book col s12 m3 l3">
                     <div className="card">
                       <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src="images/4.png" alt="cool-4" />
+                        <img className="activator" src={img4} alt="cool-4" />
                       </div>
                       <div className="card-content">
                         <span className="card-title activator grey-text text-darken-4">White Teeth</span>
@@ -105,7 +111,7 @@ class Shelf extends Component {
                   <div className="book col s12 m3 l3">
                     <div className="card">
                       <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src="images/5.png" alt="cool-3" />
+                        <img className="activator" src={img5} alt="cool-3" />
                       </div>
                       <div className="card-content">
                         <span className="card-title activator grey-text text-darken-4">Jonathan Franzen</span>
@@ -118,7 +124,7 @@ class Shelf extends Component {
                   <div className="book col s12 m3 l3">
                     <div className="card">
                       <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src="images/6.png" alt="cool-6" />
+                        <img className="activator" src={img6} alt="cool-6" />
                       </div>
                       <div className="card-content">
                         <span className="card-title activator grey-text text-darken-4">Gilead</span>
@@ -131,7 +137,7 @@ class Shelf extends Component {
                   <div className="book col s12 m3 l3">
                     <div className="card">
                       <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src="images/4.png" alt="cool" />
+                        <img className="activator" src={img4} alt="cool" />
                       </div>
                       <div className="card-content">
                         <span className="card-title activator grey-text text-darken-4">White Teeth</span>
