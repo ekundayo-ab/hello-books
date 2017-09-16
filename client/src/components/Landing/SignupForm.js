@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classname from 'classnames';
-import { userSignUpRequest, isUserExists } from '../../actions/signUpActions';
-import { addFlashMessage } from '../../actions/flashMessages';
+import { userSignUpRequest, isUserExists } from '../../actions/authActions';
+import { addFlashMessage } from '../../actions/messageActions';
+import FlashMessagesList from '../../components/flash/FlashMessagesList';
 import Helper from './../../helpers/index';
 
 class SignUp extends Component {
@@ -63,18 +64,27 @@ class SignUp extends Component {
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
       this.props.userSignUpRequest(this.state)
-        .then((done) => {
-          this.props.addFlashMessage({
+        .then((res) => {
+          if (res) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: res.data.message,
+            });
+            return this.props.history.push('/shelf');
+          }
+          return this.props.addFlashMessage({
             type: 'success',
-            text: done,
+            text: 'Oops! Something happened try again later',
           });
-          this.props.history.push('/shelf');
         })
         .catch((err) => {
-          if (err.response) {
-            this.setState({ errors: err.response });
+          if (err.response.data.errors) {
+            this.setState({ errors: err.response.data.errors });
           }
-          this.setState({ errors: err.response.data.errors, isLoading: false });
+          return this.props.addFlashMessage({
+            type: 'error',
+            text: err.response.statusText,
+          });
         });
     }
   }
@@ -83,6 +93,8 @@ class SignUp extends Component {
     const { errors } = this.state;
     return (
       <div id="register">
+        <FlashMessagesList />
+        <br />
         <div className="row">
           <form onSubmit={this.onSubmit}>
             <div className="center-align col s12">

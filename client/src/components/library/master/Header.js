@@ -13,7 +13,8 @@ class Header extends Component {
         </div>
         <nav>
           <div className="nav-wrapper">
-            <a to="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></a>
+            <Link to="/" className="brand-logo">HelloBooks</Link>
+            <Link to="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></Link>
             <ul className="right hide-on-med-and-down">
               <li><NavLink activeClassName="active" to="/shelf">Shelf</NavLink></li>
               <li><NavLink activeClassName="active" to="/history">History</NavLink></li>

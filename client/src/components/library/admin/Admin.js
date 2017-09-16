@@ -5,7 +5,7 @@ import BookForm from './BookForm';
 import CategoryForm from './CategoryForm';
 import CategoryList from './../category/CategoryList';
 import BookList from './BookList';
-import { fetchBooks } from './../../../actions/createActions';
+import { fetchBooks } from './../../../actions/bookActions';
 
 class Admin extends Component {
   componentDidMount() {

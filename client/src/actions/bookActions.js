@@ -17,20 +17,22 @@ function fetchBooks() {
         dispatch(setBooks(res.data));
       })
       .catch((err) => {
-        console.log(err);
+        console.log('I am the function');
       });
   });
 }
 
 function saveBook(data) {
   return ((dispatch) => {
-    axios.post('/api/v1/books', data, { 'x-access-token': token });
-    // .then((res) => {
-    //   console.log(res);
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
+    axios.post('/api/v1/books', data, { 'x-access-token': token })
+      .then((res) => {
+        const response = { res: res.response.data, isDone: true };
+        return response;
+      })
+      .catch((err) => {
+        const errors = err.response;
+        return { errors, loading: false };
+      });
   });
 }
 

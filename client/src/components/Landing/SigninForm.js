@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Helper from './../../helpers/index';
 import { login } from '../../actions/authActions';
-import { addFlashMessage } from '../../actions/flashMessages';
+import { addFlashMessage } from '../../actions/messageActions';
 import FlashMessagesList from '../../components/flash/FlashMessagesList';
 
 class SignIn extends Component {
@@ -38,9 +38,20 @@ class SignIn extends Component {
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
       this.props.login(this.state).then(
-        () => this.props.history.push('/shelf'),
+        (res) => {
+          if (res) {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: res.data.message,
+            });
+            return this.props.history.push('/shelf');
+          }
+          return this.props.addFlashMessage({
+            type: 'error',
+            text: 'Oops! Something happened try again or contact us',
+          });
+        },
         (err) => {
-          console.log(err.response.data.message);
           this.setState({ errors: err.response.data.message, isLoading: false });
           this.props.addFlashMessage({
             type: 'error',

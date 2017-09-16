@@ -3,6 +3,7 @@
   src: url('../fonts/chunkfive/Chunkfive.otf'), url('../fonts/chunkfive/Chunkfive.otf');
   // IE
 }
+$teal: #009688;
 $primary-color: #008080;
 $pure-white: #fff;
 $pure-red:  #f00;
@@ -214,7 +215,7 @@ nav {
 
 .side-nav {
   .mobile-header {
-    background-color: $primary-color;
+    background-color: $teal;
     color: $pure-white;
 
     a {
