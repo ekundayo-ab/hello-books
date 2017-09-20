@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import App from './components/App';
@@ -12,13 +13,13 @@ import '../public/js/main.js';
 
 const store = createStore(
   rootReducer,
-  compose(
+  composeWithDevTools(
     applyMiddleware(thunk),
-    window.devToolsExtension ? window.devToolsExtension() : f => f,
   ),
 );
 
 setAuthorizationToken(localStorage.jwtToken);
+
 
 ReactDOM.render(
   <Provider store={store}>
@@ -28,3 +29,5 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root'),
 );
+
+export default store;

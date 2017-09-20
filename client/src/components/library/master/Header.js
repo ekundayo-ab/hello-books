@@ -1,8 +1,25 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { withRouter, Link, NavLink } from 'react-router-dom';
+import { addFlashMessage } from '../../../actions/messageActions';
+import { logout } from '../../../actions/authActions';
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+  handleLogout(e) {
+    e.preventDefault();
+    logout(this.state);
+    this.props.addFlashMessage({
+      type: 'success',
+      text: 'Successfully Logged out.',
+    });
+    return this.props.history.push('/');
+  }
   render() {
     return (
       <div className="admin-page shelf-page">
@@ -20,7 +37,7 @@ class Header extends Component {
               <li><NavLink activeClassName="active" to="/history">History</NavLink></li>
               <li><NavLink activeClassName="active" to="/admin"><i className="fa fa-gear" /> Admin Dashboard</NavLink></li>
               <li><NavLink activeClassName="active" to="/profile"><i className="fa fa-user" /> Profile</NavLink></li>
-              <li><Link to=""><i className="fa fa-sign-out" /> Logout</Link></li>
+              <li><Link onClick={this.handleLogout} to=""><i className="fa fa-sign-out" /> Logout</Link></li>
             </ul>
             <ul className="side-nav" id="mobile-demo">
               <li className="mobile-header"><Link to="">HelloBooks</Link></li>
@@ -28,7 +45,7 @@ class Header extends Component {
               <li><NavLink activeClassName="active" to="/history">History</NavLink></li>
               <li><NavLink activeClassName="active" to="/admin"><i className="fa fa-gear" /> Admin Dashboard</NavLink></li>
               <li><NavLink activeClassName="active" to="/profile"><i className="fa fa-user" /> Profile</NavLink></li>
-              <li><Link to="/"><i className="fa fa-sign-out" /> Logout</Link></li>
+              <li><Link onClick={this.handleLogout} to="/"><i className="fa fa-sign-out" /> Logout</Link></li>
             </ul>
           </div>
         </nav>
@@ -37,4 +54,9 @@ class Header extends Component {
   }
 }
 
-export default Header;
+Header.propTypes = {
+  history: PropTypes.object.isRequired,
+  addFlashMessage: PropTypes.func.isRequired,
+};
+
+export default connect(null, { logout, addFlashMessage })(withRouter(Header));

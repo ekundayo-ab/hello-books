@@ -37,25 +37,19 @@ class SignIn extends Component {
     e.preventDefault();
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
-      this.props.login(this.state).then(
+      login(this.state).then(
         (res) => {
-          if (res) {
+          if (res.isAuthenticated) {
             this.props.addFlashMessage({
               type: 'success',
-              text: res.data.message,
+              text: res.message,
             });
             return this.props.history.push('/shelf');
           }
+          this.setState({ errors: {}, isLoading: false });
           return this.props.addFlashMessage({
             type: 'error',
-            text: 'Oops! Something happened try again or contact us',
-          });
-        },
-        (err) => {
-          this.setState({ errors: err.response.data.message, isLoading: false });
-          this.props.addFlashMessage({
-            type: 'error',
-            text: err.response.data.message,
+            text: res.message,
           });
         },
       );
@@ -110,7 +104,6 @@ class SignIn extends Component {
 }
 
 SignIn.propTypes = {
-  login: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
 };
