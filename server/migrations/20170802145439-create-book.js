@@ -1,10 +1,21 @@
 module.exports = {
+  /**
+   *
+   *
+   * @param {any} queryInterface
+   * @param {any} Sequelize
+   */
   up: (queryInterface, Sequelize) =>
     queryInterface.createTable('Books', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      isbn: {
+        allowNull: false,
+        unique: true,
         type: Sequelize.INTEGER,
       },
       title: {
@@ -25,11 +36,16 @@ module.exports = {
       },
       status: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        defaultValue: true,
         allowNull: true,
       },
       quantity: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      category: {
+        type: Sequelize.STRING,
+        defaultValue: 'Unsorted',
         allowNull: false,
       },
       createdAt: {
@@ -41,6 +57,11 @@ module.exports = {
         type: Sequelize.DATE,
       },
     }),
+  /**
+   *
+   *
+   * @param {any} queryInterface
+   */
   down: (queryInterface /* , Sequelize */) => {
     queryInterface.dropTable('Books');
   },

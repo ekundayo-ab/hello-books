@@ -1,0 +1,310 @@
+@font-face {
+  font-family: 'Chunkfive';
+  src: url('../fonts/chunkfive/Chunkfive.otf'), url('../fonts/chunkfive/Chunkfive.otf');
+  // IE
+}
+$primary-color: #008080;
+$pure-white: #fff;
+$pure-red:  #f00;
+$gray-color: #666;
+$black-color: #000;
+$slight-black-color: #222;
+$top-marker-color: #0097ff;
+$input-active: #26a69a;
+$teal-variant: #00a8a8;
+
+@mixin background-size($bg-size) {
+  background-size: $bg-size;
+}
+
+// Search Form
+.search-form {
+  button {
+    margin-top: 10px;
+  }
+}
+
+// For the landing page
+
+.landing-page {
+  background: url('../images/bg_landing.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
+  left: 0;
+  overflow: auto;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: -1;
+
+  .input-field {
+    margin-top: 0;
+  }
+
+  nav {
+    .brand-logo {
+      font-family: Chunkfive;
+      margin-left: 20px;
+      padding: 0 0 0 20px;
+    }
+  }
+
+  .intro-text {
+    padding: 20px;
+    text-shadow: 5px 5px 5px $black-color;
+
+    h1 {
+      font-size: 6em;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .intro-text {
+      h1 {
+        font-size: 5em;
+      }
+    }
+  }
+
+  .or {
+    color: $gray-color;
+    font-size: 20px;
+    font-weight: bold;
+  }
+}
+
+// Mobile Navbar hack
+#sidenav-overlay {
+  display: none;
+}
+
+// For shelf page
+
+.shelf-page {
+  background: url('../images/bg_shelf.jpg') no-repeat center center fixed;
+  background-size: cover;
+
+  nav {
+    background-color: $pure-white;
+
+    ul>li>a {
+      color: $gray-color;
+      font-size: 16px;
+    }
+  }
+
+}
+
+.nav-top {
+  background-color: $black-color;
+  border: 1px solid transparent;
+  opacity: 0.9;
+  padding-bottom: 0;
+  padding-left: 20px;
+  padding-right: 0;
+  padding-top: 0;
+  width: 100%;
+
+  &.row {
+    margin-bottom: 0;
+  }
+
+  h4 {
+    color: $pure-white;
+    font-family: Chunkfive;
+  }
+
+  @media (max-width: 768px) {
+    h4 {
+      font-size: 2em;
+    }
+  }
+
+}
+
+.nav-bottom {
+  background-color: $black-color;
+  border: 1px solid transparent;
+  height: 30px;
+  opacity: .9;
+  width: 100%;
+}
+
+.nav-top-marker {
+  color: $top-marker-color;
+}
+
+.right-bar {
+  li {
+    color: $gray-color;
+    font-size: 16px;
+    margin-left: 10px;
+  }
+
+  a {
+    color: $pure-white;
+  }
+}
+
+.side-nav {
+  .mobile-header {
+    background-color: $primary-color;
+    color: $pure-white;
+
+    a {
+      color: $pure-white;
+      font-size: 2em;
+    }
+  }
+
+}
+
+.icon-link {
+  .margin-0 {
+    margin: 0;
+  }
+}
+
+
+
+
+.available-books {
+  background-color: $slight-black-color;
+  padding: 0 10px;
+
+  &.row {
+    margin-bottom: 0;
+  }
+
+  h3 {
+    color: $pure-white;
+    margin-top: 0;
+  }
+}
+
+nav {
+  a {
+    color: $slight-black-color;
+  }
+}
+
+.top-menu-active {
+  background-color: $primary-color;
+  padding: 5px;
+}
+
+.category-select {
+  border: 2px solid $pure-red;
+}
+
+.tabs > .tab {
+  a {
+    color: $teal-variant;
+
+    &:hover {
+      color: $primary-color;
+    }
+
+    &.active {
+      color: $primary-color;
+    }
+  }
+}
+
+.tabs > .indicator {
+  background-color: $primary-color;
+}
+
+.input-field {
+  i {
+    font-size: 2rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: color .2s;
+    width: 3rem;
+  }
+
+  .active {
+    color: $input-active;
+  }
+
+  input,
+  textarea {
+    margin-right: 3rem;
+    padding-top: .8rem;
+    width: calc(100% - 3rem);
+  }
+
+  label {
+    margin-right: 3rem;
+  }
+
+  @media only screen and (max-width: 992px) {
+    input {
+      width: calc(100% - 3rem);
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    input {
+      width: calc(100% - 3rem);
+    }
+  }
+}
+
+// Book Listing
+
+.book {
+  .card-content {
+    padding: 0;
+    text-align: center;
+
+    .card-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 0;
+    }
+  }
+
+}
+
+
+.book-title {
+  font-size: 16px;
+}
+
+.book-author {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.book-detail {
+  img {
+    padding: 5px;
+    width: 250px;
+  }
+}
+
+.redded {
+  background-color: $pure-red;
+  color: $pure-white;
+  font-weight: bold;
+}
+
+.return-image {
+  height: 70px;
+  overflow: hidden;
+
+  img {
+    height: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .return-image {
+    height: 50px;
+    overflow: hidden;
+  }
+}

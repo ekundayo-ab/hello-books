@@ -1,54 +1,105 @@
 import model from '../models';
+import helper from '../helpers/index';
 
 const Book = model.Book;
 
 /**
- * 
+ *
  */
 class BookController {
   /**
    *
-   * @param {*} req
-   * @param {*} res
+   *
+   * @static
+   * @description Adds new book to the library
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
+   * @memberOf BookController
    */
   static create(req, res) {
-    // Check if user has administrative priviledges
-    if (req.decoded.data.role !== 2) {
-      res.status(403).send({ success: false, message: 'You are not allowed to add book' });
+    // Ensure user has administrative priviledges to create book
+    if (!helper.isAdmin(req)) {
+      return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
-    return Book
-      .create({
-        title: req.body.title,
-        author: req.body.author,
-        description: req.body.description,
-        image: req.body.image,
-        status: 1,
-        quantity: req.body.quantity,
+
+    // Validates every input by the user.
+    if (!helper.isDefined(req)) {
+      return res.status(400).send({ success: false, message: 'All fields must exist' });
+    }
+
+    // Error(s) is/are outputted if any is pushed to the array
+    const { isValid, errors } = helper.inputValidation(req);
+    if (!isValid) return res.status(400).send({ success: false, errors });
+
+    // Searches if book exists in the database
+    return Book.findOne({
+      where: { isbn: req.body.isbn },
+    })
+      .then((foundBook) => {
+        if (foundBook) {
+          return res.status(409).send({ success: false, messsage: `Conflict! ${req.body.title} exists already`, foundBook });
+        }
+        // If book does not exist, create new book.
+        return Book
+          .create({
+            isbn: req.body.isbn,
+            title: req.body.title,
+            author: req.body.author,
+            description: req.body.description,
+            image: req.body.image,
+            status: 1,
+            quantity: req.body.quantity,
+          })
+          .then((book) => {
+            res.status(200).send({ success: true, message: `${book.title}, successfully added` });
+          })
+          .catch(error => res.send(error.message));
       })
-      .then((book) => { res.status(201).send({ success: true, message: `${book.title}, succesfully added` }); })
-      .catch((error) => { res.status(400).send(error); });
+      .catch(error => res.send(error.message));
   }
   /**
    *
-   * @param {*} req
-   * @param {*} res
+   *
+   * @static
+   * @description Modifies existing book in the library
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
+   * @memberOf BookController
    */
   static update(req, res) {
-    if (req.decoded.data.role !== 2) {
-      res.status(403).send({ success: false, message: 'You are not allowed to modify book' });
+    // Ensure user has administrative priviledges to create book
+    if (!helper.isAdmin(req)) {
+      return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
+
+    // Validates every input by the user.
+    if (!helper.isDefined(req)) {
+      return res.status(400).send({ success: false, message: 'All fields must exist' });
+    }
+
+    // Error(s) is/are outputted if any is pushed to the array
+    const { isValid, errors } = helper.inputValidation(req);
+    if (!isValid) return res.status(400).send({ success: false, errors });
+
+    // Checks if book exists in the database
     return Book
-      .find({
+      .findOne({
         where: {
           id: req.params.bookId,
         },
       })
       .then((book) => {
         if (!book) {
-          res.status(404).send({ success: false, message: 'Book not found' });
+          return res.status(404).send({ success: false, message: 'Book not found' });
         }
+        // If book exists, update the book.
         return Book
           .update({
+            isbn: req.body.isbn,
             title: req.body.title,
             author: req.body.author,
             description: req.body.description,
@@ -57,28 +108,36 @@ class BookController {
             quantity: req.body.quantity,
           }, {
             where: {
-              id: book.id,
+              id: req.params.bookId,
             },
           })
           .then(() => {
-            if (!book) {
-              res.send.status(404).send({ success: false, message: 'Book not found' });
-            }
-            res.status(201).send({ success: true, message: `${book.title}, successfully updated` });
+            res.status(200).send({ success: true, message: `${book.title} successfully updated to ${req.body.title}`, old: book });
           })
-          .catch((error) => { res.status(404).send(error); });
-      })
-      .catch((error) => { res.status(400).send(error); });
+          .catch(error => res.send(error.message));
+      });
   }
   /**
    *
-   * @param {*} req
-   * @param {*} res
+   *
+   * @static
+   * @description Deletes book from the library
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
+   * @memberOf BookController
    */
   static destroy(req, res) {
-    if (req.decoded.data.role !== 2) {
-      res.status(403).send({ success: false, message: 'You are not allowed to delete books' });
+    // Ensures user has administrative priviledges to delete book
+    if (!helper.isAdmin(req)) {
+      return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
+    // Ensures Book ID is present in the path
+    if (req.params.bookId === 'undefined') {
+      return res.status(404).send({ success: false, message: 'Book not found' });
+    }
+    // Searches for book in the database
     return Book
       .find({
         where: {
@@ -89,16 +148,22 @@ class BookController {
         if (!book) {
           return res.status(404).send({ success: false, message: 'Book not found' });
         }
-        return book.destroy();
+        // If book is found, delete
+        book.destroy();
+        return res.status(200).send({ success: true, message: 'Book successfully deleted' });
       })
-      .then(() => {
-        res.status(200).send({ success: true, message: 'Book successfully deleted' });
-      }).catch(error => res.status(400).send(error));
+      .catch(() => res.status(400).send({ success: false, message: 'Enter valid inputs!' }));
   }
   /**
    *
-   * @param {*} req
-   * @param {*} res
+   *
+   * @static
+   * @description Lists all books in the library
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
+   * @memberOf BookController
    */
   static list(req, res) {
     return Book
@@ -108,10 +173,13 @@ class BookController {
         ],
       })
       .then((book) => {
-        res.status(201).send(book);
+        if (book[0] === undefined) {
+          return res.status(301).send({ success: false, message: 'Books not available, check back later.' });
+        }
+        return res.status(200).send(book);
       })
-      .catch((error) => { res.status(404).send(error); });
+      .catch(() => res.status(400).send({ success: false, message: 'Ooops! something happened, check your inputs and try again.' }));
   }
 }
 
-module.exports = BookController;
+export default BookController;

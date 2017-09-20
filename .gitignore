@@ -1,3 +1,6 @@
 node_modules/
-server/config/config.json
 .vscode/settings.json
+.env
+.coveralls.yml
+**/.DS_Store
+.sass-lint.yml

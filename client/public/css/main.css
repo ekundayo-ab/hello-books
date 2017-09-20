@@ -1,0 +1,240 @@
+@font-face {
+  font-family: 'Chunkfive';
+  src: url("../fonts/chunkfive/Chunkfive.otf"), url("../fonts/chunkfive/Chunkfive.otf"); }
+nav a.active {
+  background-color: rgba(0, 0, 0, 0.1); }
+
+.mod-tabs {
+  background-color: #fff;
+  height: 48px;
+  margin: 0 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  white-space: nowrap;
+  width: 100%; }
+  .mod-tabs.mod-tabs-fixed-width {
+    display: flex; }
+    .mod-tabs.mod-tabs-fixed-width .mod-tab {
+      flex-grow: 1; }
+  .mod-tabs .mod-tab {
+    display: inline-block;
+    height: 48px;
+    line-height: 48px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    text-transform: uppercase; }
+    .mod-tabs .mod-tab a {
+      color: #008080;
+      display: block;
+      font-size: 14px;
+      height: 100%;
+      overflow: hidden;
+      padding: 0 24px;
+      text-overflow: ellipsis;
+      transition: color 0.28s ease;
+      width: 100%; }
+
+.mod-active {
+  border-bottom: 2px solid #008080; }
+
+.search-form button {
+  margin-top: 10px; }
+
+.landing-page {
+  background: url("../images/bg_landing.jpg") no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
+  left: 0;
+  overflow: auto;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: -1; }
+  .landing-page .input-field {
+    margin-top: 0; }
+  .landing-page nav .brand-logo {
+    font-family: Chunkfive;
+    margin-left: 20px;
+    padding: 0 0 0 20px; }
+  .landing-page .intro-text {
+    padding: 20px;
+    text-shadow: 5px 5px 5px #000; }
+    .landing-page .intro-text h1 {
+      font-size: 6em; }
+  @media (max-width: 768px) {
+    .landing-page .intro-text h1 {
+      font-size: 5em; } }
+  .landing-page .or {
+    color: #666;
+    font-size: 20px;
+    font-weight: bold; }
+
+#sidenav-overlay {
+  display: none; }
+
+.shelf-page {
+  background-size: cover; }
+  .shelf-page nav {
+    background-color: #fff; }
+    .shelf-page nav ul > li > a {
+      color: #666;
+      font-size: 16px; }
+
+.admin-page {
+  background: none; }
+
+.nav-top {
+  background-color: #000;
+  border: 1px solid transparent;
+  opacity: .9;
+  padding-bottom: 0;
+  padding-left: 20px;
+  padding-right: 0;
+  padding-top: 0;
+  width: 100%; }
+  .nav-top.row {
+    margin-bottom: 0; }
+  .nav-top h4 {
+    color: #fff;
+    font-family: Chunkfive; }
+  @media (max-width: 768px) {
+    .nav-top h4 {
+      font-size: 2em; } }
+
+.nav-bottom {
+  background-color: #000;
+  border: 1px solid transparent;
+  height: 30px;
+  opacity: 0.9;
+  width: 100%; }
+
+.nav-top-marker {
+  color: #0097ff; }
+
+.right-bar li {
+  color: #666;
+  font-size: 16px;
+  margin-left: 10px; }
+.right-bar a {
+  color: #fff; }
+
+.side-nav .mobile-header {
+  background-color: #009688;
+  color: #fff; }
+  .side-nav .mobile-header a {
+    color: #fff;
+    font-size: 2em; }
+
+.icon-link .margin-0 {
+  margin: 0; }
+
+.available-books {
+  background-color: #222;
+  padding: 0 10px; }
+  .available-books.row {
+    margin-bottom: 0; }
+  .available-books h3 {
+    color: #fff;
+    margin-top: 0; }
+
+nav a {
+  color: #222; }
+
+.top-menu-active {
+  background-color: #008080;
+  padding: 5px; }
+
+.category-select {
+  border: 2px solid #f00; }
+
+.tabs > .tab a {
+  color: #00a8a8; }
+  .tabs > .tab a:hover {
+    color: #008080; }
+  .tabs > .tab a.active {
+    color: #008080; }
+
+.tabs > .indicator {
+  background-color: #008080; }
+
+.input-field i {
+  font-size: 2rem;
+  position: absolute;
+  top: 0;
+  transition: color 0.2s;
+  width: 3rem; }
+.input-field .active {
+  color: #26a69a; }
+.input-field input,
+.input-field textarea {
+  margin-right: 3rem;
+  padding-top: 0.8rem;
+  width: calc(100% - 3rem); }
+.input-field label {
+  margin-right: 3rem; }
+@media only screen and (max-width: 992px) {
+  .input-field input {
+    width: calc(100% - 3rem); } }
+@media only screen and (max-width: 600px) {
+  .input-field input {
+    width: calc(100% - 3rem); } }
+
+.book .card-content {
+  padding: 0;
+  text-align: center; }
+  .book .card-content .card-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0; }
+
+.book-title {
+  font-size: 16px; }
+
+.book-author {
+  font-size: 14px;
+  font-weight: bold; }
+
+.book-detail img {
+  padding: 5px;
+  width: 250px; }
+
+.redded {
+  background-color: #f00;
+  color: #fff;
+  font-weight: bold; }
+
+.return-image {
+  height: 70px;
+  overflow: hidden; }
+  .return-image img {
+    height: 100%; }
+
+@media (max-width: 768px) {
+  .return-image {
+    height: 50px;
+    overflow: hidden; } }
+.has-error span {
+  color: #f00;
+  margin: 0; }
+
+.alert-success {
+  background-color: #dff0d8;
+  color: #3c763d;
+  font-weight: bold;
+  padding: 20px;
+  text-align: center; }
+
+.alert-danger {
+  background-color: #a94442;
+  color: #f2dede;
+  font-weight: bold;
+  padding: 20px;
+  text-align: center; }
+  .alert-danger .close {
+    color: #f00; }
+
+.alert .close {
+  float: right; }

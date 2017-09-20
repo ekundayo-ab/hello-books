@@ -1,11 +1,11 @@
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     username: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
       validate: {
-        is: /^[a-z0-9\_\-]+$/i,
+        is: /^[a-z0-9_-]+$/i,
       },
     },
     password: {
@@ -16,14 +16,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
-      validate: {
-        isEmail: true,
-      },
     },
     role: {
-      type: DataTypes.INTEGER,
-      defaultValue: 1,
+      type: DataTypes.STRING,
+      defaultValue: 'normal',
       allowNull: false,
+    },
+    level: {
+      type: DataTypes.STRING,
+      defaultValue: 'bronze',
     },
   });
 
@@ -35,4 +36,3 @@ module.exports = (sequelize, DataTypes) => {
   };
   return User;
 };
-

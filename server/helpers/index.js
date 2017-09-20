@@ -1,55 +1,110 @@
-
+import { isEmpty } from 'lodash';
 /**
- * Helper functions for borrowing logic
+ *
+ * @description Abstracts validation functions
+ * @class Helper
  */
 class Helper {
   /**
-   * 
-   * @param {*} Model 
-   * @param {*} id 
-   * @param {*} req 
-   * @param {*} res 
-   * @param {*} qty 
-   * @param {*} book 
+   *
+   * @description Ensures Admin priviledges to perform certain operations
+   * @static
+   * @param {any} req
+   * @returns true or false
+   *
+   * @memberOf Helper
    */
-  static subtractBorrowedBook(Model, id, req, res, qty, book) {
-    return Model.update({
-      quantity: book.quantity - qty,
-    }, {
-      where: {
-        id: book.id,
-      },
-    })
-      .then(() => {
-        if (!book) {
-          res.status(404).send({ success: false, message: 'Book not found' });
-        }
-        res.status(200).send({ success: true, message: `You just borrowed ${book.title}` });
-      })
-      .catch((error) => { res.status(404).send(error); });
+  static isAdmin(req) {
+    if (req.decoded.data.role !== 'admin') {
+      return false;
+    }
+    return true;
   }
 
   /**
-   * 
-   * @param {*} Book 
-   * @param {*} id 
-   * @param {*} req 
-   * @param {*} res 
+   *
+   * @description Ensures all fields are present when adding or updating book
+   * @static
+   * @param {any} req
+   * @returns true or false
+   *
+   * @memberOf Helper
    */
-  static findBook(Book, id, req, res) {
-    return Book.find({
-      where: {
-        id,
-      },
-    })
-      .then((book) => {
-        if (book.quantity === 0 || req.body.quantity > book.quantity) {
-          res.status(404).send({ success: false, message: 'You can not borrow at this time, Book is unavailable' });
-        } else {
-          Helper.subtractBorrowedBook(Book, id, req, res, req.body.quantity, book);
-        }
-      })
-      .catch(error => res.send(error));
+  static isDefined(req) {
+    if (Object.keys(req.body).length < 5) return false;
+    return true;
+  }
+
+  /**
+   *
+   * @description Ensures all inputs are validated
+   * @static
+   * @param {any} req
+   * @returns isValid and errors
+   *
+   * @memberOf Helper
+   */
+  static inputValidation(req) {
+    const errors = {};
+    for (let i = 0; i < 5; i += 1) {
+      const field = Object.values(req.body)[i];
+      if (field === (undefined || null || '') || /^\s+$/.test(field)) {
+        const theKey = Object.keys(req.body)[i]; // eslint-disable-line no-unused-vars
+        errors[theKey] = 'This field is required';
+      }
+      if (Object.keys(req.body)[i] === 'quantity' && typeof (parseInt(Object.values(req.body)[i], 10)) !== 'number') {
+        errors.numeric = 'quantity must be a number';
+      }
+    }
+    return {
+      isValid: isEmpty(errors),
+      errors,
+    };
+  }
+
+  /**
+   *
+   * @description Ensures all inputs are validated
+   * @static
+   * @param {any} req
+   * @returns isValid and errors
+   *
+   * @memberOf Helper
+   */
+  static userValidation(req) {
+    const errors = {};
+    if (!/^[a-z_]+$/i.test(req.username)) {
+      errors.username = 'MUST be one word (letters/underscores)';
+    }
+    if (req.body.password !== req.body.passwordConfirmation) {
+      errors.password = 'Passwords do not match';
+    }
+    for (let i = 0; i < 4; i += 1) {
+      const field = Object.values(req.body)[i];
+      if (field === (undefined || null || '') || /^\s+$/.test(field)) {
+        const theKey = Object.keys(req.body)[i]; // eslint-disable-line no-unused-vars
+        errors[theKey] = 'This field is required';
+      }
+    }
+    return {
+      isValid: isEmpty(errors),
+      errors,
+    };
+  }
+
+  /**
+   *
+   *
+   * @static
+   * @description Ensures email supplied is a valid email address
+   * @param {any} email
+   * @returns {boolean} true or false
+   *
+   * @memberOf Helper
+   */
+  static validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
   }
 }
 

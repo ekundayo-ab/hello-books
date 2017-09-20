@@ -1,5 +1,10 @@
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const Book = sequelize.define('Book', {
+    isbn: {
+      type: DataTypes.INTEGER,
+      unique: true,
+      allowNull: false,
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -23,6 +28,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     quantity: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    category: {
+      type: DataTypes.STRING,
+      defaultValue: 'Unsorted',
       allowNull: false,
     },
   });

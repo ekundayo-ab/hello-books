@@ -1,4 +1,11 @@
+
 module.exports = {
+  /**
+   *
+   *
+   * @param {any} queryInterface
+   * @param {any} Sequelize
+   */
   up: (queryInterface, Sequelize) => {
     queryInterface.createTable('Borrows', {
       id: {
@@ -27,13 +34,17 @@ module.exports = {
         },
         allowNull: false,
       },
-      quantity: {
-        type: Sequelize.INTEGER,
-        defaultValue: 1,
-        allowNull: false,
-      },
       returned: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
+      dueDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      actualReturnDate: {
+        type: Sequelize.DATE,
         allowNull: false,
       },
       createdAt: {
@@ -46,7 +57,13 @@ module.exports = {
       },
     });
   },
+  /**
+   *
+   *
+   * @param {any} queryInterface
+   */
   down: (queryInterface /* , Sequelize */) => {
     queryInterface.dropTable('Borrows');
   },
 };
+

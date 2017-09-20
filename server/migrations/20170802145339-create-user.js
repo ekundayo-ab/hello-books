@@ -1,4 +1,10 @@
 module.exports = {
+  /**
+   *
+   *
+   * @param {any} queryInterface
+   * @param {any} Sequelize
+   */
   up: (queryInterface, Sequelize) => {
     queryInterface.createTable('Users', {
       id: {
@@ -12,7 +18,7 @@ module.exports = {
         allowNull: false,
         unique: true,
         validate: {
-          is: /^[a-z0-9\_\-]+$/i,
+          is: /^[a-z0-9_-]+$/i,
         },
       },
       password: {
@@ -26,8 +32,13 @@ module.exports = {
         allowNull: false,
       },
       role: {
-        type: Sequelize.INTEGER,
-        defaultValue: 1,
+        type: Sequelize.STRING,
+        defaultValue: 'normal',
+        allowNull: false,
+      },
+      level: {
+        type: Sequelize.STRING,
+        defaultValue: 'bronze',
         allowNull: false,
       },
       createdAt: {
@@ -40,6 +51,11 @@ module.exports = {
       },
     });
   },
+  /**
+   *
+   *
+   * @param {any} queryInterface
+   */
   down: (queryInterface /* , Sequelize */) => {
     queryInterface.dropTable('Users');
   },
