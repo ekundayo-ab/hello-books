@@ -35,7 +35,7 @@ class CatController {
     })
       .then((foundCat) => {
         if (foundCat) {
-          return res.status(409).send({ success: false, messsage: `Conflict! ${req.body.title} exists already`, foundCat });
+          return res.status(409).send({ success: false, message: `Conflict! ${req.body.title} exists already`, foundCat });
         }
         // If book does not exist, create new book.
         return Category
