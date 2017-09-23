@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Book from '../../library/admin/Book';
 
 const BookList = ({ books }) => {
   const emptyMessage = (
@@ -7,7 +8,22 @@ const BookList = ({ books }) => {
   );
 
   const booksList = (
-    <p>Books List</p>
+    <table className="responsive-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th className="action-data">Quantity</th>
+          <th className="action-data">Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        { books.map(book => <Book book={book} key={book.id} />)}
+      </tbody>
+    </table>
   );
 
   return (

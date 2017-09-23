@@ -8,8 +8,13 @@ import { Provider } from 'react-redux';
 import App from './components/App';
 import rootReducer from './rootReducer';
 import { setAuthorizationToken } from './utils/setAuthorizationToken';
+
+/* eslint-disable import/first */
 import '../public/css/main.css';
+import 'jquery/dist/jquery';
+import 'materialize-css/dist/js/materialize';
 import '../public/js/main.js';
+/* eslint-enable */
 
 const store = createStore(
   rootReducer,
