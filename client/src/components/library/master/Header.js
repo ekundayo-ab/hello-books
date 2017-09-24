@@ -59,4 +59,4 @@ Header.propTypes = {
   addFlashMessage: PropTypes.func.isRequired,
 };
 
-export default connect(null, { logout, addFlashMessage })(withRouter(Header));
+export default withRouter(connect(null, { logout, addFlashMessage })(Header));
