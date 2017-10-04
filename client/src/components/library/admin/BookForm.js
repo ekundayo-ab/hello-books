@@ -58,10 +58,9 @@ class BookForm extends Component {
     return (
       <div>
         {!!this.state.errors.global && <div className="alert-danger">{this.state.errors.global}</div>}
-        <h4 className="white-text center-align">Add New Book</h4>
         <form onSubmit={this.handleSubmit}>
           <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.isbn })}>
-            <i className="fa fa-list-ol prefix white-text" />
+            <i className="fa fa-list-ol prefix " />
             <input
               id="icon_prefix"
               name="isbn"
@@ -69,33 +68,33 @@ class BookForm extends Component {
               value={this.state.isbn}
               placeholder="ISBN"
               type="text"
-              className="white-text validate"
+              className=" validate"
             /><br />
             <span style={{ textAlign: 'left', marginLeft: '45px' }} className="has-error">{this.state.errors.isbn}</span>
           </div>
           <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.title })}>
-            <i className="fa fa-pencil prefix white-text" />
-            <input id="icon_prefix" name="title" onChange={this.onChange} value={this.state.title} placeholder="Title" type="text" className="white-text validate" />
+            <i className="fa fa-pencil prefix " />
+            <input id="icon_prefix" name="title" onChange={this.onChange} value={this.state.title} placeholder="Title" type="text" className=" validate" />
             <span style={{ textAlign: 'left', marginLeft: '45px' }} className="help-block">{this.state.errors.title}</span>
           </div>
           <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.author })}>
-            <i className="fa fa-user-circle prefix white-text" />
-            <input id="icon_telephone" name="author" onChange={this.onChange} value={this.state.author} placeholder="Author" type="tel" className="white-text validate" />
+            <i className="fa fa-user-circle prefix " />
+            <input id="icon_telephone" name="author" onChange={this.onChange} value={this.state.author} placeholder="Author" type="tel" className=" validate" />
             <span style={{ textAlign: 'left', marginLeft: '45px' }}>{this.state.errors.author}</span>
           </div>
           <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.quantity })}>
-            <i className="fa fa-plus-circle prefix white-text" />
-            <input id="icon_telephone" name="quantity" onChange={this.onChange} value={this.state.quantity} placeholder="Quantity" type="number" className="white-text validate" />
+            <i className="fa fa-plus-circle prefix " />
+            <input id="icon_telephone" name="quantity" onChange={this.onChange} value={this.state.quantity} placeholder="Quantity" type="number" className=" validate" />
             <span style={{ textAlign: 'left', marginLeft: '45px' }}>{this.state.errors.quantity}</span>
           </div>
           <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.description })}>
-            <i className="fa fa-edit prefix white-text" />
-            <textarea id="description" name="description" onChange={this.onChange} value={this.state.description} rows="50" cols="50" className="materialize-textarea white-text validate" placeholder="Enter description" />
+            <i className="fa fa-edit prefix " />
+            <textarea id="description" name="description" onChange={this.onChange} value={this.state.description} rows="50" cols="50" className="materialize-textarea  validate" placeholder="Enter description" />
             <span style={{ textAlign: 'left', marginLeft: '45px' }}>{this.state.errors.description}</span>
           </div>
           <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.category })}>
-            <i className="fa fa-list fa-2x prefix white-text" />
-            <select onChange={this.onChange} value="{this.state.category}" className="white-text">
+            <i className="fa fa-list fa-2x prefix " />
+            <select onChange={this.onChange} value="{this.state.category}" className="">
               <option value="" disabled>Choose your option</option>
               <option value="1">Unsorted</option>
               <option value="1">Finance</option>

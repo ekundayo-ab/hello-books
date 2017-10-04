@@ -1,8 +1,35 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import swal from 'sweetalert';
 import PropTypes from 'prop-types';
 import UpdateBookModal from '../../library/admin/UpdateBookModal';
+import { deleteBook } from '../../../actions/bookActions';
 
-export default class Book extends Component {
+class Book extends Component {
+  constructor(props) {
+    super(props);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  handleDelete() {
+    swal({
+      title: 'Are you sure?',
+      text: 'Once deleted, you will not be able to recover this book!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal('Poof! Book successfully deleted', {
+            icon: 'success',
+          });
+          return deleteBook(this.props.book.id);
+        }
+        return false;
+      });
+  }
+
   render() {
     return (
       <tr>
@@ -12,17 +39,28 @@ export default class Book extends Component {
         <td>{this.props.book.author}</td>
         <td>{this.props.book.quantity}</td>
         <td>
-          <a data-target="modal1" className="btn white waves-effect waves-light modal-trigger" href="#modal1"><i className="fa fa-edit green-text" /></a>
+          <a onClick={this.hc} className="btn white waves-effect waves-light modasl-trigger" href="#modasl1"><i className="fa fa-edit green-text" /></a>
           <div id="modal1" className="modal modal-fixed-footer">
             <UpdateBookModal />
           </div>
         </td>
-        <td><a className="btn white waves-effect" onClick="return ConfirmDelete();"><i className="fa fa-trash red-text" /> </a></td>
+        <td>
+          <a
+            role="button"
+            tabIndex={0}
+            className="btn white waves-effect"
+            onClick={this.handleDelete}
+          >
+            <i className="fa fa-trash red-text" />
+          </a>
+        </td>
       </tr>
     );
   }
 }
 
 Book.propTypes = {
-  book: PropTypes.object.isRequired,
+  book: PropTypes.array.isRequired,
 };
+
+export default connect(null, { deleteBook })(Book);

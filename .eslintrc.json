@@ -14,7 +14,8 @@
     "browser": true,
     "node": true,
     "window": true,
-    "document": true
+    "document": true,
+    "Materialize": true
   },
   "env": {
     "mocha": true,

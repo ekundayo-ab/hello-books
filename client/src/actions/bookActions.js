@@ -3,6 +3,8 @@ import store from '../../src/index';
 
 const SET_BOOKS = 'SET_BOOKS';
 const ADD_BOOK = 'ADD_BOOK';
+const BOOK_DELETED = 'BOOK_DELETED';
+
 const token = localStorage.getItem('jwtToken');
 
 function setBooks(books) {
@@ -19,6 +21,13 @@ function addBook(book) {
   };
 }
 
+function deleteSuccess(bookId) {
+  return {
+    type: BOOK_DELETED,
+    bookId,
+  };
+}
+
 function fetchBooks() {
   return ((dispatch) => {
     axios.get('/api/v1/books', { 'x-access-token': token })
@@ -32,13 +41,21 @@ function fetchBooks() {
 function saveBook(data) {
   axios.post('/api/v1/books', data, { 'x-access-token': token })
     .then((res) => {
-      const response = { res: res.response.data, isDone: true };
-      store.dispatch(addBook(response.res));
-      return response;
+      store.dispatch(addBook(res.data));
+      return { res: res.data, isDone: true };
+    })
+    .catch(err =>
+      ({ errors: err.response.data, isDone: false }),
+    );
+}
+
+function deleteBook(dataId) {
+  axios.delete(`/api/v1/books/${dataId}`, { 'x-access-token': token })
+    .then((res) => {
+      store.dispatch(deleteSuccess(res.data.book.id));
     })
     .catch((err) => {
-      const errors = err.response;
-      return { errors, loading: false };
+      console.log(err);
     });
 }
 
@@ -46,5 +63,7 @@ export {
   fetchBooks,
   setBooks,
   saveBook,
+  deleteBook,
+  BOOK_DELETED,
   SET_BOOKS,
 };

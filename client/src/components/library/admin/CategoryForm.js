@@ -65,10 +65,9 @@ class CategoryForm extends Component {
     return (
       <div>
         {this.props.location.pathname === '/admin' && <FlashMessagesList />}
-        <h4 className="white-text center-align">Add New Category</h4>
         <form onSubmit={this.onSubmit}>
           <div className={classnames('input-field', 'col s12', { 'has-error': errors.title })}>
-            <i className="fa fa-pencil prefix white-text" />
+            <i className="fa fa-pencil prefix" />
             <input
               id="icon_prefix"
               onChange={this.onChange}
@@ -76,7 +75,7 @@ class CategoryForm extends Component {
               placeholder="Category Name"
               type="text"
               value={this.state.title}
-              className="white-text validate"
+              className="validate"
             />
             {errors.title && <span className="help-block">{errors.title}</span> }
           </div>

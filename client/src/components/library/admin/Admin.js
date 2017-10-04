@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Modal, Button } from 'react-materialize';
 import BookForm from './BookForm';
 import CategoryForm from './CategoryForm';
 import CategoryList from './../category/CategoryList';
@@ -10,6 +11,9 @@ import { fetchBooks } from './../../../actions/bookActions';
 class Admin extends Component {
   componentDidMount() {
     this.props.fetchBooks();
+    $(document).ready(() => {
+      $('.modal').modal();
+    });
   }
   render() {
     return (
@@ -24,15 +28,21 @@ class Admin extends Component {
               </div>
             </div>
             <div className="col s12 m12 l9">
+              <div className="center-align">
+                <Modal
+                  header="Add New Book"
+                  trigger={<Button>ADD BOOK</Button>}
+                >
+                  <BookForm />
+                </Modal>&nbsp;&nbsp;
+                <Modal
+                  header="Add New Category"
+                  trigger={<Button>ADD CATEGORY</Button>}
+                >
+                  <CategoryForm />
+                </Modal>
+              </div>
               <BookList books={this.props.books} />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col s12 m12 l8">
-              <BookForm />
-            </div>
-            <div className="col s12 m12 l4">
-              <CategoryForm />
             </div>
           </div>
         </div>
