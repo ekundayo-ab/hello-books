@@ -1,15 +1,15 @@
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
 import store from '../../src/index';
 
-const SET_BOOKS = 'SET_BOOKS';
+const SET_CATEGORIES = 'SET_CATEGORIES';
 const ADD_CATEGORY = 'ADD_CATEGORY';
+
 const token = localStorage.getItem('jwtToken');
 
-function setBooks(books) {
+function setCategories(categories) {
   return {
-    type: SET_BOOKS,
-    books,
+    type: SET_CATEGORIES,
+    categories,
   };
 }
 
@@ -20,15 +20,16 @@ function addCategory(category) {
   };
 }
 
-function fetchBooks() {
+function fetchCategories() {
   return ((dispatch) => {
-    axios.get('/api/v1/books', { 'x-access-token': token })
+    axios.get('/api/v1/categories', { 'x-access-token': token })
       .then((res) => {
-        dispatch(setBooks(res.data));
+        dispatch(setCategories(res.data));
+        return res.data;
       })
-      .catch((err) => {
-        console.log('I am the function');
-      });
+      .catch(err =>
+        ({ err: err.message }),
+      );
   });
 }
 
@@ -44,8 +45,8 @@ function saveCategory(data) {
 }
 
 export {
-  fetchBooks,
-  setBooks,
+  fetchCategories,
+  setCategories,
   saveCategory,
-  SET_BOOKS,
+  SET_CATEGORIES,
 };

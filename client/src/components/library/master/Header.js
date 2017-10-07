@@ -14,10 +14,7 @@ class Header extends Component {
   handleLogout(e) {
     e.preventDefault();
     logout(this.state);
-    this.props.addFlashMessage({
-      type: 'success',
-      text: 'Successfully Logged out.',
-    });
+    Materialize.toast('Successfully Logged out.', 3000, 'red');
     return this.props.history.push('/');
   }
   render() {

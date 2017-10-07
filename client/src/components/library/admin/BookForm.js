@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import { Input } from 'react-materialize';
+import axios from 'axios';
+import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 import { saveBook } from './../../../actions/bookActions';
+import { fetchCategories } from './../../../actions/categoryActions';
+import droploader from '../../../../public/images/dropzone.gif';
 
 class BookForm extends Component {
   constructor(props) {
@@ -13,12 +18,20 @@ class BookForm extends Component {
       author: '',
       quantity: '',
       description: '',
-      category: 'unsorted',
+      image: '',
+      category: 'Unsorted',
       errors: {},
       loading: false,
+      coverUploaded: false,
+      dropzoneLoader: false,
     };
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDrop = this.handleDrop.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.fetchCategories();
   }
 
   onChange(e) {
@@ -34,9 +47,38 @@ class BookForm extends Component {
     }
   }
 
+  handleDrop(files) {
+    // Push all the axios request promise into a single array
+    const uploaders = files.map((file) => {
+      // Initial FormData
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'bdnqjpo9'); // Replace the preset name with your own
+      formData.append('api_key', '135232672986957'); // Replace API key with your own Cloudinary key
+      formData.append('timestamp', (Date.now() / 1000) | 0); // eslint-disable-line no-bitwise
+      this.setState({ dropzoneLoader: true });
+      // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
+      return axios.post('https://api.cloudinary.com/v1_1/dcl7tqhww/image/upload', formData, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        transformRequest: [(data, headers) => {
+          delete headers.common['x-access-token']; // eslint-disable-line no-param-reassign
+          return data;
+        }],
+      }).then((response) => {
+        const data = response.data;
+        // You should store this URL for future references in your app
+        // const fileURL = data.secure_url;
+        this.setState({ dropzoneLoader: false, image: data.url });
+      });
+    });
+    // Once all the files are uploaded
+    axios.all(uploaders).then(() => {
+      this.setState({ coverUploaded: true });
+    });
+  }
+
   handleSubmit(e) {
     e.preventDefault();
-    // Validation
     const errors = {};
     if (this.state.isbn === '') errors.isbn = 'Can\'t be empty';
     if (this.state.title === '') errors.title = 'Can\'t be empty';
@@ -48,13 +90,45 @@ class BookForm extends Component {
     const isValid = Object.keys(errors).length === 0;
 
     if (isValid) {
-      const { isbn, title, author, description, quantity, category } = this.state;
+      const { isbn, title, author, description, quantity, category, image } = this.state;
       // this.setState({ loading: true });
-      this.props.saveBook({ isbn, title, author, description, quantity, category });
+      saveBook({ isbn, title, author, description, quantity, category, image })
+        .then((res) => {
+          Materialize.toast(
+            res.isDone ? res.res.message : res.errors.message,
+            3000,
+            res.isDone ? 'green' : 'red',
+          );
+          if (res.isDone) {
+            this.setState({
+              isbn: '',
+              title: '',
+              author: '',
+              description: '',
+              quantity: '',
+              category: 'Unsorted',
+            });
+          }
+        });
     }
   }
 
   render() {
+    const style = {
+      marginLeft: '25%',
+      width: '50%',
+      fit: {
+        height: '200px',
+        position: 'absolute',
+      },
+    };
+    const selectorOptions = this.props.categories.map(option =>
+      (
+        <option key={option.id} value={option.title}>
+          {option.title}
+        </option>
+      ),
+    );
     return (
       <div>
         {!!this.state.errors.global && <div className="alert-danger">{this.state.errors.global}</div>}
@@ -94,17 +168,27 @@ class BookForm extends Component {
           </div>
           <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.category })}>
             <i className="fa fa-list fa-2x prefix " />
-            <select onChange={this.onChange} value="{this.state.category}" className="">
-              <option value="" disabled>Choose your option</option>
-              <option value="1">Unsorted</option>
-              <option value="1">Finance</option>
-              <option value="1">Science</option>
-              <option value="1">Computers</option>
-              <option value="1">Arts</option>
-              <option value="1">History</option>
-            </select>
+            <Input
+              style={{ marginLeft: '44px !important' }}
+              defaultValue={this.state.category}
+              name="category"
+              type="select"
+              onChange={this.onChange}
+            >
+              <option value="Unsorted">Unsorted</option>
+              {selectorOptions}
+            </Input>
             <span style={{ textAlign: 'left', marginLeft: '45px' }}>{this.state.errors.category}</span>
           </div>
+          <p>Drop book image file below or click below to upload</p>
+          <Dropzone
+            onDrop={this.handleDrop}
+            multiple
+            accept="image/*"
+          >
+            {this.state.dropzoneLoader && <img style={style} src={droploader} alt="" />}
+            {!this.state.dropzoneLoader && <img style={style.fit} src={this.state.image} alt="" className="card" />}
+          </Dropzone>
           <div className="center-align col s12">
             <button type="submit" className="btn waves-effect teal" disabled={classnames(this.state.loading ? 'disabled' : '')} ><i className="fa fa-send" /> Add Book</button>
           </div>
@@ -115,7 +199,14 @@ class BookForm extends Component {
 }
 
 BookForm.propTypes = {
-  saveBook: PropTypes.func.isRequired,
+  categories: PropTypes.array.isRequired,
+  fetchCategories: PropTypes.func.isRequired,
 };
 
-export default connect(null, { saveBook })(BookForm);
+function mapStateToProps(state) {
+  return {
+    categories: state.categories,
+  };
+}
+
+export default connect(mapStateToProps, { saveBook, fetchCategories })(BookForm);

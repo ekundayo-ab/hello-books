@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { saveCategory } from '../../../actions/categoryActions';
 import { addFlashMessage } from '../../../actions/messageActions';
-import FlashMessagesList from '../../../components/flash/FlashMessagesList';
 
 class CategoryForm extends Component {
   constructor(props) {
@@ -47,15 +46,9 @@ class CategoryForm extends Component {
       saveCategory(this.state)
         .then((response) => {
           if (response.isDone) {
-            return this.props.addFlashMessage({
-              type: 'success',
-              text: response.res.message,
-            });
+            return Materialize.toast(response.res.message, 4000, 'green');
           }
-          return this.props.addFlashMessage({
-            type: 'error',
-            text: response.errors.message,
-          });
+          return Materialize.toast(response.errors.message, 4000, 'red');
         });
     }
   }
@@ -64,7 +57,6 @@ class CategoryForm extends Component {
     const { errors } = this.state;
     return (
       <div>
-        {this.props.location.pathname === '/admin' && <FlashMessagesList />}
         <form onSubmit={this.onSubmit}>
           <div className={classnames('input-field', 'col s12', { 'has-error': errors.title })}>
             <i className="fa fa-pencil prefix" />

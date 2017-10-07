@@ -39,7 +39,7 @@ class BookController {
     })
       .then((foundBook) => {
         if (foundBook) {
-          return res.status(409).send({ success: false, messsage: `Conflict! ${req.body.title} exists already`, foundBook });
+          return res.status(409).send({ success: false, message: `Conflict! ${req.body.title} exists already`, foundBook });
         }
         // If book does not exist, create new book.
         return Book
@@ -51,9 +51,10 @@ class BookController {
             image: req.body.image,
             status: 1,
             quantity: req.body.quantity,
+            category: req.body.category,
           })
           .then((book) => {
-            res.status(200).send({ success: true, message: `${book.title}, successfully added` });
+            res.status(200).send({ success: true, message: `${book.title}, successfully added`, book });
           })
           .catch(error => res.send(error.message));
       })
@@ -106,6 +107,7 @@ class BookController {
             image: req.body.image,
             status: 1,
             quantity: req.body.quantity,
+            category: req.body.category,
           }, {
             where: {
               id: req.params.bookId,

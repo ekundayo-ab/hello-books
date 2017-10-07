@@ -425,3 +425,20 @@ nav {
     float: right;
   }
 }
+
+.select-wrapper {
+  input {
+    &.select-dropdown {
+      margin-left: 44px;
+    }
+  }
+}
+
+.admin-book-list {
+  height: 70px;
+  overflow: hidden;
+
+  img {
+    height: 100%;
+  }
+}

@@ -389,6 +389,7 @@ Router.put('/users/:userId/books', borrowsController.returnBook); // Route to re
 Router.get('/users/:userId/books', borrowsController.listNotReturned); // Route to list borrowed but not returned book
 
 Router.post('/category', catController.create);
+Router.get('/categories', catController.list);
 
 Router.route('*')
   .post((req, res) => {

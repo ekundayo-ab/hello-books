@@ -5,8 +5,6 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classname from 'classnames';
 import { userSignUpRequest, isUserExists } from '../../actions/authActions';
-import { addFlashMessage } from '../../actions/messageActions';
-import FlashMessagesList from '../../components/flash/FlashMessagesList';
 import Helper from './../../helpers/index';
 
 class SignUp extends Component {
@@ -66,25 +64,16 @@ class SignUp extends Component {
       this.props.userSignUpRequest(this.state)
         .then((res) => {
           if (res) {
-            this.props.addFlashMessage({
-              type: 'success',
-              text: res.data.message,
-            });
+            Materialize.toast(res.data.message, 4000, 'green');
             return this.props.history.push('/shelf');
           }
-          return this.props.addFlashMessage({
-            type: 'success',
-            text: 'Oops! Something happened try again later',
-          });
+          return Materialize.toast('Oops! Something happened try again later', 4000, 'red');
         })
         .catch((err) => {
           if (err.response.data.errors) {
             this.setState({ errors: err.response.data.errors });
           }
-          return this.props.addFlashMessage({
-            type: 'error',
-            text: err.response.statusText,
-          });
+          Materialize.toast(err.response.statusText, 4000, 'red');
         });
     }
   }
@@ -93,7 +82,6 @@ class SignUp extends Component {
     const { errors } = this.state;
     return (
       <div id="register">
-        <FlashMessagesList />
         <br />
         <div className="row">
           <form onSubmit={this.onSubmit}>
@@ -164,9 +152,8 @@ class SignUp extends Component {
 SignUp.propTypes = {
   userSignUpRequest: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
-  addFlashMessage: PropTypes.func.isRequired,
   isUserExists: PropTypes.func.isRequired,
 };
 
 export default
-connect(null, { userSignUpRequest, addFlashMessage, isUserExists })(withRouter(SignUp));
+connect(null, { userSignUpRequest, isUserExists })(withRouter(SignUp));
