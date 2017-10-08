@@ -92,7 +92,6 @@ class UpdateBookModal extends Component {
       if (id) {
         updateBook({ id, isbn, title, author, description, quantity, category, image })
           .then((res) => {
-            console.log(res);
             Materialize.toast(
               res.isDone ? res.result.message : res.result.errors.message,
               3000,
