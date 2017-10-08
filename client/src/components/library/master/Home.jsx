@@ -8,6 +8,8 @@ import History from '../History';
 import Admin from './../admin/Admin';
 import Profile from '../Profile';
 import NotFound from '../NotFound';
+import requireAuth from '../../BasicAuth';
+import requireAdmin from '../../AdminAuth';
 
 class Home extends Component {
   render() {
@@ -15,10 +17,10 @@ class Home extends Component {
       <div className="shelf-page" >
         <Header />
         <Switch>
-          <Route path="/shelf" component={Shelf} />
-          <Route path="/history" component={History} />
-          <Route path="/admin" component={Admin} />
-          <Route path="/profile" component={Profile} />
+          <Route path="/shelf" component={requireAuth(Shelf)} />
+          <Route path="/history" component={requireAuth(History)} />
+          <Route path="/admin" component={requireAdmin(Admin)} />
+          <Route path="/profile" component={requireAuth(Profile)} />
           <Route path="/*" component={NotFound} />
         </Switch>
         <Footer />

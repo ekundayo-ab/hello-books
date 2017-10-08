@@ -25,7 +25,7 @@ function login(data) {
       let user;
       const token = res.data.token;
       jwt.verify(token, 'hello-books', (err, decoded) => {
-        user = decoded;
+        user = decoded.data;
       });
       localStorage.setItem('jwtToken', token);
       store.dispatch(setCurrentUser(user));
