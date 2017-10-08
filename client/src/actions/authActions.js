@@ -1,6 +1,7 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { SET_CURRENT_USER, UNSET_CURRENT_USER } from '../actions/types';
+import setAuthorizationHeader from '../utils/setAuthorizationToken';
 import store from '../../src/index';
 
 
@@ -28,6 +29,7 @@ function login(data) {
       });
       localStorage.setItem('jwtToken', token);
       store.dispatch(setCurrentUser(user));
+      setAuthorizationHeader(token);
       return {
         isAuthenticated: true,
         message: res.data.message,

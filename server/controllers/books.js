@@ -114,7 +114,9 @@ class BookController {
             },
           })
           .then(() => {
-            res.status(200).send({ success: true, message: `${book.title} successfully updated to ${req.body.title}`, old: book });
+            Book.findById(req.params.bookId).then(newBook =>
+              res.status(200).send({ success: true, message: `${book.title} successfully updated to ${req.body.title}`, old: book, book: newBook }),
+            );
           })
           .catch(error => res.send(error.message));
       });
