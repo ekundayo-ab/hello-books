@@ -37,7 +37,6 @@ class UserController {
       return res.status(400).send({ success: false, message: 'Invalid email address, try again' });
     }
 
-
     return User
       .findOne({
         where: {
@@ -80,14 +79,17 @@ class UserController {
    */
   static signin(req, res) {
     // Ensures expected inputs are gotten
-    if (!req.body.password || !req.body.username) {
+    if (!req.body.password || !req.body.identifier) {
       return res.status(400).send({ success: false, message: 'Bad request!, Check your username or email.' });
     }
     // Queries the database if user exists with supplied credentials
     return User
       .findOne({
         where: {
-          username: req.body.username,
+          $or: {
+            username: req.body.identifier,
+            email: req.body.identifier,
+          },
         },
       })
       .then((user) => {
@@ -106,7 +108,7 @@ class UserController {
             res.status(401).send({ success: false, message: 'Authentication failed. Wrong password' });
           } else {
             const token = jwt.sign({
-              data: user,
+              data: { id: user.id, role: user.role, username: user.username },
             }, 'hello-books', { expiresIn: 60 * 60 });
             res.json({ success: true, message: `Hi ${user.username}, you are logged in`, token });
           }
@@ -137,6 +139,26 @@ class UserController {
       }).then((user) => {
         res.send({ user });
       });
+  }
+
+  static findUser(req, res) {
+    // Get all users.
+    return User
+      .findOne({
+        where: {
+          $or: {
+            username: req.body.username,
+            email: req.body.email,
+          },
+        },
+      })
+      .then((user) => {
+        if (user) {
+          return res.status(200).send(user);
+        }
+        return res.status(200).send({ success: true, message: 'Available' });
+      })
+      .catch(err => res.status(400).send(err));
   }
 }
 

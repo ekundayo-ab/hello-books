@@ -150,7 +150,7 @@ class BookController {
         }
         // If book is found, delete
         book.destroy();
-        return res.status(200).send({ success: true, message: 'Book successfully deleted' });
+        return res.status(200).send({ success: true, message: 'Book successfully deleted', book });
       })
       .catch(() => res.status(400).send({ success: false, message: 'Enter valid inputs!' }));
   }

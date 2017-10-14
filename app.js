@@ -42,13 +42,16 @@ const swaggerSpec = swaggerJSDoc(options);
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'server/api-docs/')));
+app.use('/api/docs/', express.static(path.join(__dirname, 'server/api-docs/')));
 app.use('/api/v1', router);
+
 // serve swagger
-app.get('/hellobooks.json', (req, res) => {
+app.get('/api/docs/hellobooks.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
 });
+
+// Default catch all route non available guest routes
 app.get('*', (req, res) => {
   res.status(404).send('Ooops, Route not found, Come in at /api/v1.');
 });

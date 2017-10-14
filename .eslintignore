@@ -1,4 +1,4 @@
 template/**/*.js
 server/api-docs/**/*.js
-client/dist/**/*.js
+client/public/**/*.js
 client/webpack.config.js

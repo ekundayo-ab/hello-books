@@ -42,6 +42,7 @@ describe('API Operations', () => {
           username: 'ekundayo',
           email: 'ekprogs@gmail.com',
           password: '123456',
+          passwordConfirmation: '123456',
           role: 'admin',
         })
         .end((err, res) => {
@@ -59,6 +60,7 @@ describe('API Operations', () => {
           username: 'bootcamp',
           email: 'bootcamp@gmail.com',
           password: '123456',
+          passwordConfirmation: '123456',
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(true);
@@ -76,6 +78,7 @@ describe('API Operations', () => {
           usename: 'ekundayo',
           mail: 'ekprogs@gmail.com',
           pasword: '123456',
+          passwordConfirmation: '123456',
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
@@ -93,6 +96,7 @@ describe('API Operations', () => {
           usename: '',
           email: '',
           password: '',
+          passwordConfirmation: '',
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
@@ -109,6 +113,7 @@ describe('API Operations', () => {
           username: 'testuser',
           email: 'testuser',
           password: 'testuser',
+          passwordConfirmation: 'testuser',
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
@@ -126,6 +131,7 @@ describe('API Operations', () => {
           username: 'spartan',
           email: 'bootcamp@gmail.com',
           password: '123456',
+          passwordConfirmation: '123456',
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
@@ -143,6 +149,7 @@ describe('API Operations', () => {
           username: 'bootcamp',
           email: 'spartan@gmail.com',
           password: '123456',
+          passwordConfirmation: '123456',
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
@@ -159,7 +166,7 @@ describe('API Operations', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
         .send({
-          usename: 'ekundayo',
+          idenfir: 'ekundayo',
           email: 'ekprogs@gmail.com',
         })
         .end((err, res) => {
@@ -175,7 +182,7 @@ describe('API Operations', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
         .send({
-          usename: 'ekundayo',
+          identfier: 'ekundayo',
           email: 'ekprogs@gmail.com',
         })
         .end((err, res) => {
@@ -191,7 +198,7 @@ describe('API Operations', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
         .send({
-          username: 'bootcamp',
+          identifier: 'bootcamp',
           password: '123456',
         })
         .end((err, res) => {
@@ -208,7 +215,7 @@ describe('API Operations', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
         .send({
-          username: 'ekundayo',
+          identifier: 'ekundayo',
           password: '123456',
         })
         .end((err, res) => {
@@ -225,7 +232,7 @@ describe('API Operations', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
         .send({
-          username: 'ekundayo',
+          identifier: 'ekundayo',
           password: 'wrongpass',
         })
         .end((err, res) => {
@@ -241,7 +248,7 @@ describe('API Operations', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
         .send({
-          username: 'ekundayoguy',
+          identifier: 'ekundayoguy',
           password: 'dayo',
         })
         .end((err, res) => {

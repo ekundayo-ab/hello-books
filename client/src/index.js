@@ -2,14 +2,29 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import App from './components/Landing/Home';
+import App from './components/App';
+import rootReducer from './rootReducer';
+import { setAuthorizationToken } from './utils/setAuthorizationToken';
+
+/* eslint-disable import/first */
+import '../public/css/main.css';
+import 'jquery/dist/jquery';
+import 'materialize-css/dist/js/materialize';
+import '../public/js/main.js';
+/* eslint-enable */
 
 const store = createStore(
-  (state = {}) => state,
-  applyMiddleware(thunk),
+  rootReducer,
+  composeWithDevTools(
+    applyMiddleware(thunk),
+  ),
 );
+
+setAuthorizationToken(localStorage.jwtToken);
+
 
 ReactDOM.render(
   <Provider store={store}>
@@ -19,3 +34,5 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root'),
 );
+
+export default store;

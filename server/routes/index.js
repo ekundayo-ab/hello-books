@@ -3,6 +3,7 @@ import usersController from '../controllers/users';
 import booksController from '../controllers/books';
 import borrowsController from '../controllers/borrows';
 import authMiddleware from '../middlewares/auth';
+import catController from '../controllers/category';
 
 const Router = express.Router();
 /**
@@ -25,7 +26,7 @@ Router.get('/', (req, res) => res.status(200).send({
  * definitions:
  *   Register:
  *     properties:
- *       username:
+ *       identifier:
  *         type: string
  *       email:
  *         type: string
@@ -37,14 +38,14 @@ Router.get('/', (req, res) => res.status(200).send({
  * definitions:
  *   Login:
  *     properties:
- *       username:
+ *       identifier:
  *         type: string
  *         default: ekundayo
  *       password:
  *         type: string
  *         default: dayo
  *     example: {
- *       "username": ekundayo,
+ *       "identifier": ekundayo,
  *       "password": dayo
  *     }
  */
@@ -115,6 +116,7 @@ Router.post('/users/signup', usersController.signup); // Route to sign up
  *         description: Bad Username, Password or Email
  */
 Router.post('/users/signin', usersController.signin); // Route to sign in
+Router.post('/users', usersController.findUser); // Checks if a User exists in the database
 
 Router.use(authMiddleware.authenticate); // Authentication middleware
 
@@ -385,6 +387,8 @@ Router.put('/users/:userId/books', borrowsController.returnBook); // Route to re
  *           $ref: '#/definitions/Book'
  */
 Router.get('/users/:userId/books', borrowsController.listNotReturned); // Route to list borrowed but not returned book
+
+Router.post('/category', catController.create);
 
 Router.route('*')
   .post((req, res) => {
