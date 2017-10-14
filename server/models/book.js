@@ -32,8 +32,7 @@ export default (sequelize, DataTypes) => {
     },
     category: {
       type: DataTypes.STRING,
-      defaultValue: 'Unsorted',
-      allowNull: false,
+      allowNull: true,
     },
   });
 

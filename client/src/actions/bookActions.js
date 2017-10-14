@@ -39,9 +39,9 @@ function fetchBooks() {
 }
 
 function saveBook(data) {
-  axios.post('/api/v1/books', data, { 'x-access-token': token })
+  return axios.post('/api/v1/books', data, { 'x-access-token': token })
     .then((res) => {
-      store.dispatch(addBook(res.data));
+      store.dispatch(addBook(res.data.book));
       return { res: res.data, isDone: true };
     })
     .catch(err =>
@@ -54,9 +54,7 @@ function deleteBook(dataId) {
     .then((res) => {
       store.dispatch(deleteSuccess(res.data.book.id));
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch(err => err);
 }
 
 export {
@@ -66,4 +64,5 @@ export {
   deleteBook,
   BOOK_DELETED,
   SET_BOOKS,
+  ADD_BOOK,
 };

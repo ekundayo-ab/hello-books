@@ -7,10 +7,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import App from './components/App';
 import rootReducer from './rootReducer';
-import { setAuthorizationToken } from './utils/setAuthorizationToken';
+import './utils/setAuthorizationToken';
 
 /* eslint-disable import/first */
-import '../public/css/main.css';
+import '../public/css/main.scss';
 import 'jquery/dist/jquery';
 import 'materialize-css/dist/js/materialize';
 import '../public/js/main.js';
@@ -23,7 +23,7 @@ const store = createStore(
   ),
 );
 
-setAuthorizationToken(localStorage.jwtToken);
+// setAuthorizationToken(localStorage.jwtToken);
 
 
 ReactDOM.render(

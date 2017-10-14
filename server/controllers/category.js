@@ -49,6 +49,33 @@ class CatController {
       })
       .catch(error => res.send(error.message));
   }
+
+  /**
+   *
+   *
+   * @static
+   * @description Lists all books in the library
+   * @param {any} req
+   * @param {any} res
+   * @returns
+   *
+   * @memberOf BookController
+   */
+  static list(req, res) {
+    return Category
+      .findAll({
+        order: [
+          ['createdAt', 'ASC'],
+        ],
+      })
+      .then((categories) => {
+        if (categories[0] === undefined) {
+          return res.status(301).send({ success: false, message: 'Categories not available, check back later.' });
+        }
+        return res.status(200).send(categories);
+      })
+      .catch(() => res.status(500).send({ success: false, message: 'Internal Server Error' }));
+  }
 }
 
 export default CatController;

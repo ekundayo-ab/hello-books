@@ -6,8 +6,6 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Helper from './../../helpers/index';
 import { login } from '../../actions/authActions';
-import { addFlashMessage } from '../../actions/messageActions';
-import FlashMessagesList from '../../components/flash/FlashMessagesList';
 
 class SignIn extends Component {
   constructor(props) {
@@ -40,17 +38,11 @@ class SignIn extends Component {
       login(this.state).then(
         (res) => {
           if (res.isAuthenticated) {
-            this.props.addFlashMessage({
-              type: 'success',
-              text: res.message,
-            });
+            Materialize.toast(res.message, 4000, 'green');
             return this.props.history.push('/shelf');
           }
           this.setState({ errors: {}, isLoading: false });
-          return this.props.addFlashMessage({
-            type: 'error',
-            text: res.message,
-          });
+          return Materialize.toast(res.message, 4000, 'red');
         },
       );
     }
@@ -60,7 +52,6 @@ class SignIn extends Component {
     const { errors } = this.state;
     return (
       <div id="login">
-        <FlashMessagesList />
         <div className="row">
           <form onSubmit={this.onSubmit}>
             <div className={classnames('input-field', 'col s12', { 'has-error': errors.identifier })}>
@@ -105,7 +96,6 @@ class SignIn extends Component {
 
 SignIn.propTypes = {
   history: PropTypes.object.isRequired,
-  addFlashMessage: PropTypes.func.isRequired,
 };
 
-export default connect(null, { login, addFlashMessage })(withRouter(SignIn));
+export default connect(null, { login })(withRouter(SignIn));

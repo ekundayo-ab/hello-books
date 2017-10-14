@@ -8,6 +8,6 @@ const setAuthorizationToken = (token) => {
   }
 };
 
-export {
-  setAuthorizationToken,
-};
+setAuthorizationToken(localStorage.jwtToken);
+
+export default setAuthorizationToken;

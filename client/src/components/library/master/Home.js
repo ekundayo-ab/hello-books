@@ -8,14 +8,12 @@ import History from '../History';
 import Admin from './../admin/Admin';
 import Profile from '../Profile';
 import NotFound from '../NotFound';
-import FlashMessagesList from '../../flash/FlashMessagesList';
 
 class Home extends Component {
   render() {
     return (
       <div className="shelf-page" >
         <Header />
-        <FlashMessagesList />
         <Switch>
           <Route path="/shelf" component={Shelf} />
           <Route path="/history" component={History} />
