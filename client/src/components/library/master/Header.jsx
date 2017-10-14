@@ -57,6 +57,7 @@ Header.defaultProps = {
 
 Header.propTypes = {
   history: PropTypes.object.isRequired,
+  isAdmin: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {

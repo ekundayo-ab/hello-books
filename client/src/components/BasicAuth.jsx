@@ -43,7 +43,6 @@ export default function (ComposedComponent) {
   }
 
   Authenticate.propTypes = {
-    isAuthenticated: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
     setCurrentUser: PropTypes.func.isRequired,
   };
