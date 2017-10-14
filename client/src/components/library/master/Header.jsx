@@ -53,7 +53,6 @@ class Header extends Component {
 
 Header.propTypes = {
   history: PropTypes.object.isRequired,
-  addFlashMessage: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(null, { logout, addFlashMessage })(Header));

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Modal } from 'react-materialize';
 import swal from 'sweetalert';
 import PropTypes from 'prop-types';
 import UpdateBookModal from '../../library/admin/UpdateBookModal';
@@ -39,10 +40,12 @@ class Book extends Component {
         <td>{this.props.book.author}</td>
         <td>{this.props.book.quantity}</td>
         <td>
-          <a onClick={this.hc} className="btn white waves-effect waves-light modasl-trigger" href="#modasl1"><i className="fa fa-edit green-text" /></a>
-          <div id="modal1" className="modal modal-fixed-footer">
-            <UpdateBookModal />
-          </div>
+          <Modal
+            header="Update Book"
+            trigger={<button className="btn white waves-effect waves-light"><i className="fa fa-edit green-text" /></button>}
+          >
+            <UpdateBookModal book={this.props.book} />
+          </Modal>
         </td>
         <td>
           <a

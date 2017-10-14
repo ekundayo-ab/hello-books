@@ -14,6 +14,9 @@ module.exports = {
     publicPath: '/',
   },
   devtool: 'inline-source-map',
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
   devServer: {
     historyApiFallback: true,
     hot: true,
