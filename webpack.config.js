@@ -22,7 +22,7 @@ module.exports = {
     hot: true,
     inline: true,
     host: 'localhost', // Defaults to `localhost`
-    port: 8080, // Defaults to 8080
+    port: 3000, // Defaults to 8080
     proxy: {
       '/api/v1/*': {
         target: 'http://localhost:8000/',

@@ -8,6 +8,11 @@ import SignIn from './SigninForm';
 import ForgotPassword from './ForgotPasswordForm';
 
 class Home extends Component {
+  componentWillMount() {
+    if (localStorage.getItem('jwtToken') !== null) {
+      this.props.history.push('/shelf');
+    }
+  }
   render() {
     const isCurrent = this.props.location.pathname === '/';
     let theActiveClass;
@@ -47,6 +52,7 @@ class Home extends Component {
 
 Home.propTypes = {
   location: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default withRouter(Home);

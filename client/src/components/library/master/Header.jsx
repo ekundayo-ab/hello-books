@@ -32,7 +32,7 @@ class Header extends Component {
             <ul className="right hide-on-med-and-down">
               <li><NavLink activeClassName="active" to="/shelf">Shelf</NavLink></li>
               <li><NavLink activeClassName="active" to="/history">History</NavLink></li>
-              <li><NavLink activeClassName="active" to="/admin"><i className="fa fa-gear" /> Admin Dashboard</NavLink></li>
+              {this.props.isAdmin === 'admin' && <li><NavLink activeClassName="active" to="/admin"><i className="fa fa-gear" /> Admin Dashboard</NavLink></li>}
               <li><NavLink activeClassName="active" to="/profile"><i className="fa fa-user" /> Profile</NavLink></li>
               <li><Link onClick={this.handleLogout} to=""><i className="fa fa-sign-out" /> Logout</Link></li>
             </ul>
@@ -51,8 +51,20 @@ class Header extends Component {
   }
 }
 
-Header.propTypes = {
-  history: PropTypes.object.isRequired,
+Header.defaultProps = {
+  isAdmin: PropTypes.string,
 };
 
-export default withRouter(connect(null, { logout, addFlashMessage })(Header));
+Header.propTypes = {
+  history: PropTypes.object.isRequired,
+  isAdmin: PropTypes.string.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    isAuthenticated: state.users.isAuthenticated,
+    isAdmin: state.users.user.role,
+  };
+}
+
+export default withRouter(connect(mapStateToProps, { logout, addFlashMessage })(Header));
