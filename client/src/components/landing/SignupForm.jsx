@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classname from 'classnames';
-import { userSignUpRequest, isUserExists } from '../../actions/authActions';
+import { userSignUpRequest, isUserExists, login } from '../../actions/authActions';
 import Helper from './../../helpers/index';
 
 class SignUp extends Component {
@@ -63,17 +63,20 @@ class SignUp extends Component {
       this.setState({ errors: {}, isLoading: true });
       this.props.userSignUpRequest(this.state)
         .then((res) => {
-          if (res) {
-            Materialize.toast(res.data.message, 4000, 'green');
-            return this.props.history.push('/shelf');
+          if (res.data.success) {
+            login({ identifier: this.state.username, password: this.state.password })
+              .then((resp) => {
+                if (resp.isAuthenticated) {
+                  Materialize.toast(`${res.data.message} You're logged in, welcome`, 3000, 'green');
+                  return this.props.history.push('/shelf');
+                }
+                return this.setState({ isLoading: true });
+              });
           }
-          return Materialize.toast('Oops! Something happened try again later', 4000, 'red');
         })
-        .catch((err) => {
-          if (err.response.data.errors) {
-            this.setState({ errors: err.response.data.errors });
-          }
-          Materialize.toast(err.response.statusText, 4000, 'red');
+        .catch(() => {
+          Materialize.toast('Oops! Internal Server Error, try again', 3000, 'red');
+          this.setState({ isLoading: false });
         });
     }
   }
@@ -156,4 +159,4 @@ SignUp.propTypes = {
 };
 
 export default
-connect(null, { userSignUpRequest, isUserExists })(withRouter(SignUp));
+connect(null, { userSignUpRequest, isUserExists, login })(withRouter(SignUp));

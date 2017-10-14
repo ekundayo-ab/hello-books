@@ -51,9 +51,12 @@ class Header extends Component {
   }
 }
 
+Header.defaultProps = {
+  isAdmin: PropTypes.string,
+};
+
 Header.propTypes = {
   history: PropTypes.object.isRequired,
-  isAdmin: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {

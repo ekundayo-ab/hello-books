@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import swagger from 'swagger-jsdoc';
 import router from './server/routes/';
+import authMiddleware from './server/middlewares/auth';
 
 require('dotenv').config();
 
@@ -43,6 +44,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api/docs/', express.static(path.join(__dirname, 'server/api-docs/')));
+app.post('/api/v1/verify-token', authMiddleware.authenticate, authMiddleware.verifyToken);
 app.use('/api/v1', router);
 
 // serve swagger

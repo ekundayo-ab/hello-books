@@ -58,6 +58,7 @@ function isUserExists(userData) {
 }
 
 export {
+  setCurrentUser,
   userSignUpRequest,
   login,
   isUserExists,

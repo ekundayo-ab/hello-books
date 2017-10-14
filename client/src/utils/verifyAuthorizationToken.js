@@ -1,17 +1,11 @@
-import jwt from 'jsonwebtoken';
+import axios from 'axios';
 
-const token = localStorage.jwtToken;
+const verifyToken = (data) => {
+  return axios.post('/api/v1/verify-token', data)
+    .then((resp) => {
+      const decoded = resp.data.decoded;
+      return decoded;
+    });
+};
 
-export default jwt.verify(token, 'hello-books', (err, decoded) => {
-  if (err) {
-    return {
-      verified: false,
-      decoded: null,
-    };
-  }
-
-  return {
-    verified: true,
-    decoded,
-  };
-});
+export default verifyToken;
