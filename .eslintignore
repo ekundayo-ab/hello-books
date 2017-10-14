@@ -2,3 +2,4 @@ template/**/*.js
 server/api-docs/**/*.js
 client/public/**/*.js
 client/webpack.config.js
+client/dist/**/*.js

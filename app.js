@@ -43,6 +43,7 @@ const swaggerSpec = swaggerJSDoc(options);
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static('./client/dist/')); // configure static files folder
 app.use('/api/docs/', express.static(path.join(__dirname, 'server/api-docs/')));
 app.post('/api/v1/verify-token', authMiddleware.authenticate, authMiddleware.verifyToken);
 app.use('/api/v1', router);
@@ -53,9 +54,9 @@ app.get('/api/docs/hellobooks.json', (req, res) => {
   res.send(swaggerSpec);
 });
 
-// Default catch all route non available guest routes
+// Default catch all route for static files from build folder
 app.get('*', (req, res) => {
-  res.status(404).send('Ooops, Route not found, Come in at /api/v1.');
+  res.sendFile(path.join(__dirname, './client/dist/index.html'));
 });
 
 

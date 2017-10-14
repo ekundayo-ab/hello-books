@@ -7,9 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "d": "babel-watch app.js & webpack-dev-server --open",
     "start:c": "webpack-dev-server --open",
-    "build:c": "webpack",
+    "build": "webpack --config webpack.config.js -p --progress --colors",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text --reporter=lcovonly mocha --compilers js:babel-register server/tests/*.js",
     "test:db": "sequelize db:migrate",
     "db:migrate": "cross-env DATABASE_URL=$DATABASE_URL sequelize db:migrate",
@@ -17,7 +16,7 @@
     "start:dev": "babel-watch app.js",
     "db:seed": "DATABASE_URL=$DATABASE_URL sequelize db:seed:all",
     "test": "cross-env NODE_ENV=test mocha --compilers js:babel-register server/tests/*.js",
-    "heroku-postbuild": "NODE_ENV=production && NODE_END=production sequelize db:migrate:undo:all && NODE_END=production sequelize db:migrate && npm run db:seed"
+    "heroku-postbuild": "NODE_ENV=production && NODE_ENV=production sequelize db:migrate:undo:all && NODE_ENV=production sequelize db:migrate && NODE_ENV=production npm run db:seed"
   },
   "repository": {
     "type": "git",
