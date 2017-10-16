@@ -1,8 +1,46 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import moment from 'moment';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import { fetchAllBorrowedBooks } from '../../actions/borrowActions';
 
 class Shelf extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+    };
+  }
+  componentDidMount() {
+    const userId = JSON.parse(localStorage.getItem('userDetails')).id;
+    fetchAllBorrowedBooks(userId);
+  }
+
   render() {
+    const noBorrowHistory = (
+      <p>You have not borrowed any book!</p>
+    );
+    const historySingle = this.props.books.map(borrowedBook =>
+      (<tr key={borrowedBook.id}>
+        <td className="teal-text">{borrowedBook.id}</td>
+        <td className="green-text">
+          <i
+            className={classnames('fa', { 'fa-close red-text': !borrowedBook.returned, 'fa-check green-text': borrowedBook.returned })}
+          /> {!borrowedBook.returned && <span className="red-text">Not Returned</span>}
+          {borrowedBook.returned && <span className="green-text">Returned</span>}
+        </td>
+        <td>{borrowedBook.book.title}</td>
+        <td>{borrowedBook.book.author}</td>
+        <td>{(moment(borrowedBook.book.createdAt).format('MMMM Do YYYY, h:mm a'))}</td>
+        <td>
+          <b>{borrowedBook.returned && (moment(borrowedBook.book.updatedAt).format('MMMM Do YYYY, h:mm a'))}</b>
+          <b>{!borrowedBook.returned && 'Not Yet'}</b>
+        </td>
+      </tr>),
+    );
+    console.log(this.props.books.length);
     return (
       <div>
         <div className="nav-bottom" />
@@ -43,89 +81,11 @@ class Shelf extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td className="teal-text">001</td>
-                      <td className="green-text"><i className="fa fa-check green-text" /> Returned</td>
-                      <td>Cavaler & Clay</td>
-                      <td>Michael Chabon</td>
-                      <td>31st May, 2016; 9:08 PM</td>
-                      <td>22nd June, 2016; 3:34 PM</td>
-                    </tr>
-                    <tr>
-                      <td className="teal-text">002</td>
-                      <td className="red-text"><i className="fa fa-close red-text" /> Not returned</td>
-                      <td>Cavaler & Clay</td>
-                      <td>Michael Chabon</td>
-                      <td>31st May, 2016; 9:08 PM</td>
-                      <td>22nd June, 2016; 3:34 PM</td>
-                    </tr>
-                    <tr>
-                      <td className="teal-text">003</td>
-                      <td className="red-text"><i className="fa fa-close red-text" /> Not returned</td>
-                      <td>Cavaler & Clay</td>
-                      <td>Michael Chabon</td>
-                      <td>31st May, 2016; 9:08 PM</td>
-                      <td>22nd June, 2016; 3:34 PM</td>
-                    </tr>
-                    <tr>
-                      <td className="teal-text">004</td>
-                      <td className="green-text"><i className="fa fa-check green-text" /> Returned</td>
-                      <td>Cavaler & Clay</td>
-                      <td>Michael Chabon</td>
-                      <td>31st May, 2016; 9:08 PM</td>
-                      <td>22nd June, 2016; 3:34 PM</td>
-                    </tr>
-                    <tr>
-                      <td className="teal-text">005</td>
-                      <td className="green-text"><i className="fa fa-check green-text" /> Returned</td>
-                      <td>Cavaler & Clay</td>
-                      <td>Michael Chabon</td>
-                      <td>31st May, 2016; 9:08 PM</td>
-                      <td>22nd June, 2016; 3:34 PM</td>
-                    </tr>
-                    <tr>
-                      <td className="teal-text">006</td>
-                      <td className="green-text"><i className="fa fa-check green-text" /> Returned</td>
-                      <td>Cavaler & Clay</td>
-                      <td>Michael Chabon</td>
-                      <td>31st May, 2016; 9:08 PM</td>
-                      <td>22nd June, 2016; 3:34 PM</td>
-                    </tr>
-                    <tr>
-                      <td className="teal-text">007</td>
-                      <td className="red-text"><i className="fa fa-close red-text" /> Not returned</td>
-                      <td>Cavaler & Clay</td>
-                      <td>Michael Chabon</td>
-                      <td>31st May, 2016; 9:08 PM</td>
-                      <td>22nd June, 2016; 3:34 PM</td>
-                    </tr>
-                    <tr>
-                      <td className="teal-text">008</td>
-                      <td className="red-text"><i className="fa fa-close red-text" /> Not returned</td>
-                      <td>Cavaler & Clay</td>
-                      <td>Michael Chabon</td>
-                      <td>31st May, 2016; 9:08 PM</td>
-                      <td>22nd June, 2016; 3:34 PM</td>
-                    </tr>
-                    <tr>
-                      <td className="teal-text">009</td>
-                      <td className="red-text"><i className="fa fa-close red-text" /> Not returned</td>
-                      <td>Cavaler & Clay</td>
-                      <td>Michael Chabon</td>
-                      <td>31st May, 2016; 9:08 PM</td>
-                      <td>22nd June, 2016; 3:34 PM</td>
-                    </tr>
-                    <tr>
-                      <td className="teal-text">010</td>
-                      <td className="green-text"><i className="fa fa-check green-text" /> Returned</td>
-                      <td>Cavaler & Clay</td>
-                      <td>Michael Chabon</td>
-                      <td>31st May, 2016; 9:08 PM</td>
-                      <td>22nd June, 2016; 3:34 PM</td>
-                    </tr>
+                    { this.props.books.length > 0 ? historySingle : noBorrowHistory }
                   </tbody>
                 </table>
               </div>
+              {this.props.books.length > 0 &&
               <ul className="pagination center-align">
                 <li className="disabled"><a href="#!"><i className="material-icons">chevron_left</i></a></li>
                 <li className="active"><a href="#!">1</a></li>
@@ -134,7 +94,7 @@ class Shelf extends Component {
                 <li className="waves-effect"><a href="#!">4</a></li>
                 <li className="waves-effect"><a href="#!">5</a></li>
                 <li className="waves-effect"><a href="#!"><i className="material-icons">chevron_right</i></a></li>
-              </ul>
+              </ul>}
             </div>
           </div>
         </div>
@@ -143,4 +103,15 @@ class Shelf extends Component {
   }
 }
 
-export default Shelf;
+Shelf.propTypes = {
+  books: PropTypes.array.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    userId: state.users.user.id,
+    books: state.borrows,
+  };
+}
+
+export default connect(mapStateToProps, { fetchAllBorrowedBooks })(Shelf);
