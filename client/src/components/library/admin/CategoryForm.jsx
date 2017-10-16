@@ -46,8 +46,10 @@ class CategoryForm extends Component {
       saveCategory(this.state)
         .then((response) => {
           if (response.isDone) {
+            this.setState({ title: '' });
             return Materialize.toast(response.res.message, 4000, 'green');
           }
+          this.setState({ title: '' });
           return Materialize.toast(response.errors.message, 4000, 'red');
         });
     }

@@ -184,6 +184,23 @@ class BookController {
       })
       .catch(() => res.status(400).send({ success: false, message: 'Ooops! something happened, check your inputs and try again.' }));
   }
+
+  static findBook(req, res) {
+    return Book
+      .findOne({
+        where: {
+          id: req.params.bookId,
+        },
+      }).then((book) => {
+        if (book) {
+          return res.status(200).send(book);
+        }
+        return res.status(404).send({ success: false, message: 'Book not found' });
+      })
+      .catch(() => {
+        res.status(500).send({ failure: 'Internal Server Error' });
+      });
+  }
 }
 
 export default BookController;

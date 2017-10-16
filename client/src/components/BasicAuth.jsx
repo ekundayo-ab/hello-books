@@ -18,18 +18,17 @@ export default function (ComposedComponent) {
       if (localStorage.getItem('jwtToken') === null) {
         Materialize.toast('Oops! Something Happened, Please login.', 3000, 'red');
         this.props.history.push('/login');
+      } else {
+        verifyToken({ token: localStorage.getItem('jwtToken') })
+          .then((rex) => {
+            this.props.setCurrentUser(rex);
+          })
+          .catch(() => {
+            Materialize.toast('Oops! Something happened, Allow us verify you again', 3000, 'red');
+            localStorage.removeItem('jwtToken');
+            this.props.history.push('/login');
+          });
       }
-      this.setState({ isFetching: true });
-      verifyToken({ token: localStorage.getItem('jwtToken') })
-        .then((rex) => {
-          this.setState({ isFetching: false });
-          this.props.setCurrentUser(rex);
-        })
-        .catch(() => {
-          Materialize.toast('Oops! Something happened, Allow us verify you again', 3000, 'red');
-          this.props.history.push('/login');
-          localStorage.removeItem('jwtToken');
-        });
     }
 
     render() {

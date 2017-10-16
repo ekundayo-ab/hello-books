@@ -101,25 +101,6 @@ class UpdateBookModal extends Component {
               this.setState({ errors: res.result.errors, loading: false });
             }
           });
-      } else {
-        saveBook({ isbn, title, author, description, quantity, category, image })
-          .then((res) => {
-            Materialize.toast(
-              res.isDone ? res.res.message : res.errors.message,
-              3000,
-              res.isDone ? 'green' : 'red',
-            );
-            if (res.isDone) {
-              this.setState({
-                isbn: '',
-                title: '',
-                author: '',
-                description: '',
-                quantity: '',
-                category: 'Unsorted',
-              });
-            }
-          });
       }
     }
   }
@@ -228,8 +209,11 @@ class UpdateBookModal extends Component {
   }
 }
 
+UpdateBookModal.defaultProps = {
+  book: {},
+};
+
 UpdateBookModal.propTypes = {
-  book: PropTypes.object.isRequired,
   categories: PropTypes.array.isRequired,
 };
 

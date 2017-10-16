@@ -1,13 +1,14 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
-import img1 from '../../../public/images/1.png';
-import img2 from '../../../public/images/2.png';
-import img3 from '../../../public/images/3.png';
-import img4 from '../../../public/images/4.png';
-import img5 from '../../../public/images/5.png';
-import img6 from '../../../public/images/6.png';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { fetchBooks } from '../../actions/bookActions';
+import BookCard from '../../components/library/BookCard';
 
 class Shelf extends Component {
+  componentDidMount() {
+    this.props.fetchBooks();
+  }
   render() {
     return (
       <div>
@@ -38,115 +39,7 @@ class Shelf extends Component {
             <div className="col s12 m12 l9">
               <div className="card-panel">
                 <div className="row">
-
-                  <div className="book col s12 m3 l3">
-                    <div className="card">
-                      <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src={img1} alt="cool-1" />
-                      </div>
-                      <div className="card-content">
-                        <span className="card-title activator grey-text text-darken-4">Cavaler & Clay</span>
-                        <span>Michael Chabon</span>
-                        <p><a href="book.html" className="btn">Borrow Now</a></p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="book col s12 m3 l3">
-                    <div className="card">
-                      <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src={img2} alt="cool-5" />
-                      </div>
-                      <div className="card-content">
-                        <span className="card-title activator grey-text text-darken-4">Jonathan Franzen</span>
-                        <span>The Corrections</span>
-                        <p><a href="book.html" className="btn">Borrow Now</a></p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="book col s12 m3 l3">
-                    <div className="card">
-                      <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src={img3} alt="cool-3" />
-                      </div>
-                      <div className="card-content">
-                        <span className="card-title activator grey-text text-darken-4">Wolf Hall</span>
-                        <span>Hilary Mantel</span>
-                        <p><a href="book.html" className="btn">Borrow Now</a></p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="book col s12 m3 l3">
-                    <div className="card">
-                      <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src={img6} alt="cool-6" />
-                      </div>
-                      <div className="card-content">
-                        <span className="card-title activator grey-text text-darken-4">Gilead</span>
-                        <span>Marilynne Robinson</span>
-                        <p><a href="book.html" className="btn">Borrow Now</a></p>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div className="row">
-
-                  <div className="book col s12 m3 l3">
-                    <div className="card">
-                      <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src={img4} alt="cool-4" />
-                      </div>
-                      <div className="card-content">
-                        <span className="card-title activator grey-text text-darken-4">White Teeth</span>
-                        <span>Zadie Smith</span>
-                        <p><a href="book.html" className="btn">Borrow Now</a></p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="book col s12 m3 l3">
-                    <div className="card">
-                      <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src={img5} alt="cool-3" />
-                      </div>
-                      <div className="card-content">
-                        <span className="card-title activator grey-text text-darken-4">Jonathan Franzen</span>
-                        <span>The Corrections</span>
-                        <p><a href="book.html" className="btn">Borrow Now</a></p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="book col s12 m3 l3">
-                    <div className="card">
-                      <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src={img6} alt="cool-6" />
-                      </div>
-                      <div className="card-content">
-                        <span className="card-title activator grey-text text-darken-4">Gilead</span>
-                        <span>Marilynne Robinson</span>
-                        <p><a href="book.html" className="btn">Borrow Now</a></p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="book col s12 m3 l3">
-                    <div className="card">
-                      <div className="card-image waves-effect waves-block waves-light">
-                        <img className="activator" src={img4} alt="cool" />
-                      </div>
-                      <div className="card-content">
-                        <span className="card-title activator grey-text text-darken-4">White Teeth</span>
-                        <span>Zadie Smith</span>
-                        <p><a href="book.html" className="btn">Borrow Now</a></p>
-                      </div>
-                    </div>
-                  </div>
-
+                  {this.props.books.map(book => <BookCard book={book} key={book.id} />)}
                 </div>
               </div>
               <ul className="pagination center-align">
@@ -166,4 +59,15 @@ class Shelf extends Component {
   }
 }
 
-export default Shelf;
+Shelf.propTypes = {
+  books: PropTypes.array.isRequired,
+  fetchBooks: PropTypes.func.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    books: state.books,
+  };
+}
+
+export default connect(mapStateToProps, { fetchBooks })(Shelf);

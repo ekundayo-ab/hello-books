@@ -14,7 +14,7 @@ class Header extends Component {
   handleLogout(e) {
     e.preventDefault();
     logout(this.state);
-    Materialize.toast('Successfully Logged out.', 3000, 'red');
+    Materialize.toast('Successfully Logged out.', 1000, 'red');
     return this.props.history.push('/');
   }
   render() {
@@ -57,7 +57,6 @@ Header.defaultProps = {
 
 Header.propTypes = {
   history: PropTypes.object.isRequired,
-  isAdmin: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {

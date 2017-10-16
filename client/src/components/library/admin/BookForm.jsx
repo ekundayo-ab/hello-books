@@ -106,6 +106,7 @@ class BookForm extends Component {
               author: '',
               description: '',
               quantity: '',
+              image: '',
               category: 'Unsorted',
             });
           }
