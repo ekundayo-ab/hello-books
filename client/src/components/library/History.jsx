@@ -40,7 +40,6 @@ class Shelf extends Component {
         </td>
       </tr>),
     );
-    console.log(this.props.books.length);
     return (
       <div>
         <div className="nav-bottom" />
@@ -69,21 +68,22 @@ class Shelf extends Component {
             </div>
             <div className="col s12 m12 l9">
               <div className="card-panel row">
-                <table className="responsive-table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Status</th>
-                      <th>Title</th>
-                      <th>Author</th>
-                      <th>Borrowed</th>
-                      <th>Returned</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    { this.props.books.length > 0 ? historySingle : noBorrowHistory }
-                  </tbody>
-                </table>
+                {this.props.books.length > 0 ?
+                  <table className="responsive-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Status</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Borrowed</th>
+                        <th>Returned</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      { historySingle }
+                    </tbody>
+                  </table> : noBorrowHistory }
               </div>
               {this.props.books.length > 0 &&
               <ul className="pagination center-align">
