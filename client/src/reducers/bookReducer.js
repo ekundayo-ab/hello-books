@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations, no-underscore-dangle */
 import { SET_BOOKS, BOOK_DELETED, BOOK_UPDATED, ADD_BOOK } from './../actions/bookActions';
 
 export default function books(state = [], action = {}) {

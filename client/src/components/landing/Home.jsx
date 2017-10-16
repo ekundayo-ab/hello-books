@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink, Route, withRouter } from 'react-router-dom';
+import { NavLink, Route, withRouter, Redirect, Switch } from 'react-router-dom';
 import Header from './Header';
 import SignUp from './SignupForm';
 import SignIn from './SigninForm';
@@ -36,10 +36,13 @@ class Home extends Component {
                   </ul>
                 </div>
                 <div className="card-content">
-                  <Route exact path="/" component={SignUp} />
-                  <Route path="/register" component={SignUp} />
-                  <Route path="/login" component={SignIn} />
-                  <Route path="/forgot" component={ForgotPassword} />
+                  <Switch>
+                    <Route exact path="/" component={SignUp} />
+                    <Route exact path="/register" component={SignUp} />
+                    <Route exact path="/login" component={SignIn} />
+                    <Route exact path="/forgot" component={ForgotPassword} />
+                    <Redirect path="*" to="/login" />
+                  </Switch>
                 </div>
               </div>
             </div>

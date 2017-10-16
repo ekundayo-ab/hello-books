@@ -377,22 +377,6 @@ nav {
 
 // Validation Styling
 .has-error {
-  // input {
-  //   border-color: $pure-red;
-
-  //   &[type='text'] {
-  //     margin: 3px;
-  //   }
-
-  //   &[type='email'] {
-  //     margin: 3px;
-  //   }
-
-  //   &[type='password'] {
-  //     margin: 3px;
-  //   }
-  // }
-
   span {
     color: $pure-red;
     margin: 0;
@@ -440,5 +424,12 @@ nav {
 
   img {
     height: 100%;
+  }
+}
+
+// Book Details Page Styling
+p {
+  &.book-count {
+    padding: 10px;
   }
 }

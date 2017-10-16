@@ -6,6 +6,7 @@ import Shelf from '../Shelf';
 import History from '../History';
 import Admin from './../admin/Admin';
 import Profile from '../Profile';
+import BookDetail from '../BookDetail';
 import NotFound from '../NotFound';
 import requireAuth from '../../BasicAuth';
 
@@ -14,11 +15,12 @@ class Home extends Component {
     return (
       <div className="shelf-page" >
         <Switch>
-          <Route path="/shelf" component={requireAuth(Shelf)} />
-          <Route path="/history" component={requireAuth(History)} />
-          <Route path="/admin" component={requireAuth(Admin)} />
-          <Route path="/profile" component={requireAuth(Profile)} />
-          <Route path="/*" component={NotFound} />
+          <Route exact path="/shelf" component={requireAuth(Shelf)} />
+          <Route exact path="/history" component={requireAuth(History)} />
+          <Route exact path="/admin" component={requireAuth(Admin)} />
+          <Route exact path="/profile" component={requireAuth(Profile)} />
+          <Route exact path="/shelf/:id" component={requireAuth(BookDetail)} />
+          <Route exact path="/*" component={requireAuth(NotFound)} />
         </Switch>
         <Footer />
       </div>

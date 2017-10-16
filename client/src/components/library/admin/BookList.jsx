@@ -31,6 +31,7 @@ const BookList = ({ books }) => {
       <div className="card-panel row">
         {books.length === 0 ? emptyMessage : booksList}
       </div>
+      {this.props.books.length > 0 &&
       <ul className="pagination center-align">
         <li className="disabled"><a href="#!"><i className="material-icons">chevron_left</i></a></li>
         <li className="active"><a href="#!">1</a></li>
@@ -39,7 +40,7 @@ const BookList = ({ books }) => {
         <li className="waves-effect"><a href="#!">4</a></li>
         <li className="waves-effect"><a href="#!">5</a></li>
         <li className="waves-effect"><a href="#!"><i className="material-icons">chevron_right</i></a></li>
-      </ul>
+      </ul>}
     </div>
   );
 };

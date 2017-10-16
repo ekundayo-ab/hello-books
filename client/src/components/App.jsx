@@ -10,7 +10,7 @@ class App extends Component {
     const trackPage = this.props.location.pathname;
     const trackMatch = /\/register|\/login|\/forgot/.test(trackPage);
     let viewToRender;
-    if (trackMatch || trackPage === '/') {
+    if (trackMatch || trackPage === '/' || localStorage.getItem('jwtToken') === null) {
       viewToRender = <LandingHome />;
     } else {
       viewToRender = <Home />;

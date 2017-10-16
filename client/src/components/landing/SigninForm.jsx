@@ -38,11 +38,11 @@ class SignIn extends Component {
       login(this.state).then(
         (res) => {
           if (res.isAuthenticated) {
-            Materialize.toast(res.message, 4000, 'green');
+            Materialize.toast(res.message, 1000, 'green');
             return this.props.history.push('/shelf');
           }
           this.setState({ errors: {}, isLoading: false });
-          return Materialize.toast(res.message, 4000, 'red');
+          return Materialize.toast(res.message, 1000, 'red');
         },
       );
     }

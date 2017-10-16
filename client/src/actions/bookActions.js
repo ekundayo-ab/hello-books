@@ -5,6 +5,7 @@ const SET_BOOKS = 'SET_BOOKS';
 const ADD_BOOK = 'ADD_BOOK';
 const BOOK_DELETED = 'BOOK_DELETED';
 const BOOK_UPDATED = 'BOOK_UPDATED';
+const BOOK_FETCHED = 'BOOK_FETCHED';
 
 const token = localStorage.getItem('jwtToken');
 
@@ -36,6 +37,13 @@ export function gameUpdated(book) {
   };
 }
 
+export function bookFetched(book) {
+  return {
+    type: BOOK_FETCHED,
+    book,
+  };
+}
+
 function fetchBooks() {
   return ((dispatch) => {
     axios.get('/api/v1/books', { 'x-access-token': token })
@@ -44,6 +52,15 @@ function fetchBooks() {
       })
       .catch(err => err);
   });
+}
+
+function fetchBook(id) {
+  return axios.get(`/api/v1/books/${id}`, { 'x-access-token': token })
+    .then((res) => {
+      store.dispatch(bookFetched(res.data));
+      return res.data;
+    })
+    .catch(err => err);
 }
 
 function saveBook(data) {
@@ -81,10 +98,12 @@ function deleteBook(dataId) {
 
 export {
   fetchBooks,
+  fetchBook,
   setBooks,
   saveBook,
   deleteBook,
   updateBook,
+  BOOK_FETCHED,
   BOOK_DELETED,
   BOOK_UPDATED,
   SET_BOOKS,
