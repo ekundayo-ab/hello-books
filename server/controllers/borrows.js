@@ -203,6 +203,47 @@ class BorrowController {
       })
       .catch((error) => { res.send(error.toString()); });
   }
+
+  static getBorrowedBook(req, res) {
+    return Borrow
+      .findOne({
+        where: {
+          userId: req.decoded.data.id,
+          bookId: req.params.bookId,
+          returned: false,
+        },
+      })
+      .then((foundBorrowedBook) => {
+        if (foundBorrowedBook) {
+          return res.status(200).send({ success: true, message: 'You borrowed this book', foundBorrowedBook });
+        }
+        return res.status(200).send({ success: false, message: 'Cleared, Not borrowed by you!' });
+      })
+      .catch(() => res.status(500).send({ success: false, message: 'Internal Server Error' }));
+  }
+
+  static getAllBorrowedBooks(req, res) {
+    return Borrow
+      .findAll({
+        where: {
+          userId: req.params.userId,
+        },
+        include: [
+          { model: Book, as: 'book', required: true },
+        ],
+      })
+      .then((borrowedBooks) => {
+        if (borrowedBooks.length < 1) {
+          return res.status(404).send({ success: false, message: 'You have not borrowed any book' });
+        }
+        const p = [];
+        for (let i = 0; i < borrowedBooks.length; i += 1) {
+          p[i] = borrowedBooks[i].book; // For now let's not use this
+        }
+        return res.status(200).send({ success: true, borrowedBooks });
+      })
+      .catch((error) => { res.send(error.toString()); });
+  }
 }
 
 export default BorrowController;
