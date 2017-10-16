@@ -75,6 +75,10 @@ class BookDetail extends Component {
   }
 }
 
+BookDetail.defaultProps = {
+  userId: PropTypes.number.isRequired,
+};
+
 BookDetail.propTypes = {
   book: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
