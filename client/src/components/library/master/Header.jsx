@@ -28,18 +28,18 @@ class Header extends Component {
         <nav>
           <div className="nav-wrapper">
             <Link to="/" className="brand-logo">HelloBooks</Link>
-            <Link to="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></Link>
+            <a href="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></a>
             <ul className="right hide-on-med-and-down">
-              <li><NavLink activeClassName="active" to="/shelf">Shelf</NavLink></li>
-              <li><NavLink activeClassName="active" to="/history">History</NavLink></li>
+              <li><NavLink activeClassName="active" to="/shelf"><i className="fa fa-book" /> Shelf</NavLink></li>
+              <li><NavLink activeClassName="active" to="/history"><i className="fa fa-history" /> History</NavLink></li>
               {this.props.isAdmin === 'admin' && <li><NavLink activeClassName="active" to="/admin"><i className="fa fa-gear" /> Admin Dashboard</NavLink></li>}
               <li><NavLink activeClassName="active" to="/profile"><i className="fa fa-user" /> Profile</NavLink></li>
               <li><Link onClick={this.handleLogout} to=""><i className="fa fa-sign-out" /> Logout</Link></li>
             </ul>
             <ul className="side-nav" id="mobile-demo">
               <li className="mobile-header"><Link to="">HelloBooks</Link></li>
-              <li><NavLink activeClassName="active" to="/shelf">Shelf</NavLink></li>
-              <li><NavLink activeClassName="active" to="/history">History</NavLink></li>
+              <li><NavLink activeClassName="active" to="/shelf"><i className="fa fa-book" /> Shelf</NavLink></li>
+              <li><NavLink activeClassName="active" to="/history"><i className="fa fa-history" /> History</NavLink></li>
               <li><NavLink activeClassName="active" to="/admin"><i className="fa fa-gear" /> Admin Dashboard</NavLink></li>
               <li><NavLink activeClassName="active" to="/profile"><i className="fa fa-user" /> Profile</NavLink></li>
               <li><Link onClick={this.handleLogout} to="/"><i className="fa fa-sign-out" /> Logout</Link></li>
