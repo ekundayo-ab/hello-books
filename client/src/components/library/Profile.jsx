@@ -103,7 +103,7 @@ class Profile extends Component {
             </div>
             <div className="col s12 m12 l9">
               <div className="card-panel row">
-                {this.props.books.length > 0 ? 
+                {this.props.books.length > 0 ?
                   (<table className="responsive-table">
                     <thead>
                       <tr>
