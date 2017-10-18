@@ -39,7 +39,11 @@ class Shelf extends Component {
             <div className="col s12 m12 l9">
               <div className="card-panel">
                 <div className="row">
-                  {this.props.books.map(book => <BookCard book={book} key={book.id} />)}
+                  {
+                    this.props.books.length > 0 ?
+                      this.props.books.map(book => <BookCard book={book} key={book.id} />) :
+                      <h5>Woof! No books in the shelf now, check back later</h5>
+                  }
                 </div>
               </div>
               <ul className="pagination center-align">
