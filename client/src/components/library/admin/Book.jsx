@@ -34,7 +34,7 @@ class Book extends Component {
   render() {
     return (
       <tr>
-        <td className="teal-text">{this.props.book.id}</td>
+        <td className="teal-text">{this.props.index}</td>
         <td className="green-text admin-book-list"><img src={this.props.book.image} alt="" /></td>
         <td>{this.props.book.title}</td>
         <td>{this.props.book.author}</td>
@@ -64,6 +64,7 @@ class Book extends Component {
 
 Book.propTypes = {
   book: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
 };
 
 export default connect(null, { deleteBook })(Book);

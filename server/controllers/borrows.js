@@ -117,12 +117,8 @@ class BorrowController {
           include: [
             { model: Book, as: 'book', required: true },
           ],
-        }).then((foundBorrow) => {
-          // If borrowed and returned, then you have no business returning again.
-          if (foundBorrow) {
-            return res.status(409).send({ success: false, message: 'Book returned already', foundBorrow });
-          }
-          // Else, allows to return
+        }).then(() => {
+          let updatedBorrowedBook;
           return Borrow
             .update({
               userId: req.params.userId, // Sets userId to that supplied in path parameter
@@ -135,6 +131,19 @@ class BorrowController {
               if (borrowUpdated[0] === 0) {
                 return res.status(404).send({ success: false, message: 'You have not borrowed this book' });
               }
+              Borrow
+                .findOne({
+                  where: {
+                    userId: req.params.userId,
+                    bookId: req.body.bookId,
+                    returned: true,
+                  },
+                  include: [
+                    { model: Book, as: 'book', required: true },
+                  ],
+                }).then((foundUpdatedBorrow) => {
+                  updatedBorrowedBook = foundUpdatedBorrow;
+                });
               // Searches if book is available in the database
               return Book
                 .findOne({
@@ -151,8 +160,8 @@ class BorrowController {
                     .update({
                       quantity: foundBorrowedBook.quantity + 1,
                     })
-                    .then((updatedBorrowedBook) => {
-                      res.status(200).send({ success: true, message: `${updatedBorrowedBook.title} succesfully returned but pending review by Administrator`, updatedBorrowedBook });
+                    .then((updatedBook) => {
+                      res.status(200).send({ success: true, message: `${updatedBook.title} succesfully returned but pending review by Administrator`, updatedBook, updatedBorrowedBook });
                     })
                     .catch((error) => {
                       res.status(400).send({ success: false, message: `Oops! something happened, ${error.message}` });
@@ -185,7 +194,7 @@ class BorrowController {
       .findAll({
         where: {
           userId: req.params.userId,
-          returned: req.query.returned,
+          returned: false,
         },
         include: [
           { model: Book, as: 'book', required: true },
@@ -193,7 +202,9 @@ class BorrowController {
       })
       .then((borrow) => {
         if (borrow.length < 1) {
-          return res.status(404).send({ success: false, message: 'You have no books to return' });
+          return res.status(200).send({
+            success: false,
+            message: 'You have no books to return' });
         }
         const p = [];
         for (let i = 0; i < borrow.length; i += 1) {
@@ -201,7 +212,7 @@ class BorrowController {
         }
         return res.status(200).send({ success: true, borrow });
       })
-      .catch((error) => { res.send(error.toString()); });
+      .catch(() => { res.status(500).send({ success: false, message: 'Internal Server Error' }); });
   }
 
   static getBorrowedBook(req, res) {

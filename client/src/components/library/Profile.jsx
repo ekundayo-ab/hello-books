@@ -1,13 +1,25 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
-import img1 from '../../../public/images/1.png';
-import img2 from '../../../public/images/2.png';
-import img3 from '../../../public/images/3.png';
-import img4 from '../../../public/images/4.png';
-import img5 from '../../../public/images/5.png';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import { getBorrowedNotReturned, returnBook } from '../../actions/borrowActions';
 import dayo from '../../../public/images/dayo.png';
 
-class Shelf extends Component {
+class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.handleBookReturn = this.handleBookReturn.bind(this);
+    this.userId = JSON.parse(localStorage.getItem('userDetails')).id;
+  }
+  componentDidMount() {
+    getBorrowedNotReturned(this.userId);
+  }
+
+  handleBookReturn(bookId) {
+    returnBook(this.userId, bookId);
+  }
+
   render() {
     return (
       <div>
@@ -91,61 +103,37 @@ class Shelf extends Component {
             </div>
             <div className="col s12 m12 l9">
               <div className="card-panel row">
-                <table className="responsive-table">
-                  <thead>
-                    <tr>
-                      <th>S/N</th>
-                      <th>Image</th>
-                      <th>Title</th>
-                      <th>Author</th>
-                      <th>Date Borrowed</th>
-                      <th>Return</th>
-                    </tr>
-                  </thead>
+                {this.props.books.length > 0 ? 
+                  (<table className="responsive-table">
+                    <thead>
+                      <tr>
+                        <th>S/N</th>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Date Borrowed</th>
+                        <th>Return</th>
+                      </tr>
+                    </thead>
 
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td className="return-image"><img src={img1} alt="" /> </td>
-                      <td>Kaveller & Clay</td>
-                      <td>Thomas Jenkins</td>
-                      <td>March 13th, 2016</td>
-                      <td><a href="" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td className="return-image"><img src={img2} alt="" /></td>
-                      <td>Half of a yellow sun</td>
-                      <td>Chimamanda Adichie</td>
-                      <td>March 13th, 2016</td>
-                      <td><a href="" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td className="return-image"><img src={img3} alt="" /></td>
-                      <td>Half of a yellow sun</td>
-                      <td>Chimamanda Adichie</td>
-                      <td>March 13th, 2016</td>
-                      <td><a href="" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td className="return-image"><img src={img4} alt="" /></td>
-                      <td>Title Marks</td>
-                      <td>First Line finish</td>
-                      <td>March 13th, 2016</td>
-                      <td><a href="" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td className="return-image"><img src={img5} alt="" /></td>
-                      <td>Kaveller & Clay</td>
-                      <td>Thomas Jenkins</td>
-                      <td>March 13th, 2016</td>
-                      <td><a href="" className="btn"><i className="fa fa-2x fa-mail-forward" /> Return</a></td>
-                    </tr>
-                  </tbody>
-                </table>
+                    <tbody>
+                      {this.props.books.map((bookNotReturned, index) =>
+                        (<tr key={bookNotReturned.id}>
+                          <td>{index + 1}</td>
+                          <td className="return-image"><img src={bookNotReturned.book.image} alt="" /> </td>
+                          <td>{bookNotReturned.book.title}</td>
+                          <td>{bookNotReturned.book.author}</td>
+                          <td>{moment(bookNotReturned.book.createdAt).format('MMMM Do YYYY')}</td>
+                          <td>
+                            <button className="btn" onClick={() => { this.handleBookReturn(bookNotReturned.book.id); }}>
+                              <i className="fa fa-2x fa-mail-forward" />
+                              Return
+                            </button>
+                          </td>
+                        </tr>),
+                      )}
+                    </tbody>
+                  </table>) : (<h5>All Clean!, You have no books to return</h5>)}
               </div>
               <ul className="pagination center-align">
                 <li className="disabled"><a href="#!"><i className="material-icons">chevron_left</i></a></li>
@@ -164,4 +152,14 @@ class Shelf extends Component {
   }
 }
 
-export default Shelf;
+Profile.propTypes = {
+  books: PropTypes.array.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    books: state.borrows,
+  };
+}
+
+export default connect(mapStateToProps, { getBorrowedNotReturned })(Profile);
