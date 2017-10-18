@@ -83,7 +83,6 @@ BookDetail.propTypes = {
   book: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  userId: PropTypes.number,
   borrow: PropTypes.object.isRequired,
 };
 

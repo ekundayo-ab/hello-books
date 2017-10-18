@@ -6,14 +6,14 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { fetchAllBorrowedBooks } from '../../actions/borrowActions';
 
-class Shelf extends Component {
+class History extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
     };
   }
-  componentDidMount() {
+  componentWillMount() {
     const userId = JSON.parse(localStorage.getItem('userDetails')).id;
     fetchAllBorrowedBooks(userId);
   }
@@ -22,9 +22,9 @@ class Shelf extends Component {
     const noBorrowHistory = (
       <p>You have not borrowed any book!</p>
     );
-    const historySingle = this.props.books.map(borrowedBook =>
+    const historySingle = this.props.books.map((borrowedBook, index) =>
       (<tr key={borrowedBook.id}>
-        <td className="teal-text">{borrowedBook.id}</td>
+        <td className="teal-text">{index + 1}</td>
         <td className="green-text">
           <i
             className={classnames('fa', { 'fa-close red-text': !borrowedBook.returned, 'fa-check green-text': borrowedBook.returned })}
@@ -103,7 +103,7 @@ class Shelf extends Component {
   }
 }
 
-Shelf.propTypes = {
+History.propTypes = {
   books: PropTypes.array.isRequired,
 };
 
@@ -114,4 +114,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchAllBorrowedBooks })(Shelf);
+export default connect(mapStateToProps, { fetchAllBorrowedBooks })(History);

@@ -1,12 +1,14 @@
 /* eslint-disable no-case-declarations, no-underscore-dangle */
-import { ADD_BORROW, SET_BORROWED_BOOKS } from './../actions/borrowActions';
+import { SET_BORROWED_BOOKS, SET_BORROWED_NOT_RETURNED_BOOKS, BORROWED_RETURNED } from './../actions/borrowActions';
 
 export default function borrows(state = [], action = {}) {
   switch (action.type) {
-    case ADD_BORROW:
-      return [...state, action.borrow];
     case SET_BORROWED_BOOKS:
       return action.borrowedBooks;
+    case SET_BORROWED_NOT_RETURNED_BOOKS:
+      return action.bookList;
+    case BORROWED_RETURNED:
+      return state.filter(item => item.id !== action.book.id);
     default:
       return state;
   }
