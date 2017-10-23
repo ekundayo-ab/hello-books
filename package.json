@@ -57,6 +57,7 @@
     "materialize-css": "^0.100.2",
     "moment": "^2.19.1",
     "morgan": "^1.8.2",
+    "node-sass": "^4.5.3",
     "pg": "^7.2.0",
     "pg-hstore": "^2.3.2",
     "promise": "8.0.1",
@@ -76,6 +77,7 @@
     "sequelize-cli": "^2.8.0",
     "shortid": "^2.2.8",
     "style-loader": "0.18.2",
+    "sass-loader": "^6.0.6",
     "swagger-jsdoc": "^1.9.7",
     "sweetalert": "^2.0.5",
     "url-loader": "0.5.9",
@@ -96,10 +98,8 @@
     "faker": "^4.1.0",
     "mocha": "^3.5.0",
     "mocha-lcov-reporter": "^1.3.0",
-    "node-sass": "^4.5.3",
     "nyc": "^11.1.0",
     "sass-lint": "^1.11.1",
-    "sass-loader": "^6.0.6",
     "should": "^11.2.1",
     "supertest": "^3.0.0"
   }
