@@ -56,7 +56,7 @@ app.get('/api/docs/hellobooks.json', (req, res) => {
 
 // Default catch all route for static files from build folder
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/dist/index.html'));
+  res.sendFile(path.join(__dirname, './client/public/index.html'));
 });
 
 
