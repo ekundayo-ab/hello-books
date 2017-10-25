@@ -109,7 +109,7 @@ class UserController {
           } else {
             const token = jwt.sign({
               data: { id: user.id, role: user.role, username: user.username },
-            }, 'hello-books', { expiresIn: 60 * 60 });
+            }, process.env.JWT_SECRET, { expiresIn: 60 * 60 });
             res.json({ success: true, message: `Hi ${user.username}, you are logged in`, token });
           }
         }
@@ -159,6 +159,62 @@ class UserController {
         return res.status(200).send({ success: true, message: 'Available' });
       })
       .catch(err => res.status(400).send(err));
+  }
+
+  static googleAuth(req, res) {
+    if (req.body.username.trim() === '' ||
+    req.body.password.trim() === '' || req.body.email.trim() === '') {
+      return res.status(400).send({ success: false, message: 'Please enter correct data' });
+    }
+    return User
+      .findOne({
+        where: {
+          $or: {
+            email: req.body.email,
+            username: req.body.username,
+          },
+        },
+      })
+      .then((foundUser) => {
+        if (foundUser) {
+          const token = jwt.sign({
+            data: { id: foundUser.id, role: foundUser.role, username: foundUser.username },
+          }, process.env.JWT_SECRET, { expiresIn: 60 * 60 });
+          return res.status(200).send({
+            success: true,
+            message: `Hi ${foundUser.username}, you are logged in`,
+            token,
+          });
+        }
+        return User
+          .create({
+            username: req.body.username,
+            email: req.body.email,
+            password: bcrypt.hashSync(req.body.password, 10),
+            role: req.body.role,
+          })
+          .then((user) => {
+            let token;
+            if (user) {
+              token = jwt.sign({
+                data: { id: user.id, role: user.role, username: user.username },
+              }, process.env.JWT_SECRET, { expiresIn: 60 * 60 });
+              return res.status(201).send({
+                success: true,
+                message: `Hi ${user.username}, registration successful!`,
+                token,
+              });
+            }
+            return res.status(400).send({
+              success: false,
+              message: 'Something happened, ensure you sign in to your google account',
+            });
+          })
+          .catch(() => { res.status(409).send({ success: false, message: 'A user with that email/username' }); });
+      })
+      .catch(() => {
+        res.send({ success: false, message: 'Internal server error' });
+      });
   }
 }
 

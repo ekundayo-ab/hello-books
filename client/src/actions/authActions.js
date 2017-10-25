@@ -43,6 +43,36 @@ function login(data) {
     );
 }
 
+function googleAuth(data) {
+  const user = {
+    token: data.tokenObj.access_token,
+    username: data.w3.ig.split(' ')[0],
+    email: data.w3.U3,
+    role: 'normal',
+    password: data.tokenObj.id_token,
+    passwordConfirmation: data.tokenObj.id_token,
+  };
+  return axios.post('/api/v1/auth/google', user)
+    .then((res) => {
+      Materialize.toast(res.data.message, 4000, 'green');
+      const token = res.data.token;
+      localStorage.setItem('jwtToken', token);
+      store.dispatch(setCurrentUser(user));
+      setAuthorizationHeader(token);
+      return {
+        success: res.data.success,
+        message: res.data.message,
+      };
+    })
+    .catch((err) => {
+      Materialize.toast(err.response.data.message, 4000, 'red');
+      return {
+        success: err.response.data.success,
+        message: err.response.data.message,
+      };
+    });
+}
+
 function logout() {
   const user = {};
   store.dispatch(unsetCurrentUser(user));
@@ -63,4 +93,5 @@ export {
   login,
   isUserExists,
   logout,
+  googleAuth,
 };
