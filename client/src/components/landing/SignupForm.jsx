@@ -102,6 +102,7 @@ class SignUp extends Component {
           <form onSubmit={this.onSubmit}>
             <div className="center-align col s12">
               <GoogleLogin
+                className="google-btn"
                 clientId="530102763421-emmil7mu3jjlqr1c6vqm19k8mnc40cjp.apps.googleusercontent.com"
                 buttonText="Login"
                 onSuccess={this.responseGoogle}
