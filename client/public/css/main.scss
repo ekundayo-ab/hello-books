@@ -19,6 +19,7 @@ $alert-success-text: #3c763d;
 $alert-success-background: #dff0d8;
 $alert-danger-text: #f2dede;
 $alert-danger-background: #a94442;
+$google-btn: rgb(209, 72, 54);
 
 @mixin background-size($bg-size) {
   background-size: $bg-size;
@@ -432,4 +433,19 @@ p {
   &.book-count {
     padding: 10px;
   }
+}
+
+// Google signup button
+.google-btn {
+  background: $google-btn;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: $pure-white;
+  display: inline-block;
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: bold;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  width: 119px;
 }
