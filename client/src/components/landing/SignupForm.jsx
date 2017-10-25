@@ -2,9 +2,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import GoogleLogin from 'react-google-login';
 import PropTypes from 'prop-types';
 import classname from 'classnames';
-import { userSignUpRequest, isUserExists, login } from '../../actions/authActions';
+import { userSignUpRequest, isUserExists, login, googleAuth } from '../../actions/authActions';
 import Helper from './../../helpers/index';
 
 class SignUp extends Component {
@@ -23,6 +24,17 @@ class SignUp extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.checkUserExists = this.checkUserExists.bind(this);
+    this.responseGoogle = this.responseGoogle.bind(this);
+  }
+
+  responseGoogle(response) {
+    googleAuth(response)
+      .then((res) => {
+        if (res.success) {
+          this.props.history.push('/shelf');
+        }
+        return false;
+      });
   }
 
   onChange(e) {
@@ -89,7 +101,17 @@ class SignUp extends Component {
         <div className="row">
           <form onSubmit={this.onSubmit}>
             <div className="center-align col s12">
-              <button className="btn red"><i className="fa fa-google-plus-official fa-2x" /> Google+</button><br />
+              <GoogleLogin
+                clientId="530102763421-emmil7mu3jjlqr1c6vqm19k8mnc40cjp.apps.googleusercontent.com"
+                buttonText="Login"
+                onSuccess={this.responseGoogle}
+                onFailure={this.responseGoogle}
+              >
+                <i
+                  className="fa fa-google-plus-official fa-2x"
+                />
+                 &nbsp; GOOGLE+
+              </GoogleLogin><br /> <br />
               <span className="or"><i>Or</i></span>
             </div>
             <div className={classname('input-field', 'col s12', { 'has-error': errors.username })}>

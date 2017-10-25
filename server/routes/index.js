@@ -118,6 +118,8 @@ Router.post('/users/signup', usersController.signup); // Route to sign up
 Router.post('/users/signin', usersController.signin); // Route to sign in
 Router.post('/users', usersController.findUser); // Checks if a User exists in the database
 
+Router.post('/auth/google', usersController.googleAuth);
+
 Router.use(authMiddleware.authenticate); // Authentication middleware
 
 /**
