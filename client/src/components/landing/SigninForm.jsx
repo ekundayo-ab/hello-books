@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import SingleInput from './forms/SingleInput';
+import SingleInput from '../forms/SingleInput';
 import Helper from './../../helpers/index';
 import { login } from '../../actions/authActions';
 

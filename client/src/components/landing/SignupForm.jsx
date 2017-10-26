@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
 import PropTypes from 'prop-types';
-import SingleInput from './forms/SingleInput';
+import SingleInput from '../forms/SingleInput';
 import { userSignUpRequest, isUserExists, login, googleAuth } from '../../actions/authActions';
 import Helper from './../../helpers/index';
 
