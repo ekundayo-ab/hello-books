@@ -80,12 +80,16 @@ class BookForm extends Component {
   handleSubmit(e) {
     e.preventDefault();
     const errors = {};
-    if (this.state.isbn === '') errors.isbn = 'Can\'t be empty';
-    if (this.state.title === '') errors.title = 'Can\'t be empty';
-    if (this.state.author === '') errors.author = 'Can\'t be empty';
-    if (this.state.quantity === '') errors.quantity = 'Can\'t be empty and must be number';
-    if (this.state.description === '') errors.description = 'Can\'t be empty';
-    if (this.state.category === '') errors.category = 'Can\'t be empty';
+    if (this.state.isbn.trim() === '' || isNaN(this.state.isbn)) {
+      errors.isbn = 'Can\'t be empty and must be number';
+    }
+    if (this.state.title.trim() === '') errors.title = 'Can\'t be empty';
+    if (this.state.author.trim() === '') errors.author = 'Can\'t be empty';
+    if (this.state.quantity === '' || isNaN(this.state.quantity)) {
+      errors.quantity = 'Can\'t be empty and must be number';
+    }
+    if (this.state.description.trim() === '') errors.description = 'Can\'t be empty';
+    if (this.state.category.trim() === '') errors.category = 'Can\'t be empty';
     this.setState({ errors });
     const isValid = Object.keys(errors).length === 0;
 
