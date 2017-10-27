@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { Input } from 'react-materialize';
-import axios from 'axios';
 import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
+import SingleInputWithIcon from '../../forms/SingleInputWithIcon';
+import TextAreaInput from '../../forms/TextAreaInput';
 import { saveBook } from './../../../actions/bookActions';
 import { fetchCategories } from './../../../actions/categoryActions';
+import { handleDrop } from './../../../helpers/utilities';
 import droploader from '../../../../public/images/dropzone.gif';
 
 class BookForm extends Component {
@@ -27,7 +29,7 @@ class BookForm extends Component {
     };
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleDrop = this.handleDrop.bind(this);
+    this.handleFileUpload = this.handleFileUpload.bind(this);
   }
 
   componentDidMount() {
@@ -47,38 +49,19 @@ class BookForm extends Component {
     }
   }
 
-  handleDrop(files) {
-    // Push all the axios request promise into a single array
-    const uploaders = files.map((file) => {
-      // Initial FormData
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'bdnqjpo9'); // Replace the preset name with your own
-      formData.append('api_key', '135232672986957'); // Replace API key with your own Cloudinary key
-      formData.append('timestamp', (Date.now() / 1000) | 0); // eslint-disable-line no-bitwise
-      this.setState({ dropzoneLoader: true });
-      // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
-      return axios.post('https://api.cloudinary.com/v1_1/dcl7tqhww/image/upload', formData, {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        transformRequest: [(data, headers) => {
-          delete headers.common['x-access-token']; // eslint-disable-line no-param-reassign
-          return data;
-        }],
-      }).then((response) => {
-        const data = response.data;
-        // You should store this URL for future references in your app
-        // const fileURL = data.secure_url;
-        this.setState({ dropzoneLoader: false, image: data.url });
-      });
-    });
-    // Once all the files are uploaded
-    axios.all(uploaders).then(() => {
-      this.setState({ coverUploaded: true });
+  handleFileUpload(files) {
+    this.setState({ dropzoneLoader: true });
+    handleDrop(files).then((cloudinaryResponse) => {
+      if (cloudinaryResponse.imageUploaded) {
+        this.setState({ coverUploaded: true });
+        return this.setState({ dropzoneLoader: false, image: cloudinaryResponse.data.secure_url });
+      }
+      return cloudinaryResponse;
     });
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
+  handleSubmit(event) {
+    event.preventDefault();
     const errors = {};
     if (this.state.isbn.trim() === '' || isNaN(this.state.isbn)) {
       errors.isbn = 'Can\'t be empty and must be number';
@@ -119,6 +102,7 @@ class BookForm extends Component {
   }
 
   render() {
+    const { errors } = this.state;
     const style = {
       marginLeft: '25%',
       width: '50%',
@@ -138,39 +122,60 @@ class BookForm extends Component {
       <div>
         {!!this.state.errors.global && <div className="alert-danger">{this.state.errors.global}</div>}
         <form onSubmit={this.handleSubmit}>
-          <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.isbn })}>
-            <i className="fa fa-list-ol prefix " />
-            <input
-              id="icon_prefix"
-              name="isbn"
-              onChange={this.onChange}
-              value={this.state.isbn}
-              placeholder="ISBN"
-              type="text"
-              className=" validate"
-            /><br />
-            <span style={{ textAlign: 'left', marginLeft: '45px' }} className="has-error">{this.state.errors.isbn}</span>
-          </div>
-          <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.title })}>
-            <i className="fa fa-pencil prefix " />
-            <input id="icon_prefix" name="title" onChange={this.onChange} value={this.state.title} placeholder="Title" type="text" className=" validate" />
-            <span style={{ textAlign: 'left', marginLeft: '45px' }} className="help-block">{this.state.errors.title}</span>
-          </div>
-          <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.author })}>
-            <i className="fa fa-user-circle prefix " />
-            <input id="icon_telephone" name="author" onChange={this.onChange} value={this.state.author} placeholder="Author" type="tel" className=" validate" />
-            <span style={{ textAlign: 'left', marginLeft: '45px' }}>{this.state.errors.author}</span>
-          </div>
-          <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.quantity })}>
-            <i className="fa fa-plus-circle prefix " />
-            <input id="icon_telephone" name="quantity" onChange={this.onChange} value={this.state.quantity} placeholder="Quantity" type="number" className=" validate" />
-            <span style={{ textAlign: 'left', marginLeft: '45px' }}>{this.state.errors.quantity}</span>
-          </div>
-          <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.description })}>
-            <i className="fa fa-edit prefix " />
-            <textarea id="description" name="description" onChange={this.onChange} value={this.state.description} rows="50" cols="50" className="materialize-textarea  validate" placeholder="Enter description" />
-            <span style={{ textAlign: 'left', marginLeft: '45px' }}>{this.state.errors.description}</span>
-          </div>
+          <SingleInputWithIcon
+            placeholder="ISBN"
+            identifier="icon_prefix"
+            inputName="isbn"
+            inputType="text"
+            inputClass="validate"
+            controlFunc={this.onChange}
+            content={this.state.isbn}
+            fieldError={errors.isbn}
+            iconClass={'fa fa-list-ol prefix'}
+          />
+          <SingleInputWithIcon
+            placeholder="Title"
+            identifier="icon_prefix"
+            inputName="title"
+            inputType="text"
+            inputClass="validate"
+            controlFunc={this.onChange}
+            content={this.state.title}
+            fieldError={errors.title}
+            iconClass={'fa fa-pencil prefix'}
+          />
+          <SingleInputWithIcon
+            placeholder="Author"
+            identifier="icon_prefix"
+            inputName="author"
+            inputType="text"
+            inputClass="validate"
+            controlFunc={this.onChange}
+            content={this.state.author}
+            fieldError={errors.author}
+            iconClass={'fa fa-user-circle prefix'}
+          />
+          <SingleInputWithIcon
+            placeholder="Quantity"
+            identifier="icon_prefix"
+            inputName="quantity"
+            inputType="text"
+            inputClass="validate"
+            controlFunc={this.onChange}
+            content={this.state.quantity}
+            fieldError={errors.quantity}
+            iconClass={'fa fa-plus-circle prefix'}
+          />
+          <TextAreaInput
+            placeholder={'Enter description'}
+            identifier={'description'}
+            name={'description'}
+            rows={50}
+            cols={50}
+            controlFunc={this.onChange}
+            content={this.state.description}
+            fieldError={errors.description}
+          />
           <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.category })}>
             <i className="fa fa-list fa-2x prefix " />
             <Input
@@ -180,14 +185,14 @@ class BookForm extends Component {
               type="select"
               onChange={this.onChange}
             >
-              <option value="Unsorted">Unsorted</option>
+              <option value="">Unsorted</option>
               {selectorOptions}
             </Input>
             <span style={{ textAlign: 'left', marginLeft: '45px' }}>{this.state.errors.category}</span>
           </div>
           <p>Drop book image file below or click below to upload</p>
           <Dropzone
-            onDrop={this.handleDrop}
+            onDrop={this.handleFileUpload}
             multiple
             accept="image/*"
           >
