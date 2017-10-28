@@ -48,6 +48,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('./client/dist/')); // configure static files folder
+app.use(express.static('./client/public/')); // configure static files folder
 app.use('/api/docs/', express.static(path.join(__dirname, 'server/api-docs/')));
 app.post('/api/v1/verify-token',
   authMiddleware.authenticate, authMiddleware.verifyToken);
