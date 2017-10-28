@@ -12,8 +12,11 @@ const port = process.env.PORT || 8000;
 const app = express();
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE, HEAD');
-  res.header('Access-Control-Allow-Headers', 'Authorization, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods',
+    'POST, GET, OPTIONS, PUT, DELETE, HEAD');
+  res.header('Access-Control-Allow-Headers',
+    'Authorization, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept'
+  );
   next();
 });
 const swaggerJSDoc = swagger;
@@ -22,7 +25,8 @@ const swaggerDefinition = {
   info: {
     title: 'HelloBooks API',
     version: '1.0.0',
-    description: 'An application that helps manage a library and its processes like stocking, tracking and renting of books.',
+    description: 'An application that helps manage a library' +
+    'and its processes like stocking, tracking and renting of books.',
   },
   host: 'hellobooks-e.herokuapp.com',
   // host: 'localhost:8000',
@@ -45,7 +49,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('./client/dist/')); // configure static files folder
 app.use('/api/docs/', express.static(path.join(__dirname, 'server/api-docs/')));
-app.post('/api/v1/verify-token', authMiddleware.authenticate, authMiddleware.verifyToken);
+app.post('/api/v1/verify-token',
+  authMiddleware.authenticate, authMiddleware.verifyToken);
 app.use('/api/v1', router);
 
 // serve swagger
