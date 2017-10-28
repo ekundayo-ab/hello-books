@@ -30,7 +30,7 @@ class Header extends Component {
             <Link to="/" className="brand-logo">HelloBooks</Link>
             <a href="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></a>
             <ul className="right hide-on-med-and-down">
-              <li><NavLink activeClassName="active" to="/shelf"><i className="fa fa-book" /> Shelf</NavLink></li>
+              <li><NavLink activeClassName="active" to="/shelf?page=1"><i className="fa fa-book" /> Shelf</NavLink></li>
               <li><NavLink activeClassName="active" to="/history"><i className="fa fa-history" /> History</NavLink></li>
               {this.props.isAdmin === 'admin' && <li><NavLink activeClassName="active" to="/admin"><i className="fa fa-gear" /> Admin Dashboard</NavLink></li>}
               <li><NavLink activeClassName="active" to="/profile"><i className="fa fa-user" /> Profile</NavLink></li>
@@ -38,7 +38,7 @@ class Header extends Component {
             </ul>
             <ul className="side-nav" id="mobile-demo">
               <li className="mobile-header"><Link to="">HelloBooks</Link></li>
-              <li><NavLink activeClassName="active" to="/shelf"><i className="fa fa-book" /> Shelf</NavLink></li>
+              <li><NavLink activeClassName="active" to="/shelf?page=1"><i className="fa fa-book" /> Shelf</NavLink></li>
               <li><NavLink activeClassName="active" to="/history"><i className="fa fa-history" /> History</NavLink></li>
               <li><NavLink activeClassName="active" to="/admin"><i className="fa fa-gear" /> Admin Dashboard</NavLink></li>
               <li><NavLink activeClassName="active" to="/profile"><i className="fa fa-user" /> Profile</NavLink></li>

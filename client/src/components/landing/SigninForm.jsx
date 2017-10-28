@@ -38,7 +38,7 @@ class SignIn extends Component {
         (res) => {
           if (res.isAuthenticated) {
             Materialize.toast(res.message, 1000, 'green');
-            return this.props.history.push('/shelf');
+            return this.props.history.push('/shelf?page=1');
           }
           this.setState({ errors: {}, isLoading: false });
           return Materialize.toast(res.message, 1000, 'red');

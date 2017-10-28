@@ -31,7 +31,7 @@ class SignUp extends Component {
     googleAuth(response)
       .then((res) => {
         if (res.success) {
-          this.props.history.push('/shelf');
+          this.props.history.push('/shelf?page=1');
         }
         return false;
       });
