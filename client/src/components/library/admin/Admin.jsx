@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-materialize';
+import classnames from 'classnames';
+import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import BookForm from './BookForm';
 import CategoryForm from './CategoryForm';
@@ -13,16 +15,47 @@ import { fetchCategories } from './../../../actions/categoryActions';
 class Admin extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      pages: [],
+      pageId: 1,
+    };
     this.handleDelete = this.handleDelete.bind(this);
+    this.query = new URLSearchParams(this.props.history.location.search);
+    this.nextPage = this.nextPage.bind(this);
+    this.prevPage = this.prevPage.bind(this);
+  }
+
+  componentWillMount() {
+    let pageId = this.query.get('page');
+    if (pageId === null) pageId = 1;
+    this.props.fetchBooks(pageId)
+      .then((numberOfPages) => {
+        const pages = Array.from(Array(numberOfPages)).map((e, i) => i + 1);
+        this.setState({ pages, pageId });
+      });
   }
 
   componentDidMount() {
-    this.props.fetchBooks();
     this.props.fetchCategories();
     $(document).ready(() => {
       $('.modal').modal();
     });
   }
+
+  nextPage() {
+    const nextPage = parseInt(this.state.pageId, 10) + 1;
+    if (parseInt(this.state.pageId, 10) < this.state.pages.length) {
+      this.props.history.push(`/admin?page=${nextPage}`);
+    }
+  }
+
+  prevPage() {
+    const prevPage = parseInt(this.state.pageId, 10) - 1;
+    if (parseInt(this.state.pageId, 10) > 1) {
+      this.props.history.push(`/admin?page=${prevPage}`);
+    }
+  }
+
   /* eslint-disable */
   handleDelete(bookId) {
     swal({
@@ -72,6 +105,41 @@ class Admin extends Component {
                 </Modal>
               </div>
               <BookList books={this.props.books} handleDelete={this.handleDelete} />
+              <ul className="pagination center-align">
+                <li>
+                  <button
+                    className={classnames('btn', { disabled:
+                      parseInt(this.state.pageId, 10) <= 1 })}
+                    onClick={this.prevPage}
+                  >
+                    <i className="material-icons">chevron_left</i>
+                  </button>
+                </li>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                {
+                  this.state.pages.map(page =>
+                    (
+                      <li
+                        key={page}
+                        className={classnames('waves-effect',
+                          { active: this.state.pageId === String(page) })}
+                      >
+                        <Link to={`/admin?page=${page}`}>{page}</Link>
+                      </li>
+                    ),
+                  )
+                }
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <li>
+                  <button
+                    onClick={this.nextPage}
+                    className={classnames('btn', 'waves-effect',
+                      { disabled: parseInt(this.state.pageId, 10) >=
+                        this.state.pages.length })}
+                  >
+                    <i className="material-icons">chevron_right</i>
+                  </button></li>
+              </ul>
             </div>
           </div>
         </div>
@@ -82,6 +150,9 @@ class Admin extends Component {
 
 Admin.propTypes = {
   books: PropTypes.array.isRequired,
+  fetchBooks: PropTypes.func.isRequired,
+  fetchCategories: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

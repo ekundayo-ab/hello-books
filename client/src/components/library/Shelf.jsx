@@ -12,11 +12,14 @@ class Shelf extends Component {
     super(props);
     this.state = {
       pages: [],
-      pageId: null,
+      pageId: 1,
     };
     this.query = new URLSearchParams(this.props.history.location.search);
+    this.nextPage = this.nextPage.bind(this);
+    this.prevPage = this.prevPage.bind(this);
   }
-  componentDidMount() {
+
+  componentWillMount() {
     let pageId = this.query.get('page');
     if (pageId === null) pageId = 1;
     this.props.fetchBooks(pageId)
@@ -24,6 +27,20 @@ class Shelf extends Component {
         const pages = Array.from(Array(numberOfPages)).map((e, i) => i + 1);
         this.setState({ pages, pageId });
       });
+  }
+
+  nextPage() {
+    const nextPage = parseInt(this.state.pageId, 10) + 1;
+    if (parseInt(this.state.pageId, 10) < this.state.pages.length) {
+      this.props.history.push(`/shelf?page=${nextPage}`);
+    }
+  }
+
+  prevPage() {
+    const prevPage = parseInt(this.state.pageId, 10) - 1;
+    if (parseInt(this.state.pageId, 10) > 1) {
+      this.props.history.push(`/shelf?page=${prevPage}`);
+    }
   }
 
   render() {
@@ -77,27 +94,39 @@ class Shelf extends Component {
                 </div>
               </div>
               <ul className="pagination center-align">
-                <li className="disabled">
-                  <a href="#!">
+                <li>
+                  <button
+                    className={classnames('btn', { disabled:
+                      parseInt(this.state.pageId, 10) <= 1 })}
+                    onClick={this.prevPage}
+                  >
                     <i className="material-icons">chevron_left</i>
-                  </a>
+                  </button>
                 </li>
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 {
                   this.state.pages.map(page =>
                     (
                       <li
                         key={page}
                         className={classnames('waves-effect',
-                          { active: this.state.pageId === page })}
+                          { active: this.state.pageId === String(page) })}
                       >
                         <Link to={`/shelf?page=${page}`}>{page}</Link>
                       </li>
                     ),
                   )
                 }
-                <li className="waves-effect">
-                  <a href="#!"><i className="material-icons">chevron_right</i>
-                  </a></li>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <li>
+                  <button
+                    onClick={this.nextPage}
+                    className={classnames('btn', 'waves-effect',
+                      { disabled: parseInt(this.state.pageId, 10) >=
+                        this.state.pages.length })}
+                  >
+                    <i className="material-icons">chevron_right</i>
+                  </button></li>
               </ul>
             </div>
           </div>
@@ -108,7 +137,7 @@ class Shelf extends Component {
 }
 
 Shelf.propTypes = {
-  books: PropTypes.array.isRequired,
+  books: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchBooks: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };
