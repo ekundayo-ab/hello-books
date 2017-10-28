@@ -175,7 +175,6 @@ class BookController {
     let offset = 0;
     return Book.findAndCountAll()
       .then((data) => {
-        console.log(req.query.page);
         const page = req.query.page; // page number
         const pages = Math.ceil(data.count / limit);
         offset = limit * (page - 1);
