@@ -171,19 +171,30 @@ class BookController {
    * @memberOf BookController
    */
   static list(req, res) {
-    return Book
-      .findAll({
-        order: [
-          ['createdAt', 'ASC'],
-        ],
-      })
-      .then((book) => {
-        if (book[0] === undefined) {
-          return res.status(301).send({ success: false, message: 'Books not available, check back later.' });
-        }
-        return res.status(200).send(book);
-      })
-      .catch(() => res.status(400).send({ success: false, message: 'Ooops! something happened, check your inputs and try again.' }));
+    const limit = 2; // number of records per page
+    let offset = 0;
+    return Book.findAndCountAll()
+      .then((data) => {
+        console.log(req.query.page);
+        const page = req.query.page; // page number
+        const pages = Math.ceil(data.count / limit);
+        offset = limit * (page - 1);
+        return Book
+          .findAll({
+            order: [
+              ['createdAt', 'ASC'],
+            ],
+            limit,
+            offset,
+          })
+          .then((book) => {
+            if (book[0] === undefined) {
+              return res.status(301).send({ success: false, message: 'Books not available, check back later.' });
+            }
+            return res.status(200).send({ books: book, numberOfPages: pages });
+          })
+          .catch(() => res.status(400).send({ success: false, message: 'Ooops! something happened, check your inputs and try again.' }));
+      });
   }
 
   static findBook(req, res) {

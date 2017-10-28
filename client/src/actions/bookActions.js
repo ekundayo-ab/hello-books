@@ -44,11 +44,12 @@ export function bookFetched(book) {
   };
 }
 
-function fetchBooks() {
+function fetchBooks(pageNumber) {
   return ((dispatch) => {
-    axios.get('/api/v1/books', { 'x-access-token': token })
+    return axios.get(`/api/v1/books?page=${pageNumber}`, { 'x-access-token': token })
       .then((res) => {
-        dispatch(setBooks(res.data));
+        dispatch(setBooks(res.data.books));
+        return res.data.numberOfPages;
       })
       .catch(err => err);
   });
