@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Book from '../../library/admin/Book';
+import { Modal } from 'react-materialize';
+import UpdateBookModal from '../../library/admin/UpdateBookModal';
 
-const BookList = ({ books }) => {
+const BookList = (props) => {
   const emptyMessage = (
     <p>No books have been added yet.</p>
   );
@@ -21,7 +22,35 @@ const BookList = ({ books }) => {
         </tr>
       </thead>
       <tbody>
-        { books.map((book, index) => <Book book={book} index={index + 1} key={book.id} />)}
+        {props.books.map((book, index) =>
+          (
+            <tr key={book.id}>
+              <td className="teal-text">{ index + 1}</td>
+              <td className="green-text admin-book-list"><img src={book.image} alt="" /></td>
+              <td>{book.title}</td>
+              <td>{book.author}</td>
+              <td>{book.quantity}</td>
+              <td>
+                <Modal
+                  header="Update Book"
+                  trigger={<button className="btn white waves-effect waves-light"><i className="fa fa-edit green-text" /></button>}
+                >
+                  <UpdateBookModal book={book} />
+                </Modal>
+              </td>
+              <td>
+                <a
+                  role="button"
+                  tabIndex={0}
+                  className="btn white waves-effect"
+                  onClick={() => props.handleDelete(book.id)}
+                >
+                  <i className="fa fa-trash red-text" />
+                </a>
+              </td>
+            </tr>
+          ),
+        )}
       </tbody>
     </table>
   );
@@ -29,9 +58,9 @@ const BookList = ({ books }) => {
   return (
     <div>
       <div className="card-panel row">
-        {books.length === 0 ? emptyMessage : booksList}
+        {props.books.length === 0 ? emptyMessage : booksList}
       </div>
-      {books.length > 0 &&
+      {props.books.length > 0 &&
       <ul className="pagination center-align">
         <li className="disabled"><a href="#!"><i className="material-icons">chevron_left</i></a></li>
         <li className="active"><a href="#!">1</a></li>
@@ -47,7 +76,7 @@ const BookList = ({ books }) => {
 
 BookList.propTypes = {
   books: PropTypes.array.isRequired,
+  // handleDelete: PropTypes.func.isRequired,
 };
 
 export default BookList;
-

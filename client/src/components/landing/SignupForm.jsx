@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
 import PropTypes from 'prop-types';
-import classname from 'classnames';
+import SingleInput from '../forms/SingleInput';
 import { userSignUpRequest, isUserExists, login, googleAuth } from '../../actions/authActions';
 import Helper from './../../helpers/index';
 
@@ -108,63 +108,54 @@ class SignUp extends Component {
                 onSuccess={this.responseGoogle}
                 onFailure={this.responseGoogle}
               >
-                <i
-                  className="fa fa-google-plus-official fa-2x"
-                />
+                <i className="fa fa-google-plus-official fa-2x" />
                  &nbsp; GOOGLE+
               </GoogleLogin><br /> <br />
               <span className="or"><i>Or</i></span>
             </div>
-            <div className={classname('input-field', 'col s12', { 'has-error': errors.username })}>
-              <input
-                placeholder="Username"
-                id="username"
-                type="text"
-                className="validate"
-                onBlur={this.checkUserExists}
-                name="username"
-                onChange={this.onChange}
-                value={this.state.username}
-              />
-              {errors.username && <span className="help-block">{errors.username}</span> }
-            </div>
-            <div className={classname('input-field', 'col s12', { 'has-error': errors.email })}>
-              <input
-                placeholder="Email Address"
-                id="email"
-                type="email"
-                className="validate"
-                onBlur={this.checkUserExists}
-                name="email"
-                onChange={this.onChange}
-                value={this.state.email}
-              />
-              {errors.email && <span className="help-block">{errors.email}</span> }
-            </div>
-            <div className={classname('input-field', 'col s12', { 'has-error': errors.password })}>
-              <input
-                placeholder="Password"
-                id="password"
-                type="password"
-                className="validate"
-                name="password"
-                onChange={this.onChange}
-                value={this.state.password}
-              />
-              {errors.password && <span className="help-block">{errors.password}</span> }
-            </div>
-            <div className={classname('input-field', 'col s12', { 'has-error': errors.passwordConfirmation })}>
-              <input
-                placeholder="Confirm Password"
-                id="passwordConfirmation"
-                type="password"
-                className="validate"
-                name="passwordConfirmation"
-                onChange={this.onChange}
-                value={this.state.passwordConfirmation}
-              />
-              {errors.passwordConfirmation && <span className="help-block">{errors.passwordConfirmation}</span> }
-            </div>
+            <SingleInput
+              placeholder="Username"
+              identifier="username"
+              inputType="text"
+              inputClass="validate"
+              inputName="username"
+              controlFunc={this.onChange}
+              effectFunc={this.checkUserExists}
+              content={this.state.username}
+              fieldError={errors.username}
+            />
+
+            <SingleInput
+              placeholder="Email Address"
+              identifier="email"
+              inputType="email"
+              inputClass="validate"
+              inputName="email"
+              controlFunc={this.onChange}
+              effectFunc={this.checkUserExists}
+              content={this.state.email}
+              fieldError={errors.email}
+            />
+            <SingleInput
+              placeholder="Password"
+              identifier="password"
+              inputType="password"
+              inputClass="validate"
+              inputName="password"
+              controlFunc={this.onChange}
+              content={this.state.password}
+              fieldError={errors.password}
+            />
+            <SingleInput
+              placeholder="Confirm Password"
+              identifier="passwordConfirmation"
+              inputType="password"
+              inputClass="validate"
+              inputName="passwordConfirmation"
+              controlFunc={this.onChange}
+              content={this.state.passwordConfirmation}
+              fieldError={errors.passwordConfirmation}
+            />
             <div className="col s12">
               <button type="submit" disabled={this.state.isLoading || this.state.invalid} className="right-align btn teal"><i className="fa fa-user" /> Register</button>
             </div>
