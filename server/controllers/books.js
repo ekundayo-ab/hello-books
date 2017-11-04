@@ -73,7 +73,6 @@ class BookController {
    */
   static update(req, res) {
     // Ensure user has administrative priviledges to create book
-    console.log(req);
     if (!helper.isAdmin(req)) {
       return res.status(403).send({ success: false, message: 'Permission Denied' });
     }
