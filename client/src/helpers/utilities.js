@@ -23,19 +23,20 @@ const handleDrop = (files) => {
           delete headers.common['x-access-token'];
           return data;
         }],
-      }).then((cloudinaryData) => {
-      const imageUploaded = true;
-      return {
-        imageUploaded,
-        data: cloudinaryData.data,
-      };
-    }).catch((err) => {
-      const imageUploaded = false;
-      return {
-        imageUploaded,
-        error: err.response.statusText,
-      };
-    });
+      })
+      .then((cloudinaryData) => {
+        const imageUploaded = true;
+        return {
+          imageUploaded,
+          data: cloudinaryData.data,
+        };
+      }).catch((err) => {
+        const imageUploaded = false;
+        return {
+          imageUploaded,
+          error: err.response.statusText,
+        };
+      });
   });
   return uploaders[0];
 };

@@ -192,7 +192,6 @@ class UserController {
    * @memberof UserController
    */
   static googleAuth(req, res) {
-    console.log(req.body);
     if (req.body.username.trim() === '' ||
     req.body.password.trim() === '' || req.body.email.trim() === '') {
       return res.status(400).send({
