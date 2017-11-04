@@ -1,4 +1,3 @@
-/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -6,7 +5,18 @@ import SingleInput from '../forms/SingleInput';
 import Helper from './../../helpers/index';
 import { login } from '../../actions/authActions';
 
+/**
+ * @description represents SignIn form
+ * @class SignIn
+ * @extends {Component}
+ */
 class SignIn extends Component {
+  /**
+   * Creates an instance of SignIn.
+   * @param {object} props
+   * @memberof SignUp
+   * @constructor
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -19,26 +29,33 @@ class SignIn extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+  /**
+   * @description handles event changes for form fields
+   * @param {object} event
+   * @returns {void} null
+   * @memberof SignIn
+   */
+  onChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
   }
 
-  isValid() {
-    const { errors, isValid } = Helper.loginValidation(this.state);
-    if (!isValid) {
-      this.setState({ errors });
-    }
-    return isValid;
-  }
-  onSubmit(e) {
-    e.preventDefault();
+  /**
+   * @description handles form submission
+   * @param {object} event
+   * @returns {boolean} isLoading - needed to disable submit button
+   * @returns {object} action - redirects to library shelf
+   * @returns {object} action - notifies of errors
+   * @memberof SignIn
+   */
+  onSubmit(event) {
+    event.preventDefault();
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
       login(this.state).then(
         (res) => {
           if (res.isAuthenticated) {
             Materialize.toast(res.message, 1000, 'green');
-            return this.props.history.push('/shelf');
+            return this.props.history.push('/shelf?page=1');
           }
           this.setState({ errors: {}, isLoading: false });
           return Materialize.toast(res.message, 1000, 'red');
@@ -47,6 +64,26 @@ class SignIn extends Component {
     }
   }
 
+  /**
+   * @description ensures form fields are filled with expected inputs
+   * @param {void} null
+   * @returns {boolean} isValid
+   * @memberof SignIn
+   */
+  isValid() {
+    const { errors, isValid } = Helper.loginValidation(this.state);
+    if (!isValid) {
+      this.setState({ errors });
+    }
+    return isValid;
+  }
+
+  /**
+   * @description displays the registration form
+   * @param {void} null
+   * @returns {string} HTML markup for SignIn form
+   * @memberof SignIn
+   */
   render() {
     const { errors } = this.state;
     return (
@@ -74,7 +111,11 @@ class SignIn extends Component {
               fieldError={errors.password}
             />
             <div className="col s12">
-              <button type="submit" disabled={this.state.isLoading || this.state.invalid} className="right-align btn teal"><i className="fa fa-user" /> Login</button>
+              <button
+                type="submit"
+                disabled={this.state.isLoading || this.state.invalid}
+                className="right-align btn teal"
+              ><i className="fa fa-user" /> Login</button>
             </div>
           </form>
         </div>
@@ -84,7 +125,9 @@ class SignIn extends Component {
 }
 
 SignIn.propTypes = {
-  history: PropTypes.object.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func
+  }).isRequired,
 };
 
 export default connect(null, { login })(SignIn);

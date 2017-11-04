@@ -4,3 +4,4 @@ node_modules/
 .coveralls.yml
 **/.DS_Store
 client/dist
+client/public/lib

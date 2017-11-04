@@ -1,12 +1,19 @@
 import React from 'react';
 
+/**
+ * @description functional component footer for the library pages
+ * @param {void} null
+ * @returns {string} - HTML markup of the Footer component
+ */
 const Footer = () => (
   <footer className="teal page-footer">
     <div className="container">
       <div className="row">
         <div className="col l6 s12">
           <h5 className="white-text">Grow by reading</h5>
-          <p className="grey-text text-lighten-4">You can donate books also from your location. Thanks</p>
+          <p
+            className="grey-text text-lighten-4"
+          >Help this library grow, please return any book you borrow</p>
         </div>
       </div>
     </div>

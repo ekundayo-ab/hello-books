@@ -8,10 +8,21 @@ import SingleInputWithIcon from '../../forms/SingleInputWithIcon';
 import TextAreaInput from '../../forms/TextAreaInput';
 import { saveBook } from './../../../actions/bookActions';
 import { fetchCategories } from './../../../actions/categoryActions';
-import { handleDrop } from './../../../helpers/utilities';
+import handleDrop from './../../../helpers/utilities';
 import droploader from '../../../../public/images/dropzone.gif';
 
+/**
+ * @description represents form used in Adding a Book detail
+ * @class BookForm
+ * @extends {Component}
+ */
 class BookForm extends Component {
+  /**
+   * Creates an instance of BookForm.
+   * @param {object} props
+   * @memberof BookForm
+   * @constructor
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -32,34 +43,60 @@ class BookForm extends Component {
     this.handleFileUpload = this.handleFileUpload.bind(this);
   }
 
+  /**
+   * @description Invoked after component has mounted
+   * @param {void} null
+   * @returns {void} returns nothing
+   * @memberof BookForm
+   */
   componentDidMount() {
     this.props.fetchCategories();
   }
 
-  onChange(e) {
-    if (!this.state.errors[e.target.name]) {
+  /**
+   * @description handles changes to the input fields value
+   * @param {object} event
+   * @returns {void} returns nothing
+   * @memberof BookForm
+   */
+  onChange(event) {
+    if (!this.state.errors[event.target.name]) {
       const errors = Object.assign({}, this.state.errors);
-      delete errors[e.target.name];
+      delete errors[event.target.name];
       this.setState({
-        [e.target.name]: e.target.value,
+        [event.target.name]: event.target.value,
         errors,
       });
     } else {
-      this.setState({ [e.target.name]: e.target.value });
+      this.setState({ [event.target.name]: event.target.value });
     }
   }
 
+  /**
+   * @description handles file upload to cloudinary
+   * @param {array} files
+   * @returns {string} // Image url from cloudinary
+   * @memberof BookForm
+   */
   handleFileUpload(files) {
     this.setState({ dropzoneLoader: true });
     handleDrop(files).then((cloudinaryResponse) => {
       if (cloudinaryResponse.imageUploaded) {
         this.setState({ coverUploaded: true });
-        return this.setState({ dropzoneLoader: false, image: cloudinaryResponse.data.secure_url });
+        return this.setState({
+          dropzoneLoader: false,
+          image: cloudinaryResponse.data.secure_url });
       }
       return cloudinaryResponse;
     });
   }
 
+  /**
+   * @description handles Book update form submission
+   * @param {object} event
+   * @returns {void} returns nothing
+   * @memberof UpdateBookModal
+   */
   handleSubmit(event) {
     event.preventDefault();
     const errors = {};
@@ -71,13 +108,18 @@ class BookForm extends Component {
     if (this.state.quantity === '' || isNaN(this.state.quantity)) {
       errors.quantity = 'Can\'t be empty and must be number';
     }
-    if (this.state.description.trim() === '') errors.description = 'Can\'t be empty';
-    if (this.state.category.trim() === '') errors.category = 'Can\'t be empty';
+    if (this.state.description.trim() === '') {
+      errors.description = 'Can\'t be empty';
+    }
+    if (this.state.category.trim() === '') {
+      errors.category = 'Can\'t be empty';
+    }
     this.setState({ errors });
     const isValid = Object.keys(errors).length === 0;
 
     if (isValid) {
-      const { isbn, title, author, description, quantity, category, image } = this.state;
+      const { isbn, title, author,
+        description, quantity, category, image } = this.state;
       // this.setState({ loading: true });
       saveBook({ isbn, title, author, description, quantity, category, image })
         .then((res) => {
@@ -101,6 +143,12 @@ class BookForm extends Component {
     }
   }
 
+  /**
+   * @description displays the form for updating
+   * @param {void} null
+   * @returns {string} - HTML markup for the form
+   * @memberof UpdateBookModal
+   */
   render() {
     const { errors } = this.state;
     const style = {
@@ -120,7 +168,8 @@ class BookForm extends Component {
     );
     return (
       <div>
-        {!!this.state.errors.global && <div className="alert-danger">{this.state.errors.global}</div>}
+        {!!this.state.errors.global && <div className="alert-danger">
+          {this.state.errors.global}</div>}
         <form onSubmit={this.handleSubmit}>
           <SingleInputWithIcon
             placeholder="ISBN"
@@ -176,7 +225,9 @@ class BookForm extends Component {
             content={this.state.description}
             fieldError={errors.description}
           />
-          <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.category })}>
+          <div className={classnames('input-field col s12',
+            { 'has-error': !!this.state.errors.category })}
+          >
             <i className="fa fa-list fa-2x prefix " />
             <Input
               style={{ marginLeft: '44px !important' }}
@@ -188,7 +239,8 @@ class BookForm extends Component {
               <option value="">Unsorted</option>
               {selectorOptions}
             </Input>
-            <span style={{ textAlign: 'left', marginLeft: '45px' }}>{this.state.errors.category}</span>
+            <span style={{ textAlign: 'left', marginLeft: '45px' }}>
+              {this.state.errors.category}</span>
           </div>
           <p>Drop book image file below or click below to upload</p>
           <Dropzone
@@ -196,11 +248,23 @@ class BookForm extends Component {
             multiple
             accept="image/*"
           >
-            {this.state.dropzoneLoader && <img style={style} src={droploader} alt="" />}
-            {!this.state.dropzoneLoader && <img style={style.fit} src={this.state.image} alt="" className="card" />}
+            {this.state.dropzoneLoader
+              && <img style={style} src={droploader} alt="" />}
+            {!this.state.dropzoneLoader
+              && <img
+                style={style.fit}
+                src={this.state.image}
+                alt=""
+                className="card"
+              />}
           </Dropzone>
           <div className="center-align col s12">
-            <button type="submit" className="btn waves-effect teal" disabled={classnames(this.state.loading ? 'disabled' : '')} ><i className="fa fa-send" /> Add Book</button>
+            <button
+              type="submit"
+              className="btn waves-effect teal"
+              disabled={classnames(this.state.loading ? 'disabled' : '')}
+            >
+              <i className="fa fa-send" /> Add Book</button>
           </div>
         </form>
       </div>
@@ -208,15 +272,22 @@ class BookForm extends Component {
   }
 }
 
+// Type checking for BookForm component
 BookForm.propTypes = {
-  categories: PropTypes.array.isRequired,
+  categories: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchCategories: PropTypes.func.isRequired,
 };
 
+/**
+ * @description maps the state in redux store to UpdateBookModal props
+ * @param {object} state
+ * @returns {object} categories
+ */
 function mapStateToProps(state) {
   return {
     categories: state.categories,
   };
 }
 
-export default connect(mapStateToProps, { saveBook, fetchCategories })(BookForm);
+export default connect(mapStateToProps, {
+  saveBook, fetchCategories })(BookForm);

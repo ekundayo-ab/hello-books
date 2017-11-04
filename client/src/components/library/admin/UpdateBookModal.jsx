@@ -4,13 +4,24 @@ import { Input } from 'react-materialize';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
-import { handleDrop } from './../../../helpers/utilities';
+import handleDrop from './../../../helpers/utilities';
 import { saveBook, updateBook } from './../../../actions/bookActions';
 import SingleInputWithIcon from '../../forms/SingleInputWithIcon';
 import TextAreaInput from '../../forms/TextAreaInput';
 import droploader from '../../../../public/images/dropzone.gif';
 
+/**
+ * @description represents form used in Updating a book detail
+ * @class UpdateBookModal
+ * @extends {Component}
+ */
 class UpdateBookModal extends Component {
+  /**
+   * Creates an instance of UpdateBookModal.
+   * @param {object} props
+   * @memberof UpdateBookModal
+   * @constructor
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -32,30 +43,49 @@ class UpdateBookModal extends Component {
     this.handleFileUpload = this.handleFileUpload.bind(this);
   }
 
-  onChange(e) {
-    if (!this.state.errors[e.target.name]) {
+  /**
+   * @description handles changes to the input fields value
+   * @param {object} event
+   * @returns {void} returns nothing
+   * @memberof UpdateBookModal
+   */
+  onChange(event) {
+    if (!this.state.errors[event.target.name]) {
       const errors = Object.assign({}, this.state.errors);
-      delete errors[e.target.name];
+      delete errors[event.target.name];
       this.setState({
-        [e.target.name]: e.target.value,
+        [event.target.name]: event.target.value,
         errors,
       });
     } else {
-      this.setState({ [e.target.name]: e.target.value });
+      this.setState({ [event.target.name]: event.target.value });
     }
   }
 
+  /**
+   * @description handles file upload to cloudinary
+   * @param {array} files
+   * @returns {string} // Image url from cloudinary
+   * @memberof UpdateBookModal
+   */
   handleFileUpload(files) {
     this.setState({ dropzoneLoader: true });
     handleDrop(files).then((cloudinaryResponse) => {
       if (cloudinaryResponse.imageUploaded) {
         this.setState({ coverUploaded: true });
-        return this.setState({ dropzoneLoader: false, image: cloudinaryResponse.data.secure_url });
+        return this.setState({
+          dropzoneLoader: false, image: cloudinaryResponse.data.secure_url });
       }
       return cloudinaryResponse;
     });
   }
 
+  /**
+   * @description handles Book update form submission
+   * @param {object} event
+   * @returns {void} returns nothing
+   * @memberof UpdateBookModal
+   */
   handleSubmit(event) {
     event.preventDefault();
     const errors = {};
@@ -68,17 +98,30 @@ class UpdateBookModal extends Component {
     if (this.state.quantity === '' || isNaN(this.state.quantity)) {
       errors.quantity = 'Can\'t be empty and must be number';
     }
-    if (this.state.description.trim() === '') errors.description = 'Can\'t be empty';
-    if (this.state.category.trim() === '') errors.category = 'Can\'t be empty';
+    if (this.state.description.trim() === '') {
+      errors.description = 'Can\'t be empty';
+    }
+    if (this.state.category.trim() === '') {
+      errors.category = 'Can\'t be empty';
+    }
     this.setState({ errors });
     const isValid = Object.keys(errors).length === 0;
 
     if (isValid) {
-      const { id, isbn, title, author, description, quantity, category, image } = this.state;
-      // this.setState({ loading: true });
+      const { id, isbn, title, author, description, quantity, category, image }
+      = this.state;
 
       if (id) {
-        updateBook({ id, isbn, title, author, description, quantity, category, image })
+        updateBook({
+          id,
+          isbn,
+          title,
+          author,
+          description,
+          quantity,
+          category,
+          image
+        })
           .then((res) => {
             Materialize.toast(
               res.isDone ? res.result.message : res.result.errors.message,
@@ -93,6 +136,12 @@ class UpdateBookModal extends Component {
     }
   }
 
+  /**
+   * @description displays the form for updating
+   * @param {void} null
+   * @returns {string} - HTML markup for the form
+   * @memberof UpdateBookModal
+   */
   render() {
     const { errors } = this.state;
     const style = {
@@ -115,16 +164,25 @@ class UpdateBookModal extends Component {
       <div>
         <div className="row">
           <div className="center-align book-detail col s12 m6 l4">
-            <img className="center-align detail responsive-img" src={this.props.book.image} alt="" />
+            <img
+              className="center-align detail responsive-img"
+              src={this.props.book.image}
+              alt=""
+            />
           </div>
           <div className="col s12 m6 l6">
             <h1>{this.props.book.title}</h1>
             <h5 className="teal-text">{this.props.book.author}</h5>
             <p>{this.props.book.description}</p>
-            <p className="white-text badge green" style={{ display: 'block', padding: '5px !important' }}>
+            <p
+              className="white-text badge green"
+              style={{ display: 'block', padding: '5px !important' }}
+            >
               <b>Total:</b> 28 <b>Borrowed:</b> 17 <b>Available:</b> 11
             </p>
-            <blockquote style={{ borderLeft: '5px solid green' }}>Added on { dateCreated.toUTCString() }</blockquote>
+            <blockquote
+              style={{ borderLeft: '5px solid green' }}
+            >Added on { dateCreated.toUTCString() }</blockquote>
           </div>
         </div>
         <div className="row">
@@ -185,7 +243,9 @@ class UpdateBookModal extends Component {
                 content={this.state.description}
                 fieldError={errors.description}
               />
-              <div className={classnames('input-field col s12', { 'has-error': !!this.state.errors.category })}>
+              <div className={classnames('input-field col s12',
+                { 'has-error': !!this.state.errors.category })}
+              >
                 <i className="fa fa-list fa-2x prefix " />
                 <Input
                   style={{ marginLeft: '44px !important' }}
@@ -197,7 +257,8 @@ class UpdateBookModal extends Component {
                   <option value="">Unsorted</option>
                   {selectorOptions}
                 </Input>
-                <span style={{ textAlign: 'left', marginLeft: '45px' }}>{this.state.errors.category}</span>
+                <span style={{ textAlign: 'left', marginLeft: '45px' }}>
+                  {this.state.errors.category}</span>
               </div>
               <p>Drop book image file below or click below to upload</p>
               <Dropzone
@@ -205,11 +266,21 @@ class UpdateBookModal extends Component {
                 multiple
                 accept="image/*"
               >
-                {this.state.dropzoneLoader && <img style={style} src={droploader} alt="" />}
-                {!this.state.dropzoneLoader && <img style={style.fit} src={this.state.image} alt="" className="card" />}
+                {this.state.dropzoneLoader
+                  && <img style={style} src={droploader} alt="" />}
+                {!this.state.dropzoneLoader
+                  && <img
+                    style={style.fit}
+                    src={this.state.image}
+                    alt=""
+                    className="card"
+                  />}
               </Dropzone>
               <div className="center-align col s12">
-                <button type="submit" className="btn waves-effect teal"><i className="fa fa-send" /> Save</button>
+                <button
+                  type="submit"
+                  className="btn waves-effect teal"
+                ><i className="fa fa-send" /> Save</button>
               </div>
             </form>
           </div>
@@ -219,15 +290,33 @@ class UpdateBookModal extends Component {
   }
 }
 
+// Set default value for form props
 UpdateBookModal.defaultProps = {
   book: {},
 };
 
+// Type checking for the book update form
 UpdateBookModal.propTypes = {
-  categories: PropTypes.array.isRequired,
-  book: PropTypes.object,
+  categories: PropTypes.arrayOf(PropTypes.object).isRequired,
+  book: PropTypes.shape({
+    id: PropTypes.number,
+    isbn: PropTypes.number,
+    title: PropTypes.string,
+    author: PropTypes.string,
+    description: PropTypes.string,
+    quantity: PropTypes.number,
+    category: PropTypes.string,
+    image: PropTypes.string,
+    createdAt: PropTypes.string,
+  }).isRequired,
 };
 
+/**
+ * @description maps the state in redux store to UpdateBookModal props
+ * @param {object} state
+ * @param {object} props
+ * @returns {object} book, categories
+ */
 function mapStateToProps(state, props) {
   return {
     book: state.books.find(item => item.id === props.book.id),
@@ -235,4 +324,5 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps, { saveBook, updateBook })(UpdateBookModal);
+export default connect(mapStateToProps, {
+  saveBook, updateBook })(UpdateBookModal);

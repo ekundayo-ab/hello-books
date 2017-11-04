@@ -1,4 +1,3 @@
-/* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, Route, withRouter, Redirect, Switch } from 'react-router-dom';
@@ -7,12 +6,30 @@ import SignUp from './SignupForm';
 import SignIn from './SigninForm';
 import ForgotPassword from './ForgotPasswordForm';
 
+/**
+ * @description represents application's landing page
+ * @class Home
+ * @extends {Component}
+ */
 class Home extends Component {
+  /**
+   * @description Invoked before component mounts
+   * @param {void} null
+   * @returns {void} returns nothing, but redirects conditionally
+   * @memberof Home
+   */
   componentWillMount() {
     if (localStorage.getItem('jwtToken') !== null) {
       this.props.history.push('/shelf');
     }
   }
+
+  /**
+   * @description displays the application's landing page
+   * @param {void} null
+   * @returns {string} - HTML markup for the landing page
+   * @memberof Home
+   */
   render() {
     const isCurrent = this.props.location.pathname === '/';
     let theActiveClass;
@@ -30,9 +47,19 @@ class Home extends Component {
               <div className="card col s12 m12 l6">
                 <div className="card-tabs">
                   <ul className="mod-tabs mod-tabs-fixed-width">
-                    <li className="mod-tab"><NavLink className={theActiveClass} activeClassName={'mod-active'} to="/register">Register</NavLink></li>
-                    <li className="mod-tab"><NavLink activeClassName="mod-active" to="/login">Login</NavLink></li>
-                    <li className="mod-tab"><NavLink activeClassName="mod-active" to="/forgot">Forgot Password</NavLink></li>
+                    <li className="mod-tab">
+                      <NavLink
+                        className={theActiveClass}
+                        activeClassName={'mod-active'}
+                        to="/register"
+                      >Register
+                      </NavLink></li>
+                    <li className="mod-tab">
+                      <NavLink activeClassName="mod-active" to="/login">
+                      Login</NavLink></li>
+                    <li className="mod-tab">
+                      <NavLink activeClassName="mod-active" to="/forgot">
+                      Forgot Password</NavLink></li>
                   </ul>
                 </div>
                 <div className="card-content">
@@ -53,9 +80,14 @@ class Home extends Component {
   }
 }
 
+// Type checking for Home(Landing Page) component
 Home.propTypes = {
-  location: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func
+  }).isRequired,
 };
 
 export default withRouter(Home);

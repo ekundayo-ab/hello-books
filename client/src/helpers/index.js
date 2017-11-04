@@ -1,17 +1,14 @@
 import { isEmpty } from 'lodash';
 /**
- *
- * @description Abstracts validation functions
  * @class Helper
+ * @description Abstracts validation functions
  */
 class Helper {
   /**
-   *
-   * @description Ensures Admin priviledges to perform certain operations
-   * @static
-   * @param {any} req
-   * @returns true or false
-   *
+   * Check for Admin priviledge
+   * @description Checks Admin priviledge to perform certain operations
+   * @param {object} req
+   * @returns {boolean} true or false
    * @memberOf Helper
    */
   static isAdmin(req) {
@@ -22,12 +19,10 @@ class Helper {
   }
 
   /**
-   *
+   * Validates Book Input Fields
    * @description Ensures all fields are present when adding or updating book
-   * @static
-   * @param {any} req
-   * @returns true or false
-   *
+   * @param {object} req
+   * @returns {boolean} true or false
    * @memberOf Helper
    */
   static isDefined(req) {
@@ -36,12 +31,10 @@ class Helper {
   }
 
   /**
-   *
+   * Also Validates Book Input Fields
    * @description Ensures all inputs are validated
-   * @static
-   * @param {any} req
-   * @returns isValid and errors
-   *
+   * @param {object} req
+   * @returns {object } isValid and errors
    * @memberOf Helper
    */
   static inputValidation(req) {
@@ -49,13 +42,15 @@ class Helper {
     for (let i = 0; i < 5; i += 1) {
       const field = Object.values(req.body)[i].trim();
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
-        const theKey = Object.keys(req.body)[i]; // eslint-disable-line no-unused-vars
+        const theKey = Object.keys(req.body)[i];
         errors[theKey] = 'This field is required';
       }
-      if (Object.keys(req.body)[i] === 'isbn' && typeof (Object.values(req.body)[i]) !== 'number') {
+      if (Object.keys(req.body)[i] === 'isbn'
+        && typeof (Object.values(req.body)[i]) !== 'number') {
         errors.ISBNValidation = 'ISBN must be a number';
       }
-      if (Object.keys(req.body)[i] === 'quantity' && typeof (parseInt(Object.values(req.body)[i], 10)) !== 'number') {
+      if (Object.keys(req.body)[i] === 'quantity'
+        && typeof (parseInt(Object.values(req.body)[i], 10)) !== 'number') {
         errors.numeric = 'quantity must be a number';
       }
     }
@@ -66,12 +61,10 @@ class Helper {
   }
 
   /**
-   *
-   * @description Ensures all inputs are validated
-   * @static
-   * @param {any} req
-   * @returns isValid and errors
-   *
+   * Validates Register Input Fields
+   * @description Ensures all inputs are validated when registering
+   * @param {object} req
+   * @returns {object} isValid and errors
    * @memberOf Helper
    */
   static userValidation(req) {
@@ -87,23 +80,8 @@ class Helper {
     for (let i = 0; i < 4; i += 1) {
       const field = Object.values(req)[i];
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
-        const theKey = Object.keys(req)[i]; // eslint-disable-line no-unused-vars
-        errors[theKey] = 'This field is required';
-      }
-    }
-    return {
-      isValid: isEmpty(errors),
-      errors,
-    };
-  }
-
-  static loginValidation(req) {
-    const errors = {};
-
-    for (let i = 0; i < 2; i += 1) {
-      const field = Object.values(req)[i];
-      if (field === (undefined || null || '') || /^\s+$/.test(field)) {
-        const theKey = Object.keys(req)[i]; // eslint-disable-line no-unused-vars
+        // eslint-disable-line no-unused-vars
+        const theKey = Object.keys(req)[i];
         errors[theKey] = 'This field is required';
       }
     }
@@ -114,17 +92,36 @@ class Helper {
   }
 
   /**
-   *
-   *
-   * @static
+   * Validates Login Input Fields
+   * @description Ensures all inputs are validated when logging in
+   * @param {object} req
+   * @returns {object} isValid and errors
+   * @memberof Helper
+   */
+  static loginValidation(req) {
+    const errors = {};
+    for (let i = 0; i < 2; i += 1) {
+      const field = Object.values(req)[i];
+      if (field === (undefined || null || '') || /^\s+$/.test(field)) {
+        const theKey = Object.keys(req)[i];
+        errors[theKey] = 'This field is required';
+      }
+    }
+    return {
+      isValid: isEmpty(errors),
+      errors,
+    };
+  }
+
+  /**
+   * Validates Email
    * @description Ensures email supplied is a valid email address
    * @param {any} email
    * @returns {boolean} true or false
-   *
    * @memberOf Helper
    */
   static validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line max-len
     return re.test(email);
   }
 }

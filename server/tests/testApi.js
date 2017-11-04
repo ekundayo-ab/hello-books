@@ -4,10 +4,14 @@ import jwt from 'jsonwebtoken';
 import app from '../../app';
 import models from '../models/';
 
-const User = models.User; // Makes User model available globally in this file
-const Book = models.Book; // Makes Book model available globally in this file
-const Borrow = models.Borrow; // Makes Borrow model available globally in this file
-const expect = chai.expect; // Provides interface to ascertain expected results are true
+// Makes User model available globally in this file
+const User = models.User;
+// Makes Book model available globally in this file
+const Book = models.Book;
+// Makes Borrow model available globally in this file
+const Borrow = models.Borrow;
+// Provides interface to ascertain expected results are true
+const expect = chai.expect;
 
 const server = supertest.agent(app);
 let adminToken; // Token for an Admin User
@@ -17,9 +21,12 @@ let user2Id;
 let bookId;
 describe('API Operations', () => {
   before((done) => {
-    User.destroy({ where: {} }); // Purges Data already in the table after testing
-    Book.destroy({ where: {} }); // Purges Data already in the table after testing
-    Borrow.destroy({ where: {} }); // Purges Data already in the table after testing
+    // Purges Data already in the table after testing
+    User.destroy({ where: {} });
+    // Purges Data already in the table after testing
+    Book.destroy({ where: {} });
+    // Purges Data already in the table after testing
+    Borrow.destroy({ where: {} });
     Book
       .create({
         isbn: '001',
@@ -47,7 +54,8 @@ describe('API Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(true);
-          expect(res.body.message).to.equal('Hi ekundayo, registration successful!');
+          expect(res.body.message)
+            .to.equal('Hi ekundayo, registration successful!');
           expect(res.status).to.equal(201);
           done();
         });
@@ -64,7 +72,8 @@ describe('API Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(true);
-          expect(res.body.message).to.equal('Hi bootcamp, registration successful!');
+          expect(res.body.message)
+            .to.equal('Hi bootcamp, registration successful!');
           expect(res.status).to.equal(201);
           done();
         });
@@ -82,7 +91,8 @@ describe('API Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Check your username, email or password and try again!');
+          expect(res.body.message)
+            .to.equal('Check your username, email or password and try again!');
           expect(res.status).to.equal(400);
           done();
         });
@@ -100,7 +110,8 @@ describe('API Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Check your username, email or password and try again!');
+          expect(res.body.message)
+            .to.equal('Check your username, email or password and try again!');
           done();
         });
     });
@@ -171,7 +182,8 @@ describe('API Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Bad request!, Check your username or email.');
+          expect(res.body.message)
+            .to.equal('Bad request!, Check your username or email.');
           expect(res.status).to.equal(400);
           done();
         });
@@ -187,7 +199,8 @@ describe('API Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Bad request!, Check your username or email.');
+          expect(res.body.message)
+            .to.equal('Bad request!, Check your username or email.');
           expect(res.status).to.equal(400);
           done();
         });
@@ -237,7 +250,8 @@ describe('API Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Authentication failed. Wrong password');
+          expect(res.body.message)
+            .to.equal('Authentication failed. Wrong password');
           expect(res.status).to.equal(401);
           done();
         });
@@ -253,7 +267,8 @@ describe('API Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Authentication failed. User not found');
+          expect(res.body.message)
+            .to.equal('Authentication failed. User not found');
           expect(res.status).to.equal(404);
           done();
         });
@@ -408,7 +423,8 @@ describe('API Operations', () => {
         .expect(400)
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
-          expect(res.body.errors.description).to.equal('This field is required');
+          expect(res.body.errors.description)
+            .to.equal('This field is required');
           expect(res.status).to.equal(400);
           done();
         });
@@ -466,18 +482,6 @@ describe('API Operations', () => {
           done();
         });
     });
-    it('should allow authenticated users to view all books', (done) => {
-      server
-        .get('/api/v1/books')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', normalToken)
-        .expect(200)
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body).to.be.a('array');
-          done();
-        });
-    });
   });
 
   describe('Upon borrowing of books', () => {
@@ -512,7 +516,8 @@ describe('API Operations', () => {
         .end((err, res) => {
           expect(res.body.success).to.equal(true);
           expect(res.status).to.equal(200);
-          expect(res.body.message).to.equal('Learn Haskell succesfully borrowed');
+          expect(res.body.message)
+            .to.equal('Learn Haskell succesfully borrowed');
           done();
         });
     });
@@ -531,21 +536,22 @@ describe('API Operations', () => {
           done();
         });
     });
-    it('should notify if book was borrowed but not returned by same user', (done) => {
-      server
-        .post(`/api/v1/users/${userId}/books`)
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .send({
-          bookId,
-        })
-        .end((err, res) => {
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Book borrowed already');
-          expect(res.status).to.equal(409);
-          done();
-        });
-    });
+    it('should notify if book was borrowed but not returned by same user',
+      (done) => {
+        server
+          .post(`/api/v1/users/${userId}/books`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .send({
+            bookId,
+          })
+          .end((err, res) => {
+            expect(res.body.success).to.equal(false);
+            expect(res.body.message).to.equal('Book borrowed already');
+            expect(res.status).to.equal(409);
+            done();
+          });
+      });
   });
 
   describe('Upon listing of books not returned', () => {
@@ -569,18 +575,19 @@ describe('API Operations', () => {
           done();
         });
     });
-    it('should list all books borrowed but not returned by authenticated user', (done) => {
-      server
-        .get(`/api/v1/users/${userId}/books?returned=false`)
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .end((err, res) => {
-          expect(res.body.success).to.equal(true);
-          expect(res.status).to.equal(200);
-          expect(res.body).to.have.property('borrow');
-          done();
-        });
-    });
+    it('should list all books borrowed but not returned by authenticated user',
+      (done) => {
+        server
+          .get(`/api/v1/users/${userId}/books?returned=false`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .end((err, res) => {
+            expect(res.body.success).to.equal(true);
+            expect(res.status).to.equal(200);
+            expect(res.body).to.have.property('borrow');
+            done();
+          });
+      });
     it('should notify if user has no book(s) to return', (done) => {
       server
         .get(`/api/v1/users/${user2Id}/books?returned=false`)
@@ -627,7 +634,9 @@ describe('API Operations', () => {
         .end((err, res) => {
           expect(res.body.success).to.equal(true);
           expect(res.status).to.equal(200);
-          expect(res.body.message).to.equal('Learn Haskell succesfully returned but pending review by Administrator');
+          expect(res.body.message)
+            .to.equal('Learn Haskell succesfully returned ' +
+            'but pending review by Administrator');
           done();
         });
     });
@@ -695,7 +704,8 @@ describe('API Operations', () => {
           isbn: '001',
           title: 'Learn Haskell New Edition',
           author: 'Haskell Master',
-          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          description: 'Learn and Master Haskell in 16 Months' +
+          'Updated with more projects and examples',
           quantity: '30',
         })
         .end((err, res) => {
@@ -705,25 +715,27 @@ describe('API Operations', () => {
           done();
         });
     });
-    it('should ensure only authenticated admin user can modify books', (done) => {
-      server
-        .put(`/api/v1/books/${bookId}`)
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', `${adminToken}giberrish`)
-        .send({
-          isbn: '001',
-          title: 'Learn Haskell New Edition',
-          author: 'Haskell Master',
-          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
-          quantity: '30',
-        })
-        .end((err, res) => {
-          expect(res.body.success).to.equal(false);
-          expect(res.status).to.equal(400);
-          expect(res.body.message).to.equal('Failed to authenticate token');
-          done();
-        });
-    });
+    it('should ensure only authenticated admin user can modify books',
+      (done) => {
+        server
+          .put(`/api/v1/books/${bookId}`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', `${adminToken}giberrish`)
+          .send({
+            isbn: '001',
+            title: 'Learn Haskell New Edition',
+            author: 'Haskell Master',
+            description: 'Learn and Master Haskell in' +
+            '16 Months Updated with more projects and examples',
+            quantity: '30',
+          })
+          .end((err, res) => {
+            expect(res.body.success).to.equal(false);
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.equal('Failed to authenticate token');
+            done();
+          });
+      });
     it('should allow authenticated admin user to modify books', (done) => {
       server
         .put(`/api/v1/books/${bookId}`)
@@ -733,13 +745,16 @@ describe('API Operations', () => {
           isbn: '001',
           title: 'Learn Haskell New Edition',
           author: 'Haskell Master',
-          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          description: 'Learn and Master Haskell in' +
+          '16 Months Updated with more projects and examples',
           quantity: 30,
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(true);
           expect(res.status).to.equal(200);
-          expect(res.body.message).to.equal('Learn Haskell successfully updated to Learn Haskell New Edition');
+          expect(res.body.message)
+            .to.equal('Learn Haskell successfully ' +
+            'updated to Learn Haskell New Edition');
           done();
         });
     });
@@ -752,7 +767,8 @@ describe('API Operations', () => {
           isbn: '001',
           title: 'Learn Haskell New Edition',
           author: 'Haskell Master',
-          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          description: 'Learn and Master Haskell in' +
+          '16 Months Updated with more projects and examples',
           quantity: 30,
         })
         .end((err, res) => {
@@ -771,7 +787,8 @@ describe('API Operations', () => {
           isbn: '001',
           title: 'Learn Haskell New Edition',
           author: 'Haskell Master',
-          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          description: 'Learn and Master Haskell in' +
+          '16 Months Updated with more projects and examples',
           quantity: undefined,
         })
         .end((err, res) => {
@@ -790,7 +807,8 @@ describe('API Operations', () => {
           isbn: '',
           title: 'Learn Haskell New Edition',
           author: 'Haskell Master',
-          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          description: 'Learn and Master Haskell in 16 Months' +
+          'Updated with more projects and examples',
           quantity: 40,
         })
         .end((err, res) => {
@@ -809,7 +827,8 @@ describe('API Operations', () => {
           isbn: 456,
           title: '',
           author: 'Haskell Master',
-          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          description: 'Learn and Master Haskell in 16' +
+          'Months Updated with more projects and examples',
           quantity: 40,
         })
         .end((err, res) => {
@@ -828,7 +847,8 @@ describe('API Operations', () => {
           isbn: 456,
           title: 'Learn Haskell New Edition',
           author: '',
-          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          description: 'Learn and Master Haskell in' +
+          '16 Months Updated with more projects and examples',
           quantity: 40,
         })
         .end((err, res) => {
@@ -852,7 +872,8 @@ describe('API Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
-          expect(res.body.errors.description).to.equal('This field is required');
+          expect(res.body.errors.description)
+            .to.equal('This field is required');
           expect(res.status).to.equal(400);
           done();
         });
@@ -866,7 +887,8 @@ describe('API Operations', () => {
           isbn: 456,
           title: 'Learn Haskell New Edition',
           author: 'Haskell Master',
-          description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+          description: 'Learn and Master Haskell in 16' +
+          'Months Updated with more projects and examples',
           quantity: '',
         })
         .end((err, res) => {
@@ -879,51 +901,57 @@ describe('API Operations', () => {
   });
 
   describe('Upon listing of all books', () => {
+    it('should ensure only authenticated admin user can view all books',
+      (done) => {
+        server
+          .get('/api/v1/books?page=1')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.numberOfPages).to.equal(1);
+            expect(res.body.books).to.be.a('array');
+            done();
+          });
+      });
     it('should ensure only authenticated user can view all books', (done) => {
       server
-        .get('/api/v1/books')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body).to.be.a('array');
-          done();
-        });
-    });
-    it('should ensure only authenticated user can view all books', (done) => {
-      server
-        .get('/api/v1/books')
+        .get('/api/v1/books?page=1')
         .set('Accept', 'application/x-www-form-urlencoded')
         .set('x-access-token', normalToken)
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body).to.be.a('array');
+          expect(res.body.numberOfPages).to.equal(1);
+          expect(res.body.books).to.be.a('array');
           done();
         });
     });
-    it('should disallow unauthenticated user from viewing all books', (done) => {
-      server
-        .get('/api/v1/books')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .end((err, res) => {
-          expect(res.status).to.equal(401);
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Unauthenticated, token not found');
-          done();
-        });
-    });
-    it('should disallow user with altered token from viewing all books', (done) => {
-      server
-        .get('/api/v1/books')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', `${adminToken}gibberish`)
-        .end((err, res) => {
-          expect(res.status).to.equal(400);
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Failed to authenticate token');
-          done();
-        });
-    });
+    it('should disallow unauthenticated user from viewing all books',
+      (done) => {
+        server
+          .get('/api/v1/books')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .end((err, res) => {
+            expect(res.status).to.equal(401);
+            expect(res.body.success).to.equal(false);
+            expect(res.body.message)
+              .to.equal('Unauthenticated, token not found');
+            done();
+          });
+      });
+    it('should disallow user with altered token from viewing all books',
+      (done) => {
+        server
+          .get('/api/v1/books')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', `${adminToken}gibberish`)
+          .end((err, res) => {
+            expect(res.status).to.equal(400);
+            expect(res.body.success).to.equal(false);
+            expect(res.body.message).to.equal('Failed to authenticate token');
+            done();
+          });
+      });
   });
 
   describe('Upon deleting of a book', () => {

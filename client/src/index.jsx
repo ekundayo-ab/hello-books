@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'jquery/dist/jquery';
+import 'materialize-css/dist/js/materialize';
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -8,15 +10,13 @@ import { Provider } from 'react-redux';
 import App from './components/App';
 import rootReducer from './rootReducer';
 import setAuthorizationHeader from './utils/setAuthorizationToken';
-
-/* eslint-disable import/first */
 import '../public/css/main.scss';
-import 'jquery/dist/jquery';
-import 'materialize-css/dist/js/materialize';
-import '../public/js/main.js';
-/* eslint-enable */
+import '../public/js/main';
 
+// Get token from Local Storage
 const token = localStorage.getItem('jwtToken');
+
+// If token exists set header for subsequent requests
 if (token) {
   setAuthorizationHeader(token);
 }
@@ -26,8 +26,6 @@ const store = createStore(
     applyMiddleware(thunk),
   ),
 );
-
-// setAuthorizationToken(localStorage.jwtToken);
 
 
 ReactDOM.render(

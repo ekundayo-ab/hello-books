@@ -3,11 +3,19 @@ import PropTypes from 'prop-types';
 import { Modal } from 'react-materialize';
 import UpdateBookModal from '../../library/admin/UpdateBookModal';
 
+/**
+ * @description displays list of books
+ * @param {object} props
+ * @returns {string} - HTML markup of CategoryList component
+ * @memberof BookList
+ */
 const BookList = (props) => {
+  // message to display if no books
   const emptyMessage = (
     <p>No books have been added yet.</p>
   );
 
+  // markup to render if books exist
   const booksList = (
     <table className="responsive-table">
       <thead>
@@ -26,14 +34,18 @@ const BookList = (props) => {
           (
             <tr key={book.id}>
               <td className="teal-text">{ index + 1}</td>
-              <td className="green-text admin-book-list"><img src={book.image} alt="" /></td>
+              <td className="green-text admin-book-list">
+                <img src={book.image} alt="" /></td>
               <td>{book.title}</td>
               <td>{book.author}</td>
               <td>{book.quantity}</td>
               <td>
                 <Modal
                   header="Update Book"
-                  trigger={<button className="btn white waves-effect waves-light"><i className="fa fa-edit green-text" /></button>}
+                  trigger={<button
+                    className="btn white waves-effect waves-light"
+                  >
+                    <i className="fa fa-edit green-text" /></button>}
                 >
                   <UpdateBookModal book={book} />
                 </Modal>
@@ -60,23 +72,13 @@ const BookList = (props) => {
       <div className="card-panel row">
         {props.books.length === 0 ? emptyMessage : booksList}
       </div>
-      {props.books.length > 0 &&
-      <ul className="pagination center-align">
-        <li className="disabled"><a href="#!"><i className="material-icons">chevron_left</i></a></li>
-        <li className="active"><a href="#!">1</a></li>
-        <li className="waves-effect"><a href="#!">2</a></li>
-        <li className="waves-effect"><a href="#!">3</a></li>
-        <li className="waves-effect"><a href="#!">4</a></li>
-        <li className="waves-effect"><a href="#!">5</a></li>
-        <li className="waves-effect"><a href="#!"><i className="material-icons">chevron_right</i></a></li>
-      </ul>}
     </div>
   );
 };
 
+// Type checking for the BookList component
 BookList.propTypes = {
-  books: PropTypes.array.isRequired,
-  // handleDelete: PropTypes.func.isRequired,
+  books: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default BookList;

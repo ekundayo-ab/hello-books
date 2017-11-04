@@ -1,10 +1,14 @@
+/**
+ * @description hardcoded users details for testing
+ */
 export default {
   user1: {
     decoded: {
       data: {
         id: 10,
         username: 'ekundayo',
-        password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
+        password:
+        '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
         email: 'ekprogs@gmail.com',
         role: 'admin',
         level: 'bronze',
@@ -18,7 +22,8 @@ export default {
       data: {
         id: 10,
         username: 'ekundayo',
-        password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
+        password:
+        '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
         email: 'ekprogs@gmail.com',
         role: 'normal',
         level: 'bronze',

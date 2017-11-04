@@ -1,3 +1,6 @@
+/**
+ * @description hardcoded books details for testing
+ */
 export default {
   book1: {
     body: {

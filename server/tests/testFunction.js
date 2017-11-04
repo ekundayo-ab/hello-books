@@ -33,23 +33,28 @@ describe('Helper Functions', () => {
     });
     it('should raise error for isbn field which is invalid', () => {
       assert.equal(inputValidation(helperBook.book3).isValid, false);
-      assert.equal(inputValidation(helperBook.book3).errors.isbn, 'This field is required');
+      assert.equal(inputValidation(helperBook.book3)
+        .errors.isbn, 'This field is required');
     });
     it('should raise error for title field which is invalid', () => {
       assert.equal(inputValidation(helperBook.book4).isValid, false);
-      assert.equal(inputValidation(helperBook.book4).errors.title, 'This field is required');
+      assert.equal(inputValidation(helperBook.book4)
+        .errors.title, 'This field is required');
     });
     it('should raise error for author field which is invalid', () => {
       assert.equal(inputValidation(helperBook.book5).isValid, false);
-      assert.equal(inputValidation(helperBook.book5).errors.author, 'This field is required');
+      assert.equal(inputValidation(helperBook.book5)
+        .errors.author, 'This field is required');
     });
     it('should raise error for description field which is invalid', () => {
       assert.equal(inputValidation(helperBook.book6).isValid, false);
-      assert.equal(inputValidation(helperBook.book6).errors.description, 'This field is required');
+      assert.equal(inputValidation(helperBook.book6)
+        .errors.description, 'This field is required');
     });
     it('should raise error for quantity field which is invalid', () => {
       assert.equal(inputValidation(helperBook.book7).isValid, false);
-      assert.equal(inputValidation(helperBook.book7).errors.quantity, 'This field is required');
+      assert.equal(inputValidation(helperBook.book7)
+        .errors.quantity, 'This field is required');
     });
   });
   describe('Validates email for sign up & sign in', () => {

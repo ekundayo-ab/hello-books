@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-materialize';
+import classnames from 'classnames';
+import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import BookForm from './BookForm';
 import CategoryForm from './CategoryForm';
@@ -10,20 +12,91 @@ import BookList from './BookList';
 import { fetchBooks, deleteBook } from './../../../actions/bookActions';
 import { fetchCategories } from './../../../actions/categoryActions';
 
+/**
+ * @description represents admin dashboard of the library
+ * @class Admin
+ * @extends {Component}
+ */
 class Admin extends Component {
+  /**
+   * Creates an instance of Admin.
+   * @param {object} props
+   * @memberof Admin
+   * @constructor
+   */
   constructor(props) {
     super(props);
+    this.state = {
+      pages: [],
+      pageId: 1,
+    };
     this.handleDelete = this.handleDelete.bind(this);
+    this.query = new URLSearchParams(this.props.history.location.search);
+    this.nextPage = this.nextPage.bind(this);
+    this.prevPage = this.prevPage.bind(this);
   }
 
+  /**
+   * @description Invoked before page loads
+   * @param {void} null
+   * @returns {void} returns nothing
+   * @memberof Admin
+   */
+  componentWillMount() {
+    let pageId = this.query.get('page');
+    if (pageId === null) pageId = 1;
+    this.props.fetchBooks(pageId)
+      .then((numberOfPages) => {
+        const pages = Array.from(Array(numberOfPages)).map((e, i) => i + 1);
+        this.setState({ pages, pageId });
+      });
+  }
+
+  /**
+   * @description Invoked after component has mounted
+   * @param {void} null
+   * @returns {void} returns nothing
+   * @memberof Admin
+   */
   componentDidMount() {
-    this.props.fetchBooks();
     this.props.fetchCategories();
     $(document).ready(() => {
       $('.modal').modal();
     });
   }
-  /* eslint-disable */
+
+  /**
+   * @description generates next page of books
+   * @param {void} null
+   * @returns {void} returns nothing
+   * @memberof Admin
+   */
+  nextPage() {
+    const nextPage = parseInt(this.state.pageId, 10) + 1;
+    if (parseInt(this.state.pageId, 10) < this.state.pages.length) {
+      this.props.history.push(`/admin?page=${nextPage}`);
+    }
+  }
+
+  /**
+   * @description generates previous page of books
+   * @param {void} null
+   * @returns {void} returns nothing
+   * @memberof Admin
+   */
+  prevPage() {
+    const prevPage = parseInt(this.state.pageId, 10) - 1;
+    if (parseInt(this.state.pageId, 10) > 1) {
+      this.props.history.push(`/admin?page=${prevPage}`);
+    }
+  }
+
+  /**
+   * @description deletes a book from the library
+   * @param {number} bookId
+   * @returns {function} action
+   * @memberof Admin
+   */
   handleDelete(bookId) {
     swal({
       title: 'Are you sure?',
@@ -37,13 +110,26 @@ class Admin extends Component {
           swal('Poof! Book successfully deleted', {
             icon: 'success',
           });
+          const pageId = this.query.get('page');
+          // if (pageId === null) pageId = 1;
+          this.props.fetchBooks(pageId)
+            .then((numberOfPages) => {
+              const pages = Array.from(Array(numberOfPages))
+                .map((e, i) => i + 1);
+              this.setState({ pages, pageId });
+            });
           return deleteBook(bookId);
         }
         return false;
       });
   }
-  /* eslint-disable */
 
+  /**
+   * @description displays the admin dashboard
+   * @param {void} null
+   * @returns {string} - HTML markup for the dashboard
+   * @memberof Admin
+   */
   render() {
     return (
       <div>
@@ -71,7 +157,46 @@ class Admin extends Component {
                   <CategoryForm />
                 </Modal>
               </div>
-              <BookList books={this.props.books} handleDelete={this.handleDelete} />
+              <BookList
+                books={this.props.books}
+                handleDelete={this.handleDelete}
+              />
+              {this.props.books.length > 0 ?
+                (<ul className="pagination center-align">
+                  <li>
+                    <button
+                      className={classnames('btn', { disabled:
+                        parseInt(this.state.pageId, 10) <= 1 })}
+                      onClick={this.prevPage}
+                    >
+                      <i className="material-icons">chevron_left</i>
+                    </button>
+                  </li>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  {
+                    this.state.pages.map(page =>
+                      (
+                        <li
+                          key={page}
+                          className={classnames('waves-effect',
+                            { active: this.state.pageId === String(page) })}
+                        >
+                          <Link to={`/admin?page=${page}`}>{page}</Link>
+                        </li>
+                      ),
+                    )
+                  }
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <li>
+                    <button
+                      onClick={this.nextPage}
+                      className={classnames('btn', 'waves-effect',
+                        { disabled: parseInt(this.state.pageId, 10) >=
+                          this.state.pages.length })}
+                    >
+                      <i className="material-icons">chevron_right</i>
+                    </button></li>
+                </ul>) : ''}
             </div>
           </div>
         </div>
@@ -80,10 +205,22 @@ class Admin extends Component {
   }
 }
 
+// Type checking for Admin component
 Admin.propTypes = {
-  books: PropTypes.array.isRequired,
+  books: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fetchBooks: PropTypes.func.isRequired,
+  fetchCategories: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    location: PropTypes.object.isRequired,
+    push: PropTypes.func.isRequired
+  }).isRequired,
 };
 
+/**
+ * @description maps the state in redux store to Admin props
+ * @param {object} state
+ * @returns {object} book
+ */
 function mapStateToProps(state) {
   return {
     books: state.books,

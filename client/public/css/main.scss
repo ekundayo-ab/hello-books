@@ -449,3 +449,16 @@ p {
   padding-top: 10px;
   width: 119px;
 }
+
+// Pagination
+.pagination {
+  li {
+    a {
+      color: $pure-white;
+      display: inline-block;
+      font-size: 1.2rem;
+      line-height: 30px;
+      padding: 0 10px;
+    }
+  }
+}

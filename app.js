@@ -10,19 +10,27 @@ require('dotenv').config();
 
 const port = process.env.PORT || 8000;
 const app = express();
+
+// Set headers for Cross Origin Requests
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE, HEAD');
-  res.header('Access-Control-Allow-Headers', 'Authorization, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods',
+    'POST, GET, OPTIONS, PUT, DELETE, HEAD');
+  res.header('Access-Control-Allow-Headers',
+    'Authorization, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept'
+  );
   next();
 });
+
+// Initialize swagger
 const swaggerJSDoc = swagger;
 // swagger definition
 const swaggerDefinition = {
   info: {
     title: 'HelloBooks API',
     version: '1.0.0',
-    description: 'An application that helps manage a library and its processes like stocking, tracking and renting of books.',
+    description: 'An application that helps manage a library' +
+    'and its processes like stocking, tracking and renting of books.',
   },
   host: 'hellobooks-e.herokuapp.com',
   // host: 'localhost:8000',
@@ -40,12 +48,23 @@ const options = {
 // initialize swagger-jsdoc
 const swaggerSpec = swaggerJSDoc(options);
 
+// Log errors, server requests and responses
 app.use(morgan('dev'));
+
+// Parse requests and responses
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static('./client/dist/')); // configure static files folder
+
+// Configure static files for dist directory
+app.use(express.static('./client/dist/'));
+
+// Configure static files for public directory
+app.use(express.static('./client/public/'));
+
+// Serve directory with url as static files
 app.use('/api/docs/', express.static(path.join(__dirname, 'server/api-docs/')));
-app.post('/api/v1/verify-token', authMiddleware.authenticate, authMiddleware.verifyToken);
+app.post('/api/v1/verify-token',
+  authMiddleware.authenticate, authMiddleware.verifyToken);
 app.use('/api/v1', router);
 
 // serve swagger
@@ -59,7 +78,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/public/index.html'));
 });
 
-
+// Listens to port for requests
 app.listen(port, (err) => {
   /* eslint-disable no-console */
   if (err) console.log(err);

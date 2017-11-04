@@ -4,25 +4,33 @@ import store from '../../src/index';
 const SET_CATEGORIES = 'SET_CATEGORIES';
 const ADD_CATEGORY = 'ADD_CATEGORY';
 
-const token = localStorage.getItem('jwtToken');
+/**
+ * Set Categories
+ * @description Set the categories in the store
+ * @param {object} categories - details categories to set
+ * @returns {object} action
+ */
+const setCategories = categories =>
+  ({ type: SET_CATEGORIES, categories });
 
-function setCategories(categories) {
-  return {
-    type: SET_CATEGORIES,
-    categories,
-  };
-}
+/**
+ * Add Category
+ * @description Adds a new category to the store
+ * @param {object} category - category to add
+ * @returns {object} action
+ */
+const addCategory = category =>
+  ({ type: ADD_CATEGORY, category });
 
-function addCategory(category) {
-  return {
-    type: ADD_CATEGORY,
-    category,
-  };
-}
-
-function fetchCategories() {
-  return ((dispatch) => {
-    axios.get('/api/v1/categories', { 'x-access-token': token })
+/**
+ * Get Categories
+ * @description Makes request to the server to get categories
+ * @param {void} null
+ * @returns {object} action
+ */
+const fetchCategories = () =>
+  ((dispatch) => {
+    axios.get('/api/v1/categories')
       .then((res) => {
         dispatch(setCategories(res.data));
         return res.data;
@@ -31,10 +39,15 @@ function fetchCategories() {
         ({ err: err.message }),
       );
   });
-}
 
-function saveCategory(data) {
-  return axios.post('/api/v1/category', data, { 'x-access-token': token })
+/**
+ * Create/Add Category
+ * @description Sends category to be saved to the server
+ * @param {object} categoryDetails
+ * @returns {object} action
+ */
+const saveCategory = categoryDetails =>
+  axios.post('/api/v1/category', categoryDetails)
     .then((res) => {
       store.dispatch(addCategory(res.data));
       return { res: res.data, isDone: true };
@@ -42,7 +55,6 @@ function saveCategory(data) {
     .catch(err =>
       ({ errors: err.response.data, isDone: false }),
     );
-}
 
 export {
   fetchCategories,

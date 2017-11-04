@@ -4,29 +4,32 @@ import helper from '../helpers/index';
 const Category = model.Category;
 
 /**
- *
+ * @class CatController
+ * @description Book Category operations
  */
 class CatController {
   /**
-   *
-   *
    * @static
    * @description Adds new category to the library
    * @param {any} req
    * @param {any} res
-   * @returns
-   *
+   * @returns {object} // Success, Message
    * @memberOf CatController
    */
   static create(req, res) {
     // Ensure user has administrative priviledges to create book
     if (!helper.isAdmin(req)) {
-      return res.status(403).send({ success: false, message: 'Permission Denied' });
+      return res.status(403).send({
+        success: false,
+        message: 'Permission Denied' });
     }
 
     // Error(s) is/are outputted if any
-    if (req.body.title === (undefined || null || '') || /^\s+$/.test(req.body.title)) {
-      return res.status(400).send({ success: false, message: 'All fields must exist' });
+    if (req.body.title === (undefined || null || '')
+    || /^\s+$/.test(req.body.title)) {
+      return res.status(400).send({
+        success: false,
+        message: 'All fields must exist' });
     }
 
     // Searches if Category exists in the database
@@ -35,7 +38,10 @@ class CatController {
     })
       .then((foundCat) => {
         if (foundCat) {
-          return res.status(409).send({ success: false, message: `Conflict! ${req.body.title} exists already`, foundCat });
+          return res.status(409).send({
+            success: false,
+            message: `Conflict! ${req.body.title} exists already`,
+            foundCat });
         }
         // If book does not exist, create new book.
         return Category
@@ -43,7 +49,10 @@ class CatController {
             title: req.body.title,
           })
           .then((category) => {
-            res.status(200).send({ success: true, message: `${category.title}, successfully added` });
+            res.status(200).send({
+              success: true,
+              message: `${category.title},
+              successfully added` });
           })
           .catch(error => res.send(error.message));
       })
@@ -51,14 +60,11 @@ class CatController {
   }
 
   /**
-   *
-   *
    * @static
    * @description Lists all books in the library
    * @param {any} req
    * @param {any} res
-   * @returns
-   *
+   * @returns {object} // Categories
    * @memberOf BookController
    */
   static list(req, res) {
@@ -70,11 +76,15 @@ class CatController {
       })
       .then((categories) => {
         if (categories[0] === undefined) {
-          return res.status(301).send({ success: false, message: 'Categories not available, check back later.' });
+          return res.status(301).send({
+            success: false,
+            message: 'Categories not available, check back later.' });
         }
         return res.status(200).send(categories);
       })
-      .catch(() => res.status(500).send({ success: false, message: 'Internal Server Error' }));
+      .catch(() => res.status(500).send({
+        success: false,
+        message: 'Internal Server Error' }));
   }
 }
 
