@@ -2,19 +2,48 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-materialize';
+import swal from 'sweetalert';
 import BookForm from './BookForm';
 import CategoryForm from './CategoryForm';
 import CategoryList from './../category/CategoryList';
 import BookList from './BookList';
-import { fetchBooks } from './../../../actions/bookActions';
+import { fetchBooks, deleteBook } from './../../../actions/bookActions';
+import { fetchCategories } from './../../../actions/categoryActions';
 
 class Admin extends Component {
+  constructor(props) {
+    super(props);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
   componentDidMount() {
     this.props.fetchBooks();
+    this.props.fetchCategories();
     $(document).ready(() => {
       $('.modal').modal();
     });
   }
+  /* eslint-disable */
+  handleDelete(bookId) {
+    swal({
+      title: 'Are you sure?',
+      text: 'Once deleted, you will not be able to recover this book!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal('Poof! Book successfully deleted', {
+            icon: 'success',
+          });
+          return deleteBook(bookId);
+        }
+        return false;
+      });
+  }
+  /* eslint-disable */
+
   render() {
     return (
       <div>
@@ -42,7 +71,7 @@ class Admin extends Component {
                   <CategoryForm />
                 </Modal>
               </div>
-              <BookList books={this.props.books} />
+              <BookList books={this.props.books} handleDelete={this.handleDelete} />
             </div>
           </div>
         </div>
@@ -53,7 +82,6 @@ class Admin extends Component {
 
 Admin.propTypes = {
   books: PropTypes.array.isRequired,
-  fetchBooks: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -62,4 +90,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchBooks })(Admin);
+export default connect(mapStateToProps, { fetchBooks, fetchCategories })(Admin);
