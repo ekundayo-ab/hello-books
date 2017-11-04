@@ -47,13 +47,10 @@ class Helper {
   static inputValidation(req) {
     const errors = {};
     for (let i = 0; i < 5; i += 1) {
-      const field = Object.values(req.body)[i].trim();
+      const field = Object.values(req.body)[i];
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
         const theKey = Object.keys(req.body)[i]; // eslint-disable-line no-unused-vars
         errors[theKey] = 'This field is required';
-      }
-      if (Object.keys(req.body)[i] === 'isbn' && typeof (Object.values(req.body)[i]) !== 'number') {
-        errors.ISBNValidation = 'ISBN must be a number';
       }
       if (Object.keys(req.body)[i] === 'quantity' && typeof (parseInt(Object.values(req.body)[i], 10)) !== 'number') {
         errors.numeric = 'quantity must be a number';
