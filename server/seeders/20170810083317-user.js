@@ -1,4 +1,3 @@
-/* eslint-disable */
 const bcrypt = require('bcrypt');
 'use strict';
 module.exports = {
@@ -33,4 +32,3 @@ module.exports = {
   }
 };
 
-/* eslint-enable */

@@ -10,6 +10,8 @@ require('dotenv').config();
 
 const port = process.env.PORT || 8000;
 const app = express();
+
+// Set headers for Cross Origin Requests
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods',
@@ -19,6 +21,8 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+// Initialize swagger
 const swaggerJSDoc = swagger;
 // swagger definition
 const swaggerDefinition = {
@@ -44,11 +48,20 @@ const options = {
 // initialize swagger-jsdoc
 const swaggerSpec = swaggerJSDoc(options);
 
+// Log errors, server requests and responses
 app.use(morgan('dev'));
+
+// Parse requests and responses
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static('./client/dist/')); // configure static files folder
-app.use(express.static('./client/public/')); // configure static files folder
+
+// Configure static files for dist directory
+app.use(express.static('./client/dist/'));
+
+// Configure static files for public directory
+app.use(express.static('./client/public/'));
+
+// Serve directory with url as static files
 app.use('/api/docs/', express.static(path.join(__dirname, 'server/api-docs/')));
 app.post('/api/v1/verify-token',
   authMiddleware.authenticate, authMiddleware.verifyToken);
@@ -65,7 +78,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/public/index.html'));
 });
 
-
+// Listens to port for requests
 app.listen(port, (err) => {
   /* eslint-disable no-console */
   if (err) console.log(err);

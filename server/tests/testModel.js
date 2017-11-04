@@ -3,19 +3,26 @@ import models from '../models/';
 import helperUser from '../helpers/helperUser';
 import helperBook from '../helpers/helperBook';
 
-const User = models.User; // Makes User model available globally in this file
-const Book = models.Book; // Makes Book model available globally in this file
-const Borrow = models.Borrow; // Makes Borrow model available globally in this file
-const expect = chai.expect; // Provides interface to ascertain expected results are true
+// Makes User model available globally in this fil
+const User = models.User;
+// Makes Book model available globally in this file
+const Book = models.Book;
+// Makes Borrow model available globally in this file
+const Borrow = models.Borrow;
+// Provides interface to ascertain expected results are true
+const expect = chai.expect;
 let userId;
 let bookId;
 let borrowId;
 
 describe('Models', () => {
   before((done) => {
-    User.destroy({ where: {} }); // Purges Data already in the table after testing
-    Book.destroy({ where: {} }); // Purges Data already in the table after testing
-    Borrow.destroy({ where: {} }); // Purges Data already in the table after testing
+    // Purges Data already in the table after testing
+    User.destroy({ where: {} });
+    // Purges Data already in the table after testing
+    Book.destroy({ where: {} });
+    // Purges Data already in the table after testing
+    Borrow.destroy({ where: {} });
     User.create(helperUser.user9)
       .then((user) => { userId = user.id; });
     Book.create(helperBook.book11);
@@ -65,7 +72,8 @@ describe('Models', () => {
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeValidationError');
-          expect(err.errors[0].message).to.equal('Validation is on username failed');
+          expect(err.errors[0].message)
+            .to.equal('Validation is on username failed');
           done();
         });
     });
@@ -84,8 +92,10 @@ describe('Models', () => {
     it('should list all users', (done) => {
       User.findAll()
         .then((user) => {
-          expect(user[0].dataValues.username).to.equal(helperUser.user9.username);
-          expect(user[1].dataValues.username).to.equal(helperUser.user6.username);
+          expect(user[0].dataValues.username)
+            .to.equal(helperUser.user9.username);
+          expect(user[1].dataValues.username)
+            .to.equal(helperUser.user6.username);
           done();
         });
     });
@@ -125,20 +135,24 @@ describe('Models', () => {
       Book.create(helperBook.book9) // This value does not exist
         .then()
         .catch((err) => {
-          expect(err.name).to.equal('SequelizeDatabaseError');
-          expect(err.message).to.equal('invalid input syntax for integer: "number"');
+          expect(err.name)
+            .to.equal('SequelizeDatabaseError');
+          expect(err.message)
+            .to.equal('invalid input syntax for integer: "number"');
           done();
         });
     });
-    it('should raise validation error for invalid value in quantity', (done) => {
-      Book.create(helperBook.book10) // This value does not exist
-        .then()
-        .catch((err) => {
-          expect(err.name).to.equal('SequelizeDatabaseError');
-          expect(err.message).to.equal('invalid input syntax for integer: "number"');
-          done();
-        });
-    });
+    it('should raise validation error for invalid value in quantity',
+      (done) => {
+        Book.create(helperBook.book10) // This value does not exist
+          .then()
+          .catch((err) => {
+            expect(err.name).to.equal('SequelizeDatabaseError');
+            expect(err.message)
+              .to.equal('invalid input syntax for integer: "number"');
+            done();
+          });
+      });
     it('should find a book', (done) => {
       Book.findOne({
         where: {
@@ -158,7 +172,12 @@ describe('Models', () => {
         });
     });
     it('should update a book', (done) => {
-      Book.update({ isbn: 4, title: 'Learn Haskell Edition 2017', author: 'New Man', description: 'Learn Haskell and be happy', quantity: 90 }, { where: { isbn: helperBook.book8.isbn } })
+      Book.update({
+        isbn: 4,
+        title: 'Learn Haskell Edition 2017',
+        author: 'New Man',
+        description: 'Learn Haskell and be happy',
+        quantity: 90 }, { where: { isbn: helperBook.book8.isbn } })
         .then((book) => {
           expect(book[0]).to.equal(1);
           done();
@@ -203,7 +222,8 @@ describe('Models', () => {
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeDatabaseError');
-          expect(err.message).to.equal('invalid input syntax for integer: "number"');
+          expect(err.message)
+            .to.equal('invalid input syntax for integer: "number"');
           done();
         });
     });
@@ -212,7 +232,8 @@ describe('Models', () => {
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeDatabaseError');
-          expect(err.message).to.equal('invalid input syntax for integer: "number"');
+          expect(err.message)
+            .to.equal('invalid input syntax for integer: "number"');
           done();
         });
     });
@@ -255,7 +276,9 @@ describe('Models', () => {
         actualReturnDate: Date.now(),
       }).then().catch((err) => {
         expect(err.name).to.equal('SequelizeForeignKeyConstraintError');
-        expect(err.message).to.equal('insert or update on table "Borrows" violates foreign key constraint "Borrows_bookId_fkey"');
+        expect(err.message)
+          .to.equal('insert or update on table "Borrows"' +
+          ' violates foreign key constraint "Borrows_bookId_fkey"');
         done();
       });
     });
@@ -268,7 +291,9 @@ describe('Models', () => {
         actualReturnDate: Date.now(),
       }).then().catch((err) => {
         expect(err.name).to.equal('SequelizeForeignKeyConstraintError');
-        expect(err.message).to.equal('insert or update on table "Borrows" violates foreign key constraint "Borrows_userId_fkey"');
+        expect(err.message)
+          .to.equal('insert or update on table "Borrows"' +
+          ' violates foreign key constraint "Borrows_userId_fkey"');
         done();
       });
     });

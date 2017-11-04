@@ -1,9 +1,6 @@
 import axios from 'axios';
 import store from '../../src/index';
 
-// Gets set JSON Web Token from local storage
-const token = localStorage.getItem('jwtToken');
-
 /**
  * @description sets all immutable types for the pure redux actions
  * @constant ADD_BORROW, BORROW_FETCHED, BOOK_FETCHED, SET_BORROWED_BOOKS,
@@ -14,102 +11,99 @@ const BOOK_FETCHED = 'BOOK_FETCHED';
 const SET_BORROWED_BOOKS = 'SET_BORROWED_BOOKS';
 const SET_BORROWED_NOT_RETURNED_BOOKS = 'SET_BORROWED_NOT_RETURNED_BOOKS';
 const BORROWED_RETURNED = 'BORROWED_RETURNED';
+
 /**
- * @function
+ * Gets Borrowed Book
  * @description dispatches a single borrowed book to redux store
- * @param {*} borrow
+ * @param {object} borrow - borrowing details
+ * @returns {object} action
  */
-const borrowedFetched = borrow => ({
-  type: BORROWED_FETCHED,
-  borrow,
-});
+const borrowedFetched = borrow =>
+  ({ type: BORROWED_FETCHED, borrow });
 
 /**
- * @function
+ * Get A Book
  * @description dispatch a single book to redux store
- * @param {*} book
+ * @param {object} book - details of book
+ * @returns {object} action
  */
-const bookFetched = book => ({
-  type: BOOK_FETCHED,
-  book,
-});
+const bookFetched = book =>
+  ({ type: BOOK_FETCHED, book });
 
 /**
- * @function
+ * Returns A Book
  * @description dispatch and updates lists of
  * books borrowed but not returned in the redux store
- * @param {*} book
+ * @param {object} book - book details
+ * @returns {object} action
  */
-const bookReturned = book => ({
-  type: BORROWED_RETURNED,
-  book,
-});
+const bookReturned = book =>
+  ({ type: BORROWED_RETURNED, book });
 
 /**
- * @function
+ * Sets Borrowed Books
  * @description dispatches all borrowed books to redux store
- * @param {*} borrowedBooks
+ * @param {array} borrowedBooks - lists of borrowed books
+ * @returns {object} action
  */
-const setBorrowedBooks = borrowedBooks => ({
-  type: SET_BORROWED_BOOKS,
-  borrowedBooks,
-});
+const setBorrowedBooks = borrowedBooks =>
+  ({ type: SET_BORROWED_BOOKS, borrowedBooks });
 
 /**
- * @function
+ * Get Borrowed Not Returned Books
  * @description dispatches all books borrowed but not returned
  * to redux store
- * @param {*} booksList
+ * @param {array} bookList - lists of books not returned
+ * @returns {object} action
  */
-const setBorrowedNotReturnedBooks = bookList => ({
-  type: SET_BORROWED_NOT_RETURNED_BOOKS,
-  bookList,
-});
+const setBorrowedNotReturnedBooks = bookList =>
+  ({ type: SET_BORROWED_NOT_RETURNED_BOOKS, bookList });
 
 /**
- * @function
+ * Borrow Book
  * @description borrows book from the library and dispatches
- * @function borrowFetched and @function bookFetched to redux store,
- * It also displays a noti=fication that book was borrowed
- * @function Materialize does that
- * @param {*} userId
- * @param {*} bookId
+ * function borrowFetched and function bookFetched to redux store
+ * @param {number} userId - id of user borrowing
+ * @param {number} bookId - id of book to borrow
+ * @returns {object} action
  */
 const borrowBook = (userId, bookId) =>
   axios.post(
     `/api/v1/users/${userId}/books`,
     bookId,
-    { 'x-access-token': token },
   ).then((res) => {
     store.dispatch(borrowedFetched(res.data.updatedBorrowedBook));
     store.dispatch(bookFetched(res.data.updatedBorrowedBook));
-    Materialize.toast(`${res.data.updatedBorrowedBook.title} Successfully borrowed`, '2000', 'green');
+    Materialize.toast(
+      `${res.data.updatedBorrowedBook.title} Successfully borrowed`,
+      '2000', 'green');
   });
 
 /**
- * @function
+ * Get Borrowed Books
  * @description makes an API call to the server for all
  * borrowed books, then dispatches an action to set them
  * in the redux store
- * @param {*} userId
+ * @param {number} userId - id of user
+ * @returns {object} action
  */
 const fetchAllBorrowedBooks = userId =>
   axios.get(
     `/api/v1/borrowed/${userId}/books`,
-    { 'x-access-token': token },
   ).then((res) => {
     store.dispatch(setBorrowedBooks(res.data.borrowedBooks));
   });
 
 /**
- * @function
- * @description makes an API call to the server to borroww a single
- * book from then dispatches a pure function action to
+ * Get Single Borrowed Book
+ * @description makes an API call to the server to borrow a single
+ * book, then dispatches a pure function action to
  * set it in the redux store
- * @param {*} bookId
+ * @param {number} bookId - id of book to borrow
+ * @returns {object} action
  */
 const fetchBorrowedBook = bookId =>
-  axios.get(`/api/v1/borrowed/${bookId}`, { 'x-access-token': token })
+  axios.get(`/api/v1/borrowed/${bookId}`)
     .then((res) => {
       if (res.data.foundBorrowedBook) {
         store.dispatch(borrowedFetched(res.data.foundBorrowedBook));
@@ -121,14 +115,15 @@ const fetchBorrowedBook = bookId =>
     .catch(err => err);
 
 /**
- * @function
+ * Get All Books Borrowed Not Returned
  * @description makes an API call the server to get all books
  * which have been borrowed but not returned, then dispatches
  * an action to set them in the redux store
- * @param {*} userId
+ * @param {number} userId - id of user concerned
+ * @returns {object} action
  */
 const getBorrowedNotReturned = userId =>
-  axios.get(`/api/v1/users/${userId}/books?returned=false`, { 'x-access-token': token },
+  axios.get(`/api/v1/users/${userId}/books?returned=false`
   ).then((res) => {
     if (res.data.success) {
       return store.dispatch(setBorrowedNotReturnedBooks(res.data.borrow));
@@ -136,8 +131,16 @@ const getBorrowedNotReturned = userId =>
     return store.dispatch(setBorrowedNotReturnedBooks([]));
   });
 
+  /**
+   * Return Book
+   * @description Send ID of book to return, with a the borrower's identity
+   * @param {*} userId - id of user returning book
+   * @param {*} bookId - id of book returned
+   * @returns {object} action
+   */
 const returnBook = (userId, bookId) =>
-  axios.put(`/api/v1/users/${userId}/books`, { bookId }, { 'x-access-token': token },
+  axios.put(`/api/v1/users/${userId}/books`,
+    { bookId }
   ).then((res) => {
     store.dispatch(bookReturned(res.data.updatedBorrowedBook));
     Materialize.toast(res.data.message, '2000', 'green');

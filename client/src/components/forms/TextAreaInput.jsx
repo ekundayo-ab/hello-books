@@ -2,8 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+/**
+ * Abstracts TextArea form fields
+ * @description abstracts the text area form field into a function
+ * @param {object} props
+ * @returns {void} returns nothing
+ */
 const TextAreaInput = props => (
-  <div className={classnames('input-field col s12', { 'has-error': !!props.fieldError })}>
+  <div className={
+    classnames('input-field col s12', { 'has-error': !!props.fieldError })}
+  >
     <i className="fa fa-edit prefix " />
     <textarea
       id={props.identifier}
@@ -15,7 +23,8 @@ const TextAreaInput = props => (
       onChange={props.controlFunc}
       placeholder={props.placeholder}
     />
-    <span style={{ textAlign: 'left', marginLeft: '45px' }}>{props.fieldError}</span>
+    <span style={{ textAlign: 'left', marginLeft: '45px' }}>
+      {props.fieldError}</span>
   </div>
 );
 

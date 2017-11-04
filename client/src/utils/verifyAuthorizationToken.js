@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+/**
+ *
+ * @param {*} data
+ * @returns {string} // Decoded token
+ */
 const verifyToken = data =>
   axios.post('/api/v1/verify-token', data)
     .then((resp) => {

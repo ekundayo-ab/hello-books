@@ -2,8 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classname from 'classnames';
 
+/**
+ * Abstracts Input form fields
+ * @description abstracts the input form fields
+ * @param {object} props
+ * @returns {void} returns nothing
+ */
 const SingleInput = props => (
-  <div className={classname('input-field', 'col s12', { 'has-error': props.fieldError })}>
+  <div className={
+    classname('input-field', 'col s12', { 'has-error': props.fieldError })}
+  >
     <input
       placeholder={props.placeholder}
       id={props.identifier}
@@ -14,7 +22,8 @@ const SingleInput = props => (
       onBlur={props.effectFunc}
       value={props.content}
     />
-    {props.fieldError && <span className="help-block">{props.fieldError}</span> }
+    {props.fieldError &&
+      <span className="help-block">{props.fieldError}</span> }
   </div>
 );
 

@@ -1,6 +1,8 @@
 template/**/*.js
 server/api-docs/**/*.js
+server/migrations/**/*.js
 client/public/**/*.js
 client/webpack.config.js
 client/dist/**/*.js
 .sass-lint.yml
+server/seeders

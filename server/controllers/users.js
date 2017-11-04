@@ -6,26 +6,25 @@ import Helper from '../helpers/index';
 const User = models.User;
 
 /**
- *
- *
  * @class UserController
+ * @description Library users operations
  */
 class UserController {
   /**
-   *
    * @static
    * @description Signs up a user
    * @param {any} req
    * @param {any} res
-   * @returns registered user and success: true message
-   *
+   * @returns {object} registered user and success: true message
    * @memberOf UserController
    */
   static signup(req, res) {
     // Validates and ensure expected inputs are gotten
     if (req.body.password === undefined || req.body.username === undefined
       || req.body.email === undefined) {
-      return res.status(400).send({ success: false, message: 'Check your username, email or password and try again!' });
+      return res.status(400).send({
+        success: false,
+        message: 'Check your username, email or password and try again!' });
     }
 
     // Error(s) is/are outputted if any is pushed to the array
@@ -34,7 +33,9 @@ class UserController {
 
 
     if (!Helper.validateEmail(req.body.email)) {
-      return res.status(400).send({ success: false, message: 'Invalid email address, try again' });
+      return res.status(400).send({
+        success: false,
+        message: 'Invalid email address, try again' });
     }
 
     return User
@@ -45,7 +46,9 @@ class UserController {
       })
       .then((foundEmail) => {
         if (foundEmail) {
-          return res.status(409).send({ success: false, message: 'User with that email exists' });
+          return res.status(409).send({
+            success: false,
+            message: 'User with that email exists' });
         }
         return User.findOne({
           where: {
@@ -53,7 +56,9 @@ class UserController {
           },
         }).then((foundUsername) => {
           if (foundUsername) {
-            return res.status(409).send({ success: false, message: 'Username already taken' });
+            return res.status(409).send({
+              success: false,
+              message: 'Username already taken' });
           }
           return User
             .create({
@@ -62,25 +67,29 @@ class UserController {
               password: bcrypt.hashSync(req.body.password, 10),
               role: req.body.role,
             })
-            .then((user) => { res.status(201).send({ success: true, message: `Hi ${user.username}, registration successful!` }); })
+            .then((user) => {
+              res.status(201).send({
+                success: true,
+                message: `Hi ${user.username}, registration successful!` });
+            })
             .catch((error) => { res.status(409).send(error.message); });
         });
       });
   }
   /**
-   *
    * @static
    * @description Signs In in a User
    * @param {any} req
    * @param {any} res
-   * @returns token and success: true message
-   *
+   * @returns {object} token and success: true message
    * @memberOf UserController
    */
   static signin(req, res) {
     // Ensures expected inputs are gotten
     if (!req.body.password || !req.body.identifier) {
-      return res.status(400).send({ success: false, message: 'Bad request!, Check your username or email.' });
+      return res.status(400).send({
+        success: false,
+        message: 'Bad request!, Check your username or email.' });
     }
     // Queries the database if user exists with supplied credentials
     return User
@@ -95,7 +104,9 @@ class UserController {
       .then((user) => {
         // If User does not exist, output User not found.
         if (!user) {
-          res.status(404).send({ success: false, message: 'Authentication failed. User not found' });
+          res.status(404).send({
+            success: false,
+            message: 'Authentication failed. User not found' });
         } else if (user) {
           /**
            * if User exists, compares supplied credentials
@@ -105,30 +116,35 @@ class UserController {
            * consisting of User's data and the phrase "hello-books"
            */
           if (!bcrypt.compareSync(req.body.password, user.password)) {
-            res.status(401).send({ success: false, message: 'Authentication failed. Wrong password' });
+            res.status(401).send({
+              success: false,
+              message: 'Authentication failed. Wrong password' });
           } else {
             const token = jwt.sign({
               data: { id: user.id, role: user.role, username: user.username },
             }, process.env.JWT_SECRET, { expiresIn: 60 * 60 });
-            res.json({ success: true, message: `Hi ${user.username}, you are logged in`, token });
+            res.json({
+              success: true,
+              message: `Hi ${user.username}, you are logged in`,
+              token });
           }
         }
       })
       .catch((error) => { res.status(404).send(error); });
   }
   /**
-   *
    * @static
    * @description Lists all users
    * @param {any} req
    * @param {any} res
-   * @returns users list
-   *
+   * @returns {object} users list
    * @memberOf UserController
    */
   static list(req, res) {
     if (req.decoded.data.role !== 'admin') {
-      res.status(403).send({ success: false, message: 'You are not allowed to view all users' });
+      res.status(403).send({
+        success: false,
+        message: 'You are not allowed to view all users' });
     }
     // Get all users.
     return User
@@ -141,6 +157,13 @@ class UserController {
       });
   }
 
+  /**
+   * @static
+   * @param {any} req
+   * @param {any} res
+   * @returns {object} //Success, Message
+   * @memberof UserController
+   */
   static findUser(req, res) {
     // Get all users.
     return User
@@ -161,10 +184,20 @@ class UserController {
       .catch(err => res.status(400).send(err));
   }
 
+  /**
+   * @static
+   * @param {any} req
+   * @param {any} res
+   * @returns {object} // Success, Message token
+   * @memberof UserController
+   */
   static googleAuth(req, res) {
+    console.log(req.body);
     if (req.body.username.trim() === '' ||
     req.body.password.trim() === '' || req.body.email.trim() === '') {
-      return res.status(400).send({ success: false, message: 'Please enter correct data' });
+      return res.status(400).send({
+        success: false,
+        message: 'Please enter correct data' });
     }
     return User
       .findOne({
@@ -178,7 +211,9 @@ class UserController {
       .then((foundUser) => {
         if (foundUser) {
           const token = jwt.sign({
-            data: { id: foundUser.id, role: foundUser.role, username: foundUser.username },
+            data: { id: foundUser.id,
+              role: foundUser.role,
+              username: foundUser.username },
           }, process.env.JWT_SECRET, { expiresIn: 60 * 60 });
           return res.status(200).send({
             success: true,
@@ -207,13 +242,20 @@ class UserController {
             }
             return res.status(400).send({
               success: false,
-              message: 'Something happened, ensure you sign in to your google account',
+              message: 'Something happened, ensure you' +
+              'sign in to your google account',
             });
           })
-          .catch(() => { res.status(409).send({ success: false, message: 'A user with that email/username' }); });
+          .catch(() => {
+            res.status(409).send({
+              success: false,
+              message: 'A user with that email/username' });
+          });
       })
       .catch(() => {
-        res.send({ success: false, message: 'Internal server error' });
+        res.send({
+          success: false,
+          message: 'Internal server error' });
       });
   }
 }

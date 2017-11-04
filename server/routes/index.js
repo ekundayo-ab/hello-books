@@ -116,7 +116,9 @@ Router.post('/users/signup', usersController.signup); // Route to sign up
  *         description: Bad Username, Password or Email
  */
 Router.post('/users/signin', usersController.signin); // Route to sign in
-Router.post('/users', usersController.findUser); // Checks if a User exists in the database
+
+// Checks if a User exists in the database
+Router.post('/users', usersController.findUser);
 
 Router.post('/auth/google', usersController.googleAuth);
 
@@ -210,7 +212,8 @@ Router.post('/books', booksController.create); // Route to add new book
  *       404:
  *         description: Book not found
  */
-Router.put('/books/:bookId', booksController.update); // Route to modify a book information
+// Route to modify a book information
+Router.put('/books/:bookId', booksController.update);
 
 /**
  * @swagger
@@ -240,7 +243,8 @@ Router.put('/books/:bookId', booksController.update); // Route to modify a book 
  *       404:
  *         description: Book not found
  */
-Router.delete('/books/:bookId', booksController.destroy); // Route to delete a book
+// Route to delete a book
+Router.delete('/books/:bookId', booksController.destroy);
 
 /**
  * @swagger
@@ -263,7 +267,8 @@ Router.delete('/books/:bookId', booksController.destroy); // Route to delete a b
  *         schema:
  *           $ref: '#/definitions/Book'
  */
-Router.get('/books', booksController.list); // Route to list all books in library
+// Route to list all books in library
+Router.get('/books', booksController.list);
 
 /**
  * @swagger
@@ -309,7 +314,8 @@ Router.get('/books', booksController.list); // Route to list all books in librar
  *       404:
  *         description: Book not found
  */
-Router.post('/users/:userId/books', borrowsController.create); // Route to borrow a book
+// Route to borrow a book
+Router.post('/users/:userId/books', borrowsController.create);
 
 /**
  * @swagger
@@ -355,8 +361,8 @@ Router.post('/users/:userId/books', borrowsController.create); // Route to borro
  *       404:
  *         description: Book not found
  */
-Router.put('/users/:userId/books', borrowsController.returnBook); // Route to return a book
-
+// Route to return a book
+Router.put('/users/:userId/books', borrowsController.returnBook);
 /**
  * @swagger
  * /users/{userId}/books:
@@ -388,7 +394,8 @@ Router.put('/users/:userId/books', borrowsController.returnBook); // Route to re
  *         schema:
  *           $ref: '#/definitions/Book'
  */
-Router.get('/users/:userId/books', borrowsController.listNotReturned); // Route to list borrowed but not returned book
+// Route to list borrowed but not returned book
+Router.get('/users/:userId/books', borrowsController.listNotReturned);
 
 Router.get('/books/:bookId', booksController.findBook);
 Router.get('/borrowed/:bookId', borrowsController.getBorrowedBook);

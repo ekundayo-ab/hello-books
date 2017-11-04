@@ -1,4 +1,3 @@
-/* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -6,17 +5,29 @@ import verifyToken from '../utils/verifyAuthorizationToken';
 import Header from '../components/library/master/Header';
 import { setCurrentUser } from '../actions/authActions';
 
+/**
+ * Higher Order Function
+ * @description A function which returns another function
+ * @param {class} ComposedComponent
+ * @returns {function} connect
+ */
 export default function (ComposedComponent) {
+  /**
+   * @description Represents a component middleware for protected pages
+   * @class Authenticate
+   * @extends {Component}
+   */
   class Authenticate extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        isFetching: false,
-      };
-    }
+    /**
+     * @description Executed after component mounts
+     * @param {void} null
+     * @returns {void} returns nothing
+     * @memberof Authenticate
+     */
     componentWillMount() {
       if (localStorage.getItem('jwtToken') === null) {
-        Materialize.toast('Oops! Something Happened, Please login.', 3000, 'red');
+        Materialize.toast('Oops! Something Happened, Please login.',
+          3000, 'red');
         this.props.history.push('/login');
       } else {
         verifyToken({ token: localStorage.getItem('jwtToken') })
@@ -24,13 +35,20 @@ export default function (ComposedComponent) {
             this.props.setCurrentUser(rex);
           })
           .catch(() => {
-            Materialize.toast('Oops! Something happened, Allow us verify you again', 3000, 'red');
+            Materialize.toast(
+              'Oops! Something happened, Allow us verify you again',
+              3000, 'red');
             localStorage.removeItem('jwtToken');
             this.props.history.push('/login');
           });
       }
     }
 
+    /**
+     * @description Renders the component
+     * @returns {string} - HTML markup for component which passes authentication
+     * @memberof Authenticate
+     */
     render() {
       return (
         <div>
@@ -41,17 +59,29 @@ export default function (ComposedComponent) {
     }
   }
 
+  // Type checking for props used
   Authenticate.propTypes = {
-    history: PropTypes.object.isRequired,
+    history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
     setCurrentUser: PropTypes.func.isRequired,
   };
 
+  /**
+   * @description maps state from store to component props
+   * @param {object} state
+   * @returns {boolean} false or true
+   */
   function mapStateToProps(state) {
     return {
       isAuthenticated: state.users.isAuthenticated,
     };
   }
 
+
+  /**
+   * @desc Maps dispatch to setCurrentUser action
+   * @param {void} null
+   * @return {object} setCurrentUser
+   */
   const mapDispatchToProps = {
     setCurrentUser,
   };

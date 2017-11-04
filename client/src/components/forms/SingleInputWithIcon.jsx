@@ -2,8 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classname from 'classnames';
 
+/**
+ * Abstracts Input form fields with Icon
+ * @description abstracts the input form fields with icons
+ * @param {object} props
+ * @returns {void} returns nothing
+ */
 const SingleInputWithIcon = props => (
-  <div className={classname('input-field col s12', { 'has-error': !!props.fieldError })}>
+  <div
+    className={
+      classname('input-field col s12', { 'has-error': !!props.fieldError })}
+  >
     <i className={props.iconClass} />
     <input
       placeholder={props.placeholder}
@@ -14,7 +23,10 @@ const SingleInputWithIcon = props => (
       onChange={props.controlFunc}
       value={props.content}
     /><br />
-    <span style={{ textAlign: 'left', marginLeft: '45px' }} className="has-error">{props.fieldError}</span>
+    <span
+      style={{ textAlign: 'left', marginLeft: '45px' }}
+      className="has-error"
+    >{props.fieldError}</span>
   </div>
 );
 

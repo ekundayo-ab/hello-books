@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { saveCategory } from '../../../actions/categoryActions';
-import { addFlashMessage } from '../../../actions/messageActions';
 
+/**
+ * @description represents form for adding Category
+ * @class CategoryForm
+ * @extends {Component}
+ */
 class CategoryForm extends Component {
+  /**
+   * Creates an instance of CategoryForm.
+   * @param {object} props
+   * @memberof CategoryForm
+   * @constructor
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -19,22 +28,34 @@ class CategoryForm extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-    if (!this.state.errors[e.target.name]) {
+  /**
+   * @description handles changes to the input fields value
+   * @param {object} event
+   * @returns {void} nothing
+   * @memberof CategoryForm
+   */
+  onChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+    if (!this.state.errors[event.target.name]) {
       const errors = Object.assign({}, this.state.errors);
-      delete errors[e.target.name];
+      delete errors[event.target.name];
       this.setState({
-        [e.target.name]: e.target.value,
+        [event.target.name]: event.target.value,
         errors,
       });
     } else {
-      this.setState({ [e.target.name]: e.target.value });
+      this.setState({ [event.target.name]: event.target.value });
     }
   }
 
-  onSubmit(e) {
-    e.preventDefault();
+  /**
+   * @description handles Category form submission
+   * @param {object} event
+   * @returns {string} alert message
+   * @memberof CategoryForm
+   */
+  onSubmit(event) {
+    event.preventDefault();
     const errors = {};
     if (this.state.title === '') {
       errors.title = 'Field cannot be empty';
@@ -55,12 +76,20 @@ class CategoryForm extends Component {
     }
   }
 
+  /**
+   * @description displays the form for adding category
+   * @param {void} null
+   * @returns {string} - HTML markup for the form
+   * @memberof UpdateBookModal
+   */
   render() {
     const { errors } = this.state;
     return (
       <div>
         <form onSubmit={this.onSubmit}>
-          <div className={classnames('input-field', 'col s12', { 'has-error': errors.title })}>
+          <div className={classnames('input-field', 'col s12',
+            { 'has-error': errors.title })}
+          >
             <i className="fa fa-pencil prefix" />
             <input
               id="icon_prefix"
@@ -71,10 +100,12 @@ class CategoryForm extends Component {
               value={this.state.title}
               className="validate"
             />
-            {errors.title && <span className="help-block">{errors.title}</span> }
+            {errors.title
+              && <span className="help-block">{errors.title}</span> }
           </div>
           <div className="center-align col s12">
-            <button type="submit" className="btn waves-effect teal"><i className="fa fa-plus" /> Create Category</button>
+            <button type="submit" className="btn waves-effect teal">
+              <i className="fa fa-plus" /> Create Category</button>
           </div>
         </form>
       </div>
@@ -82,9 +113,4 @@ class CategoryForm extends Component {
   }
 }
 
-CategoryForm.propTypes = {
-  location: PropTypes.object.isRequired,
-  addFlashMessage: PropTypes.func.isRequired,
-};
-
-export default connect(null, { saveCategory, addFlashMessage })(withRouter(CategoryForm));
+export default connect(null, { saveCategory })(withRouter(CategoryForm));
