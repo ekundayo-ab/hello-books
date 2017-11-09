@@ -61,9 +61,15 @@ class BookController {
               message: `${book.title}, successfully added`,
               book });
           })
-          .catch(error => res.send(error.message));
+          .catch(() => res.status(500).send({
+            success: false,
+            message: 'Internal Server Error'
+          }));
       })
-      .catch(error => res.send(error.message));
+      .catch(() => res.status(500).send({
+        success: false,
+        message: 'Internal Server Error'
+      }));
   }
   /**
    * @static
@@ -128,7 +134,10 @@ class BookController {
                 book: newBook }),
             );
           })
-          .catch(error => res.send(error.message));
+          .catch(() => res.status(500).send({
+            success: true,
+            message: 'Internal Server Error'
+          }));
       });
   }
   /**
@@ -142,13 +151,17 @@ class BookController {
   static destroy(req, res) {
     // Ensures user has administrative priviledges to delete book
     if (!helper.isAdmin(req)) {
-      return res.status(403).send({ success: false,
-        message: 'Permission Denied' });
+      return res.status(403).send({
+        success: false,
+        message: 'Permission Denied'
+      });
     }
     // Ensures Book ID is present in the path
     if (req.params.bookId === 'undefined') {
-      return res.status(404).send({ success: false,
-        message: 'Book not found' });
+      return res.status(400).send({
+        success: false,
+        message: 'Ensure book ID is present'
+      });
     }
     // Searches for book in the database
     return Book
@@ -159,17 +172,23 @@ class BookController {
       })
       .then((book) => {
         if (!book) {
-          return res.status(404).send({ success: false,
-            message: 'Book not found' });
+          return res.status(404).send({
+            success: false,
+            message: 'Book not found'
+          });
         }
         // If book is found, delete
         book.destroy();
-        return res.status(200).send({ success: true,
+        return res.status(200).send({
+          success: true,
           message: 'Book successfully deleted',
-          book });
+          book
+        });
       })
-      .catch(() => res.status(400).send({ success: false,
-        message: 'Enter valid inputs!' }));
+      .catch(() => res.status(500).send({
+        success: false,
+        message: 'Internal Server Error'
+      }));
   }
   /**
    * @static
@@ -197,16 +216,24 @@ class BookController {
           })
           .then((book) => {
             if (book[0] === undefined) {
-              return res.status(301).send({ success: false,
-                message: 'Books not available, check back later.' });
+              return res.status(204).send({
+                success: false,
+                message: 'Books not available, check back later.'
+              });
             }
-            return res.status(200).send({ books: book, numberOfPages: pages });
+            return res.status(200).send({
+              success: true,
+              books: book,
+              numberOfPages: pages
+            });
           })
           .catch(() =>
             res.status(400)
-              .send({ success: false,
+              .send({
+                success: false,
                 message: 'Ooops! something happened,' +
-                'check your inputs and try again.' }));
+                'check your inputs and try again.'
+              }));
       });
   }
 
@@ -228,8 +255,10 @@ class BookController {
         if (book) {
           return res.status(200).send(book);
         }
-        return res.status(404).send({ success: false,
-          message: 'Book not found' });
+        return res.status(404).send({
+          success: false,
+          message: 'Book not found'
+        });
       })
       .catch(() => {
         res.status(500).send({ failure: 'Internal Server Error' });

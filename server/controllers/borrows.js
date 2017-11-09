@@ -18,91 +18,98 @@ class BorrowController {
    */
   static create(req, res) {
     // Checks if user exists
-    return User.findById(req.decoded.data.id)
+    User.findById(req.decoded.data.id)
       .then((userFound) => {
         if (!userFound) {
           return res.status(404).send({
             success: false,
             message: 'User does not exist' });
         }
-        // Also checks if book has been borrowed and not returned
-        return Borrow
+      })
+      .catch(() => res.status(500).send({
+        success: false,
+        message: 'Internal Server Error'
+      }));
+
+    // Also checks if book has been borrowed and not returned
+    return Borrow
+      .findOne({
+        where: {
+          userId: req.decoded.data.id,
+          bookId: req.body.bookId,
+          returned: false,
+        },
+        include: [
+          { model: Book, as: 'book', required: true },
+        ],
+      }).then((foundBorrow) => {
+        /**
+         * If book has been borrowed before and not returned,
+         * User cannot borrow same book again.
+         */
+        if (foundBorrow) {
+          return res.status(409).send({
+            success: false,
+            message: 'Book borrowed already'
+          });
+        }
+        // Check if book is available and not borrowed out.
+        return Book
           .findOne({
             where: {
-              userId: req.decoded.data.id,
-              bookId: req.body.bookId,
-              returned: false,
+              id: req.body.bookId,
             },
-            include: [
-              { model: Book, as: 'book', required: true },
-            ],
-          }).then((foundBorrow) => {
-            /**
-             * If book has been borrowed before and not returned,
-             * User cannot borrow same book again.
-             */
-            if (foundBorrow) {
-              return res.status(409).send({
+          })
+          .then((foundBooktoBorrow) => {
+            // If book is borrowed out, then No book to borrow
+            if (!foundBooktoBorrow || foundBooktoBorrow.quantity === 0) {
+              return res.status(404).send({
                 success: false,
-                message: 'Book borrowed already' });
+                message: 'Book not found'
+              });
             }
-            // Check if book is available and not borrowed out.
-            return Book
-              .findOne({
-                where: {
-                  id: req.body.bookId,
-                },
+            /**
+             * But if book is available, User can borrow book
+             * with the count decreased by one
+             */
+            return foundBooktoBorrow
+              .update({
+                quantity: foundBooktoBorrow.quantity - 1,
               })
-              .then((foundBooktoBorrow) => {
+              .then((updatedBorrowedBook) => {
                 // If book is borrowed out, then No book to borrow
-                if (!foundBooktoBorrow || foundBooktoBorrow.quantity === 0) {
+                if (!foundBooktoBorrow ||
+                  foundBooktoBorrow.quantity === 0) {
                   return res.status(404).send({
                     success: false,
-                    message: 'Book not found' });
+                    message: 'Book not found'
+                  });
                 }
-                /**
-                 * But if book is available, User can borrow book
-                 * with the count decreased by one
-                 */
-                return foundBooktoBorrow
-                  .update({
-                    quantity: foundBooktoBorrow.quantity - 1,
-                  })
-                  .then((updatedBorrowedBook) => {
-                    // If book is borrowed out, then No book to borrow
-                    if (!foundBooktoBorrow ||
-                      foundBooktoBorrow.quantity === 0) {
-                      return res.status(404).send({
-                        success: false,
-                        message: 'Book not found' });
-                    }
-                    // Else, user is eligible to borrow book
-                    return Borrow
-                      .create({
-                        returned: false,
-                        userId: req.decoded.data.id,
-                        bookId: req.body.bookId,
-                        dueDate:
-                        new Date(Date.now() + (3 * 24 * 60 * 60 * 1000)),
-                        actualReturnDate: Date.now(),
-                      }).then(() => {
-                        res.status(200).send({
-                          success: true,
-                          message: `${updatedBorrowedBook.title}` +
-                          ' succesfully borrowed',
-                          updatedBorrowedBook
-                        });
-                      });
+                // Else, user is eligible to borrow book
+                return Borrow
+                  .create({
+                    returned: false,
+                    userId: req.decoded.data.id,
+                    bookId: req.body.bookId,
+                    dueDate:
+                    new Date(Date.now() + (3 * 24 * 60 * 60 * 1000)),
+                    actualReturnDate: Date.now(),
+                  }).then(() => {
+                    res.status(200).send({
+                      success: true,
+                      message: `${updatedBorrowedBook.title}` +
+                      ' succesfully borrowed',
+                      updatedBorrowedBook
+                    });
                   });
               });
-          })
-          .catch((error) => {
-            res.status(400).send({
-              success: false,
-              message: `Oops! something happened, ${error.message}` });
           });
       })
-      .catch(e => res.send(e.message));
+      .catch((error) => {
+        res.status(400).send({
+          success: false,
+          message: `Oops! something happened, ${error.message}` });
+      });
   }
   /**
    * @static
@@ -114,106 +121,101 @@ class BorrowController {
    */
   static returnBook(req, res) {
     // Checks if user exists
-    return User.findById(req.params.userId).then((userFound) => {
+    User.findById(req.params.userId).then((userFound) => {
       if (!userFound) {
         return res.status(404).send({
           success: false,
-          message: 'User does not exist' });
-      }
-      // Check if book has been borrowed before and returned
-      return Borrow
-        .findOne({
-          where: {
-            userId: req.params.userId,
-            bookId: req.body.bookId,
-            returned: true,
-          },
-          include: [
-            { model: Book, as: 'book', required: true },
-          ],
-        }).then(() => {
-          let updatedBorrowedBook;
-          return Borrow
-            .update({
-              // Sets userId to that supplied in path parameter
-              userId: req.params.userId,
-              returned: true, // Sets returned status to true
-              actualReturnDate: Date.now(), // Updates returned date to now
-            }, {
-              where: {
-                userId: req.params.userId,
-                bookId: req.body.bookId,
-                returned: false },
-            })
-            .then((borrowUpdated) => {
-              if (borrowUpdated[0] === 0) {
-                return res.status(404).send({ success: false,
-                  message: 'You have not borrowed this book' });
-              }
-              Borrow
-                .findOne({
-                  where: {
-                    userId: req.params.userId,
-                    bookId: req.body.bookId,
-                    returned: true,
-                  },
-                  include: [
-                    { model: Book, as: 'book', required: true },
-                  ],
-                }).then((foundUpdatedBorrow) => {
-                  updatedBorrowedBook = foundUpdatedBorrow;
-                });
-              // Searches if book is available in the database
-              return Book
-                .findOne({
-                  where: {
-                    id: req.body.bookId,
-                  },
-                })
-                .then((foundBorrowedBook) => {
-                  if (!foundBorrowedBook || foundBorrowedBook.quantity === 0) {
-                    return res.status(404).send({
-                      success: false,
-                      message: 'Book not found' });
-                  }
-                  // Book is returned with the count increased by one
-                  return foundBorrowedBook
-                    .update({
-                      quantity: foundBorrowedBook.quantity + 1,
-                    })
-                    .then((updatedBook) => {
-                      res.status(200).send({
-                        success: true,
-                        message: `${updatedBook.title} succesfully` +
-                        ' returned but pending review by Administrator',
-                        updatedBook,
-                        updatedBorrowedBook });
-                    })
-                    .catch((error) => {
-                      res.status(400).send({
-                        success: false,
-                        message: `Oops! something happened,
-                        ${error.message}` });
-                    });
-                })
-                .catch((error) => {
-                  res.status(400).send({
-                    success: false,
-                    message: `Oops! something happenned ${error.message}` });
-                });
-            })
-            .catch((error) => {
-              res.status(400).send({
-                success: false,
-                message: `Oops! something happened, ${error.message}` });
-            });
-        })
-        .catch((error) => {
-          res.status(400).send({
-            success: false,
-            message: `Oops! something happened, ${error.message}` });
+          message: 'User does not exist'
         });
-    }).catch(e => res.status(400).send(e.message));
+      }
+    }).catch(() => res.status(500).send({
+      success: false,
+      message: 'Internal Server Error'
+    }));
+
+    let updatedBorrowedBook;
+    return Borrow
+      .update({
+        // Sets userId to that supplied in path parameter
+        userId: req.params.userId,
+        returned: true, // Sets returned status to true
+        actualReturnDate: Date.now(), // Updates returned date to now
+      }, {
+        where: {
+          userId: req.params.userId,
+          bookId: req.body.bookId,
+          returned: false
+        },
+      })
+      .then((borrowUpdated) => {
+        if (borrowUpdated[0] === 0) {
+          return res.status(404).send({
+            success: false,
+            message: 'You have not borrowed this book'
+          });
+        }
+        Borrow
+          .findOne({
+            where: {
+              userId: req.params.userId,
+              bookId: req.body.bookId,
+              returned: true,
+            },
+            include: [
+              { model: Book, as: 'book', required: true },
+            ],
+          }).then((foundUpdatedBorrow) => {
+            updatedBorrowedBook = foundUpdatedBorrow;
+          });
+        // Searches if book is available in the database
+        return Book
+          .findOne({
+            where: {
+              id: req.body.bookId,
+            },
+          })
+          .then((foundBorrowedBook) => {
+            if (!foundBorrowedBook || foundBorrowedBook.quantity === 0) {
+              return res.status(404).send({
+                success: false,
+                message: 'Book not found'
+              });
+            }
+            // Book is returned with the count increased by one
+            return foundBorrowedBook
+              .update({
+                quantity: foundBorrowedBook.quantity + 1,
+              })
+              .then((updatedBook) => {
+                res.status(200).send({
+                  success: true,
+                  message: `${updatedBook.title} succesfully` +
+                  ' returned but pending review by Administrator',
+                  updatedBook,
+                  updatedBorrowedBook
+                });
+              })
+              .catch((error) => {
+                res.status(400).send({
+                  success: false,
+                  message: `Oops! something happened,
+                  ${error.message}`
+                });
+              });
+          })
+          .catch((error) => {
+            res.status(400).send({
+              success: false,
+              message: `Oops! something happenned ${error.message}`
+            });
+          });
+      })
+      .catch((error) => {
+        res.status(400).send({
+          success: false,
+          message: `Oops! something happened, ${error.message}`
+        });
+      });
   }
   /**
    * @static
@@ -238,7 +240,8 @@ class BorrowController {
         if (borrow.length < 1) {
           return res.status(200).send({
             success: false,
-            message: 'You have no books to return' });
+            message: 'You have no books to return'
+          });
         }
         const p = [];
         for (let i = 0; i < borrow.length; i += 1) {
@@ -249,7 +252,8 @@ class BorrowController {
       .catch(() => {
         res.status(500).send({
           success: false,
-          message: 'Internal Server Error' });
+          message: 'Internal Server Error'
+        });
       });
   }
 
@@ -282,7 +286,8 @@ class BorrowController {
       })
       .catch(() => res.status(500).send({
         success: false,
-        message: 'Internal Server Error' }));
+        message: 'Internal Server Error'
+      }));
   }
 
   /**
@@ -306,7 +311,8 @@ class BorrowController {
         if (borrowedBooks.length < 1) {
           return res.status(404).send({
             success: false,
-            message: 'You have not borrowed object book' });
+            message: 'You have not borrowed object book'
+          });
         }
         const p = [];
         for (let i = 0; i < borrowedBooks.length; i += 1) {
