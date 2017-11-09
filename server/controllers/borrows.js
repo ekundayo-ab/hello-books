@@ -50,7 +50,8 @@ class BorrowController {
         if (foundBorrow) {
           return res.status(409).send({
             success: false,
-            message: 'Book borrowed already' });
+            message: 'Book borrowed already'
+          });
         }
         // Check if book is available and not borrowed out.
         return Book
@@ -64,7 +65,8 @@ class BorrowController {
             if (!foundBooktoBorrow || foundBooktoBorrow.quantity === 0) {
               return res.status(404).send({
                 success: false,
-                message: 'Book not found' });
+                message: 'Book not found'
+              });
             }
             /**
              * But if book is available, User can borrow book
@@ -80,7 +82,8 @@ class BorrowController {
                   foundBooktoBorrow.quantity === 0) {
                   return res.status(404).send({
                     success: false,
-                    message: 'Book not found' });
+                    message: 'Book not found'
+                  });
                 }
                 // Else, user is eligible to borrow book
                 return Borrow
@@ -122,7 +125,8 @@ class BorrowController {
       if (!userFound) {
         return res.status(404).send({
           success: false,
-          message: 'User does not exist' });
+          message: 'User does not exist'
+        });
       }
     }).catch(() => res.status(500).send({
       success: false,
@@ -140,12 +144,15 @@ class BorrowController {
         where: {
           userId: req.params.userId,
           bookId: req.body.bookId,
-          returned: false },
+          returned: false
+        },
       })
       .then((borrowUpdated) => {
         if (borrowUpdated[0] === 0) {
-          return res.status(404).send({ success: false,
-            message: 'You have not borrowed this book' });
+          return res.status(404).send({
+            success: false,
+            message: 'You have not borrowed this book'
+          });
         }
         Borrow
           .findOne({
@@ -171,7 +178,8 @@ class BorrowController {
             if (!foundBorrowedBook || foundBorrowedBook.quantity === 0) {
               return res.status(404).send({
                 success: false,
-                message: 'Book not found' });
+                message: 'Book not found'
+              });
             }
             // Book is returned with the count increased by one
             return foundBorrowedBook
@@ -184,25 +192,29 @@ class BorrowController {
                   message: `${updatedBook.title} succesfully` +
                   ' returned but pending review by Administrator',
                   updatedBook,
-                  updatedBorrowedBook });
+                  updatedBorrowedBook
+                });
               })
               .catch((error) => {
                 res.status(400).send({
                   success: false,
                   message: `Oops! something happened,
-                  ${error.message}` });
+                  ${error.message}`
+                });
               });
           })
           .catch((error) => {
             res.status(400).send({
               success: false,
-              message: `Oops! something happenned ${error.message}` });
+              message: `Oops! something happenned ${error.message}`
+            });
           });
       })
       .catch((error) => {
         res.status(400).send({
           success: false,
-          message: `Oops! something happened, ${error.message}` });
+          message: `Oops! something happened, ${error.message}`
+        });
       });
   }
   /**
@@ -228,7 +240,8 @@ class BorrowController {
         if (borrow.length < 1) {
           return res.status(200).send({
             success: false,
-            message: 'You have no books to return' });
+            message: 'You have no books to return'
+          });
         }
         const p = [];
         for (let i = 0; i < borrow.length; i += 1) {
@@ -239,7 +252,8 @@ class BorrowController {
       .catch(() => {
         res.status(500).send({
           success: false,
-          message: 'Internal Server Error' });
+          message: 'Internal Server Error'
+        });
       });
   }
 
@@ -272,7 +286,8 @@ class BorrowController {
       })
       .catch(() => res.status(500).send({
         success: false,
-        message: 'Internal Server Error' }));
+        message: 'Internal Server Error'
+      }));
   }
 
   /**
@@ -296,7 +311,8 @@ class BorrowController {
         if (borrowedBooks.length < 1) {
           return res.status(404).send({
             success: false,
-            message: 'You have not borrowed object book' });
+            message: 'You have not borrowed object book'
+          });
         }
         const p = [];
         for (let i = 0; i < borrowedBooks.length; i += 1) {

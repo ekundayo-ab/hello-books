@@ -177,8 +177,10 @@ class BookController {
           message: 'Book successfully deleted',
           book });
       })
-      .catch(() => res.status(500).send({ success: false,
-        message: 'Internal Server Error' }));
+      .catch(() => res.status(500).send({
+        success: false,
+        message: 'Internal Server Error'
+      }));
   }
   /**
    * @static
@@ -206,8 +208,10 @@ class BookController {
           })
           .then((book) => {
             if (book[0] === undefined) {
-              return res.status(204).send({ success: false,
-                message: 'Books not available, check back later.' });
+              return res.status(204).send({
+                success: false,
+                message: 'Books not available, check back later.'
+              });
             }
             return res.status(200).send({
               success: true,

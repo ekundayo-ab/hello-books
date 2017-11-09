@@ -24,7 +24,8 @@ class UserController {
       || req.body.email === undefined) {
       return res.status(400).send({
         success: false,
-        message: 'Check your username, email or password and try again!' });
+        message: 'Check your username, email or password and try again!'
+      });
     }
 
     // Error(s) is/are outputted if any is pushed to the array
@@ -35,7 +36,8 @@ class UserController {
     if (!Helper.validateEmail(req.body.email)) {
       return res.status(400).send({
         success: false,
-        message: 'Invalid email address, try again' });
+        message: 'Invalid email address, try again'
+      });
     }
 
     return User
@@ -48,7 +50,8 @@ class UserController {
         if (foundEmail) {
           return res.status(409).send({
             success: false,
-            message: 'User with that email exists' });
+            message: 'User with that email exists'
+          });
         }
         return User.findOne({
           where: {
@@ -58,7 +61,8 @@ class UserController {
           if (foundUsername) {
             return res.status(409).send({
               success: false,
-              message: 'Username already taken' });
+              message: 'Username already taken'
+            });
           }
           return User
             .create({
@@ -70,7 +74,8 @@ class UserController {
             .then((user) => {
               res.status(201).send({
                 success: true,
-                message: `Hi ${user.username}, registration successful!` });
+                message: `Hi ${user.username}, registration successful!`
+              });
             })
             .catch(() => {
               res.status(500).send({
@@ -94,7 +99,8 @@ class UserController {
     if (!req.body.password || !req.body.identifier) {
       return res.status(400).send({
         success: false,
-        message: 'Bad request!, Check your username or email.' });
+        message: 'Bad request!, Check your username or email.'
+      });
     }
     // Queries the database if user exists with supplied credentials
     return User
@@ -111,7 +117,8 @@ class UserController {
         if (!user) {
           res.status(404).send({
             success: false,
-            message: 'Authentication failed. check password or email' });
+            message: 'Authentication failed. check password or email'
+          });
         } else if (user) {
           /**
            * if User exists, compares supplied credentials
@@ -123,7 +130,8 @@ class UserController {
           if (!bcrypt.compareSync(req.body.password, user.password)) {
             res.status(401).send({
               success: false,
-              message: 'Authentication failed. check password or email' });
+              message: 'Authentication failed. check password or email'
+            });
           } else {
             const token = jwt.sign({
               data: { id: user.id, role: user.role, username: user.username },
@@ -131,14 +139,16 @@ class UserController {
             res.json({
               success: true,
               message: `Hi ${user.username}, you are logged in`,
-              token });
+              token
+            });
           }
         }
       })
       .catch(() => {
         res.status(500).send({
           success: false,
-          message: 'Internal Server Error' });
+          message: 'Internal Server Error'
+        });
       });
   }
   /**
@@ -257,13 +267,15 @@ class UserController {
           .catch(() => {
             res.status(409).send({
               success: false,
-              message: 'A user with that email/username' });
+              message: 'A user with that email/username'
+            });
           });
       })
       .catch(() => {
         res.send({
           success: false,
-          message: 'Internal server error' });
+          message: 'Internal server error'
+        });
       });
   }
 }
