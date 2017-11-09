@@ -61,9 +61,15 @@ class BookController {
               message: `${book.title}, successfully added`,
               book });
           })
-          .catch(error => res.send(error.message));
+          .catch(() => res.status(500).send({
+            success: false,
+            message: 'Internal Server Error'
+          }));
       })
-      .catch(error => res.send(error.message));
+      .catch(() => res.status(500).send({
+        success: false,
+        message: 'Internal Server Error'
+      }));
   }
   /**
    * @static
@@ -128,7 +134,10 @@ class BookController {
                 book: newBook }),
             );
           })
-          .catch(error => res.send(error.message));
+          .catch(() => res.status(500).send({
+            success: true,
+            message: 'Internal Server Error'
+          }));
       });
   }
   /**
@@ -147,8 +156,8 @@ class BookController {
     }
     // Ensures Book ID is present in the path
     if (req.params.bookId === 'undefined') {
-      return res.status(404).send({ success: false,
-        message: 'Book not found' });
+      return res.status(400).send({ success: false,
+        message: 'Ensure book ID is present' });
     }
     // Searches for book in the database
     return Book
@@ -168,8 +177,8 @@ class BookController {
           message: 'Book successfully deleted',
           book });
       })
-      .catch(() => res.status(400).send({ success: false,
-        message: 'Enter valid inputs!' }));
+      .catch(() => res.status(500).send({ success: false,
+        message: 'Internal Server Error' }));
   }
   /**
    * @static
@@ -197,10 +206,14 @@ class BookController {
           })
           .then((book) => {
             if (book[0] === undefined) {
-              return res.status(301).send({ success: false,
+              return res.status(204).send({ success: false,
                 message: 'Books not available, check back later.' });
             }
-            return res.status(200).send({ books: book, numberOfPages: pages });
+            return res.status(200).send({
+              success: true,
+              books: book,
+              numberOfPages: pages
+            });
           })
           .catch(() =>
             res.status(400)

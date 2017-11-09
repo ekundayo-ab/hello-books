@@ -72,7 +72,12 @@ class UserController {
                 success: true,
                 message: `Hi ${user.username}, registration successful!` });
             })
-            .catch((error) => { res.status(409).send(error.message); });
+            .catch(() => {
+              res.status(500).send({
+                success: false,
+                message: 'Internal Server Error'
+              });
+            });
         });
       });
   }
@@ -106,7 +111,7 @@ class UserController {
         if (!user) {
           res.status(404).send({
             success: false,
-            message: 'Authentication failed. User not found' });
+            message: 'Authentication failed. check password or email' });
         } else if (user) {
           /**
            * if User exists, compares supplied credentials
@@ -118,7 +123,7 @@ class UserController {
           if (!bcrypt.compareSync(req.body.password, user.password)) {
             res.status(401).send({
               success: false,
-              message: 'Authentication failed. Wrong password' });
+              message: 'Authentication failed. check password or email' });
           } else {
             const token = jwt.sign({
               data: { id: user.id, role: user.role, username: user.username },
@@ -130,7 +135,11 @@ class UserController {
           }
         }
       })
-      .catch((error) => { res.status(404).send(error); });
+      .catch(() => {
+        res.status(500).send({
+          success: false,
+          message: 'Internal Server Error' });
+      });
   }
   /**
    * @static

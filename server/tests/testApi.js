@@ -251,7 +251,7 @@ describe('API Operations', () => {
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
           expect(res.body.message)
-            .to.equal('Authentication failed. Wrong password');
+            .to.equal('Authentication failed. check password or email');
           expect(res.status).to.equal(401);
           done();
         });
@@ -268,7 +268,7 @@ describe('API Operations', () => {
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
           expect(res.body.message)
-            .to.equal('Authentication failed. User not found');
+            .to.equal('Authentication failed. check password or email');
           expect(res.status).to.equal(404);
           done();
         });
@@ -997,9 +997,9 @@ describe('API Operations', () => {
         .set('Accept', 'application/x-www-form-urlencoded')
         .set('x-access-token', adminToken)
         .end((err, res) => {
-          expect(res.status).to.equal(404);
+          expect(res.status).to.equal(400);
           expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Book not found');
+          expect(res.body.message).to.equal('Ensure book ID is present');
           done();
         });
     });
