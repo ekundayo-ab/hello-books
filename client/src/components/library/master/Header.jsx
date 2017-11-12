@@ -46,13 +46,13 @@ class Header extends Component {
       <div className="admin-page shelf-page">
         <div className="nav-top row">
           <div className="col s12 center-align">
-            <Link to="/shelf">
+            <Link to="/shelf?page=1">
               <h4>Hello<span className="nav-top-marker">books</span></h4></Link>
           </div>
         </div>
         <nav>
           <div className="nav-wrapper">
-            <Link to="/" className="brand-logo">HelloBooks</Link>
+            <Link to="/shelf?page=1" className="brand-logo">HelloBooks</Link>
             <a
               href="#!"
               data-activates="mobile-demo"
@@ -66,7 +66,7 @@ class Header extends Component {
                 ><i className="fa fa-book" /> Shelf</NavLink>
               </li>
               <li>
-                <NavLink activeClassName="active" to="/history">
+                <NavLink activeClassName="active" to="/history?page=1">
                   <i className="fa fa-history" /> History</NavLink>
               </li>
               {this.props.isAdmin === 'admin'
@@ -75,7 +75,7 @@ class Header extends Component {
                     <i className="fa fa-gear" /> Admin Dashboard</NavLink>
                 </li>}
               <li>
-                <NavLink activeClassName="active" to="/profile">
+                <NavLink activeClassName="active" to="/profile?page=1">
                   <i className="fa fa-user" /> Profile</NavLink>
               </li>
               <li>
@@ -90,7 +90,7 @@ class Header extends Component {
                   <i className="fa fa-book" /> Shelf</NavLink>
               </li>
               <li>
-                <NavLink activeClassName="active" to="/history">
+                <NavLink activeClassName="active" to="/history?page=1">
                   <i className="fa fa-history" /> History</NavLink>
               </li>
               <li>
@@ -98,7 +98,7 @@ class Header extends Component {
                   <i className="fa fa-gear" /> Admin Dashboard</NavLink>
               </li>
               <li>
-                <NavLink activeClassName="active" to="/profile">
+                <NavLink activeClassName="active" to="/profile?page=1">
                   <i className="fa fa-user" /> Profile</NavLink>
               </li>
               <li>

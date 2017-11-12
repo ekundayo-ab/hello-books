@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { fetchBooks } from '../../actions/bookActions';
 import BookCard from '../../components/library/BookCard';
+import paginate from '../../helpers/paginate';
+import Paginator from '../../helpers/Paginator';
 
 /**
  * @description represents Shelf Page
@@ -25,8 +25,6 @@ class Shelf extends Component {
       pageId: 1,
     };
     this.query = new URLSearchParams(this.props.history.location.search);
-    this.nextPage = this.nextPage.bind(this);
-    this.prevPage = this.prevPage.bind(this);
   }
 
   /**
@@ -35,40 +33,14 @@ class Shelf extends Component {
    * @memberof Shelf
    * @returns {void} returns nothing
    */
-  componentWillMount() {
-    let pageId = this.query.get('page');
-    if (pageId === null) pageId = 1;
-    this.props.fetchBooks(pageId)
-      .then((numberOfPages) => {
-        const pages = Array.from(Array(numberOfPages)).map((e, i) => i + 1);
-        this.setState({ pages, pageId });
+  componentDidMount() {
+    paginate(this.props.fetchBooks, this.query.get('page'))
+      .then((res) => {
+        this.setState({
+          pages: res.pages,
+          pageId: res.pageId
+        });
       });
-  }
-
-  /**
-   * @description generates next page of books
-   * @param {void} null
-   * @returns {void} returns nothing
-   * @memberof Shelf
-   */
-  nextPage() {
-    const nextPage = parseInt(this.state.pageId, 10) + 1;
-    if (parseInt(this.state.pageId, 10) < this.state.pages.length) {
-      this.props.history.push(`/shelf?page=${nextPage}`);
-    }
-  }
-
-  /**
-   * @description generates previous page of books
-   * @param {void} null
-   * @returns {void} returns nothing
-   * @memberof Shelf
-   */
-  prevPage() {
-    const prevPage = parseInt(this.state.pageId, 10) - 1;
-    if (parseInt(this.state.pageId, 10) > 1) {
-      this.props.history.push(`/shelf?page=${prevPage}`);
-    }
   }
 
   /**
@@ -123,46 +95,19 @@ class Shelf extends Component {
                     this.props.books.length > 0 ?
                       this.props.books.map(book =>
                         <BookCard book={book} key={book.id} />) :
-                      <h5>Woof! No books in the shelf now, check back later</h5>
+                      <h5>Woof! No book(s) available in this
+                       shelf currently, please check back later</h5>
                   }
                 </div>
               </div>
               {this.props.books.length > 0 ?
-                (<ul className="pagination center-align">
-                  <li>
-                    <button
-                      className={classnames('btn', { disabled:
-                        parseInt(this.state.pageId, 10) <= 1 })}
-                      onClick={this.prevPage}
-                    >
-                      <i className="material-icons">chevron_left</i>
-                    </button>
-                  </li>
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  {
-                    this.state.pages.map(page =>
-                      (
-                        <li
-                          key={page}
-                          className={classnames('waves-effect',
-                            { active: this.state.pageId === String(page) })}
-                        >
-                          <Link to={`/shelf?page=${page}`}>{page}</Link>
-                        </li>
-                      ),
-                    )
-                  }
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  <li>
-                    <button
-                      onClick={this.nextPage}
-                      className={classnames('btn', 'waves-effect',
-                        { disabled: parseInt(this.state.pageId, 10) >=
-                          this.state.pages.length })}
-                    >
-                      <i className="material-icons">chevron_right</i>
-                    </button></li>
-                </ul>) : ''}
+                <Paginator
+                  pages={this.state.pages}
+                  pageId={this.state.pageId.toString()}
+                  redirect={this.props.history.push}
+                  pageName={this.props.history.location.pathname}
+                /> : ''
+              }
             </div>
           </div>
         </div>
@@ -188,7 +133,7 @@ Shelf.propTypes = {
  */
 function mapStateToProps(state) {
   return {
-    books: state.books,
+    books: state.booksReducer.books,
   };
 }
 

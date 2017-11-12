@@ -578,7 +578,7 @@ describe('API Operations', () => {
     it('should list all books borrowed but not returned by authenticated user',
       (done) => {
         server
-          .get(`/api/v1/users/${userId}/books?returned=false`)
+          .get(`/api/v1/users/${userId}/books?returned=false&page=1`)
           .set('Accept', 'application/x-www-form-urlencoded')
           .set('x-access-token', adminToken)
           .end((err, res) => {
@@ -590,7 +590,7 @@ describe('API Operations', () => {
       });
     it('should notify if user has no book(s) to return', (done) => {
       server
-        .get(`/api/v1/users/${user2Id}/books?returned=false`)
+        .get(`/api/v1/users/${user2Id}/books?returned=false&page=1`)
         .set('Accept', 'application/x-www-form-urlencoded')
         .set('x-access-token', normalToken)
         .end((err, res) => {

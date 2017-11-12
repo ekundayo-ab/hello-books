@@ -226,34 +226,44 @@ class BorrowController {
    * @memberOf BorrowController
    */
   static listNotReturned(req, res) {
-    return Borrow
-      .findAll({
-        where: {
-          userId: req.params.userId,
-          returned: false,
-        },
-        include: [
-          { model: Book, as: 'book', required: true },
-        ],
-      })
-      .then((borrow) => {
-        if (borrow.length < 1) {
-          return res.status(200).send({
-            success: false,
-            message: 'You have no books to return'
+    const limit = 4;
+    let offset = 0;
+    return Borrow.findAndCountAll()
+      .then((data) => {
+        const page = req.query.page; // page number
+        const pages = Math.ceil(data.count / limit);
+        offset = limit * (page - 1);
+        return Borrow
+          .findAll({
+            where: {
+              userId: req.params.userId,
+              returned: false,
+            },
+            include: [
+              { model: Book, as: 'book', required: true },
+            ],
+            limit,
+            offset,
+          })
+          .then((borrow) => {
+            if (borrow.length < 1) {
+              return res.status(200).send({
+                success: false,
+                message: 'You have no books to return'
+              });
+            }
+            return res.status(200).send({
+              success: true,
+              borrow,
+              numberOfPages: pages
+            });
+          })
+          .catch(() => {
+            res.status(500).send({
+              success: false,
+              message: 'Internal Server Error'
+            });
           });
-        }
-        const p = [];
-        for (let i = 0; i < borrow.length; i += 1) {
-          p[i] = borrow[i].book; // For now let's not use this
-        }
-        return res.status(200).send({ success: true, borrow });
-      })
-      .catch(() => {
-        res.status(500).send({
-          success: false,
-          message: 'Internal Server Error'
-        });
       });
   }
 
@@ -298,29 +308,39 @@ class BorrowController {
    * @memberof BorrowController
    */
   static getAllBorrowedBooks(req, res) {
-    return Borrow
-      .findAll({
-        where: {
-          userId: req.params.userId,
-        },
-        include: [
-          { model: Book, as: 'book', required: true },
-        ],
-      })
-      .then((borrowedBooks) => {
-        if (borrowedBooks.length < 1) {
-          return res.status(404).send({
-            success: false,
-            message: 'You have not borrowed object book'
-          });
-        }
-        const p = [];
-        for (let i = 0; i < borrowedBooks.length; i += 1) {
-          p[i] = borrowedBooks[i].book; // For now let's not use this
-        }
-        return res.status(200).send({ success: true, borrowedBooks });
-      })
-      .catch((error) => { res.send(error.toString()); });
+    const limit = 4; // number of records per page
+    let offset = 0;
+    return Borrow.findAndCountAll()
+      .then((data) => {
+        const page = req.query.page; // page number
+        const pages = Math.ceil(data.count / limit);
+        offset = limit * (page - 1);
+        return Borrow
+          .findAll({
+            where: {
+              userId: req.params.userId,
+            },
+            include: [
+              { model: Book, as: 'book', required: true },
+            ],
+            limit,
+            offset,
+          })
+          .then((borrowedBooks) => {
+            if (borrowedBooks.length < 1) {
+              return res.status(204).send({
+                success: false,
+                message: 'You have no borrowed book(s)'
+              });
+            }
+            return res.status(200).send({
+              success: true,
+              borrowedBooks,
+              numberOfPages: pages
+            });
+          })
+          .catch((error) => { res.send(error.toString()); });
+      });
   }
 }
 

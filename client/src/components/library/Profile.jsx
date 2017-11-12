@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { getBorrowedNotReturned, returnBook }
   from '../../actions/borrowActions';
+import paginate from './../../helpers/paginate';
+import Paginator from './../../helpers/Paginator';
 import dayo from '../../../public/images/dayo.png';
 
 /**
@@ -20,6 +22,11 @@ class Profile extends Component {
    */
   constructor(props) {
     super(props);
+    this.state = {
+      pages: [],
+      pageId: 1,
+    };
+    this.query = new URLSearchParams(this.props.location.search);
     this.handleBookReturn = this.handleBookReturn.bind(this);
     this.userId = JSON.parse(localStorage.getItem('userDetails')).id;
   }
@@ -31,7 +38,17 @@ class Profile extends Component {
    * @memberof Profile
    */
   componentDidMount() {
-    getBorrowedNotReturned(this.userId);
+    paginate(
+      this.props.getBorrowedNotReturned,
+      this.query.get('page'),
+      this.userId
+    )
+      .then((res) => {
+        this.setState({
+          pages: res.pages,
+          pageId: res.pageId
+        });
+      });
   }
 
   /**
@@ -191,17 +208,14 @@ class Profile extends Component {
                   </table>) :
                   (<h5>All Clean!, You have no books to return</h5>)}
               </div>
-              <ul className="pagination center-align">
-                <li className="disabled"><a href="#!">
-                  <i className="material-icons">chevron_left</i></a></li>
-                <li className="active"><a href="#!">1</a></li>
-                <li className="waves-effect"><a href="#!">2</a></li>
-                <li className="waves-effect"><a href="#!">3</a></li>
-                <li className="waves-effect"><a href="#!">4</a></li>
-                <li className="waves-effect"><a href="#!">5</a></li>
-                <li className="waves-effect"><a href="#!">
-                  <i className="material-icons">chevron_right</i></a></li>
-              </ul>
+              {this.props.books.length > 0 ?
+                <Paginator
+                  pages={this.state.pages}
+                  pageId={this.state.pageId.toString()}
+                  redirect={this.props.history.push}
+                  pageName={this.props.location.pathname}
+                /> : ''
+              }
             </div>
           </div>
         </div>
@@ -213,6 +227,12 @@ class Profile extends Component {
 // Tye checking for Profile Component
 Profile.propTypes = {
   books: PropTypes.arrayOf(PropTypes.object).isRequired,
+  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+    search: PropTypes.string
+  }).isRequired,
+  getBorrowedNotReturned: PropTypes.func.isRequired
 };
 
 /**
@@ -222,7 +242,7 @@ Profile.propTypes = {
  */
 function mapStateToProps(state) {
   return {
-    books: state.borrows,
+    books: state.borrowsReducer.borrows,
   };
 }
 
