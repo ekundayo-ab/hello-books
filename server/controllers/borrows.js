@@ -230,7 +230,7 @@ class BorrowController {
     let offset = 0;
     return Borrow.findAndCountAll()
       .then((data) => {
-        const page = req.query.page; // page number
+        const { page } = req.query; // page number
         const pages = Math.ceil(data.count / limit);
         offset = limit * (page - 1);
         return Borrow
@@ -312,7 +312,7 @@ class BorrowController {
     let offset = 0;
     return Borrow.findAndCountAll()
       .then((data) => {
-        const page = req.query.page; // page number
+        const { page } = req.query; // page number
         const pages = Math.ceil(data.count / limit);
         offset = limit * (page - 1);
         return Borrow

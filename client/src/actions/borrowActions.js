@@ -90,16 +90,15 @@ const borrowBook = (userId, bookId) =>
  */
 const fetchAllBorrowedBooks = (pageNumber, userId) =>
   dispatch =>
-    axios.get(
-      `/api/v1/borrowed/${userId}/books?page=${pageNumber}`,
-    ).then((res) => {
-      if (res.data.borrowedBooks) {
-        dispatch(setBorrowedBooks(res.data.borrowedBooks));
-      }
-      return res.data;
-    }).catch((err) => {
-      Materialize.toast(err.response.data.message, 3000, 'red');
-    });
+    axios.get(`/api/v1/borrowed/${userId}/books?page=${pageNumber}`)
+      .then((res) => {
+        if (res.data.borrowedBooks) {
+          dispatch(setBorrowedBooks(res.data.borrowedBooks));
+        }
+        return res.data;
+      }).catch((err) => {
+        Materialize.toast(err.response.data.message, 3000, 'red');
+      });
 
 /**
  * Get Single Borrowed Book
@@ -134,13 +133,13 @@ const fetchBorrowedBook = bookId =>
  */
 const getBorrowedNotReturned = (pageNumber, userId) =>
   dispatch =>
-    axios.get(`/api/v1/users/${userId}/books?returned=false&page=${pageNumber}`
-    ).then((res) => {
-      dispatch(setBorrowedNotReturnedBooks(res.data.borrow));
-      return res.data;
-    }).catch((err) => {
-      Materialize.toast(err.response.data.message, 3000, 'red');
-    });
+    axios.get(`/api/v1/users/${userId}/books?returned=false&page=${pageNumber}`)
+      .then((res) => {
+        dispatch(setBorrowedNotReturnedBooks(res.data.borrow));
+        return res.data;
+      }).catch((err) => {
+        Materialize.toast(err.response.data.message, 3000, 'red');
+      });
 
   /**
    * Return Book
