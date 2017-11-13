@@ -4,6 +4,8 @@ import moment from 'moment';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { fetchAllBorrowedBooks } from '../../actions/borrowActions';
+import paginate from '../../helpers/paginate';
+import Paginator from '../../helpers/Paginator';
 
 /**
  * @description represents History Page
@@ -12,14 +14,35 @@ import { fetchAllBorrowedBooks } from '../../actions/borrowActions';
  */
 class History extends Component {
   /**
+   * Creates an instance of Shelf.
+   * @param {object} props
+   * @memberof History
+   * @constructor
+   */
+  constructor(props) {
+    super(props);
+    this.state = {
+      pages: [],
+      pageId: 1,
+    };
+    this.query = new URLSearchParams(this.props.history.location.search);
+  }
+
+  /**
    * @description Invoked before History Page loads
    * @param {void} null
    * @returns {void} null
    * @memberof History
    */
-  componentWillMount() {
+  componentDidMount() {
     const userId = JSON.parse(localStorage.getItem('userDetails')).id;
-    fetchAllBorrowedBooks(userId);
+    paginate(this.props.fetchAllBorrowedBooks, this.query.get('page'), userId)
+      .then((res) => {
+        this.setState({
+          pages: res.pages,
+          pageId: res.pageId
+        });
+      });
   }
 
   /**
@@ -30,7 +53,7 @@ class History extends Component {
    */
   render() {
     const noBorrowHistory = (
-      <p>You have not borrowed any book!</p>
+      <h5>You have not borrowed any book(s)!</h5>
     );
     const historySingle = this.props.books.map((borrowedBook, index) =>
       (<tr key={borrowedBook.id}>
@@ -115,18 +138,14 @@ class History extends Component {
                     </tbody>
                   </table> : noBorrowHistory }
               </div>
-              {this.props.books.length > 0 &&
-              <ul className="pagination center-align">
-                <li className="disabled"><a href="#!">
-                  <i className="material-icons">chevron_left</i></a></li>
-                <li className="active"><a href="#!">1</a></li>
-                <li className="waves-effect"><a href="#!">2</a></li>
-                <li className="waves-effect"><a href="#!">3</a></li>
-                <li className="waves-effect"><a href="#!">4</a></li>
-                <li className="waves-effect"><a href="#!">5</a></li>
-                <li className="waves-effect"><a href="#!">
-                  <i className="material-icons">chevron_right</i></a></li>
-              </ul>}
+              {this.props.books.length > 0 ?
+                <Paginator
+                  pages={this.state.pages}
+                  pageId={this.state.pageId.toString()}
+                  redirect={this.props.history.push}
+                  pageName={this.props.history.location.pathname}
+                /> : ''
+              }
             </div>
           </div>
         </div>
@@ -138,6 +157,11 @@ class History extends Component {
 // Type checking for History component
 History.propTypes = {
   books: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fetchAllBorrowedBooks: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    location: PropTypes.object.isRequired,
+    push: PropTypes.func.isRequired
+  }).isRequired,
 };
 
 /**
@@ -149,7 +173,7 @@ History.propTypes = {
 function mapStateToProps(state) {
   return {
     userId: state.users.user.id,
-    books: state.borrows,
+    books: state.borrowsReducer.borrows,
   };
 }
 

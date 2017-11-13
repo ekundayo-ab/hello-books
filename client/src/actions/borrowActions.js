@@ -84,15 +84,21 @@ const borrowBook = (userId, bookId) =>
  * @description makes an API call to the server for all
  * borrowed books, then dispatches an action to set them
  * in the redux store
+ * @param {number} pageNumber - page number
  * @param {number} userId - id of user
  * @returns {object} action
  */
-const fetchAllBorrowedBooks = userId =>
-  axios.get(
-    `/api/v1/borrowed/${userId}/books`,
-  ).then((res) => {
-    store.dispatch(setBorrowedBooks(res.data.borrowedBooks));
-  });
+const fetchAllBorrowedBooks = (pageNumber, userId) =>
+  dispatch =>
+    axios.get(`/api/v1/borrowed/${userId}/books?page=${pageNumber}`)
+      .then((res) => {
+        if (res.data.borrowedBooks) {
+          dispatch(setBorrowedBooks(res.data.borrowedBooks));
+        }
+        return res.data;
+      }).catch((err) => {
+        Materialize.toast(err.response.data.message, 3000, 'red');
+      });
 
 /**
  * Get Single Borrowed Book
@@ -112,24 +118,28 @@ const fetchBorrowedBook = bookId =>
         store.dispatch(borrowedFetched(foundBorrowedBook));
       }
     })
-    .catch(err => err);
+    .catch((err) => {
+      Materialize.toast(err.response.data.message, 3000, 'red');
+    });
 
 /**
  * Get All Books Borrowed Not Returned
  * @description makes an API call the server to get all books
  * which have been borrowed but not returned, then dispatches
  * an action to set them in the redux store
+ * @param {number} pageNumber - page number
  * @param {number} userId - id of user concerned
  * @returns {object} action
  */
-const getBorrowedNotReturned = userId =>
-  axios.get(`/api/v1/users/${userId}/books?returned=false`
-  ).then((res) => {
-    if (res.data.success) {
-      return store.dispatch(setBorrowedNotReturnedBooks(res.data.borrow));
-    }
-    return store.dispatch(setBorrowedNotReturnedBooks([]));
-  });
+const getBorrowedNotReturned = (pageNumber, userId) =>
+  dispatch =>
+    axios.get(`/api/v1/users/${userId}/books?returned=false&page=${pageNumber}`)
+      .then((res) => {
+        dispatch(setBorrowedNotReturnedBooks(res.data.borrow));
+        return res.data;
+      }).catch((err) => {
+        Materialize.toast(err.response.data.message, 3000, 'red');
+      });
 
   /**
    * Return Book
@@ -144,6 +154,8 @@ const returnBook = (userId, bookId) =>
   ).then((res) => {
     store.dispatch(bookReturned(res.data.updatedBorrowedBook));
     Materialize.toast(res.data.message, '2000', 'green');
+  }).catch((err) => {
+    Materialize.toast(err.response.data.message);
   });
 
 export {

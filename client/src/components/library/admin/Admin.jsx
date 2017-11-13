@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-materialize';
-import classnames from 'classnames';
-import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import BookForm from './BookForm';
 import CategoryForm from './CategoryForm';
@@ -11,6 +9,8 @@ import CategoryList from './../category/CategoryList';
 import BookList from './BookList';
 import { fetchBooks, deleteBook } from './../../../actions/bookActions';
 import { fetchCategories } from './../../../actions/categoryActions';
+import paginate from './../../../helpers/paginate';
+import Paginator from './../../../helpers/Paginator';
 
 /**
  * @description represents admin dashboard of the library
@@ -32,24 +32,6 @@ class Admin extends Component {
     };
     this.handleDelete = this.handleDelete.bind(this);
     this.query = new URLSearchParams(this.props.history.location.search);
-    this.nextPage = this.nextPage.bind(this);
-    this.prevPage = this.prevPage.bind(this);
-  }
-
-  /**
-   * @description Invoked before page loads
-   * @param {void} null
-   * @returns {void} returns nothing
-   * @memberof Admin
-   */
-  componentWillMount() {
-    let pageId = this.query.get('page');
-    if (pageId === null) pageId = 1;
-    this.props.fetchBooks(pageId)
-      .then((numberOfPages) => {
-        const pages = Array.from(Array(numberOfPages)).map((e, i) => i + 1);
-        this.setState({ pages, pageId });
-      });
   }
 
   /**
@@ -63,32 +45,13 @@ class Admin extends Component {
     $(document).ready(() => {
       $('.modal').modal();
     });
-  }
-
-  /**
-   * @description generates next page of books
-   * @param {void} null
-   * @returns {void} returns nothing
-   * @memberof Admin
-   */
-  nextPage() {
-    const nextPage = parseInt(this.state.pageId, 10) + 1;
-    if (parseInt(this.state.pageId, 10) < this.state.pages.length) {
-      this.props.history.push(`/admin?page=${nextPage}`);
-    }
-  }
-
-  /**
-   * @description generates previous page of books
-   * @param {void} null
-   * @returns {void} returns nothing
-   * @memberof Admin
-   */
-  prevPage() {
-    const prevPage = parseInt(this.state.pageId, 10) - 1;
-    if (parseInt(this.state.pageId, 10) > 1) {
-      this.props.history.push(`/admin?page=${prevPage}`);
-    }
+    paginate(this.props.fetchBooks, this.query.get('page'))
+      .then((res) => {
+        this.setState({
+          pages: res.pages,
+          pageId: res.pageId
+        });
+      });
   }
 
   /**
@@ -107,18 +70,17 @@ class Admin extends Component {
     })
       .then((willDelete) => {
         if (willDelete) {
-          swal('Poof! Book successfully deleted', {
-            icon: 'success',
-          });
           const pageId = this.query.get('page');
-          // if (pageId === null) pageId = 1;
-          this.props.fetchBooks(pageId)
-            .then((numberOfPages) => {
-              const pages = Array.from(Array(numberOfPages))
-                .map((e, i) => i + 1);
-              this.setState({ pages, pageId });
-            });
-          return deleteBook(bookId);
+          this.setState({ pageId });
+          deleteBook(bookId)
+            .then(() =>
+              paginate(this.props.fetchBooks, this.query.get('page'))
+                .then((res) => {
+                  this.setState({
+                    pages: res.pages,
+                    pageId: res.pageId
+                  });
+                }));
         }
         return false;
       });
@@ -162,41 +124,13 @@ class Admin extends Component {
                 handleDelete={this.handleDelete}
               />
               {this.props.books.length > 0 ?
-                (<ul className="pagination center-align">
-                  <li>
-                    <button
-                      className={classnames('btn', { disabled:
-                        parseInt(this.state.pageId, 10) <= 1 })}
-                      onClick={this.prevPage}
-                    >
-                      <i className="material-icons">chevron_left</i>
-                    </button>
-                  </li>
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  {
-                    this.state.pages.map(page =>
-                      (
-                        <li
-                          key={page}
-                          className={classnames('waves-effect',
-                            { active: this.state.pageId === String(page) })}
-                        >
-                          <Link to={`/admin?page=${page}`}>{page}</Link>
-                        </li>
-                      ),
-                    )
-                  }
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  <li>
-                    <button
-                      onClick={this.nextPage}
-                      className={classnames('btn', 'waves-effect',
-                        { disabled: parseInt(this.state.pageId, 10) >=
-                          this.state.pages.length })}
-                    >
-                      <i className="material-icons">chevron_right</i>
-                    </button></li>
-                </ul>) : ''}
+                <Paginator
+                  pages={this.state.pages}
+                  pageId={this.state.pageId.toString()}
+                  redirect={this.props.history.push}
+                  pageName={this.props.history.location.pathname}
+                /> : ''
+              }
             </div>
           </div>
         </div>
@@ -223,8 +157,12 @@ Admin.propTypes = {
  */
 function mapStateToProps(state) {
   return {
-    books: state.books,
+    books: state.booksReducer.books,
   };
 }
 
-export default connect(mapStateToProps, { fetchBooks, fetchCategories })(Admin);
+export default connect(mapStateToProps, {
+  fetchBooks,
+  fetchCategories,
+  deleteBook
+})(Admin);

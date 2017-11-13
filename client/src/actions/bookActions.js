@@ -31,7 +31,7 @@ const addBook = book =>
  * @param {any} bookId - id of book to delete
  * @returns {object} action
  */
-const deleteSuccess = bookId =>
+export const deleteSuccess = bookId =>
   ({ type: BOOK_DELETED, bookId });
 
 
@@ -63,10 +63,12 @@ const fetchBooks = pageNumber =>
   dispatch =>
     axios.get(`/api/v1/books?page=${pageNumber}`)
       .then((res) => {
-        dispatch(setBooks(res.data.books));
-        return res.data.numberOfPages;
+        if (res.data.books) dispatch(setBooks(res.data.books));
+        return res.data;
       })
-      .catch(err => err);
+      .catch((err) => {
+        Materialize.toast(err.response.data.message, 3000, 'red');
+      });
 
 /**
  * Get Single Book
@@ -93,11 +95,15 @@ const saveBook = data =>
   axios.post('/api/v1/books', data)
     .then((res) => {
       store.dispatch(addBook(res.data.book));
+      Materialize.toast(res.data.message, 3000, 'green');
       return { res: res.data, isDone: true };
     })
-    .catch(err =>
-      ({ errors: err.response.data, isDone: false }),
-    );
+    .catch((err) => {
+      Materialize.toast(err.response.data.message, 3000, 'red');
+      return {
+        isDone: false
+      };
+    });
 
 /**
  * Update Book
@@ -110,27 +116,35 @@ const updateBook = data =>
     .put(`/api/v1/books/${data.id}`, data)
     .then((res) => {
       store.dispatch(bookUpdated(res.data.book));
+      Materialize.toast(res.data.message, 3000, 'green');
       return {
         isDone: true,
         result: res.data,
       };
     })
-    .catch(err => ({ hasError: true, result: err.response.data }),
-    );
+    .catch((err) => {
+      Materialize.toast(err.response.data.message, 3000, 'red');
+      return {
+        hasError: true,
+        result: err.response.data
+      };
+    });
 
 /**
  * Delete A Book
  * @description Sends ID of book to server for deletion
- * @param {number} dataId - id of book to delete
+ * @param {number} bookId - id of book to delete
  * @returns {object} action
  */
-const deleteBook = (dataId) => {
-  axios.delete(`/api/v1/books/${dataId}`)
+const deleteBook = bookId =>
+  axios.delete(`/api/v1/books/${bookId}`)
     .then((res) => {
+      Materialize.toast('Poof! Book successfully deleted', 3000, 'green');
       store.dispatch(deleteSuccess(res.data.book.id));
     })
-    .catch(err => err);
-};
+    .catch((err) => {
+      Materialize.toast(err.response.data.message, 3000, 'red');
+    });
 
 export {
   fetchBooks,
