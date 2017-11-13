@@ -39,7 +39,8 @@ const Paginator = (props) => {
       <li>
         <button
           className={
-            classnames('btn', { disabled:
+            classnames('btn', {
+              disabled:
             parseInt(props.pageId, 10) <= 1
             })}
           onClick={prevPage}
@@ -55,12 +56,12 @@ const Paginator = (props) => {
               key={page}
               className={classnames(
                 'waves-effect',
-                { active: props.pageId === String(page) })}
+                { active: props.pageId === String(page)
+                })}
             >
               <Link to={`${props.pageName}?page=${page}`}>{page}</Link>
             </li>
-          ),
-        )
+          ))
       }
       &nbsp;&nbsp;&nbsp;&nbsp;
       <li>
@@ -72,10 +73,12 @@ const Paginator = (props) => {
             {
               disabled: parseInt(props.pageId, 10) >=
               props.pages.length
-            })}
+            }
+          )}
         >
           <i className="material-icons">chevron_right</i>
-        </button></li>
+        </button>
+      </li>
     </ul>
   );
 };

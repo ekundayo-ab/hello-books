@@ -80,8 +80,7 @@ class Admin extends Component {
                     pages: res.pages,
                     pageId: res.pageId
                   });
-                })
-            );
+                }));
         }
         return false;
       });
