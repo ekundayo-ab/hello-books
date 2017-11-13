@@ -94,7 +94,8 @@ class Shelf extends Component {
                   {
                     this.props.books.length > 0 ?
                       this.props.books.map(book =>
-                        <BookCard book={book} key={book.id} />) :
+                        <BookCard book={book} key={book.id} />
+                      ) :
                       <h5>Woof! No book(s) available in this
                        shelf currently, please check back later</h5>
                   }

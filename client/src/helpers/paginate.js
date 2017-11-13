@@ -11,7 +11,7 @@ const paginate = (getData, pageId, userId) => {
   if (pageId === null) pageId = 1;
   return getData(pageId, userId)
     .then((getDataResponse) => {
-      const numberOfPages = getDataResponse.numberOfPages;
+      const { numberOfPages } = getDataResponse;
       const pages = Array.from(Array(numberOfPages)).map((e, i) => i + 1);
       return {
         pages,
