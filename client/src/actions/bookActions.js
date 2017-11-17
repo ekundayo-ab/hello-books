@@ -58,11 +58,13 @@ const fetchBooks = pageNumber =>
   dispatch =>
     axios.get(`/api/v1/books?page=${pageNumber}`)
       .then((res) => {
-        if (res.data.books) dispatch(setBooks(res.data.books));
+        const toDispatch = res.data.books ? res.data.books : [];
+        dispatch(setBooks(toDispatch));
         return res.data;
       })
       .catch((err) => {
         Materialize.toast(err.response.data.message, 3000, 'red');
+        return err.response.data;
       });
 
 /**

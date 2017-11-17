@@ -92,6 +92,7 @@ const fetchAllBorrowedBooks = (pageNumber, userId) =>
         return res.data;
       }).catch((err) => {
         Materialize.toast(err.response.data.message, 3000, 'red');
+        return err.response.data;
       });
 
 /**

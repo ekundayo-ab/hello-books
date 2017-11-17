@@ -214,7 +214,8 @@ class BookController {
         if (books.rows.length < 1) {
           return res.status(404).send({
             success: false,
-            message: 'Books not available, check back later.'
+            message: 'Books not available, check back later.',
+            numberOfPages: 0
           });
         }
         return res.status(200).send({
