@@ -59,28 +59,19 @@ class SignUp extends Component {
     event.preventDefault();
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
-      this.props.userSignUpRequest(this.state)
+      userSignUpRequest(this.state)
         .then((res) => {
-          if (res.data.success) {
+          if (res.isDone) {
             login({
               identifier: this.state.username,
               password: this.state.password
             })
-              .then((resp) => {
-                if (resp.isAuthenticated) {
-                  Materialize.toast(
-                    `${res.data.message} You're logged in, welcome`,
-                    3000, 'green');
+              .then((response) => {
+                if (response.isAuthenticated) {
                   return this.props.history.push('/shelf');
                 }
-                return this.setState({ isLoading: true });
               });
           }
-        })
-        .catch(() => {
-          Materialize.toast('Oops! Internal Server Error, try again',
-            3000, 'red');
-          this.setState({ isLoading: false });
         });
     }
   }
@@ -229,7 +220,6 @@ class SignUp extends Component {
 
 // Type checking for SignUp form
 SignUp.propTypes = {
-  userSignUpRequest: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func
   }).isRequired,
@@ -237,4 +227,4 @@ SignUp.propTypes = {
 };
 
 export default
-connect(null, { userSignUpRequest, isUserExists, login })(withRouter(SignUp));
+connect(null, { isUserExists, login })(withRouter(SignUp));

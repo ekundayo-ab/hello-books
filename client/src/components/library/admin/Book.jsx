@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Modal } from 'react-materialize';
 import swal from 'sweetalert';
 import PropTypes from 'prop-types';
-import UpdateBookModal from '../../library/admin/UpdateBookModal';
 import { deleteBook } from '../../../actions/bookActions';
+import BookForm from '../../../components/library/admin/BookForm';
 
 /**
  * @description represents a single book component
@@ -58,16 +58,19 @@ class Book extends Component {
     return (
       <tr>
         <td className="teal-text">{this.props.index}</td>
-        <td className="green-text admin-book-list"><img src={this.props.book.image} alt="" /></td>
+        <td className="green-text admin-book-list">
+          <img src={this.props.book.image} alt="" />
+        </td>
         <td>{this.props.book.title}</td>
         <td>{this.props.book.author}</td>
         <td>{this.props.book.quantity}</td>
         <td>
           <Modal
             header="Update Book"
-            trigger={<button className="btn white waves-effect waves-light"><i className="fa fa-edit green-text" /></button>}
+            trigger={<button className="btn white waves-effect waves-light">
+              <i className="fa fa-edit green-text" /></button>}
           >
-            <UpdateBookModal book={this.props.book} />
+            <BookForm book={this.props.book} />
           </Modal>
         </td>
         <td>

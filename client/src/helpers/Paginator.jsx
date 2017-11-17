@@ -34,53 +34,47 @@ const Paginator = (props) => {
       props.redirect(`${props.pageName}?page=${prevPageNumber}`);
     }
   };
-  return (
-    <ul className="pagination center-align">
-      <li>
-        <button
-          className={
-            classnames('btn', {
-              disabled:
-            parseInt(props.pageId, 10) <= 1
-            })}
-          onClick={prevPage}
-        >
-          <i className="material-icons">chevron_left</i>
-        </button>
-      </li>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      {
-        props.pages.map(page =>
-          (
-            <li
-              key={page}
-              className={classnames(
-                'waves-effect',
-                { active: props.pageId === String(page)
-                })}
-            >
-              <Link to={`${props.pageName}?page=${page}`}>{page}</Link>
-            </li>
-          ))
-      }
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <li>
-        <button
-          onClick={nextPage}
-          className={classnames(
-            'btn',
-            'waves-effect',
+  return (<ul className="pagination center-align">
+    <li>
+      <button
+        className={
+          classnames('btn',
             {
-              disabled: parseInt(props.pageId, 10) >=
-              props.pages.length
+              disabled: parseInt(props.pageId, 10) <= 1
+            })
+        }
+        onClick={prevPage}
+      >
+        <i className="material-icons">chevron_left</i>
+      </button>
+    </li>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    {
+      props.pages.map(page =>
+        (
+          <li
+            key={page}
+            className={
+              classnames('waves-effect',
+                { active: props.pageId === String(page) })
             }
-          )}
-        >
-          <i className="material-icons">chevron_right</i>
-        </button>
-      </li>
-    </ul>
-  );
+          >
+            <Link to={`${props.pageName}?page=${page}`}>{page}</Link>
+          </li>
+        ),
+      )
+    }
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <li>
+      <button
+        onClick={nextPage}
+        className={classnames('btn', 'waves-effect',
+          { disabled: parseInt(props.pageId, 10) >=
+            props.pages.length })}
+      >
+        <i className="material-icons">chevron_right</i>
+      </button></li>
+  </ul>);
 };
 
 Paginator.propTypes = {

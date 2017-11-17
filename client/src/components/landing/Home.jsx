@@ -39,12 +39,12 @@ class Home extends Component {
         <div className="page-wrapper">
           <Header />
           <br />
-          <div className="container">
+          <div className="container-fluid">
             <div className="row">
-              <div className="col s12 m12 l6 center valign-wrapper intro-text">
+              <div className="col s12 m6 l5 center valign-wrapper intro-text">
                 <h1 className="white-text">Read, think & Innovate</h1>
               </div>
-              <div className="card col s12 m12 l6">
+              <div className="card col s12 m6 offset-l1 l5">
                 <div className="card-tabs">
                   <ul className="mod-tabs mod-tabs-fixed-width">
                     <li className="mod-tab">

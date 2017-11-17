@@ -54,11 +54,24 @@ class Profile extends Component {
   /**
    * @description handles returning of Book
    * @param {number} bookId
-   * @returns {void} nothing
+   * @param {number} borrowId
+   * @returns {object} action
    * @memberof Profile
    */
-  handleBookReturn(bookId) {
-    returnBook(this.userId, bookId);
+  handleBookReturn(bookId, borrowId) {
+    returnBook(this.userId, bookId, borrowId)
+      .then(() =>
+        paginate(
+          this.props.getBorrowedNotReturned,
+          this.query.get('page'),
+          this.userId
+        )
+          .then((res) => {
+            this.setState({
+              pages: res.pages,
+              pageId: res.pageId
+            });
+          }));
   }
 
   /**
@@ -195,7 +208,10 @@ class Profile extends Component {
                             <button
                               className="btn"
                               onClick={() => {
-                                this.handleBookReturn(bookNotReturned.book.id);
+                                this.handleBookReturn(
+                                  bookNotReturned.book.id,
+                                  bookNotReturned.id
+                                );
                               }}
                             >
                               <i className="fa fa-2x fa-mail-forward" />
@@ -208,7 +224,7 @@ class Profile extends Component {
                   </table>) :
                   (<h5>All Clean!, You have no books to return</h5>)}
               </div>
-              {this.props.books.length > 0 ?
+              {this.state.pages.length > 1 ?
                 <Paginator
                   pages={this.state.pages}
                   pageId={this.state.pageId.toString()}

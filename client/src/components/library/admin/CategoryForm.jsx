@@ -80,7 +80,7 @@ class CategoryForm extends Component {
    * @description displays the form for adding category
    * @param {void} null
    * @returns {string} - HTML markup for the form
-   * @memberof UpdateBookModal
+   * @memberof CategoryForm
    */
   render() {
     const { errors } = this.state;
