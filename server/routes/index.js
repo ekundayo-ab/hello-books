@@ -713,7 +713,8 @@ Router.post('/users/:userId/books', borrowsController.create);
  *         description: Internal Server Error
  */
 // Route to return a book
-Router.put('/users/:userId/books',
+Router.put(
+  '/users/:userId/books',
   authMiddleware.doesUserExist,
   borrowsController.returnBook
 );

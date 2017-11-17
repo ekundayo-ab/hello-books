@@ -3,10 +3,7 @@ import jwt from 'jsonwebtoken';
 import app from '../../app';
 import models from '../models/';
 
-const User = models.User;
-const Book = models.Book;
-const Borrow = models.Borrow;
-const Category = models.Category;
+const { User, Book, Borrow, Category } = models.User;
 
 const server = supertest.agent(app);
 
@@ -75,8 +72,8 @@ class BeforeHooks {
             })
             .end((err, res) => {
               process.env.adminToken = res.body.token;
-              jwt.verify(
-                process.env.adminToken, 'hello-books', (error, decoded) => {
+              jwt.verify(process.env.adminToken, 'hello-books',
+                (error, decoded) => {
                   process.env.userId = decoded.data.id;
                 });
             });
@@ -100,8 +97,8 @@ class BeforeHooks {
             })
             .end((err, res) => {
               process.env.normalToken = res.body.token;
-              jwt.verify(
-                process.env.normalToken, 'hello-books', (error, decoded) => {
+              jwt.verify(process.env.normalToken, 'hello-books',
+                (error, decoded) => {
                   process.env.user2Id = decoded.data.id;
                 });
               done();

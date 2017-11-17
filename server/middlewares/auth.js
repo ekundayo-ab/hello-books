@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import model from './../models';
 
-const User = model.User;
+const { User } = model;
 /**
  * @class Authenticate
  * @description Authenticates requests
@@ -65,14 +65,15 @@ class Authenticate {
    * @memberof Authenticate
    */
   static doesUserExist(req, res, next) {
-    const userId = req.params.userId;
+    const { userId } = req.params;
     // Checks if user exists
     User.findById(userId)
       .then((userFound) => {
         if (!userFound) {
           return res.status(404).send({
             success: false,
-            message: 'User does not exist' });
+            message: 'User does not exist'
+          });
         }
         next();
       });
