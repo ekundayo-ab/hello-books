@@ -1,0 +1,147 @@
+// For authentication operations
+export const userAuthenticated = {
+  isAuthenticated: true,
+  user: {
+    id: 49,
+    role: 'admin',
+    username: 'ekundayo'
+  }
+};
+
+export const userNotAuthenticated = {
+  isAuthenticated: false,
+  user: {}
+};
+
+// For book operations
+export const book1 = {
+  id: 280,
+  isbn: 456,
+  title: 'The Secret of the Lorax',
+  author: 'O\'Hare',
+  description: 'The secret of the lorax features a man selling air',
+  image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/' +
+  'v1510914293/fbuuwg6uqiab9b3rxpvh.jpg',
+  status: true,
+  quantity: 57,
+  category: 'Sports',
+  updatedAt: '2017-11-17T10:25:01.852Z',
+  createdAt: '2017-11-17T10:25:01.852Z'
+};
+
+export const book2 = {
+  id: 389,
+  isbn: 456,
+  title: 'The Secret of the Lorax',
+  author: 'O\'Hare',
+  description: 'The secret of the lorax features a man selling air',
+  image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/' +
+  'v1510914293/fbuuwg6uqiab9b3rxpvh.jpg',
+  status: true,
+  quantity: 57,
+  category: 'Sports',
+  updatedAt: '2017-11-17T10:25:01.852Z',
+  createdAt: '2017-11-17T10:25:01.852Z'
+};
+
+export const book3 = {
+  id: 389,
+  isbn: 456,
+  title: 'Ancient Tips on travelling',
+  author: 'O\'Hare',
+  description: 'This tips would help you become a better traveller',
+  image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/' +
+  'v1510914293/fbuuwg6uqiab9b3rxpvh.jpg',
+  status: true,
+  quantity: 57,
+  category: 'Travels',
+  updatedAt: '2017-11-17T10:25:01.852Z',
+  createdAt: '2017-11-17T10:25:01.852Z'
+};
+
+export const books1 = [book1];
+export const books2 = [book1, book2];
+
+export const booksAfterDeletion = [book2];
+export const booksAfterUpdating = [book1, book3];
+
+// For borrowing operations
+export const borrow1 = {
+  id: 299,
+  returned: false,
+  dueDate: '2017-11-20T13:21:03.365Z',
+  actualReturnDate: '2017-11-17T13:21:03.365Z',
+  createdAt: '2017-11-17T13:21:03.365Z',
+  updatedAt: '2017-11-17T13:21:03.365Z',
+  bookId: 299,
+  userId: 49,
+  book: {
+    id: 299,
+    isbn: 9,
+    title: 'Gilead',
+    author: 'Marilynne Robinson',
+    description: 'Gilead is a novel written by Marilynne Robinson',
+    image: 'http://res.cloudinary.com/dcl7tqhww/image/upload' +
+    '/v1509139554/kf18x2ukcnygh6bau1o2.png',
+    status: true,
+    quantity: 10,
+    category: 'Arts',
+    createdAt: '2017-11-17T13:11:15.472Z',
+    updatedAt: '2017-11-17T13:21:03.361Z'
+  }
+};
+
+export const borrow2 = {
+  id: 302,
+  returned: false,
+  dueDate: '2017-11-20T13:21:23.296Z',
+  actualReturnDate: '2017-11-17T13:21:23.296Z',
+  createdAt: '2017-11-17T13:21:23.296Z',
+  updatedAt: '2017-11-17T13:21:23.296Z',
+  bookId: 294,
+  userId: 49,
+  book: {
+    id: 294,
+    isbn: 4,
+    title: 'Wolf Hall',
+    author: 'Hilary Mantel',
+    description: 'Wolf Hall is a historical novel by English author Hilary',
+    image: 'http://res.cloudinary.com/dcl7tqhww/image/upload' +
+    '/v1509139539/w9wpuonkyguo32i90mg8.png',
+    status: true,
+    quantity: 9,
+    category: 'Arts',
+    createdAt: '2017-11-17T13:11:15.472Z',
+    updatedAt: '2017-11-17T13:21:23.293Z'
+  }
+};
+
+export const borrows1 = [borrow1];
+export const borrows2 = [borrow1, borrow2];
+export const booksAfterReturning = [borrow2];
+
+
+// For categories operations
+export const category1 = {
+  id: 6,
+  title: 'Programming',
+  createdAt: '2017-10-14T17:58:13.884Z',
+  updatedAt: '2017-10-14T17:58:13.884Z'
+};
+
+export const category2 = {
+  id: 8,
+  title: 'Sciences',
+  createdAt: '2017-10-14T17:58:26.597Z',
+  updatedAt: '2017-10-14T17:58:26.597Z'
+};
+
+export const category3 = {
+  id: 9,
+  title: 'Arts',
+  createdAt: '2017-10-14T17:58:29.869Z',
+  updatedAt: '2017-10-14T17:58:29.869Z'
+};
+
+export const categories1 = [category1, category2];
+export const categories2 = [category1, category2, category3];
