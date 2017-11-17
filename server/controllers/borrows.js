@@ -264,7 +264,8 @@ class BorrowController {
         if (borrowedBooks.rows.length < 1) {
           return res.status(404).send({
             success: false,
-            message: 'You have no borrowed book(s)'
+            message: 'You have no borrowed book(s)',
+            numberOfPages: 0
           });
         }
         return res.status(200).send({
