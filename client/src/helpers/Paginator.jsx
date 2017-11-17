@@ -41,7 +41,8 @@ const Paginator = (props) => {
           classnames('btn',
             {
               disabled: parseInt(props.pageId, 10) <= 1
-            })
+            }
+          )
         }
         onClick={prevPage}
       >

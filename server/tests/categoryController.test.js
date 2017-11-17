@@ -11,8 +11,7 @@ const server = supertest.agent(app);
 describe('CATEGORY Operations', () => {
   helperBeforeHooks.makeDataAvailable();
   beforeEach((done) => {
-    let { adminToken } = process.env;
-    let { normalToken } = process.env;
+    ({ adminToken, normalToken } = process.env);
     done();
   });
   describe('A typical category operation', () => {

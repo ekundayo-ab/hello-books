@@ -10,9 +10,7 @@ let bookId;
 describe('BOOK Operations', () => {
   helperBeforeHooks.makeDataAvailable();
   beforeEach((done) => {
-    adminToken = process.env.adminToken;
-    normalToken = process.env.normalToken;
-    bookId = process.env.bookId;
+    ({ adminToken, normalToken, bookId } = process.env);
     done();
   });
   describe('Upon adding of books', () => {

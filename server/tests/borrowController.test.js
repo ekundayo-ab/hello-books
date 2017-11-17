@@ -18,11 +18,7 @@ let borrowId;
 describe('BORROWING & RETURNING Operations', () => {
   helperBeforeHooks.makeDataAvailable();
   beforeEach((done) => {
-    adminToken = process.env.adminToken;
-    normalToken = process.env.normalToken;
-    bookId = process.env.bookId;
-    userId = process.env.userId;
-    user2Id = process.env.user2Id;
+    ({ adminToken, normalToken, bookId, userId, user2Id } = process.env);
     done();
   });
 
