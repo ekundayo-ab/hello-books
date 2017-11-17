@@ -1,5 +1,5 @@
 /**
- * @description represents logics used in validating inputs 
+ * @description represents logics used in validating inputs
  * when updating or creating a book
  * @class Validators
  */

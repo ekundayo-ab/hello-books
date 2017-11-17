@@ -3,7 +3,7 @@ import chai from 'chai';
 import app from '../../app';
 import helperBeforeHooks from './../helpers/helperBeforeHooks';
 
-const expect = chai.expect;
+const { expect } = chai;
 let adminToken;
 let normalToken;
 
@@ -11,8 +11,8 @@ const server = supertest.agent(app);
 describe('CATEGORY Operations', () => {
   helperBeforeHooks.makeDataAvailable();
   beforeEach((done) => {
-    adminToken = process.env.adminToken;
-    normalToken = process.env.normalToken;
+    let { adminToken } = process.env;
+    let { normalToken } = process.env;
     done();
   });
   describe('A typical category operation', () => {

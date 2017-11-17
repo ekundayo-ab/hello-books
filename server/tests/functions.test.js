@@ -3,11 +3,13 @@ import helper from '../helpers/index';
 import helperUser from '../helpers/helperUser';
 import helperBook from '../helpers/helperBook';
 
-const isAdmin = helper.isAdmin;
-const isDefined = helper.isDefined;
-const inputValidation = helper.inputValidation;
-const userValidation = helper.userValidation;
-const validateEmail = helper.validateEmail;
+const {
+  isAdmin,
+  isDefined,
+  inputValidation,
+  userValidation,
+  validateEmail
+} = helper;
 
 describe('Helper Functions', () => {
   describe('Checks if user is an Admin', () => {
