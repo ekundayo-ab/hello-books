@@ -37,6 +37,7 @@
     "Materialize": true
   },
   "env": {
+    "jest": true,
     "mocha": true,
     "jquery": true,
     "commonjs": true,
