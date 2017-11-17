@@ -12,10 +12,10 @@ describe('category reducer', () => {
   });
 
   it('should handle ADD_CATEGORY and save the payload to the store', () => {
-    expect(
-      categoryReducer(
-        { categories: categories1 },
-        { type: actionTypes.ADD_CATEGORY, category: category3 })
+    expect(categoryReducer(
+      { categories: categories1 },
+      { type: actionTypes.ADD_CATEGORY, category: category3 }
+    )
     ).toEqual({ categories: categories2 });
   });
 
