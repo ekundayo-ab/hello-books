@@ -1,16 +1,6 @@
 import axios from 'axios';
 import store from '../../src/index';
-
-/**
- * @description sets all immutable types for the pure redux actions
- * @constant ADD_BORROW, BORROW_FETCHED, BOOK_FETCHED, SET_BORROWED_BOOKS,
- * SET_BORROWED_NOT_RETURNED_BOOKS
- */
-const BORROWED_FETCHED = 'BORROWED_FETCHED';
-const BOOK_FETCHED = 'BOOK_FETCHED';
-const SET_BORROWED_BOOKS = 'SET_BORROWED_BOOKS';
-const SET_BORROWED_NOT_RETURNED_BOOKS = 'SET_BORROWED_NOT_RETURNED_BOOKS';
-const BORROWED_RETURNED = 'BORROWED_RETURNED';
+import * as actionTypes from './types';
 
 /**
  * Gets Borrowed Book
@@ -19,7 +9,7 @@ const BORROWED_RETURNED = 'BORROWED_RETURNED';
  * @returns {object} action
  */
 const borrowedFetched = borrow =>
-  ({ type: BORROWED_FETCHED, borrow });
+  ({ type: actionTypes.BORROWED_FETCHED, borrow });
 
 /**
  * Get A Book
@@ -28,7 +18,7 @@ const borrowedFetched = borrow =>
  * @returns {object} action
  */
 const bookFetched = book =>
-  ({ type: BOOK_FETCHED, book });
+  ({ type: actionTypes.BOOK_FETCHED, book });
 
 /**
  * Returns A Book
@@ -38,7 +28,7 @@ const bookFetched = book =>
  * @returns {object} action
  */
 const bookReturned = book =>
-  ({ type: BORROWED_RETURNED, book });
+  ({ type: actionTypes.BORROWED_RETURNED, book });
 
 /**
  * Sets Borrowed Books
@@ -47,7 +37,7 @@ const bookReturned = book =>
  * @returns {object} action
  */
 const setBorrowedBooks = borrowedBooks =>
-  ({ type: SET_BORROWED_BOOKS, borrowedBooks });
+  ({ type: actionTypes.SET_BORROWED_BOOKS, borrowedBooks });
 
 /**
  * Get Borrowed Not Returned Books
@@ -57,7 +47,7 @@ const setBorrowedBooks = borrowedBooks =>
  * @returns {object} action
  */
 const setBorrowedNotReturnedBooks = bookList =>
-  ({ type: SET_BORROWED_NOT_RETURNED_BOOKS, bookList });
+  ({ type: actionTypes.SET_BORROWED_NOT_RETURNED_BOOKS, bookList });
 
 /**
  * Borrow Book
@@ -76,7 +66,7 @@ const borrowBook = (userId, bookId) =>
     store.dispatch(bookFetched(res.data.updatedBorrowedBook));
     Materialize.toast(
       `${res.data.updatedBorrowedBook.title} Successfully borrowed`,
-      '2000', 'green');
+      2000, 'green');
   });
 
 /**
@@ -92,9 +82,13 @@ const fetchAllBorrowedBooks = (pageNumber, userId) =>
   dispatch =>
     axios.get(`/api/v1/borrowed/${userId}/books?page=${pageNumber}`)
       .then((res) => {
+        let toDispatch;
         if (res.data.borrowedBooks) {
-          dispatch(setBorrowedBooks(res.data.borrowedBooks));
+          toDispatch = res.data.borrowedBooks;
+        } else {
+          toDispatch = [];
         }
+        dispatch(setBorrowedBooks(toDispatch));
         return res.data;
       }).catch((err) => {
         Materialize.toast(err.response.data.message, 3000, 'red');
@@ -135,7 +129,13 @@ const getBorrowedNotReturned = (pageNumber, userId) =>
   dispatch =>
     axios.get(`/api/v1/users/${userId}/books?returned=false&page=${pageNumber}`)
       .then((res) => {
-        dispatch(setBorrowedNotReturnedBooks(res.data.borrow));
+        let toDispatch;
+        if (res.data.borrow) {
+          toDispatch = res.data.borrow;
+        } else {
+          toDispatch = [];
+        }
+        dispatch(setBorrowedNotReturnedBooks(toDispatch));
         return res.data;
       }).catch((err) => {
         Materialize.toast(err.response.data.message, 3000, 'red');
@@ -146,23 +146,26 @@ const getBorrowedNotReturned = (pageNumber, userId) =>
    * @description Send ID of book to return, with a the borrower's identity
    * @param {*} userId - id of user returning book
    * @param {*} bookId - id of book returned
+   * @param {*} borrowId - id of the borrowed record
    * @returns {object} action
    */
-const returnBook = (userId, bookId) =>
+const returnBook = (userId, bookId, borrowId) =>
   axios.put(`/api/v1/users/${userId}/books`,
-    { bookId }
+    { bookId, borrowId }
   ).then((res) => {
-    store.dispatch(bookReturned(res.data.updatedBorrowedBook));
-    Materialize.toast(res.data.message, '2000', 'green');
+    let toDispatch;
+    if (res.data.updatedBorrowedBook) {
+      toDispatch = res.data.updatedBorrowedBook;
+    } else {
+      toDispatch = [];
+    }
+    store.dispatch(bookReturned(toDispatch));
+    return Materialize.toast(res.data.message, 2000, 'green');
   }).catch((err) => {
-    Materialize.toast(err.response.data.message);
+    Materialize.toast(err.response.data.message, 2000, 'red');
   });
 
 export {
-  SET_BORROWED_BOOKS,
-  BORROWED_FETCHED,
-  SET_BORROWED_NOT_RETURNED_BOOKS,
-  BORROWED_RETURNED,
   borrowBook,
   returnBook,
   fetchBorrowedBook,

@@ -1,16 +1,16 @@
 import { combineReducers } from 'redux';
-import categories from './reducers/categoryReducer';
+import categoryReducer from './reducers/categoryReducer';
 import users from './reducers/authReducer';
-import books from './reducers/bookReducer';
-import book from './reducers/singleBookReducer';
-import borrows from './reducers/borrowReducer';
-import borrow from './reducers/singleBorrowReducer';
+import booksReducer from './reducers/bookReducer';
+import borrowsReducer from './reducers/borrowReducer';
+import bookReducer from './reducers/singleBookReducer';
+import borrowReducer from './reducers/singleBorrowReducer';
 
 export default combineReducers({
   users,
-  categories,
-  books,
-  book,
-  borrows,
-  borrow,
+  categoryReducer,
+  booksReducer,
+  borrowsReducer,
+  bookReducer,
+  borrowReducer,
 });

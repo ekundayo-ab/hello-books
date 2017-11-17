@@ -59,6 +59,16 @@ const login = userData =>
  * @returns {object} action
  */
 const googleAuth = (userData) => {
+  if (!userData.tokenObj) {
+    return new Promise(() => {
+      Materialize.toast(
+        'Please sign in to your google account',
+        4000,
+        'red'
+      );
+      return { success: false };
+    });
+  }
   const user = {
     token: userData.tokenObj.access_token,
     username: userData.w3.ig.split(' ')[0],
@@ -108,7 +118,18 @@ const logout = () => {
  * @returns {object} action
  */
 const userSignUpRequest = userData =>
-  () => axios.post('/api/v1/users/signup', userData);
+  axios.post('/api/v1/users/signup', userData)
+    .then((res) => {
+      Materialize.toast(`${res.data.message} You're logged in`, 3000, 'green');
+      return {
+        isDone: res.data.success,
+        message: res.data.message
+      };
+    })
+    .catch(err =>
+      Materialize.toast(err.response.data.message, 3000, 'red')
+    );
+
 
 /**
  * Check User existence
@@ -117,7 +138,8 @@ const userSignUpRequest = userData =>
  * @returns {object} action
  */
 const isUserExists = userData =>
-  () => axios.post('/api/v1/users', userData);
+  axios.post('/api/v1/users', userData)
+    .catch(err => Materialize.toast(err.response.data.message, 2000, 'red'));
 
 
 export {

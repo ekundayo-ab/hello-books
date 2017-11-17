@@ -1,6 +1,10 @@
 /* eslint-disable no-case-declarations, no-underscore-dangle */
-import { BORROWED_FETCHED } from './../actions/borrowActions';
+import { BORROWED_FETCHED } from './../actions/types';
 
+// Declare the initial state for a single book
+const initialState = {
+  borrow: {}
+};
 /**
  * Singly Borrowed Book Reducer
  * @description Return each action by its type
@@ -8,12 +12,14 @@ import { BORROWED_FETCHED } from './../actions/borrowActions';
  * @param {any} [action={}]
  * @returns {object} // Borrowed book
  */
-export default function book(state = {}, action = {}) {
+const borrowReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case BORROWED_FETCHED: {
-      return action.borrow;
+      return { ...state, borrow: action.borrow };
     }
     default:
       return state;
   }
-}
+};
+
+export default borrowReducer;

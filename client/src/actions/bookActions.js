@@ -1,11 +1,6 @@
 import axios from 'axios';
 import store from '../../src/index';
-
-const SET_BOOKS = 'SET_BOOKS';
-const ADD_BOOK = 'ADD_BOOK';
-const BOOK_DELETED = 'BOOK_DELETED';
-const BOOK_UPDATED = 'BOOK_UPDATED';
-const BOOK_FETCHED = 'BOOK_FETCHED';
+import * as actionTypes from './types';
 
 /**
  * Make books available
@@ -14,7 +9,7 @@ const BOOK_FETCHED = 'BOOK_FETCHED';
  * @returns {object} action
  */
 const setBooks = books =>
-  ({ type: SET_BOOKS, books, });
+  ({ type: actionTypes.SET_BOOKS, books, });
 
 /**
  * Add Book
@@ -23,7 +18,7 @@ const setBooks = books =>
  * @returns {object} action
  */
 const addBook = book =>
-  ({ type: ADD_BOOK, book });
+  ({ type: actionTypes.ADD_BOOK, book });
 
 /**
  * Deletes Book
@@ -31,8 +26,8 @@ const addBook = book =>
  * @param {any} bookId - id of book to delete
  * @returns {object} action
  */
-export const deleteSuccess = bookId =>
-  ({ type: BOOK_DELETED, bookId });
+const deleteSuccess = bookId =>
+  ({ type: actionTypes.BOOK_DELETED, bookId });
 
 
 /**
@@ -42,7 +37,7 @@ export const deleteSuccess = bookId =>
  * @returns {object} action
  */
 export const bookUpdated = book =>
-  ({ type: BOOK_UPDATED, book });
+  ({ type: actionTypes.BOOK_UPDATED, book });
 
 /**
  * Get Single Book
@@ -51,7 +46,7 @@ export const bookUpdated = book =>
  * @returns {object} action
  */
 export const bookFetched = book =>
-  ({ type: BOOK_FETCHED, book });
+  ({ type: actionTypes.BOOK_FETCHED, book });
 
 /**
  * Get Books
@@ -153,9 +148,4 @@ export {
   saveBook,
   deleteBook,
   updateBook,
-  BOOK_FETCHED,
-  BOOK_DELETED,
-  BOOK_UPDATED,
-  SET_BOOKS,
-  ADD_BOOK,
 };
