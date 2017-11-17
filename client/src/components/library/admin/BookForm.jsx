@@ -6,10 +6,12 @@ import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 import SingleInputWithIcon from '../../forms/SingleInputWithIcon';
 import TextAreaInput from '../../forms/TextAreaInput';
-import { saveBook } from './../../../actions/bookActions';
+import { saveBook, updateBook } from './../../../actions/bookActions';
 import { fetchCategories } from './../../../actions/categoryActions';
+import Validators from './../../../helpers/validators';
 import handleDrop from './../../../helpers/utilities';
 import droploader from '../../../../public/images/dropzone.gif';
+import UpdateBookDetails from '../../library/admin/UpdateBookDetails';
 
 /**
  * @description represents form used in Adding a Book detail
@@ -26,13 +28,15 @@ class BookForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isbn: '',
-      title: '',
-      author: '',
-      quantity: '',
-      description: '',
-      image: '',
-      category: 'Unsorted',
+      id: this.props.book.id ? this.props.book.id : '',
+      isbn: this.props.book.isbn ? this.props.book.isbn : '',
+      title: this.props.book.title ? this.props.book.title : '',
+      author: this.props.book.author ? this.props.book.author : '',
+      quantity: this.props.book.quantity ? this.props.book.quantity : '',
+      description: this.props.book.description ?
+        this.props.book.description : '',
+      image: this.props.book.image ? this.props.book.image : '',
+      category: this.props.book.category ? this.props.book.category : '',
       errors: {},
       loading: false,
       coverUploaded: false,
@@ -95,51 +99,55 @@ class BookForm extends Component {
    * @description handles Book update form submission
    * @param {object} event
    * @returns {void} returns nothing
-   * @memberof UpdateBookModal
+   * @memberof BookForm
    */
   handleSubmit(event) {
     event.preventDefault();
-    const errors = {};
-    if (this.state.isbn.trim() === '' || isNaN(this.state.isbn)) {
-      errors.isbn = 'Can\'t be empty and must be number';
-    }
-    if (this.state.title.trim() === '') errors.title = 'Can\'t be empty';
-    if (this.state.author.trim() === '') errors.author = 'Can\'t be empty';
-    if (this.state.quantity === '' || isNaN(this.state.quantity)) {
-      errors.quantity = 'Can\'t be empty and must be number';
-    }
-    if (this.state.description.trim() === '') {
-      errors.description = 'Can\'t be empty';
-    }
-    if (this.state.category.trim() === '') {
-      errors.category = 'Can\'t be empty';
-    }
-    this.setState({ errors });
-    const isValid = Object.keys(errors).length === 0;
-
+    const { isValid, errors } = Validators.validateBookForm(this.state);
+    if (!isValid) this.setState({ errors });
     if (isValid) {
-      const { isbn, title, author,
+      const { id, isbn, title, author,
         description, quantity, category, image } = this.state;
-      // this.setState({ loading: true });
-      saveBook({ isbn, title, author, description, quantity, category, image })
-        .then((res) => {
-          Materialize.toast(
-            res.isDone ? res.res.message : res.errors.message,
-            3000,
-            res.isDone ? 'green' : 'red',
-          );
-          if (res.isDone) {
-            this.setState({
-              isbn: '',
-              title: '',
-              author: '',
-              description: '',
-              quantity: '',
-              image: '',
-              category: 'Unsorted',
-            });
-          }
-        });
+      if (id) {
+        updateBook({
+          id,
+          isbn,
+          title,
+          author,
+          description,
+          quantity,
+          category,
+          image
+        })
+          .then((res) => {
+            if (!res.isDone) {
+              this.setState({ errors: res.result.errors, loading: false });
+            }
+          });
+      } else {
+        saveBook({
+          isbn,
+          title,
+          author,
+          description,
+          quantity,
+          category,
+          image
+        })
+          .then((res) => {
+            if (res.isDone) {
+              this.setState({
+                isbn: '',
+                title: '',
+                author: '',
+                description: '',
+                quantity: '',
+                image: '',
+                category: 'Unsorted',
+              });
+            }
+          });
+      }
     }
   }
 
@@ -147,7 +155,7 @@ class BookForm extends Component {
    * @description displays the form for updating
    * @param {void} null
    * @returns {string} - HTML markup for the form
-   * @memberof UpdateBookModal
+   * @memberof BookForm
    */
   render() {
     const { errors } = this.state;
@@ -159,15 +167,16 @@ class BookForm extends Component {
         position: 'absolute',
       },
     };
-    const selectorOptions = this.props.categories.map(option =>
+    const selectorOptions = this.props.categories.map(category =>
       (
-        <option key={option.id} value={option.title}>
-          {option.title}
+        <option key={category} value={category.title}>
+          {category.title}
         </option>
       ),
     );
     return (
       <div>
+        {this.state.id ? <UpdateBookDetails book={this.props.book} /> : ''}
         {!!this.state.errors.global && <div className="alert-danger">
           {this.state.errors.global}</div>}
         <form onSubmit={this.handleSubmit}>
@@ -264,7 +273,9 @@ class BookForm extends Component {
               className="btn waves-effect teal"
               disabled={classnames(this.state.loading ? 'disabled' : '')}
             >
-              <i className="fa fa-send" /> Add Book</button>
+              <i className="fa fa-send" />
+              {this.state.id ? 'Save' : 'Add Book'}
+            </button>
           </div>
         </form>
       </div>
@@ -272,20 +283,45 @@ class BookForm extends Component {
   }
 }
 
+BookForm.defaultProps = {
+  book: {
+    id: null,
+    isbn: null,
+    title: '',
+    author: '',
+    description: '',
+    quantity: null,
+    category: '',
+    image: '',
+    createdAt: '',
+  }
+};
+
 // Type checking for BookForm component
 BookForm.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchCategories: PropTypes.func.isRequired,
+  book: PropTypes.shape({
+    id: PropTypes.number,
+    isbn: PropTypes.number,
+    title: PropTypes.string,
+    author: PropTypes.string,
+    description: PropTypes.string,
+    quantity: PropTypes.number,
+    category: PropTypes.string,
+    image: PropTypes.string,
+    createdAt: PropTypes.string,
+  }),
 };
 
 /**
- * @description maps the state in redux store to UpdateBookModal props
+ * @description maps the state in redux store to BookForm props
  * @param {object} state
  * @returns {object} categories
  */
 function mapStateToProps(state) {
   return {
-    categories: state.categories,
+    categories: state.categoryReducer.categories,
   };
 }
 

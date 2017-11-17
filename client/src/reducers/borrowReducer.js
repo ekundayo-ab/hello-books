@@ -1,7 +1,12 @@
 /* eslint-disable no-case-declarations, no-underscore-dangle */
 import { SET_BORROWED_BOOKS,
   SET_BORROWED_NOT_RETURNED_BOOKS, BORROWED_RETURNED }
-  from './../actions/borrowActions';
+  from './../actions/types';
+
+// Declare the initial state for borrowing
+const initialState = {
+  borrows: []
+};
 
 /**
  * Borrowing Reducer
@@ -10,15 +15,19 @@ import { SET_BORROWED_BOOKS,
  * @param {any} [action={}]
  * @returns {object} // Borrowed/Returned Book(s)
  */
-export default function borrows(state = [], action = {}) {
+const borrowsReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case SET_BORROWED_BOOKS:
-      return action.borrowedBooks;
+      return { ...state, borrows: action.borrowedBooks };
     case SET_BORROWED_NOT_RETURNED_BOOKS:
-      return action.bookList;
+      return { ...state, borrows: action.bookList };
     case BORROWED_RETURNED:
-      return state.filter(item => item.id !== action.book.id);
+      const booksAfterReturning =
+      state.borrows.filter(borrowedBook => borrowedBook.id !== action.book.id);
+      return { ...state, borrows: booksAfterReturning };
     default:
       return state;
   }
-}
+};
+
+export default borrowsReducer;

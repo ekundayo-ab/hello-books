@@ -49,14 +49,18 @@ class CatController {
             title: req.body.title,
           })
           .then((category) => {
-            res.status(200).send({
+            res.status(201).send({
               success: true,
-              message: `${category.title},
-              successfully added` });
+              message: `${category.title}, successfully added`,
+              category
+            });
           })
-          .catch(error => res.send(error.message));
-      })
-      .catch(error => res.send(error.message));
+          .catch(() =>
+            res.status(500).send({
+              success: false,
+              message: 'Internal Server Error'
+            }));
+      });
   }
 
   /**
@@ -78,9 +82,13 @@ class CatController {
         if (categories[0] === undefined) {
           return res.status(301).send({
             success: false,
-            message: 'Categories not available, check back later.' });
+            message: 'Categories not available, check back later.'
+          });
         }
-        return res.status(200).send(categories);
+        return res.status(200).send({
+          success: true,
+          categories
+        });
       })
       .catch(() => res.status(500).send({
         success: false,

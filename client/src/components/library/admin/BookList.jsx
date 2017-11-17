@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-materialize';
-import UpdateBookModal from '../../library/admin/UpdateBookModal';
+import BookForm from '../../library/admin/BookForm';
 
 /**
  * @description displays list of books
@@ -12,7 +12,7 @@ import UpdateBookModal from '../../library/admin/UpdateBookModal';
 const BookList = (props) => {
   // message to display if no books
   const emptyMessage = (
-    <p>No books have been added yet.</p>
+    <p>No book(s) have been added to this shelf yet.</p>
   );
 
   // markup to render if books exist
@@ -47,7 +47,7 @@ const BookList = (props) => {
                   >
                     <i className="fa fa-edit green-text" /></button>}
                 >
-                  <UpdateBookModal book={book} />
+                  <BookForm book={book} />
                 </Modal>
               </td>
               <td>

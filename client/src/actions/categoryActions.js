@@ -1,8 +1,6 @@
 import axios from 'axios';
 import store from '../../src/index';
-
-const SET_CATEGORIES = 'SET_CATEGORIES';
-const ADD_CATEGORY = 'ADD_CATEGORY';
+import * as actionTypes from '../actions/types';
 
 /**
  * Set Categories
@@ -11,7 +9,7 @@ const ADD_CATEGORY = 'ADD_CATEGORY';
  * @returns {object} action
  */
 const setCategories = categories =>
-  ({ type: SET_CATEGORIES, categories });
+  ({ type: actionTypes.SET_CATEGORIES, categories });
 
 /**
  * Add Category
@@ -20,7 +18,7 @@ const setCategories = categories =>
  * @returns {object} action
  */
 const addCategory = category =>
-  ({ type: ADD_CATEGORY, category });
+  ({ type: actionTypes.ADD_CATEGORY, category });
 
 /**
  * Get Categories
@@ -32,7 +30,7 @@ const fetchCategories = () =>
   ((dispatch) => {
     axios.get('/api/v1/categories')
       .then((res) => {
-        dispatch(setCategories(res.data));
+        dispatch(setCategories(res.data.categories));
         return res.data;
       })
       .catch(err =>
@@ -49,7 +47,7 @@ const fetchCategories = () =>
 const saveCategory = categoryDetails =>
   axios.post('/api/v1/category', categoryDetails)
     .then((res) => {
-      store.dispatch(addCategory(res.data));
+      store.dispatch(addCategory(res.data.category));
       return { res: res.data, isDone: true };
     })
     .catch(err =>
@@ -60,5 +58,4 @@ export {
   fetchCategories,
   setCategories,
   saveCategory,
-  SET_CATEGORIES,
 };

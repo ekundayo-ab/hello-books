@@ -178,15 +178,14 @@ Router.post('/users/signup', usersController.signup); // Route to sign up
  */
 Router.post('/users/signin', usersController.signin); // Route to sign in
 
-// Checks if a User exists in the database
-Router.post('/users', usersController.findUser);
 
 // Authentication for google signup and signin
 Router.post('/auth/google', usersController.googleAuth);
 
 Router.use(authMiddleware.authenticate); // Authentication middleware
 
-Router.get('/users', usersController.list); // Listing all users
+// Checks if a User exists in the database
+Router.post('/users', usersController.findUser);
 
 /**
  * @swagger
@@ -240,7 +239,7 @@ Router.get('/users', usersController.list); // Listing all users
  *         required: true
  *         type: string
  *     responses:
- *       200:
+ *       201:
  *         description: Learn JAVA in two months successfully added
  *         schema:
  *           $ref: '#/definitions/BookCreationResponse'
@@ -714,7 +713,11 @@ Router.post('/users/:userId/books', borrowsController.create);
  *         description: Internal Server Error
  */
 // Route to return a book
-Router.put('/users/:userId/books', borrowsController.returnBook);
+Router.put(
+  '/users/:userId/books',
+  authMiddleware.doesUserExist,
+  borrowsController.returnBook
+);
 
 /**
  * @swagger
@@ -819,15 +822,104 @@ Router.get('/users/:userId/books', borrowsController.listNotReturned);
 Router.get('/books/:bookId', booksController.findBook);
 Router.get('/borrowed/:bookId', borrowsController.getBorrowedBook);
 Router.get('/borrowed/:userId/books', borrowsController.getAllBorrowedBooks);
-
+/**
+ * @swagger
+ * /category:
+ *   post:
+ *     tags:
+ *       - Category Operations
+ *     description: Adds a category specification to the library
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: title
+ *         description: name of the category to add
+ *         in: body
+ *         required: true
+ *         type: string
+ *         default: "Sciences"
+ *       - name: x-access-token
+ *         in: header
+ *         description: an authentication header
+ *         required: true
+ *         type: string
+ *     responses:
+ *       201:
+ *         description: Sciences successfully added
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *             properties:
+ *               title: string
+ *               example: Sciences
+ *       400:
+ *         description: All fields must exist
+ *       403:
+ *         description: Permission Denied
+ *       409:
+ *         description: Conflict! Sciences exists already
+ *       500:
+ *         description: Internal Server Error
+ */
 Router.post('/category', catController.create);
+
+/**
+ * @swagger
+ * /categories:
+ *   get:
+ *     tags:
+ *       - Category Operations
+ *     description: Lists all categories in the library
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: x-access-token
+ *         in: header
+ *         description: an authentication header
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: An array of Categories
+ *         schema:
+ *           type: object
+ *           properties:
+ *             success:
+ *               type: boolean
+ *               example: true
+ *             categories:
+ *               type: array
+ *               example:
+ *                 - {
+ *                  "id": 6,
+ *                  "title": "Programming",
+ *                  "createdAt": "2017-10-14T17:58:13.884Z",
+ *                  "updatedAt": "2017-10-14T17:58:13.884Z",
+ *                 }
+ *                 - {
+ *                  "id": 7,
+ *                  "title": "Music",
+ *                  "createdAt": "2017-10-14T17:58:18.937Z",
+ *                  "updatedAt": "2017-10-14T17:58:18.937Z",
+ *                 }
+ *                 - {
+ *                  "id": 8,
+ *                  "title": "Sciences",
+ *                  "createdAt": "2017-10-14T17:58:26.597Z",
+ *                  "updatedAt": "2017-10-14T17:58:26.597Z",
+ *                 }
+ *                 - {
+ *                  "id": 9,
+ *                  "title": "Arts",
+ *                  "createdAt": "2017-10-14T17:58:29.869Z",
+ *                  "updatedAt": "2017-10-14T17:58:29.869Z",
+ *                 }
+ *       301:
+ *         description: Categories not available, check back later.
+ *       500:
+ *         description: Internal Server Error
+ */
 Router.get('/categories', catController.list);
 
-Router.route('*')
-  .post((req, res) => {
-    res.send('This is an invalid route');
-  })
-  .get((req, res) => {
-    res.send('This is an invalid route');
-  });
 export default Router;

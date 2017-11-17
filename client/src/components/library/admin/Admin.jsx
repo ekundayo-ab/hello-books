@@ -123,7 +123,7 @@ class Admin extends Component {
                 books={this.props.books}
                 handleDelete={this.handleDelete}
               />
-              {this.props.books.length > 0 ?
+              {this.state.pages.length > 1 ?
                 <Paginator
                   pages={this.state.pages}
                   pageId={this.state.pageId.toString()}

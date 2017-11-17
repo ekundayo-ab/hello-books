@@ -64,6 +64,24 @@ export default {
       quantity: '',
     },
   },
+  book7a: {
+    body: {
+      isbn: 'asd',
+      title: 'Learn Haskell',
+      author: 'Haskell Master',
+      description: 'Learn and Master Haskell in 16 Months',
+      quantity: '201',
+    },
+  },
+  book7b: {
+    body: {
+      isbn: '003',
+      title: 'Learn Haskell',
+      author: 'Haskell Master',
+      description: 'Learn and Master Haskell in 16 Months',
+      quantity: 'bookQuantity',
+    },
+  },
   book8: {
     isbn: 1,
     title: 'Learn Haskell',

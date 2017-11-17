@@ -166,8 +166,8 @@ BookDetail.propTypes = {
  */
 function mapStateToProps(state) {
   return {
-    book: state.book,
-    borrow: state.borrow,
+    book: state.bookReducer.book,
+    borrow: state.borrowReducer.borrow,
     userId: state.users.user.id,
   };
 }

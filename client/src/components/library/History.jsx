@@ -138,7 +138,7 @@ class History extends Component {
                     </tbody>
                   </table> : noBorrowHistory }
               </div>
-              {this.props.books.length > 0 ?
+              {this.state.pages.length > 1 ?
                 <Paginator
                   pages={this.state.pages}
                   pageId={this.state.pageId.toString()}
