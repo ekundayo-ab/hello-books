@@ -77,10 +77,10 @@ class UserController {
                 message: `Hi ${user.username}, registration successful!`
               });
             })
-            .catch(() => {
+            .catch((err) => {
               res.status(500).send({
                 success: false,
-                message: 'Internal Server Error'
+                message: err.message
               });
             });
         });
@@ -151,30 +151,6 @@ class UserController {
         });
       });
   }
-  /**
-   * @static
-   * @description Lists all users
-   * @param {any} req
-   * @param {any} res
-   * @returns {object} users list
-   * @memberOf UserController
-   */
-  static list(req, res) {
-    if (req.decoded.data.role !== 'admin') {
-      res.status(403).send({
-        success: false,
-        message: 'You are not allowed to view all users' });
-    }
-    // Get all users.
-    return User
-      .findAll({
-        order: [
-          ['createdAt', 'ASC'],
-        ],
-      }).then((user) => {
-        res.send({ user });
-      });
-  }
 
   /**
    * @static
@@ -184,6 +160,18 @@ class UserController {
    * @memberof UserController
    */
   static findUser(req, res) {
+    // Ensure user has administrative priviledges to find a User
+    if (!Helper.isAdmin(req)) {
+      return res.status(403).send({ success: false,
+        message: 'Permission Denied' });
+    }
+    // Ensures expected inputs are gotten
+    if (!req.body.password || !req.body.username) {
+      return res.status(400).send({
+        success: false,
+        message: 'Bad request!, Check username or email.'
+      });
+    }
     // Get all users.
     return User
       .findOne({
@@ -198,9 +186,17 @@ class UserController {
         if (user) {
           return res.status(200).send(user);
         }
-        return res.status(200).send({ success: true, message: 'Available' });
+        return res.status(404).send({
+          success: false,
+          message: 'User does not exist'
+        });
       })
-      .catch(err => res.status(400).send(err));
+      .catch((err) => {
+        res.status(500).send({
+          success: false,
+          message: err.message
+        });
+      });
   }
 
   /**
@@ -211,12 +207,9 @@ class UserController {
    * @memberof UserController
    */
   static googleAuth(req, res) {
-    if (req.body.username.trim() === '' ||
-    req.body.password.trim() === '' || req.body.email.trim() === '') {
-      return res.status(400).send({
-        success: false,
-        message: 'Please enter correct data' });
-    }
+    // Error(s) is/are outputted if any is pushed to the array
+    const { isValid, errors } = Helper.userValidation(req);
+    if (!isValid) return res.status(400).send({ success: false, errors });
     return User
       .findOne({
         where: {
@@ -247,32 +240,18 @@ class UserController {
             role: req.body.role,
           })
           .then((user) => {
-            let token;
-            if (user) {
-              token = jwt.sign({
-                data: { id: user.id, role: user.role, username: user.username },
-              }, process.env.JWT_SECRET, { expiresIn: 60 * 60 });
-              return res.status(201).send({
-                success: true,
-                message: `Hi ${user.username}, registration successful!`,
-                token,
-              });
-            }
-            return res.status(400).send({
-              success: false,
-              message: 'Something happened, ensure you' +
-              'sign in to your google account',
-            });
-          })
-          .catch(() => {
-            res.status(409).send({
-              success: false,
-              message: 'A user with that email/username'
+            const token = jwt.sign({
+              data: { id: user.id, role: user.role, username: user.username },
+            }, process.env.JWT_SECRET, { expiresIn: 60 * 60 });
+            return res.status(201).send({
+              success: true,
+              message: `Hi ${user.username}, registration successful!`,
+              token,
             });
           });
       })
       .catch(() => {
-        res.send({
+        res.status(500).send({
           success: false,
           message: 'Internal server error'
         });

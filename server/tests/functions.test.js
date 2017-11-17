@@ -1,4 +1,3 @@
-/* eslint-env mocha */
 import { assert } from 'chai';
 import helper from '../helpers/index';
 import helperUser from '../helpers/helperUser';
@@ -7,6 +6,7 @@ import helperBook from '../helpers/helperBook';
 const isAdmin = helper.isAdmin;
 const isDefined = helper.isDefined;
 const inputValidation = helper.inputValidation;
+const userValidation = helper.userValidation;
 const validateEmail = helper.validateEmail;
 
 describe('Helper Functions', () => {
@@ -56,6 +56,16 @@ describe('Helper Functions', () => {
       assert.equal(inputValidation(helperBook.book7)
         .errors.quantity, 'This field is required');
     });
+    it('should raise error when isbn field is not a number', () => {
+      assert.equal(inputValidation(helperBook.book7a).isValid, false);
+      assert.equal(inputValidation(helperBook.book7a)
+        .errors.ISBNValidation, 'ISBN must be a number');
+    });
+    it('should raise error when quantity field is not a number', () => {
+      assert.equal(inputValidation(helperBook.book7b).isValid, false);
+      assert.equal(inputValidation(helperBook.book7b)
+        .errors.numeric, 'quantity must be a number');
+    });
   });
   describe('Validates email for sign up & sign in', () => {
     it('should return true for ekprogs@gmail.com', () => {
@@ -66,6 +76,23 @@ describe('Helper Functions', () => {
     });
     it('should return false for ekprogs@gmail', () => {
       assert.equal(validateEmail(helperUser.user5.email), false);
+    });
+  });
+  describe('Validation of user inputs when registering', () => {
+    it('should return an error for invalid username supplied', () => {
+      assert.equal(userValidation(helperUser.user9a).isValid, false);
+      assert.equal(userValidation(helperUser.user9a)
+        .errors.username, 'One word, only letters or underscore');
+    });
+    it('should return error for username not supplied', () => {
+      assert.equal(userValidation(helperUser.user9b).isValid, false);
+      assert.equal(userValidation(helperUser.user9b)
+        .errors.username, 'This field is required');
+    });
+    it('should return error for password mismatch', () => {
+      assert.equal(userValidation(helperUser.user9c).isValid, false);
+      assert.equal(userValidation(helperUser.user9c)
+        .errors.password, 'Passwords do not match');
     });
   });
 });

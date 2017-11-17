@@ -43,17 +43,20 @@ class Helper {
       const field = (Object.values(req.body)[i]);
       if (typeof (Object.values(req.body)[i])
       === 'string') Object.values(req.body)[i].trim();
+
       if (field === (undefined || null || '')
       || /^\s+$/.test(field)) {
         const theKey = Object.keys(req.body)[i];
         errors[theKey] = 'This field is required';
       }
+
       if (Object.keys(req.body)[i] === 'isbn'
       && isNaN(Object.values(req.body)[i])) {
         errors.ISBNValidation = 'ISBN must be a number';
       }
+
       if (Object.keys(req.body)[i] === 'quantity'
-      && typeof (parseInt(Object.values(req.body)[i], 10)) !== 'number') {
+      && isNaN(Object.values(req.body)[i])) {
         errors.numeric = 'quantity must be a number';
       }
     }
@@ -72,19 +75,24 @@ class Helper {
    */
   static userValidation(req) {
     const errors = {};
-    if (!/^[a-z_]+$/i.test(req.username)) {
-      errors.username = 'MUST be one word (letters/underscores)';
+    if (!/^[a-z_]+$/i.test(req.body.username)) {
+      errors.username = 'One word, only letters or underscore';
     }
+
     if (req.body.password !== req.body.passwordConfirmation) {
       errors.password = 'Passwords do not match';
     }
     for (let i = 0; i < 4; i += 1) {
       const field = Object.values(req.body)[i];
+      const theKey = Object.keys(req.body)[i];
+      if (Object.keys(req.body)[i] !== 'email' && field.trim().length < 6) {
+        errors[theKey] = 'minimum of 6 characters word allowed';
+      }
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
-        const theKey = Object.keys(req.body)[i];
         errors[theKey] = 'This field is required';
       }
     }
+
     return {
       isValid: isEmpty(errors),
       errors,

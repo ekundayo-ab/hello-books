@@ -11,9 +11,9 @@
     "start:dev": "babel-watch app.js",
     "build": "webpack --config webpack.config.prod.js -p --progress --colors",
     "build:dev": "webpack-dev-server --open --config webpack.config.dev.js",
-    "test": "cross-env NODE_ENV=test mocha --compilers js:babel-register server/tests/*.js",
+    "test": "cross-env NODE_ENV=test mocha --timeout 5000 --compilers js:babel-register server/tests/**.js",
     "test:db": "sequelize db:migrate",
-    "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text --reporter=lcovonly mocha --compilers js:babel-register server/tests/*.js",
+    "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text --reporter=lcovonly mocha --compilers js:babel-register server/tests/**.js",
     "db:migrate": "cross-env DATABASE_URL=$DATABASE_URL sequelize db:migrate",
     "db:seed": "DATABASE_URL=$DATABASE_URL sequelize db:seed:all",
     "postinstall": "npm run build",
@@ -32,6 +32,11 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ekundayo-ab/hello-books/issues"
+  },
+  "nyc": {
+    "exclude": [
+      "server/tests"
+    ]
   },
   "homepage": "https://github.com/ekundayo-ab/hello-books#readme",
   "dependencies": {

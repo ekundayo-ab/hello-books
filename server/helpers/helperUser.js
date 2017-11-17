@@ -77,5 +77,29 @@ export default {
     password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
     email: 'pate@gmail.com',
   },
+  user9a: {
+    body: {
+      username: '   murphus',
+      password: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
+      passwordConfirmation: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
+      email: 'murphus@gmail.com'
+    }
+  },
+  user9b: {
+    body: {
+      username: '',
+      password: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
+      passwordConfirmation: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
+      email: 'murphus@gmail.com'
+    }
+  },
+  user9c: {
+    body: {
+      username: 'lincoln',
+      password: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
+      passwordConfirmation: 'bhVaz30gNLdCmqbZYuRIPQulAB/Sg',
+      email: 'murphus@gmail.com'
+    }
+  },
 };
 

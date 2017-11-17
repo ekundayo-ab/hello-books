@@ -200,41 +200,35 @@ class BookController {
    */
   static list(req, res) {
     const limit = 4; // number of records per page
-    let offset = 0;
-    return Book.findAndCountAll()
-      .then((data) => {
-        const page = req.query.page; // page number
-        const pages = Math.ceil(data.count / limit);
-        offset = limit * (page - 1);
-        return Book
-          .findAll({
-            order: [
-              ['createdAt', 'ASC'],
-            ],
-            limit,
-            offset,
-          })
-          .then((book) => {
-            if (book[0] === undefined) {
-              return res.status(204).send({
-                success: false,
-                message: 'Books not available, check back later.'
-              });
-            }
-            return res.status(200).send({
-              success: true,
-              books: book,
-              numberOfPages: pages
-            });
-          })
-          .catch(() =>
-            res.status(400)
-              .send({
-                success: false,
-                message: 'Ooops! something happened,' +
-                'check your inputs and try again.'
-              }));
-      });
+    const { page } = req.query; // page number
+    const offset = limit * (page - 1);
+    return Book.findAndCountAll({
+      order: [
+        ['title', 'ASC'],
+      ],
+      limit,
+      offset,
+    })
+      .then((books) => {
+        const pages = Math.ceil(books.count / limit);
+        if (books.rows.length < 1) {
+          return res.status(404).send({
+            success: false,
+            message: 'Books not available, check back later.'
+          });
+        }
+        return res.status(200).send({
+          success: true,
+          books: books.rows,
+          numberOfPages: pages
+        });
+      })
+      .catch(() =>
+        res.status(400).send({
+          success: false,
+          message: 'Ooops! something happened,' +
+            'check your inputs and try again.'
+        }));
   }
 
   /**
@@ -246,13 +240,19 @@ class BookController {
    * @memberof BookController
    */
   static findBook(req, res) {
+    if (!req.params.bookId || isNaN(req.params.bookId)) {
+      return res.status(400).send({
+        success: false,
+        message: 'Ensure book ID is supplied'
+      });
+    }
     return Book
       .findOne({
         where: {
           id: req.params.bookId,
         },
       }).then((book) => {
-        if (book) {
+        if (book !== null) {
           return res.status(200).send(book);
         }
         return res.status(404).send({
@@ -261,7 +261,10 @@ class BookController {
         });
       })
       .catch(() => {
-        res.status(500).send({ failure: 'Internal Server Error' });
+        res.status(500).send({
+          success: false,
+          message: 'Internal Server Error'
+        });
       });
   }
 }

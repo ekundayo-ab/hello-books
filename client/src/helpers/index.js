@@ -70,7 +70,7 @@ class Helper {
   static userValidation(req) {
     const errors = {};
     if (!/^[a-z_]+$/i.test(req.username)) {
-      errors.username = 'MUST be one word (letters/underscores)';
+      errors.username = 'One word, only letters or underscore';
     }
 
     if (req.password !== req.passwordConfirmation) {
@@ -79,9 +79,11 @@ class Helper {
 
     for (let i = 0; i < 4; i += 1) {
       const field = Object.values(req)[i];
+      const theKey = Object.keys(req)[i];
+      if (Object.keys(req)[i] !== 'email' && field.trim().length < 6) {
+        errors[theKey] = 'minimum of 6 characters word allowed';
+      }
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
-        // eslint-disable-line no-unused-vars
-        const theKey = Object.keys(req)[i];
         errors[theKey] = 'This field is required';
       }
     }
