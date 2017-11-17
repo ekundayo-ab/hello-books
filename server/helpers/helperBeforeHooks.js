@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import app from '../../app';
 import models from '../models/';
 
-const { User, Book, Borrow, Category } = models.User;
+const { User, Book, Borrow, Category } = models;
 
 const server = supertest.agent(app);
 
