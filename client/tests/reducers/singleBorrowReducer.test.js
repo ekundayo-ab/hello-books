@@ -10,11 +10,9 @@ describe('single borrow reducer', () => {
   });
 
   it('should handle BOOK_FETCHED and save the payload to the store', () => {
-    expect(
-      singleBorrowReducer(
-        { borrow: {} },
-        { type: actionTypes.BORROWED_FETCHED, borrow: borrow1 }
-      )
-    ).toEqual({ borrow: borrow1 });
+    expect(singleBorrowReducer(
+      { borrow: {} },
+      { type: actionTypes.BORROWED_FETCHED, borrow: borrow1 }
+    )).toEqual({ borrow: borrow1 });
   });
 });
