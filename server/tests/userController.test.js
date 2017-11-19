@@ -306,42 +306,7 @@ describe('AUTHENTICATION & USER Operations', () => {
   });
 
   describe('When searching for a single user', () => {
-    it('should disallow non-admin user from searching', (done) => {
-      server
-        .post('/api/v1/users')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', normalUserToken)
-        .send({
-          username: 'emmanuel',
-          password: 'ekundayo'
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(403);
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Permission Denied');
-          expect(res.body).to.be.an.instanceof(Object);
-          done();
-        });
-    });
-    it('should raise error if supplied inputs are invalid', (done) => {
-      server
-        .post('/api/v1/users')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminUserToken)
-        .send({
-          username: '',
-          password: ''
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(400);
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message)
-            .to.equal('Bad request!, Check username or email.');
-          expect(res.body).to.be.an.instanceof(Object);
-          done();
-        });
-    });
-    it('should raise error if User does not exists', (done) => {
+    it('should send a message if username has not been taken', (done) => {
       server
         .post('/api/v1/users')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -351,14 +316,14 @@ describe('AUTHENTICATION & USER Operations', () => {
           password: 'errorguy'
         })
         .end((err, res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('User does not exist');
+          expect(res.status).to.equal(200);
+          expect(res.body.success).to.equal(true);
+          expect(res.body.message).to.equal('Username available');
           expect(res.body).to.be.an.instanceof(Object);
           done();
         });
     });
-    it('should respond with user data if all goes well', (done) => {
+    it('should respond with user data if user exists', (done) => {
       server
         .post('/api/v1/users')
         .set('Accept', 'application/x-www-form-urlencoded')

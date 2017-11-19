@@ -160,18 +160,6 @@ class UserController {
    * @memberof UserController
    */
   static findUser(req, res) {
-    // Ensure user has administrative priviledges to find a User
-    if (!Helper.isAdmin(req)) {
-      return res.status(403).send({ success: false,
-        message: 'Permission Denied' });
-    }
-    // Ensures expected inputs are gotten
-    if (!req.body.password || !req.body.username) {
-      return res.status(400).send({
-        success: false,
-        message: 'Bad request!, Check username or email.'
-      });
-    }
     // Get all users.
     return User
       .findOne({
@@ -186,9 +174,9 @@ class UserController {
         if (user) {
           return res.status(200).send(user);
         }
-        return res.status(404).send({
-          success: false,
-          message: 'User does not exist'
+        return res.status(200).send({
+          success: true,
+          message: 'Username available'
         });
       })
       .catch((err) => {

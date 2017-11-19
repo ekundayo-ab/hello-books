@@ -182,10 +182,11 @@ Router.post('/users/signin', usersController.signin); // Route to sign in
 // Authentication for google signup and signin
 Router.post('/auth/google', usersController.googleAuth);
 
-Router.use(authMiddleware.authenticate); // Authentication middleware
-
 // Checks if a User exists in the database
 Router.post('/users', usersController.findUser);
+
+Router.use(authMiddleware.authenticate); // Authentication middleware
+
 
 /**
  * @swagger
