@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { SET_CURRENT_USER, UNSET_CURRENT_USER } from '../actions/types';
 import setAuthorizationHeader from '../utils/setAuthorizationToken';
-import store from '../../src/index';
+import store from '../helpers/store';
 
 /**
  * Set Current User
@@ -72,12 +72,12 @@ const googleAuth = (userData) => {
     password: userData.tokenObj.id_token,
     passwordConfirmation: userData.tokenObj.id_token,
   };
-  return axios.post('/api/v1/auth/google', user)
+  return dispatch => axios.post('/api/v1/auth/google', user)
     .then((res) => {
       Materialize.toast(res.data.message, 4000, 'green');
       const token = res.data.token;
       localStorage.setItem('jwtToken', token);
-      store.dispatch(setCurrentUser(user));
+      dispatch(setCurrentUser(user));
       setAuthorizationHeader(token);
       return {
         success: res.data.success,

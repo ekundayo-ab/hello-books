@@ -1,5 +1,5 @@
 import axios from 'axios';
-import store from '../../src/index';
+import store from '../helpers/store';
 import * as actionTypes from '../actions/types';
 
 /**

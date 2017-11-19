@@ -25,6 +25,7 @@ const handleDrop = (files) => {
         }],
       })
       .then((cloudinaryData) => {
+        console.log(cloudinaryData);
         const imageUploaded = true;
         return {
           imageUploaded,

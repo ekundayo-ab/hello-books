@@ -145,3 +145,47 @@ export const category3 = {
 
 export const categories1 = [category1, category2];
 export const categories2 = [category1, category2, category3];
+
+// Authentication actions
+export const user = {
+  id: 49,
+  role: 'admin',
+  username: 'ekundayo'
+};
+
+export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e' +
+'yJkYXRhIjp7ImlkIjo0OSwicm9sZSI6ImFkbWl' +
+'uIiwidXNlcm5hbWUiOiJla3VuZGF5byJ9LCJpYXQi' +
+'OjE1MTA5NjI2OTYsImV4cCI6MzYxNTEwOTYyNjk2fQ.' +
+'TtaPVG2xai-CqEhLJMB8Nxenm7DIskx3pASF0pdFU2k';
+
+export const googleDetails = {
+  El: '116643864639139228843',
+  w3: {
+    Eea: '116643864639139228843',
+    ig: 'Ekundayo Abiona',
+    ofa: 'Ekundayo',
+    wea: 'Abiona',
+    Paa: 'https://lh5.googleusercontent.com/-vI2PRePGAKU/' +
+    'AAAAAAAAAAI/AAAAAAAAAAc/2nvT9UwrvUs/s96-c/photo.jpg',
+    U3: 'ekundayo.abiona@andela.com'
+  },
+  googleId: '116643864639139228843',
+  tokenObj: {
+    token_type: 'Bearer',
+    access_token: 'ya29.GlwHBbqo-6eZvqDOPjKQ89C3pXqx08Nt_vxypcQQaB9KQ' +
+    '0HvNFd2_0' +
+    'PBh2lZK19xF5rV0YhuyxKWDXbTrImxuwV2BBjXrn255YYFULs7PhhvY23CUHUdYxUqu47IPg',
+    id_token: 'defualt872%^&#a!'
+  }
+};
+
+export const googleUser = {
+  token: googleDetails.tokenObj.access_token,
+  username: googleDetails.w3.ig.split(' ')[0],
+  email: googleDetails.w3.U3,
+  role: 'normal',
+  password: googleDetails.tokenObj.id_token,
+  passwordConfirmation: googleDetails.tokenObj.id_token,
+};
+
