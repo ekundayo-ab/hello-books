@@ -17,7 +17,7 @@
     "db:migrate": "cross-env DATABASE_URL=$DATABASE_URL sequelize db:migrate",
     "db:seed": "DATABASE_URL=$DATABASE_URL sequelize db:seed:all",
     "postinstall": "npm run build",
-    "heroku-postbuild": "NODE_ENV=production && NODE_ENV=production sequelize db:migrate:undo:all && NODE_ENV=production sequelize db:migrate && NODE_ENV=production npm run db:seed && npm run build",
+    "heroku-postbuild": "NODE_ENV=production && NODE_ENV=production sequelize db:migrate:undo:all && NODE_ENV=production sequelize db:migrate && NODE_ENV=production npm run db:seed",
     "db:reset": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all"
   },
   "repository": {
