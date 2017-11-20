@@ -66,9 +66,9 @@ class BookController {
             message: 'Internal Server Error'
           }));
       })
-      .catch((err) => res.status(500).send({
+      .catch(() => res.status(500).send({
         success: false,
-        message: err.message
+        message: 'Internal Server Error'
       }));
   }
   /**

@@ -36,7 +36,7 @@ class BookForm extends Component {
       description: this.props.book.description ?
         this.props.book.description : '',
       image: this.props.book.image ? this.props.book.image : '',
-      category: this.props.book.category ? this.props.book.category : '',
+      category: this.props.book.categoryId ? this.props.book.categoryId : '',
       errors: {},
       loading: false,
       coverUploaded: false,
@@ -113,6 +113,7 @@ class BookForm extends Component {
             if (!res.isDone) {
               this.setState({ errors: res.result.errors, loading: false });
             } else {
+              $('#book-form-modal').modal('close');
               this.setState({ errors: {} });
               this.props.fetchCategories();
             }
@@ -129,6 +130,7 @@ class BookForm extends Component {
         })
           .then((res) => {
             if (res.isDone) {
+              $('#book-form-modal').modal('close');
               this.props.fetchCategories();
               this.setState({
                 isbn: '',
@@ -234,9 +236,9 @@ class BookForm extends Component {
             <i className="fa fa-list fa-2x prefix " />
             <Input
               style={{ marginLeft: '44px !important' }}
-              defaultValue={this.state.category}
               name="category"
               type="select"
+              defaultValue={this.state.category}
               onChange={this.onChange}
             >
               <option disabled value="">Please select a category</option>
@@ -285,7 +287,7 @@ BookForm.defaultProps = {
     author: '',
     description: '',
     quantity: null,
-    category: '',
+    category: null,
     image: '',
     createdAt: '',
   }
@@ -302,7 +304,7 @@ BookForm.propTypes = {
     author: PropTypes.string,
     description: PropTypes.string,
     quantity: PropTypes.number,
-    category: PropTypes.string,
+    categoryId: PropTypes.number,
     image: PropTypes.string,
     createdAt: PropTypes.string,
   }),

@@ -60,7 +60,7 @@ module.exports = {
       },
       {
         isbn : 6,
-        title : 'Gilead',
+        title : 'Gilead01',
         author: 'Marilynne Robinson',
         quantity : 11,
         description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
@@ -71,7 +71,7 @@ module.exports = {
       },
       {
         isbn : 7,
-        title : 'Gilead',
+        title : 'Gilead02',
         author: 'Marilynne Robinson',
         quantity : 11,
         description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
@@ -82,7 +82,7 @@ module.exports = {
       },
       {
         isbn : 8,
-        title : 'Gilead',
+        title : 'Gilead03',
         author: 'Marilynne Robinson',
         quantity : 11,
         description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
@@ -93,7 +93,7 @@ module.exports = {
       },
       {
         isbn : 9,
-        title : 'Gilead',
+        title : 'Gilead04',
         author: 'Marilynne Robinson',
         quantity : 11,
         description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
@@ -104,7 +104,7 @@ module.exports = {
       },
       {
         isbn : 10,
-        title : 'Gilead',
+        title : 'Gilead05',
         author: 'Marilynne Robinson',
         quantity : 11,
         description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',

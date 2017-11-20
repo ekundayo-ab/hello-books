@@ -91,7 +91,7 @@ const fetchAllBorrowedBooks = (pageNumber, userId) =>
         dispatch(setBorrowedBooks(toDispatch));
         return res.data;
       }).catch((err) => {
-        Materialize.toast(err.response.data.message, 3000, 'red');
+        Materialize.toast(err.response.data.message, 2000, 'red');
         return err.response.data;
       });
 
@@ -114,7 +114,7 @@ const fetchBorrowedBook = bookId =>
       }
     })
     .catch((err) => {
-      Materialize.toast(err.response.data.message, 3000, 'red');
+      Materialize.toast(err.response.data.message, 2000, 'red');
     });
 
 /**
@@ -139,7 +139,7 @@ const getBorrowedNotReturned = (pageNumber, userId) =>
         dispatch(setBorrowedNotReturnedBooks(toDispatch));
         return res.data;
       }).catch((err) => {
-        Materialize.toast(err.response.data.message, 3000, 'red');
+        Materialize.toast(err.response.data.message, 2000, 'red');
       });
 
   /**

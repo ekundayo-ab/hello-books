@@ -68,6 +68,7 @@ class CategoryForm extends Component {
         .then((response) => {
           if (response.isDone) {
             this.setState({ title: '' });
+            $('#category-form-modal').modal('close');
             return Materialize.toast(response.res.message, 4000, 'green');
           }
           this.setState({ title: '' });
