@@ -43,10 +43,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      category: {
-        type: Sequelize.STRING,
-        defaultValue: 'Unsorted',
-        allowNull: false,
+      categoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,

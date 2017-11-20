@@ -1,47 +1,64 @@
 import React from 'react';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
 /**
  * @description displays categories of books
- * @param {void} null
+ * @param {object} props
  * @returns {string} - HTML markup of CategoryList component
  * @memberof CategoryList
  */
-const CategoryList = () =>
+const CategoryList = props =>
   (
-    <div>
-      <form action="" className="search-form">
-        <input
-          className="col s9 white-text validate"
-          placeholder="Search.."
-          type="tel"
-        />
-        <button
-          type="submit"
-          className="btn col s3"
-        >
-          <i className="fa fa-search" /></button>
-      </form>
+    <div
+      className={
+        classnames(props.categories.length > 10 ? 'ct-fixed-height' : '')
+      }
+    >
+      {/* TODO: Filter books by searching
+        <form action="" className="search-form">
+          <input
+            className="col s9 white-text validate"
+            placeholder="Search.."
+            type="tel"
+          />
+          <button
+            type="submit"
+            className="btn col s3"
+          >
+            <i className="fa fa-search" /></button>
+        </form>
+      */}
       <div className="card-panel white col s12">
         <h6 className="teal-text">SELECT A CATEGORY</h6>
-        <div className="collection">
-          <a
-            href="#!"
-            className="collection-item"
-          ><span className="new badge">14</span>Finance</a>
-          <a href="#!" className="collection-item">
-            <span className="new badge">311</span>Science
-          </a>
-          <a href="#!" className="collection-item">
-            <span className="new badge">24</span>Computers</a>
-          <a href="#!" className="collection-item">
-            <span className="new badge">32</span>Arts</a>
-          <a href="#!" className="collection-item">
-            <span className="new badge">30</span>History</a>
-          <a href="#!" className="collection-item">
-            <span className="new badge">10</span>Animal</a>
-        </div>
+        {props.categories.length > 0 ?
+          <div className="collection">
+            {
+              props.categories.map(category => (
+                <a
+                  key={category.id}
+                  href="#!"
+                  onClick={event => props.handleFilterBooksByCategory(
+                    category.id,
+                    event,
+                    category.title
+                  )}
+                  className="collection-item"
+                >
+                  <span className="new badge">
+                    {category.cat.length}
+                  </span>{category.title}
+                </a>
+              ))
+            }
+          </div> : <p>No categories yet, check later</p>
+        }
       </div>
     </div>
   );
+
+CategoryList.propTypes = {
+  categories: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default CategoryList;

@@ -86,40 +86,7 @@ class History extends Component {
         <div className="row available-books">
           <h3 className="col s12">Borrowing History</h3>
           <div className="row">
-            <div className="col s12 m12 l3">
-              <div className="row">
-                <form action="" className="search-form">
-                  <input
-                    className="col s9 white-text validate"
-                    placeholder="Search.."
-                    type="tel"
-                  />
-                  <button
-                    type="submit"
-                    className="btn col s3"
-                  ><i className="fa fa-search" /></button>
-                </form>
-
-                <div className="card-panel white col s12">
-                  <h6 className="teal-text">SELECT A CATEGORY</h6>
-                  <div className="collection">
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">14</span>Finance</a>
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">311</span>Science</a>
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">24</span>Computers</a>
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">32</span>Arts</a>
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">30</span>History</a>
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">10</span>Animal</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col s12 m12 l9">
+            <div className="col s12 m12 l12">
               <div className="card-panel row">
                 {this.props.books.length > 0 ?
                   <table className="responsive-table">

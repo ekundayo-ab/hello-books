@@ -63,9 +63,30 @@ const fetchBooks = pageNumber =>
         return res.data;
       })
       .catch((err) => {
-        Materialize.toast(err.response.data.message, 3000, 'red');
+        Materialize.toast(err.response.data.message, 2000, 'red');
         return err.response.data;
       });
+
+/**
+ * Get Books
+ * @description Gets books from the server by category
+ * @param {number} pageNumber - page ID to get
+ * @param {number} categoryId - page ID to get
+ * @returns {array} action
+ */
+const fetchBooksByCategory = (pageNumber, categoryId) =>
+  axios.get(`/api/v1/category/books?page=${pageNumber}&categoryId=${categoryId}`
+  )
+    .then((res) => {
+      store.dispatch(setBooks(res.data.books));
+      return {
+        isDone: true
+      };
+    })
+    .catch((err) => {
+      store.dispatch(setBooks(err.response.data.books));
+      return err.response.data;
+    });
 
 /**
  * Get Single Book
@@ -92,11 +113,11 @@ const saveBook = data =>
   axios.post('/api/v1/books', data)
     .then((res) => {
       store.dispatch(addBook(res.data.book));
-      Materialize.toast(res.data.message, 3000, 'green');
+      Materialize.toast(res.data.message, 2000, 'green');
       return { res: res.data, isDone: true };
     })
     .catch((err) => {
-      Materialize.toast(err.response.data.message, 3000, 'red');
+      Materialize.toast(err.response.data.message, 2000, 'red');
       return {
         isDone: false
       };
@@ -113,14 +134,14 @@ const updateBook = data =>
     .put(`/api/v1/books/${data.id}`, data)
     .then((res) => {
       store.dispatch(bookUpdated(res.data.book));
-      Materialize.toast(res.data.message, 3000, 'green');
+      Materialize.toast(res.data.message, 2000, 'green');
       return {
         isDone: true,
         result: res.data,
       };
     })
     .catch((err) => {
-      Materialize.toast(err.response.data.message, 3000, 'red');
+      Materialize.toast(err.response.data.message, 2000, 'red');
       return {
         hasError: true,
         result: err.response.data
@@ -136,15 +157,16 @@ const updateBook = data =>
 const deleteBook = bookId =>
   axios.delete(`/api/v1/books/${bookId}`)
     .then((res) => {
-      Materialize.toast('Poof! Book successfully deleted', 3000, 'green');
+      Materialize.toast('Poof! Book successfully deleted', 2000, 'green');
       store.dispatch(deleteSuccess(res.data.book.id));
     })
     .catch((err) => {
-      Materialize.toast(err.response.data.message, 3000, 'red');
+      Materialize.toast(err.response.data.message, 2000, 'red');
     });
 
 export {
   fetchBooks,
+  fetchBooksByCategory,
   fetchBook,
   setBooks,
   saveBook,

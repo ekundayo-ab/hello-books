@@ -7,7 +7,8 @@ import BookForm from './BookForm';
 import CategoryForm from './CategoryForm';
 import CategoryList from './../category/CategoryList';
 import BookList from './BookList';
-import { fetchBooks, deleteBook } from './../../../actions/bookActions';
+import { fetchBooks, deleteBook, fetchBooksByCategory }
+  from './../../../actions/bookActions';
 import { fetchCategories } from './../../../actions/categoryActions';
 import paginate from './../../../helpers/paginate';
 import Paginator from './../../../helpers/Paginator';
@@ -29,8 +30,11 @@ class Admin extends Component {
     this.state = {
       pages: [],
       pageId: 1,
+      showCategoryTitle: false,
+      categoryTitle: ''
     };
     this.handleDelete = this.handleDelete.bind(this);
+    this.filterBooksByCategory = this.filterBooksByCategory.bind(this);
     this.query = new URLSearchParams(this.props.history.location.search);
   }
 
@@ -100,6 +104,31 @@ class Admin extends Component {
   }
 
   /**
+   * @description deletes a book from the library
+   * @param {number} categoryId - id of the category to filter by
+   * @param {object} event - click event
+   * @param {string} title - category name
+   * @returns {function} action
+   * @memberof Admin
+   */
+  filterBooksByCategory(categoryId, event, title) {
+    event.preventDefault();
+    fetchBooksByCategory(this.state.pageId, categoryId)
+      .then((res) => {
+        if (res.isDone) {
+          return this.setState({
+            showCategoryTitle: true,
+            categoryTitle: title
+          });
+        }
+        this.setState({
+          showCategoryTitle: true,
+          categoryTitle: `${title} Sorry! ${res.message}`
+        });
+      });
+  }
+
+  /**
    * @description displays the admin dashboard
    * @param {void} null
    * @returns {string} - HTML markup for the dashboard
@@ -110,11 +139,23 @@ class Admin extends Component {
       <div>
         <div className="nav-bottom" />
         <div className="row available-books">
-          <h3 className="col s12">Admin Dashboard</h3>
+          <h3 className="col s12">
+          Admin Dashboard &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {this.state.showCategoryTitle && (
+              <small className="white-text">
+                Filtering by: {this.state.categoryTitle}
+              </small>)}
+          </h3>
           <div className="row">
             <div className="col s12 m12 l3">
               <div className="row">
-                <CategoryList />
+                <CategoryList
+                  handleFilterBooksByCategory={this.filterBooksByCategory}
+                  categories={this.props.categories}
+                />
+                {this.props.categories > 10 ? <p className="white-text">
+                Scroll inside above list to see remaining categories
+                </p> : ''}
               </div>
             </div>
             <div className="col s12 m12 l9">
@@ -122,12 +163,14 @@ class Admin extends Component {
                 <Modal
                   header="Add New Book"
                   trigger={<Button>ADD BOOK</Button>}
+                  id="book-form-modal"
                 >
                   <BookForm />
                 </Modal>&nbsp;&nbsp;
                 <Modal
                   header="Add New Category"
                   trigger={<Button>ADD CATEGORY</Button>}
+                  id="category-form-modal"
                 >
                   <CategoryForm />
                 </Modal>
@@ -136,7 +179,7 @@ class Admin extends Component {
                 books={this.props.books}
                 handleDelete={this.handleDelete}
               />
-              {this.state.pages.length > 1 ?
+              {!this.state.showCategoryTitle && this.state.pages.length > 1 ?
                 <Paginator
                   pages={this.state.pages}
                   pageId={this.state.pageId.toString()}
@@ -161,6 +204,7 @@ Admin.propTypes = {
     location: PropTypes.object.isRequired,
     push: PropTypes.func.isRequired
   }).isRequired,
+  categories: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 /**
@@ -171,6 +215,7 @@ Admin.propTypes = {
 function mapStateToProps(state) {
   return {
     books: state.booksReducer.books,
+    categories: state.categoryReducer.categories
   };
 }
 

@@ -21,7 +21,7 @@ describe('CATEGORY Operations', () => {
         .set('Accept', 'application/x-www-form-urlencoded')
         .set('x-access-token', adminToken)
         .end((err, res) => {
-          expect(res.status).to.equal(301);
+          expect(res.status).to.equal(404);
           expect(res.body.success).to.equal(false);
           expect(res.body.message)
             .to.equal('Categories not available, check back later.');

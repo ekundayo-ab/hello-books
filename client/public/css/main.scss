@@ -11,7 +11,7 @@ $pure-green: #008000;
 $gray-color: #666;
 $black-color: #000;
 $slight-black-color: #222;
-$top-marker-color: #0097ff;
+$top-marker-color: #02b5b5;
 $input-active: #26a69a;
 $teal-variant: #00a8a8;
 $active-background: rgba(0, 0, 0, 0.1);
@@ -249,6 +249,10 @@ nav {
     color: $pure-white;
     margin-top: 0;
   }
+
+  small {
+    font-size: 55%;
+  }
 }
 
 nav {
@@ -462,4 +466,24 @@ p {
       padding: 0 10px;
     }
   }
+}
+
+// Categories component
+.ct-fixed-height {
+  height: 500px;
+  overflow: scroll;
+}
+
+span {
+  &.new {
+    &::after {content: ' books' !important;}
+  }
+}
+
+// Modify materialize
+#toast-container {
+  bottom: 82%;
+  left: 7%;
+  right: auto !important;
+  top: auto !important;
 }

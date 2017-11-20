@@ -57,9 +57,10 @@ class Home extends Component {
                     <li className="mod-tab">
                       <NavLink activeClassName="mod-active" to="/login">
                       Login</NavLink></li>
-                    <li className="mod-tab">
-                      <NavLink activeClassName="mod-active" to="/forgot">
-                      Forgot Password</NavLink></li>
+                    {/* TODO: Forgot password logic implementation
+                      <li className="mod-tab">
+                        <NavLink activeClassName="mod-active" to="/forgot">
+                        Forgot Password</NavLink></li> */}
                   </ul>
                 </div>
                 <div className="card-content">
@@ -67,7 +68,9 @@ class Home extends Component {
                     <Route exact path="/" component={SignUp} />
                     <Route exact path="/register" component={SignUp} />
                     <Route exact path="/login" component={SignIn} />
+                    {/* TODO: Forgot password logic implementation
                     <Route exact path="/forgot" component={ForgotPassword} />
+                    */}
                     <Redirect path="*" to="/login" />
                   </Switch>
                 </div>
@@ -75,8 +78,7 @@ class Home extends Component {
             </div>
           </div>
         </div>
-      </div>
-    );
+      </div>);
   }
 }
 

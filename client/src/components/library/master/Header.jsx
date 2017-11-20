@@ -52,7 +52,6 @@ class Header extends Component {
         </div>
         <nav>
           <div className="nav-wrapper">
-            <Link to="/shelf?page=1" className="brand-logo">HelloBooks</Link>
             <a
               href="#!"
               data-activates="mobile-demo"

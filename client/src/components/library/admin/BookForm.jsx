@@ -36,7 +36,7 @@ class BookForm extends Component {
       description: this.props.book.description ?
         this.props.book.description : '',
       image: this.props.book.image ? this.props.book.image : '',
-      category: this.props.book.category ? this.props.book.category : '',
+      category: this.props.book.categoryId ? this.props.book.categoryId : '',
       errors: {},
       loading: false,
       coverUploaded: false,
@@ -45,16 +45,6 @@ class BookForm extends Component {
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleFileUpload = this.handleFileUpload.bind(this);
-  }
-
-  /**
-   * @description Invoked after component has mounted
-   * @param {void} null
-   * @returns {void} returns nothing
-   * @memberof BookForm
-   */
-  componentDidMount() {
-    this.props.fetchCategories();
   }
 
   /**
@@ -122,6 +112,10 @@ class BookForm extends Component {
           .then((res) => {
             if (!res.isDone) {
               this.setState({ errors: res.result.errors, loading: false });
+            } else {
+              $('#book-form-modal').modal('close');
+              this.setState({ errors: {} });
+              this.props.fetchCategories();
             }
           });
       } else {
@@ -136,7 +130,8 @@ class BookForm extends Component {
         })
           .then((res) => {
             if (res.isDone) {
-              this.setState({ errors: {}, loading: false });
+              $('#book-form-modal').modal('close');
+              this.props.fetchCategories();
               this.setState({
                 isbn: '',
                 title: '',
@@ -144,7 +139,9 @@ class BookForm extends Component {
                 description: '',
                 quantity: '',
                 image: '',
-                category: 'Unsorted',
+                category: '',
+                errors: {},
+                loading: false
               });
             }
           });
@@ -170,7 +167,7 @@ class BookForm extends Component {
     };
     const selectorOptions = this.props.categories.map(category =>
       (
-        <option key={category} value={category.title}>
+        <option key={category} value={category.id}>
           {category.title}
         </option>
       ),
@@ -241,12 +238,12 @@ class BookForm extends Component {
             <i className="fa fa-list fa-2x prefix " />
             <Input
               style={{ marginLeft: '44px !important' }}
-              defaultValue={this.state.category}
               name="category"
               type="select"
+              defaultValue={this.state.category}
               onChange={this.onChange}
             >
-              <option value="">Unsorted</option>
+              <option disabled value="">Please select a category</option>
               {selectorOptions}
             </Input>
             <span style={{ textAlign: 'left', marginLeft: '45px' }}>
@@ -292,7 +289,7 @@ BookForm.defaultProps = {
     author: '',
     description: '',
     quantity: null,
-    category: '',
+    category: null,
     image: '',
     createdAt: '',
   }
@@ -309,7 +306,7 @@ BookForm.propTypes = {
     author: PropTypes.string,
     description: PropTypes.string,
     quantity: PropTypes.number,
-    category: PropTypes.string,
+    categoryId: PropTypes.number,
     image: PropTypes.string,
     createdAt: PropTypes.string,
   }),
