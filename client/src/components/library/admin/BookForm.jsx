@@ -140,6 +140,8 @@ class BookForm extends Component {
                 quantity: '',
                 image: '',
                 category: '',
+                errors: {},
+                loading: false
               });
             }
           });

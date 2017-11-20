@@ -39,6 +39,19 @@ class Admin extends Component {
   }
 
   /**
+   * @description Invoked before the component mounts
+   * @param {void} null
+   * @returns {void} returns nothing
+   * @memberof Admin
+   */
+  componentWillMount() {
+    const { role } = JSON.parse(localStorage.getItem('userDetails'));
+    if (role === 'normal' || role === undefined) {
+      this.props.history.push('/shelf');
+    }
+  }
+
+  /**
    * @description Invoked after component has mounted
    * @param {void} null
    * @returns {void} returns nothing
