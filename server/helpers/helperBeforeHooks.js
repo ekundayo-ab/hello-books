@@ -49,6 +49,7 @@ class BeforeHooks {
           author: 'Haskell Master',
           description: 'Learn and Master Haskell in 16 Months',
           quantity: '30',
+          categoryId: 4
         }).then((book) => {
           process.env.bookId = book.id;
         });

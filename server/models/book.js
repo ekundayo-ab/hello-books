@@ -30,16 +30,19 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    category: {
+    categoryId: {
       type: DataTypes.STRING,
-      allowNull: true,
-    },
+      allowNull: true
+    }
   });
-
   Book.associate = (models) => {
     Book.hasMany(models.Borrow, {
       foreignKey: 'bookId',
       as: 'book',
+    });
+    Book.belongsTo(models.Category, {
+      foreignKey: 'categoryId',
+      as: 'cat',
     });
   };
   return Book;

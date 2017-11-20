@@ -1,6 +1,7 @@
 import model from '../models';
 import helper from '../helpers/index';
 
+const Book = model.Book;
 const Category = model.Category;
 
 /**
@@ -77,12 +78,16 @@ class CatController {
         order: [
           ['createdAt', 'ASC'],
         ],
+        include: [
+          { model: Book, as: 'cat', required: false },
+        ]
       })
       .then((categories) => {
         if (categories[0] === undefined) {
-          return res.status(301).send({
+          return res.status(404).send({
             success: false,
-            message: 'Categories not available, check back later.'
+            message: 'Categories not available, check back later.',
+            categories: []
           });
         }
         return res.status(200).send({

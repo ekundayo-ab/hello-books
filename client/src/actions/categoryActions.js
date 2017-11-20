@@ -33,9 +33,10 @@ const fetchCategories = () =>
         dispatch(setCategories(res.data.categories));
         return res.data;
       })
-      .catch(err =>
-        ({ err: err.message }),
-      );
+      .catch((err) => {
+        dispatch(setCategories(err.response.data.categories));
+        return err.response.data.message;
+      });
   });
 
 /**
@@ -47,7 +48,9 @@ const fetchCategories = () =>
 const saveCategory = categoryDetails =>
   axios.post('/api/v1/category', categoryDetails)
     .then((res) => {
-      store.dispatch(addCategory(res.data.category));
+      const { category } = res.data;
+      category.cat = [];
+      store.dispatch(addCategory(category));
       return { res: res.data, isDone: true };
     })
     .catch(err =>

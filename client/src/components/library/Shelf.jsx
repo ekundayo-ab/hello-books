@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchBooks } from '../../actions/bookActions';
+import { fetchBooks, fetchBooksByCategory } from '../../actions/bookActions';
+import { fetchCategories } from '../../actions/categoryActions';
 import BookCard from '../../components/library/BookCard';
 import paginate from '../../helpers/paginate';
 import Paginator from '../../helpers/Paginator';
+import CategoryList from '../../components/library/category/CategoryList';
 
 /**
  * @description represents Shelf Page
@@ -23,8 +25,11 @@ class Shelf extends Component {
     this.state = {
       pages: [],
       pageId: 1,
+      showCategoryTitle: false,
+      categoryTitle: ''
     };
     this.query = new URLSearchParams(this.props.history.location.search);
+    this.filterBooksByCategory = this.filterBooksByCategory.bind(this);
   }
 
   /**
@@ -34,11 +39,37 @@ class Shelf extends Component {
    * @returns {void} returns nothing
    */
   componentDidMount() {
+    this.props.fetchCategories();
     paginate(this.props.fetchBooks, this.query.get('page'))
       .then((res) => {
         this.setState({
           pages: res.pages,
           pageId: res.pageId
+        });
+      });
+  }
+
+  /**
+   * @description deletes a book from the library
+   * @param {number} categoryId - id of the category to filter by
+   * @param {object} event - click event
+   * @param {string} title - category name
+   * @returns {function} action
+   * @memberof Admin
+   */
+  filterBooksByCategory(categoryId, event, title) {
+    event.preventDefault();
+    fetchBooksByCategory(this.state.pageId, categoryId)
+      .then((res) => {
+        if (res.isDone) {
+          return this.setState({
+            showCategoryTitle: true,
+            categoryTitle: title
+          });
+        }
+        this.setState({
+          showCategoryTitle: true,
+          categoryTitle: `${title} Sorry! ${res.message}`
         });
       });
   }
@@ -54,38 +85,21 @@ class Shelf extends Component {
       <div>
         <div className="nav-bottom" />
         <div className="row available-books">
-          <h3 className="col s12">Available Books</h3>
+          <h3 className="col s12">Available Books &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {this.state.showCategoryTitle && (<small className="white-text">
+            Filtering by: {this.state.categoryTitle}
+            </small>)}
+          </h3>
           <div className="row">
             <div className="col s12 m12 l3">
               <div className="row">
-                <form action="" className="search-form">
-                  <input
-                    className="col s9 white-text validate"
-                    placeholder="Search.."
-                    type="tel"
-                  />
-                  <button
-                    type="submit"
-                    className="btn col s3"
-                  ><i className="fa fa-search" /></button>
-                </form>
-                <div className="card-panel white col s12">
-                  <h6 className="teal-text">SELECT A CATEGORY</h6>
-                  <div className="collection">
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">14</span>Finance</a>
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">311</span>Science</a>
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">24</span>Computers</a>
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">32</span>Arts</a>
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">30</span>History</a>
-                    <a href="#!" className="collection-item">
-                      <span className="new badge">10</span>Animal</a>
-                  </div>
-                </div>
+                <CategoryList
+                  handleFilterBooksByCategory={this.filterBooksByCategory}
+                  categories={this.props.categories}
+                />
+                {this.props.categories > 10 ? <p className="white-text">
+                  Scroll inside above list to see remaining categories
+                </p> : ''}
               </div>
             </div>
             <div className="col s12 m12 l9">
@@ -101,7 +115,7 @@ class Shelf extends Component {
                   }
                 </div>
               </div>
-              {this.state.pages.length > 1 ?
+              {!this.state.showCategoryTitle && this.state.pages.length > 1 ?
                 <Paginator
                   pages={this.state.pages}
                   pageId={this.state.pageId.toString()}
@@ -121,6 +135,7 @@ class Shelf extends Component {
 Shelf.propTypes = {
   books: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchBooks: PropTypes.func.isRequired,
+  fetchCategories: PropTypes.func.isRequired,
   history: PropTypes.shape({
     location: PropTypes.object.isRequired,
     push: PropTypes.func.isRequired
@@ -135,7 +150,8 @@ Shelf.propTypes = {
 function mapStateToProps(state) {
   return {
     books: state.booksReducer.books,
+    categories: state.categoryReducer.categories
   };
 }
 
-export default connect(mapStateToProps, { fetchBooks })(Shelf);
+export default connect(mapStateToProps, { fetchBooks, fetchCategories })(Shelf);

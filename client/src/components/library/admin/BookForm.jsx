@@ -48,16 +48,6 @@ class BookForm extends Component {
   }
 
   /**
-   * @description Invoked after component has mounted
-   * @param {void} null
-   * @returns {void} returns nothing
-   * @memberof BookForm
-   */
-  componentDidMount() {
-    this.props.fetchCategories();
-  }
-
-  /**
    * @description handles changes to the input fields value
    * @param {object} event
    * @returns {void} returns nothing
@@ -122,6 +112,9 @@ class BookForm extends Component {
           .then((res) => {
             if (!res.isDone) {
               this.setState({ errors: res.result.errors, loading: false });
+            } else {
+              this.setState({ errors: {} });
+              this.props.fetchCategories();
             }
           });
       } else {
@@ -136,6 +129,7 @@ class BookForm extends Component {
         })
           .then((res) => {
             if (res.isDone) {
+              this.props.fetchCategories();
               this.setState({
                 isbn: '',
                 title: '',
@@ -143,7 +137,7 @@ class BookForm extends Component {
                 description: '',
                 quantity: '',
                 image: '',
-                category: 'Unsorted',
+                category: '',
               });
             }
           });
@@ -169,7 +163,7 @@ class BookForm extends Component {
     };
     const selectorOptions = this.props.categories.map(category =>
       (
-        <option key={category} value={category.title}>
+        <option key={category} value={category.id}>
           {category.title}
         </option>
       ),
@@ -245,7 +239,7 @@ class BookForm extends Component {
               type="select"
               onChange={this.onChange}
             >
-              <option value="">Unsorted</option>
+              <option disabled value="">Please select a category</option>
               {selectorOptions}
             </Input>
             <span style={{ textAlign: 'left', marginLeft: '45px' }}>

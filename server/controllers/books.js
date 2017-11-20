@@ -54,7 +54,7 @@ class BookController {
             image: req.body.image,
             status: 1,
             quantity: req.body.quantity,
-            category: req.body.category,
+            categoryId: req.body.category,
           })
           .then((book) => {
             res.status(200).send({ success: true,
@@ -66,9 +66,9 @@ class BookController {
             message: 'Internal Server Error'
           }));
       })
-      .catch(() => res.status(500).send({
+      .catch((err) => res.status(500).send({
         success: false,
-        message: 'Internal Server Error'
+        message: err.message
       }));
   }
   /**
@@ -119,7 +119,7 @@ class BookController {
             image: req.body.image,
             status: 1,
             quantity: req.body.quantity,
-            category: req.body.category,
+            categoryId: req.body.category,
           }, {
             where: {
               id: req.params.bookId,
@@ -265,6 +265,35 @@ class BookController {
         res.status(500).send({
           success: false,
           message: 'Internal Server Error'
+        });
+      });
+  }
+
+  /**
+   * @static
+   * @description Gets a single book from the database
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} // Success, Message, Found book
+   * @memberof BookController
+   */
+  static filterBooks(req, res) {
+    return Book
+      .findAll({
+        where: {
+          categoryId: req.query.categoryId
+        }
+      }).then((books) => {
+        if (books.length > 0) {
+          return res.status(200).send({
+            success: true,
+            books
+          });
+        }
+        return res.status(404).send({
+          success: false,
+          message: 'No book(s) in this category',
+          books: []
         });
       });
   }

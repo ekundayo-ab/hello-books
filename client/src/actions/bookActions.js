@@ -68,6 +68,28 @@ const fetchBooks = pageNumber =>
       });
 
 /**
+ * Get Books
+ * @description Gets books from the server by category
+ * @param {number} pageNumber - page ID to get
+ * @param {number} categoryId - page ID to get
+ * @returns {array} action
+ */
+const fetchBooksByCategory = (pageNumber, categoryId) =>
+  axios.get(
+    `/api/v1/category/books?page=${pageNumber}&categoryId=${categoryId}`
+  )
+    .then((res) => {
+      store.dispatch(setBooks(res.data.books));
+      return {
+        isDone: true
+      };
+    })
+    .catch((err) => {
+      store.dispatch(setBooks(err.response.data.books));
+      return err.response.data;
+    });
+
+/**
  * Get Single Book
  * @description Gets a single book from the server
  * @param {number} id - book ID to get
@@ -145,6 +167,7 @@ const deleteBook = bookId =>
 
 export {
   fetchBooks,
+  fetchBooksByCategory,
   fetchBook,
   setBooks,
   saveBook,
