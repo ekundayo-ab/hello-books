@@ -75,8 +75,7 @@ const fetchBooks = pageNumber =>
  * @returns {array} action
  */
 const fetchBooksByCategory = (pageNumber, categoryId) =>
-  axios.get(
-    `/api/v1/category/books?page=${pageNumber}&categoryId=${categoryId}`
+  axios.get(`/api/v1/category/books?page=${pageNumber}&categoryId=${categoryId}`
   )
     .then((res) => {
       store.dispatch(setBooks(res.data.books));

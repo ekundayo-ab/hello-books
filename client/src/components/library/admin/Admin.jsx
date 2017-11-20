@@ -141,9 +141,10 @@ class Admin extends Component {
         <div className="row available-books">
           <h3 className="col s12">
           Admin Dashboard &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            {this.state.showCategoryTitle && (<small className="white-text">
-            Filtering by: {this.state.categoryTitle}
-            </small>)}
+            {this.state.showCategoryTitle && (
+              <small className="white-text">
+                Filtering by: {this.state.categoryTitle}
+              </small>)}
           </h3>
           <div className="row">
             <div className="col s12 m12 l3">

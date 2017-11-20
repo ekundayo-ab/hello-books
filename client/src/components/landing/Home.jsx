@@ -69,7 +69,7 @@ class Home extends Component {
                     <Route exact path="/register" component={SignUp} />
                     <Route exact path="/login" component={SignIn} />
                     {/* TODO: Forgot password logic implementation
-                    <Route exact path="/forgot" component={ForgotPassword} /> 
+                    <Route exact path="/forgot" component={ForgotPassword} />
                     */}
                     <Redirect path="*" to="/login" />
                   </Switch>
@@ -78,8 +78,7 @@ class Home extends Component {
             </div>
           </div>
         </div>
-      </div>
-    );
+      </div>);
   }
 }
 

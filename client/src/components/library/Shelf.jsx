@@ -86,9 +86,10 @@ class Shelf extends Component {
         <div className="nav-bottom" />
         <div className="row available-books">
           <h3 className="col s12">Available Books &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            {this.state.showCategoryTitle && (<small className="white-text">
-            Filtering by: {this.state.categoryTitle}
-            </small>)}
+            {this.state.showCategoryTitle && (
+              <small className="white-text">
+                Filtering by: {this.state.categoryTitle}
+              </small>)}
           </h3>
           <div className="row">
             <div className="col s12 m12 l3">
@@ -97,9 +98,10 @@ class Shelf extends Component {
                   handleFilterBooksByCategory={this.filterBooksByCategory}
                   categories={this.props.categories}
                 />
-                {this.props.categories > 10 ? <p className="white-text">
-                  Scroll inside above list to see remaining categories
-                </p> : ''}
+                {this.props.categories > 10 ?
+                  <p className="white-text">
+                    Scroll inside above list to see remaining categories
+                  </p> : ''}
               </div>
             </div>
             <div className="col s12 m12 l9">
@@ -140,6 +142,7 @@ Shelf.propTypes = {
     location: PropTypes.object.isRequired,
     push: PropTypes.func.isRequired
   }).isRequired,
+  categories: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 /**

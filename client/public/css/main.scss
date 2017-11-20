@@ -483,8 +483,8 @@ span {
 
 // Modify materialize
 #toast-container {
-  top: auto !important;
-  right: auto !important;
   bottom: 82%;
-  left:7%;
+  left: 7%;
+  right: auto !important;
+  top: auto !important;
 }
