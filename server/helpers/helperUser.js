@@ -101,5 +101,10 @@ export default {
       email: 'murphus@gmail.com'
     }
   },
+  user9d: {
+    oldPass: '',
+    newPass: '',
+    newPassConfirm: '',
+  },
 };
 

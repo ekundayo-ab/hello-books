@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { changePassword } from '../../actions/authActions';
 import { getBorrowedNotReturned, returnBook }
   from '../../actions/borrowActions';
+import validator from '../../helpers/validators';
 import paginate from './../../helpers/paginate';
 import Paginator from './../../helpers/Paginator';
-import dayo from '../../../public/images/dayo.png';
+import SingleInput from './../forms/SingleInput';
 
 /**
  * @description represents Profile Page
@@ -25,10 +27,16 @@ class Profile extends Component {
     this.state = {
       pages: [],
       pageId: 1,
+      oldPass: '',
+      newPass: '',
+      newPassConfirm: '',
+      errors: {}
     };
     this.query = new URLSearchParams(this.props.location.search);
     this.handleBookReturn = this.handleBookReturn.bind(this);
     this.userId = JSON.parse(localStorage.getItem('userDetails')).id;
+    this.onChange = this.onChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   /**
@@ -49,6 +57,25 @@ class Profile extends Component {
           pageId: res.pageId
         });
       });
+  }
+
+  /**
+   * @description handles changes to the input fields value
+   * @param {object} event
+   * @returns {void} returns nothing
+   * @memberof Profile
+   */
+  onChange(event) {
+    if (!this.state.errors[event.target.name]) {
+      const errors = Object.assign({}, this.state.errors);
+      delete errors[event.target.name];
+      this.setState({
+        [event.target.name]: event.target.value,
+        errors,
+      });
+    } else {
+      this.setState({ [event.target.name]: event.target.value });
+    }
   }
 
   /**
@@ -75,12 +102,33 @@ class Profile extends Component {
   }
 
   /**
+ * @description handles returning of Book
+ * @param {number} event - form submission event
+ * @returns {object} action
+ * @memberof Profile
+ */
+  handleSubmit(event) {
+    event.preventDefault();
+    const { isValid, errors } = validator.validatePassForm(this.state);
+    this.setState({ errors });
+    if (isValid) {
+      changePassword(this.state);
+      this.setState({
+        oldPass: '',
+        newPass: '',
+        newPassConfirm: '',
+      });
+    }
+  }
+
+  /**
    * @description displays the Profile Page
    * @param {void} null
    * @returns {string} - HTML markup for Profile Page
    * @memberof Profile
    */
   render() {
+    const { errors } = this.state;
     return (
       <div>
         <div className="row available-books">
@@ -91,11 +139,44 @@ class Profile extends Component {
               <div className="col s12 card">
                 <div className="card">
                   <div className="card-image">
-                    <img src={dayo} alt="dayo" />
-                  </div>
-                  <div className="card-content">
-                    <p>Ekundayo A. Abiona</p>
-                    <small>Computer Programmer</small>
+                    <h5 className="center-align">Change Password</h5>
+                    <form onSubmit={this.handleSubmit}>
+                      <SingleInput
+                        placeholder="Old Password"
+                        identifier="oldPass"
+                        inputName="oldPass"
+                        inputType="password"
+                        inputClass="validate"
+                        controlFunc={this.onChange}
+                        content={this.state.oldPass}
+                        fieldError={errors.oldPass}
+                      />
+                      <SingleInput
+                        placeholder="New Password"
+                        identifier="newPass"
+                        inputName="newPass"
+                        inputType="password"
+                        inputClass="validate"
+                        controlFunc={this.onChange}
+                        content={this.state.newPass}
+                        fieldError={errors.newPass || errors.mismatch}
+                      />
+                      <SingleInput
+                        placeholder="Confirm New Password"
+                        identifier="newPassConfirm"
+                        inputName="newPassConfirm"
+                        inputType="password"
+                        inputClass="validate"
+                        controlFunc={this.onChange}
+                        content={this.state.newPassConfirm}
+                        fieldError={errors.newPassConfirm}
+                      />
+                      <div className="center-align col s12">
+                        <button type="submit" className="btn waves-effect teal">
+                          <i className="fa fa-send" /> Save Changes
+                        </button><br /><br />
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>

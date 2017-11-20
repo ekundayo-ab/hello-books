@@ -342,4 +342,84 @@ describe('AUTHENTICATION & USER Operations', () => {
         });
     });
   });
+
+  describe('Upon a user password change request', () => {
+    it('should successfully update password', (done) => {
+      server
+        .post('/api/v1/users/pass')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminUserToken)
+        .send({
+          oldPass: '123456',
+          newPass: 'dayo',
+          newPassConfirm: 'dayo',
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body).to.be.an.instanceof(Object);
+          expect(res.body.message).to.equal('Password successfully changed');
+          expect(res.body).to.have.property('message');
+          done();
+        });
+    });
+    it('should respond with bad request for invalid input', (done) => {
+      server
+        .post('/api/v1/users/pass')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminUserToken)
+        .send({
+          oldPass: '',
+          newPass: '',
+          newPassConfirm: '',
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body).to.be.an.instanceof(Object);
+          expect(res.body).to.have.property('errors');
+          done();
+        });
+    });
+    it('should respond with failure message if old password is incorrect',
+      (done) => {
+        server
+          .post('/api/v1/users/pass')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminUserToken)
+          .send({
+            oldPass: 'ekundayo',
+            newPass: 'dayo',
+            newPassConfirm: 'dayo',
+          })
+          .end((err, res) => {
+            expect(res.status).to.equal(401);
+            expect(res.body.success).to.equal(false);
+            expect(res.body).to.be.an.instanceof(Object);
+            expect(res.body.message)
+              .to.equal('Authentication failed, old password incorrect');
+            done();
+          });
+      });
+    it('should respond with failure message if user is not found', (done) => {
+      process.env.TRIGGER_ENV = true;
+      server
+        .post('/api/v1/users/pass')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', normalUserToken)
+        .send({
+          oldPass: 'dayo',
+          newPass: 'dayo',
+          newPassConfirm: 'dayo',
+          userId: 9825
+        })
+        .end((err, res) => {
+          process.env.TRIGGER_ENV = false;
+          expect(res.status).to.equal(404);
+          expect(res.body.success).to.equal(false);
+          expect(res.body).to.be.an.instanceof(Object);
+          expect(res.body.message)
+            .to.equal('Password change failed, try again');
+          done();
+        });
+    });
+  });
 });

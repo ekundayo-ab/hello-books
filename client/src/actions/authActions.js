@@ -141,6 +141,17 @@ const isUserExists = userData =>
   axios.post('/api/v1/users', userData)
     .catch(err => Materialize.toast(err.response.data.message, 2000, 'red'));
 
+/**
+ * Check User existence
+ * @description Checks if a users exists in the library
+ * @param {object} passwordData - user details
+ * @returns {object} action
+ */
+const changePassword = passwordData =>
+  axios.post('/api/v1/users/pass', passwordData)
+    .then(res => Materialize.toast(res.data.message, 2000, 'green'))
+    .catch(err => Materialize.toast(err.response.data.message, 2000, 'red'));
+
 
 export {
   setCurrentUser,
@@ -149,4 +160,5 @@ export {
   isUserExists,
   logout,
   googleAuth,
+  changePassword
 };

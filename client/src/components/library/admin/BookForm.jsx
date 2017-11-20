@@ -175,8 +175,6 @@ class BookForm extends Component {
     return (
       <div>
         {this.state.id ? <UpdateBookDetails book={this.props.book} /> : ''}
-        {!!this.state.errors.global && <div className="alert-danger">
-          {this.state.errors.global}</div>}
         <form onSubmit={this.handleSubmit}>
           <SingleInputWithIcon
             placeholder="ISBN"

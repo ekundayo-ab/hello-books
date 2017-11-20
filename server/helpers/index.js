@@ -100,6 +100,23 @@ class Helper {
   }
 
   /**
+   * @description validates some input fields for the form
+   * @param {object} formState - state data in the form
+   * @returns {object} - This contains errors and isvalid a boolean
+   * @memberof Validators
+   */
+  static validatePassForm(formState) {
+    const { oldPass, newPass, newPassConfirm } = formState;
+    const errors = {};
+    if (oldPass.trim() === '') errors.oldPass = 'field required';
+    if (newPass.trim() === '') errors.newPass = 'field required';
+    if (newPassConfirm.trim() === '') errors.newPassConfirm = 'field required';
+    if (newPass !== newPassConfirm) errors.mismatch = 'Passwords do not match';
+    const isValid = Object.keys(errors).length === 0;
+    return { isValid, errors };
+  }
+
+  /**
    * @static
    * @description Ensures email supplied is a valid email address
    * @param {string} email

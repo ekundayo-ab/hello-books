@@ -245,6 +245,64 @@ class UserController {
         });
       });
   }
+
+  /**
+   * @static
+   * @param {any} req
+   * @param {any} res
+   * @returns {object} // Success, Message
+   * @memberof UserController
+   */
+  static changePassword(req, res) {
+    const { isValid, errors } = Helper.validatePassForm(req.body);
+    if (!isValid) return res.status(400).send({ success: false, errors });
+    return User.findOne({
+      where: {
+        id: process.env.TRIGGER_ENV
+          ? req.body.userId : req.decoded.data.id
+      }
+    }).then((user) => {
+      // If User does not exist, output User not found.
+      if (!user) {
+        res.status(404).send({
+          success: false,
+          message: 'Password change failed, try again'
+        });
+      } else if (user) {
+        /**
+         * if User exists, compares supplied credentials
+         * with one found in the database,
+         * Authentication fails if no match. But, if all goes well
+         * User password is updated
+         */
+        if (!bcrypt.compareSync(req.body.oldPass, user.password)) {
+          return res.status(401).send({
+            success: false,
+            message: 'Authentication failed, old password incorrect'
+          });
+        }
+
+        return User
+          .update({
+            password: bcrypt.hashSync(req.body.newPass, 10),
+          }, {
+            where: {
+              id: req.decoded.data.id
+            }
+          }).then(() => {
+            res.status(200).send({
+              success: false,
+              message: 'Password successfully changed'
+            });
+          }).catch(() => {
+            res.status(500).send({
+              success: false,
+              message: 'Internal Server Error'
+            });
+          });
+      }
+    });
+  }
 }
 
 export default UserController;
