@@ -249,6 +249,10 @@ nav {
     color: $pure-white;
     margin-top: 0;
   }
+
+  small {
+    font-size: 55%;
+  }
 }
 
 nav {
@@ -469,15 +473,10 @@ p {
   height: 500px;
   overflow: scroll;
 }
+
 span {
   &.new {
     &::after {content: ' books' !important;}
-  }
-}
-
-.available-books {
-  small {
-    font-size: 55%;
   }
 }
 
