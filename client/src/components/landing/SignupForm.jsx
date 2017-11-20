@@ -86,7 +86,7 @@ class SignUp extends Component {
     const field = event.target.name;
     const val = event.target.value;
     if (val !== '') {
-      this.props.isUserExists(this.state)
+      isUserExists(this.state)
         .then((res) => {
           const errors = this.state.errors;
           let invalid;
@@ -223,8 +223,7 @@ SignUp.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func
   }).isRequired,
-  isUserExists: PropTypes.func.isRequired,
 };
 
 export default
-connect(null, { isUserExists, login })(withRouter(SignUp));
+connect(null, { login })(withRouter(SignUp));

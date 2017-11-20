@@ -136,6 +136,7 @@ class BookForm extends Component {
         })
           .then((res) => {
             if (res.isDone) {
+              this.setState({ errors: {}, loading: false });
               this.setState({
                 isbn: '',
                 title: '',
