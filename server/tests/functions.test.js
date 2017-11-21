@@ -8,7 +8,8 @@ const {
   isDefined,
   inputValidation,
   userValidation,
-  validateEmail
+  validateEmail,
+  validatePassForm
 } = helper;
 
 describe('Helper Functions', () => {
@@ -95,6 +96,13 @@ describe('Helper Functions', () => {
       assert.equal(userValidation(helperUser.user9c).isValid, false);
       assert.equal(userValidation(helperUser.user9c)
         .errors.password, 'Passwords do not match');
+    });
+  });
+  describe('Validation of inputs when changing password', () => {
+    it('should return an error for invalid inputs supplied', () => {
+      assert.equal(validatePassForm(helperUser.user9d).isValid, false);
+      assert.equal(validatePassForm(helperUser.user9d)
+        .errors.oldPass, 'field required');
     });
   });
 });

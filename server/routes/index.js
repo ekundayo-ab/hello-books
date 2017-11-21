@@ -824,6 +824,7 @@ Router.get('/books/:bookId', booksController.findBook);
 Router.get('/category/books', booksController.filterBooks);
 Router.get('/borrowed/:bookId', borrowsController.getBorrowedBook);
 Router.get('/borrowed/:userId/books', borrowsController.getAllBorrowedBooks);
+Router.post('/users/pass', usersController.changePassword);
 /**
  * @swagger
  * /category:

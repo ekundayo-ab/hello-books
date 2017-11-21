@@ -16,7 +16,8 @@
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text --reporter=lcovonly mocha --compilers js:babel-register server/tests/**.js",
     "db:migrate": "cross-env DATABASE_URL=$DATABASE_URL sequelize db:migrate",
     "db:seed": "DATABASE_URL=$DATABASE_URL sequelize db:seed:all",
-    "heroku-postbuild": "NODE_ENV=production && NODE_ENV=production sequelize db:migrate:undo:all && NODE_ENV=production sequelize db:migrate && NODE_ENV=production npm run db:seed:all && npm run build",
+    "postinstall": "npm run build",
+    "heroku-postbuild": "NODE_ENV=production && NODE_ENV=production sequelize db:migrate:undo:all && NODE_ENV=production sequelize db:migrate && NODE_ENV=production npm run db:seed",
     "db:reset": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all"
   },
   "repository": {
