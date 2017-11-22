@@ -601,7 +601,9 @@ Router.get('/books', booksController.list);
  *         description: Internal Server Error
  */
 // Route to borrow a book
-Router.post('/users/:userId/books', borrowsController.create);
+Router
+  .post('/users/:userId/books',
+    authMiddleware.doesUserExist, borrowsController.create);
 
 /**
  * @swagger
@@ -825,6 +827,7 @@ Router.get('/category/books', booksController.filterBooks);
 Router.get('/borrowed/:bookId', borrowsController.getBorrowedBook);
 Router.get('/borrowed/:userId/books', borrowsController.getAllBorrowedBooks);
 Router.post('/users/pass', usersController.changePassword);
+Router.post('/users/autoupgrade', usersController.autoUpgrade);
 /**
  * @swagger
  * /category:

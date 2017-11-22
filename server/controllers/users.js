@@ -139,7 +139,8 @@ class UserController {
             res.json({
               success: true,
               message: `Hi ${user.username}, you are logged in`,
-              token
+              token,
+              user
             });
           }
         }
@@ -302,6 +303,70 @@ class UserController {
           });
       }
     });
+  }
+
+  /**
+   * @static
+   * @param {any} req
+   * @param {any} res
+   * @returns {object} // Success, Message
+   * @memberof UserController
+   */
+  static autoUpgrade(req, res) {
+    return User.findById(req.decoded.data.id)
+      .then((user) => {
+        const upgradeToken = {
+          levelName: user.level,
+          credit: 0,
+        };
+        if (user.totalBorrow !== 10
+          && user.totalBorrow !== 20 && user.totalBorrow !== 30) {
+          return res.status(200).send({
+            success: false,
+            message: 'Not eligible'
+          });
+        }
+        if (user.level === 'bronze' && user.totalBorrow === 10) {
+          upgradeToken.levelName = 'silver';
+          upgradeToken.credit = 1;
+        }
+        if (user.level === 'silver' && user.totalBorrow === 20) {
+          upgradeToken.levelName = 'gold';
+          upgradeToken.credit = 2;
+        }
+        if (user.level === 'gold' && user.totalBorrow === 30) {
+          upgradeToken.levelName = 'unlimited';
+          upgradeToken.credit = 9000;
+        }
+        if (upgradeToken.credit > 0) {
+          return User.update({
+            level: upgradeToken.levelName,
+            borrowLimit: user.borrowLimit + upgradeToken.credit
+          }, {
+            where: {
+              id: req.decoded.data.id
+            },
+            returning: true,
+            plain: true
+          }).then(userUpdated =>
+            res.status(200).send({
+              success: true,
+              message: 'You\'ve been upgraded to ' +
+              `${userUpdated[1].dataValues.level}`,
+              user: userUpdated[1]
+            })
+          ).catch((err) => {
+            res.status(500).send({
+              success: false,
+              message: err.message,
+            });
+          });
+        }
+        return res.status(200).send({
+          success: false,
+          message: 'Not eligible'
+        });
+      });
   }
 }
 

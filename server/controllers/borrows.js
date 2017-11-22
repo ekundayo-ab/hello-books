@@ -1,4 +1,5 @@
 import model from '../models';
+import Helper from '../helpers/index';
 
 const Book = model.Book;
 const Borrow = model.Borrow;
@@ -16,6 +17,12 @@ class BorrowController {
    * @memberOf BorrowController
    */
   static create(req, res) {
+    if (res.locals.borrowStatus) {
+      return res.status(401).send({
+        success: false,
+        message: 'Loan credit exhausted, upgrade or return borrowed book'
+      });
+    }
     // Also checks if book has been borrowed and not returned
     return Borrow
       .findOne({
@@ -80,6 +87,11 @@ class BorrowController {
                     new Date(Date.now() + (3 * 24 * 60 * 60 * 1000)),
                     actualReturnDate: Date.now(),
                   }).then((borrowingRecord) => {
+                    const userToUpdate = {
+                      ops: true,
+                      userId: req.decoded.data.id,
+                    };
+                    Helper.updateBorrowLimitAndTotalBorrows(userToUpdate);
                     res.status(200).send({
                       success: true,
                       message: `${updatedBorrowedBook.title}` +
@@ -107,6 +119,7 @@ class BorrowController {
    */
   static returnBook(req, res) {
     let bookToReturn;
+    let userToUpdateInStore;
     // Searches if book is available in the database
     return Book.findById(req.body.bookId).then((bookFound) => {
       if (!bookFound) {
@@ -145,13 +158,22 @@ class BorrowController {
               returning: true,
               plain: true
             }).then((updatedBook) => {
-              res.status(200).send({
-                success: true,
-                message: `${updatedBook[1].dataValues.title} succesfully` +
-                ' returned but pending review by Administrator',
-                updatedBook,
-                borrowUpdated: borrowUpdated[1].dataValues
-              });
+              const userToUpdate = {
+                ops: false,
+                userId: req.decoded.data.id
+              };
+              Helper.updateBorrowLimitAndTotalBorrows(userToUpdate)
+                .then((resp) => {
+                  userToUpdateInStore = resp.ok ? resp.user : {};
+                  res.status(200).send({
+                    success: true,
+                    message: `${updatedBook[1].dataValues.title} succesfully` +
+                    ' returned but pending review by Administrator',
+                    updatedBook,
+                    borrowUpdated: borrowUpdated[1].dataValues,
+                    userToUpdateInStore
+                  });
+                });
             });
         });
     }).catch(() => res.status(500).send({

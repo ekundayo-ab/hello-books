@@ -8,9 +8,9 @@ import axios from 'axios';
 const verifyToken = data =>
   axios.post('/api/v1/verify-token', data)
     .then((resp) => {
-      const decoded = resp.data.decoded;
+      const { decoded, user } = resp.data;
       localStorage.setItem('userDetails', JSON.stringify(decoded));
-      return decoded;
+      return { decoded, user };
     });
 
 export default verifyToken;
