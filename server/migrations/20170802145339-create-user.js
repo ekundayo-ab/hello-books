@@ -41,6 +41,16 @@ module.exports = {
         defaultValue: 'bronze',
         allowNull: false,
       },
+      borrowLimit: {
+        type: Sequelize.INTEGER,
+        defaultValue: 2,
+        allowNull: false,
+      },
+      totalBorrow: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

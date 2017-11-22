@@ -1,8 +1,10 @@
 import supertest from 'supertest';
 import chai from 'chai';
 import app from '../../app';
+import model from '../models';
 import helperBeforeHooks from './../helpers/helperBeforeHooks';
 
+const User = model.User;
 const expect = chai.expect;
 let adminUserToken;
 let normalUserToken;
@@ -418,6 +420,62 @@ describe('AUTHENTICATION & USER Operations', () => {
           expect(res.body).to.be.an.instanceof(Object);
           expect(res.body.message)
             .to.equal('Password change failed, try again');
+          done();
+        });
+    });
+  });
+
+  describe('Membership auto-upgrade', () => {
+    before(() => {
+      User.update({
+        totalBorrow: 10,
+        borrowLimit: 2
+      }, {
+        where: {
+          username: 'emmanuel'
+        }
+      });
+    });
+    it('should not upgrade if not eligible', (done) => {
+      server
+        .post('/api/v1/users/autoupgrade')
+        .set('x-access-token', adminUserToken)
+        .send({})
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Not eligible');
+          expect(res.body).to.be.an.instanceof(Object);
+          done();
+        });
+    });
+    it('should upgrade if eligible', (done) => {
+      server
+        .post('/api/v1/users/autoupgrade')
+        .set('x-access-token', normalUserToken)
+        .send({})
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.success).to.equal(true);
+          expect(res.body.message).to.equal('You\'ve been upgraded to silver');
+          expect(res.body).to.be.an.instanceof(Object);
+          done();
+        });
+    });
+  });
+
+  describe('Token verification', () => {
+    it('should ensure an authenticated user has a valid token', (done) => {
+      server
+        .post('/api/v1/verify-token')
+        .set('x-access-token', adminUserToken)
+        .send({})
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.user.username).to.equal('ekundayo');
+          expect(res.body).to.have.property('user');
+          expect(res.body).to.have.property('decoded');
+          expect(res.body).to.be.an.instanceof(Object);
           done();
         });
     });

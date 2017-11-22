@@ -4,7 +4,7 @@ import { NavLink, Route, withRouter, Redirect, Switch } from 'react-router-dom';
 import Header from './Header';
 import SignUp from './SignupForm';
 import SignIn from './SigninForm';
-import ForgotPassword from './ForgotPasswordForm';
+// import ForgotPassword from './ForgotPasswordForm'; // TODO:Write logic
 
 /**
  * @description represents application's landing page

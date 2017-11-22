@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import verifyToken from '../utils/verifyAuthorizationToken';
+import autoUpgrade from '../utils/autoUpgrade';
 import Header from '../components/library/master/Header';
-import { setCurrentUser } from '../actions/authActions';
+import { setCurrentUser, logout } from '../actions/authActions';
 
 /**
  * Higher Order Function
@@ -29,17 +30,19 @@ export default function (ComposedComponent) {
         Materialize.toast('Oops! Something Happened, Please login.',
           3000, 'red');
         this.props.history.push('/login');
+        this.props.logout();
       } else {
+        autoUpgrade();
         verifyToken({ token: localStorage.getItem('jwtToken') })
-          .then((rex) => {
-            this.props.setCurrentUser(rex);
+          .then((res) => {
+            this.props.setCurrentUser(res.user);
           })
           .catch(() => {
             Materialize.toast(
               'Oops! Something happened, Allow us verify you again',
               3000, 'red');
-            localStorage.removeItem('jwtToken');
             this.props.history.push('/login');
+            this.props.logout();
           });
       }
     }
@@ -63,6 +66,7 @@ export default function (ComposedComponent) {
   Authenticate.propTypes = {
     history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
     setCurrentUser: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
   };
 
   /**
@@ -84,6 +88,7 @@ export default function (ComposedComponent) {
    */
   const mapDispatchToProps = {
     setCurrentUser,
+    logout,
   };
 
   return connect(mapStateToProps, mapDispatchToProps)(Authenticate);

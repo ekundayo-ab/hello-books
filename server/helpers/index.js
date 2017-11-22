@@ -1,4 +1,7 @@
 import { isEmpty } from 'lodash';
+import model from './../models';
+
+const User = model.User;
 /**
  * @class Helper
  * @description Abstracts validation functions
@@ -85,8 +88,11 @@ class Helper {
     for (let i = 0; i < 4; i += 1) {
       const field = Object.values(req.body)[i];
       const theKey = Object.keys(req.body)[i];
-      if (Object.keys(req.body)[i] !== 'email' && field.trim().length < 6) {
+      if (Object.keys(req.body)[i] === 'password' && field.trim().length < 6) {
         errors[theKey] = 'minimum of 6 characters word allowed';
+      }
+      if (Object.keys(req)[i] === 'username' && field.trim().length < 3) {
+        errors[theKey] = 'minimum of 3 characters word allowed';
       }
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
         errors[theKey] = 'This field is required';
@@ -126,6 +132,31 @@ class Helper {
   static validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line max-len
     return re.test(email);
+  }
+
+  /**
+   * @static
+   * @description Ensures email supplied is a valid email address
+   * @param {object} userData
+   * @returns {boolean} true or false
+   * @memberOf Helper
+   */
+  static updateBorrowLimitAndTotalBorrows(userData) {
+    return User.findById(userData.userId)
+      .then(user =>
+        User.update({
+          borrowLimit: userData.ops ?
+            user.borrowLimit - 1 : user.borrowLimit + 1,
+          totalBorrow: userData.ops ?
+            user.totalBorrow + 1 : user.totalBorrow
+        }, {
+          where: {
+            id: user.id
+          },
+          returning: true,
+          plain: true
+        }).then(userUpdated =>
+          ({ ok: !!userUpdated, user: userUpdated[1].dataValues })));
   }
 }
 

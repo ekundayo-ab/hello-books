@@ -1,6 +1,7 @@
 import axios from 'axios';
 import store from '../../src/index';
 import * as actionTypes from './types';
+import { setCurrentUser } from './authActions';
 
 /**
  * Gets Borrowed Book
@@ -67,6 +68,8 @@ const borrowBook = (userId, bookId) =>
     Materialize.toast(
       `${res.data.updatedBorrowedBook.title} Successfully borrowed`,
       2000, 'green');
+  }).catch((err) => {
+    Materialize.toast(err.response.data.message, 2000, 'red');
   });
 
 /**
@@ -90,10 +93,7 @@ const fetchAllBorrowedBooks = (pageNumber, userId) =>
         }
         dispatch(setBorrowedBooks(toDispatch));
         return res.data;
-      }).catch((err) => {
-        Materialize.toast(err.response.data.message, 2000, 'red');
-        return err.response.data;
-      });
+      }).catch(err => err.response.data);
 
 /**
  * Get Single Borrowed Book
@@ -138,9 +138,7 @@ const getBorrowedNotReturned = (pageNumber, userId) =>
         }
         dispatch(setBorrowedNotReturnedBooks(toDispatch));
         return res.data;
-      }).catch((err) => {
-        Materialize.toast(err.response.data.message, 2000, 'red');
-      });
+      }).catch(err => err.response.data);
 
   /**
    * Return Book
@@ -161,6 +159,7 @@ const returnBook = (userId, bookId, borrowId) =>
       toDispatch = [];
     }
     store.dispatch(bookReturned(toDispatch));
+    store.dispatch(setCurrentUser(res.data.userToUpdateInStore));
     return Materialize.toast(res.data.message, 2000, 'green');
   }).catch((err) => {
     Materialize.toast(err.response.data.message, 2000, 'red');

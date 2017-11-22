@@ -26,6 +26,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: 'bronze',
     },
+    borrowLimit: {
+      type: DataTypes.INTEGER,
+      defaultValue: 2,
+    },
+    totalBorrow: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
   });
 
   User.associate = (models) => {

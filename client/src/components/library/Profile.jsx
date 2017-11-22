@@ -185,45 +185,87 @@ class Profile extends Component {
             <div className="col s12 m12 l9">
               <div className="card-panel row">
                 <h4>Info & Details</h4>
-                <p>Books borrowed details, Level Status and others.</p>
                 <div className="row">
                   <div className="col s12 m4 l4">
                     <div className="center promo promo-example">
                       <i className="fa fa-flash fa-5x teal-text" />
                       <p className="promo-caption">Total Books Borrowed</p>
-                      <p className="light center">50</p>
+                      <p className="light center">
+                        {this.props.user.totalBorrow}
+                      </p>
                     </div>
                   </div>
                   <div className="col s12 m4 l4">
                     <div className="center promo promo-example">
                       <i className="fa fa-users fa-5x teal-text" />
                       <p className="promo-caption">Level</p>
-                      <p className="light center">Bronze</p>
+                      <p className="light center">{this.props.user.level}</p>
                     </div>
                   </div>
                   <div className="col s12 m4 l4">
                     <div className="center promo promo-example">
                       <i className="fa fa-code fa-5x teal-text" />
-                      <p className="promo-caption">Other Details</p>
-                      <p className="light center">Surcharges not paid.</p>
+                      <p className="promo-caption">Borrow Credit</p>
+                      <p className="light center">
+                        {this.props.user.borrowLimit}
+                      </p>
                     </div>
                   </div>
-                </div>
-                <div className="center-align row">
-                  <i className="fa fa-google fa-2x red-text" />
-                  <i className="fa fa-facebook fa-2x indigo-text" />
-                  <i className="fa fa-github fa-2x grey-text" />
-                  <i className="fa fa-twitter fa-2x blue-text" />
-                  <i className="fa fa-skype fa-2x cyan-text" />
-                  <i className="fa fa-phone fa-2x dark-text" />
                 </div>
               </div>
             </div>
           </div>
+
+          <div className="row">
+            <h3 className="col s12">Library Guide</h3>
+            <div className="lg col s12 m4 l4">
+              <div className="card small ">
+                <h5>Default Membership Points</h5>
+                <p><i className="fa fa-hand-o-right" />
+                  &nbsp; Bronze - 2 Credit Points
+                </p>
+                <p><i className="fa fa-hand-o-right" />
+                &nbsp; Silver - 3 Credit Points
+                </p>
+                <p><i className="fa fa-hand-o-right" />
+                  &nbsp; Gold - 5 Credit Points
+                </p>
+              </div>
+            </div>
+            <div className="lg col s12 m4 l4">
+              <div className="card small">
+                <h5>Borrowing Modalities</h5>
+                <p><i className="fa fa-hand-o-right" />
+                &nbsp; Credit point deducted for every borrow
+                </p>
+                <p><i className="fa fa-hand-o-right" />
+                &nbsp; Credit point added back after return
+                </p>
+                <p><i className="fa fa-hand-o-right" />
+                  &nbsp; Inability to borrow on low (0) Credit point
+                </p>
+              </div>
+            </div>
+            <div className="lg col s12 m4 l4">
+              <div className="card small">
+                <h5> Membership Upgrade Eligibility </h5>
+                <p><i className="fa fa-hand-o-right" />
+                  &nbsp; Bronze to Silver - Minimum of 10 borrows
+                </p>
+                <p><i className="fa fa-hand-o-right" />
+                &nbsp; Silver to Gold - Minimum of 20 borrows
+                </p>
+                <p><i className="fa fa-hand-o-right" />
+                   &nbsp; Gold to Unlimited - Minimum of 30 borrows
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="row">
             <h3 className="col s12">Unreturned Books</h3>
             <div className="col s12 m12 l12">
-              <div className="card-panel row">
+              <div className="card-panel">
                 {this.props.books.length > 0 ?
                   (<table className="responsive-table">
                     <thead>
@@ -288,9 +330,14 @@ class Profile extends Component {
   }
 }
 
-// Tye checking for Profile Component
+// Type checking for Profile Component
 Profile.propTypes = {
   books: PropTypes.arrayOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({
+    totalBorrow: PropTypes.number,
+    borrowLimit: PropTypes.number,
+    level: PropTypes.string
+  }).isRequired,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
@@ -306,6 +353,7 @@ Profile.propTypes = {
  */
 function mapStateToProps(state) {
   return {
+    user: state.users.user,
     books: state.borrowsReducer.borrows,
   };
 }

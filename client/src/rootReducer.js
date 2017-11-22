@@ -6,7 +6,7 @@ import borrowsReducer from './reducers/borrowReducer';
 import bookReducer from './reducers/singleBookReducer';
 import borrowReducer from './reducers/singleBorrowReducer';
 
-export default combineReducers({
+const appReducer = combineReducers({
   users,
   categoryReducer,
   booksReducer,
@@ -14,3 +14,12 @@ export default combineReducers({
   bookReducer,
   borrowReducer,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === 'UNSET_CURRENT_USER') {
+    state = undefined;
+  }
+  return appReducer(state, action);
+};
+
+export default rootReducer;

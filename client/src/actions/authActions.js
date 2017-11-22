@@ -1,5 +1,4 @@
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
 import { SET_CURRENT_USER, UNSET_CURRENT_USER } from '../actions/types';
 import setAuthorizationHeader from '../utils/setAuthorizationToken';
 import store from '../../src/index';
@@ -31,13 +30,9 @@ const unsetCurrentUser = user =>
 const login = userData =>
   axios.post('/api/v1/users/signin', userData)
     .then((res) => {
-      let user;
       const token = res.data.token;
-      jwt.verify(token, 'hello-books', (err, decoded) => {
-        user = decoded.data;
-      });
       localStorage.setItem('jwtToken', token);
-      store.dispatch(setCurrentUser(user));
+      store.dispatch(setCurrentUser(res.data.user));
       setAuthorizationHeader(token);
       return {
         isAuthenticated: true,
