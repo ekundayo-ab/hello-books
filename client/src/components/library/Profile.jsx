@@ -32,7 +32,7 @@ class Profile extends Component {
       newPass: '',
       newPassConfirm: '',
       errors: {},
-      loading: false
+      loading: null
     };
     this.query = new URLSearchParams(this.props.location.search);
     this.handleBookReturn = this.handleBookReturn.bind(this);
@@ -88,7 +88,7 @@ class Profile extends Component {
    * @memberof Profile
    */
   handleBookReturn(bookId, borrowId) {
-    this.setState({ loading: true });
+    this.setState({ loading: bookId });
     returnBook(this.userId, bookId, borrowId)
       .then(() =>
         paginate(
@@ -299,7 +299,7 @@ class Profile extends Component {
                           </td>
                           <td>
                             <button
-                              className={classnames('btn', this.state.loading && 'disabled')}
+                              className={classnames('btn', { disabled: this.state.loading === bookNotReturned.book.id })}
                               onClick={() => {
                                 this.handleBookReturn(
                                   bookNotReturned.book.id,
