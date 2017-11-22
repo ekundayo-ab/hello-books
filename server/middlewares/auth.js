@@ -15,13 +15,9 @@ class Authenticate {
    * @returns {next} //verifies and allows route continue to endpoint
    */
   static authenticate(req, res, next) {
-    let token;
     // check header or url parameters or post parameters for token
-    if (req.body.token) {
-      token = req.body.token;
-    } else {
-      token = req.query.token || req.headers['x-access-token'];
-    }
+    const token = req.body.token ||
+        req.query.token || req.headers['x-access-token'];
     if (token) {
       return jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
@@ -49,10 +45,9 @@ class Authenticate {
    * @memberof Authenticate
    */
   static verifyToken(req, res) {
-    if (req.decoded) {
-      return res.status(200).send({ decoded: req.decoded.data });
-    }
-    return res.status(500).send({ failure: 'Internal Server Error' });
+    User.findOne({ where: { id: req.decoded.data.id } })
+      .then(user =>
+        res.status(200).send({ decoded: req.decoded.data, user }));
   }
 
   /**
@@ -75,6 +70,7 @@ class Authenticate {
             message: 'User does not exist'
           });
         }
+        res.locals.borrowStatus = userFound.borrowLimit < 1;
         next();
       });
   }

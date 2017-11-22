@@ -80,8 +80,15 @@ class Helper {
     for (let i = 0; i < 4; i += 1) {
       const field = Object.values(req)[i];
       const theKey = Object.keys(req)[i];
-      if (Object.keys(req)[i] !== 'email' && field.trim().length < 6) {
+      if (Object.keys(req)[i] === 'password' && field.trim().length < 6) {
         errors[theKey] = 'minimum of 6 characters word allowed';
+      }
+      if (Object.keys(req)[i] === 'passwordConfirmation'
+        && field.trim().length < 6) {
+        errors[theKey] = 'minimum of 6 characters word allowed';
+      }
+      if (Object.keys(req)[i] === 'username' && field.trim().length < 3) {
+        errors[theKey] = 'minimum of 3 characters word allowed';
       }
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
         errors[theKey] = 'This field is required';

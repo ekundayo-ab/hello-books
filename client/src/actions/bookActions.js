@@ -62,10 +62,7 @@ const fetchBooks = pageNumber =>
         dispatch(setBooks(toDispatch));
         return res.data;
       })
-      .catch((err) => {
-        Materialize.toast(err.response.data.message, 2000, 'red');
-        return err.response.data;
-      });
+      .catch(err => err.response.data);
 
 /**
  * Get Books
