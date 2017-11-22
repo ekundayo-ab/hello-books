@@ -1,5 +1,5 @@
 import axios from 'axios';
-import store from '../../src/index';
+import store from '../helpers/store';
 import { setCurrentUser } from '../actions/authActions';
 
 
@@ -10,7 +10,6 @@ const autoUpgrade = () =>
         store.dispatch(setCurrentUser(res.data.user));
         Materialize.toast(res.data.message, 3000, 'green');
       }
-    })
-    .catch(err => err.response.data);
+    }).catch(err => err.response.data);
 
 export default autoUpgrade;

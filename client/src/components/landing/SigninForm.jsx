@@ -51,7 +51,7 @@ class SignIn extends Component {
     event.preventDefault();
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
-      this.props.login(this.state).then(
+      login(this.state).then(
         (res) => {
           if (res.isAuthenticated) {
             Materialize.toast(res.message, 1000, 'green');
@@ -128,7 +128,6 @@ SignIn.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func
   }).isRequired,
-  login: PropTypes.func.isRequired
 };
 
 export default connect(null, { login })(SignIn);

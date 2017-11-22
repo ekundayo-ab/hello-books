@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import classnames from 'classnames';
 import { changePassword } from '../../actions/authActions';
 import { getBorrowedNotReturned, returnBook }
   from '../../actions/borrowActions';
@@ -30,7 +31,8 @@ class Profile extends Component {
       oldPass: '',
       newPass: '',
       newPassConfirm: '',
-      errors: {}
+      errors: {},
+      loading: false
     };
     this.query = new URLSearchParams(this.props.location.search);
     this.handleBookReturn = this.handleBookReturn.bind(this);
@@ -86,6 +88,7 @@ class Profile extends Component {
    * @memberof Profile
    */
   handleBookReturn(bookId, borrowId) {
+    this.setState({ loading: true });
     returnBook(this.userId, bookId, borrowId)
       .then(() =>
         paginate(
@@ -296,7 +299,7 @@ class Profile extends Component {
                           </td>
                           <td>
                             <button
-                              className="btn"
+                              className={classnames('btn', this.state.loading && 'disabled')}
                               onClick={() => {
                                 this.handleBookReturn(
                                   bookNotReturned.book.id,
