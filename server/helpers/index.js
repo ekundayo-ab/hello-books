@@ -156,8 +156,7 @@ class Helper {
           returning: true,
           plain: true
         }).then(userUpdated =>
-          ({ ok: !!userUpdated, user: userUpdated[1].dataValues })
-        ));
+          ({ ok: !!userUpdated, user: userUpdated[1].dataValues })));
   }
 }
 

@@ -354,8 +354,7 @@ class UserController {
               message: 'You\'ve been upgraded to ' +
               `${userUpdated[1].dataValues.level}`,
               user: userUpdated[1]
-            })
-          ).catch((err) => {
+            })).catch((err) => {
             res.status(500).send({
               success: false,
               message: err.message,

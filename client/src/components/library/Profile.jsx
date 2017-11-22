@@ -190,7 +190,9 @@ class Profile extends Component {
                     <div className="center promo promo-example">
                       <i className="fa fa-flash fa-5x teal-text" />
                       <p className="promo-caption">Total Books Borrowed</p>
-                      <p className="light center">{this.props.user.totalBorrow}</p>
+                      <p className="light center">
+                        {this.props.user.totalBorrow}
+                      </p>
                     </div>
                   </div>
                   <div className="col s12 m4 l4">
@@ -204,7 +206,9 @@ class Profile extends Component {
                     <div className="center promo promo-example">
                       <i className="fa fa-code fa-5x teal-text" />
                       <p className="promo-caption">Borrow Credit</p>
-                      <p className="light center">{this.props.user.borrowLimit}</p>
+                      <p className="light center">
+                        {this.props.user.borrowLimit}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -329,6 +333,11 @@ class Profile extends Component {
 // Type checking for Profile Component
 Profile.propTypes = {
   books: PropTypes.arrayOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({
+    totalBorrow: PropTypes.number,
+    borrowLimit: PropTypes.number,
+    level: PropTypes.string
+  }).isRequired,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
