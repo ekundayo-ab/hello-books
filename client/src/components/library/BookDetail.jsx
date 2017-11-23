@@ -30,14 +30,14 @@ class BookDetail extends Component {
    */
   componentDidMount() {
     const { id } = this.props.match.params;
-    fetchBook(id)
+    this.props.fetchBook(id)
       .then((resp) => {
         if (resp.response) {
           this.props.history.push('/shelf');
           Materialize.toast(resp.response.data.message, 1000, 'red');
         }
       });
-    fetchBorrowedBook(this.props.match.params.id);
+    this.props.fetchBorrowedBook(this.props.match.params.id);
   }
 
   /**
@@ -47,7 +47,7 @@ class BookDetail extends Component {
    * @memberof BookDetail
    */
   handleBorrowClick() {
-    borrowBook(this.props.userId, { bookId: this.props.book.id });
+    this.props.borrowBook(this.props.userId, { bookId: this.props.book.id });
   }
 
   /**
@@ -157,6 +157,9 @@ BookDetail.propTypes = {
     createdAt: PropTypes.string,
     updatedAt: PropTypes.string
   }).isRequired,
+  fetchBook: PropTypes.func.isRequired,
+  borrowBook: PropTypes.func.isRequired,
+  fetchBorrowedBook: PropTypes.func.isRequired
 };
 
 /**
@@ -172,4 +175,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchBook, borrowBook })(BookDetail);
+export default connect(mapStateToProps, {
+  fetchBook,
+  borrowBook,
+  fetchBorrowedBook
+})(BookDetail);

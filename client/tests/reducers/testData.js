@@ -146,11 +146,18 @@ export const category3 = {
 export const categories1 = [category1, category2];
 export const categories2 = [category1, category2, category3];
 
-// Authentication actions
+// For Authentication actions
 export const user = {
-  id: 49,
+  id: 1,
+  username: 'ekundayo',
+  password: '$2a$10$Vr56t.ASTNcE8mT0.meS0uDk9hxO4ThfiSw8XfX0lcHEyBeZ3bPrG',
+  email: 'ekprogs@gmail.com',
   role: 'admin',
-  username: 'ekundayo'
+  level: 'silver',
+  borrowLimit: 2,
+  totalBorrow: 10,
+  createdAt: '2017-11-22T15:27:47.770Z',
+  updatedAt: '2017-11-22T15:41:56.222Z'
 };
 
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e' +
@@ -189,3 +196,176 @@ export const googleUser = {
   passwordConfirmation: googleDetails.tokenObj.id_token,
 };
 
+export const regUserData = {
+  username: 'maxwell',
+  email: 'maxwell@max.com',
+  password: 'max37689',
+  passwordConfirmation: 'max37689'
+};
+
+export const passData = {
+  oldPass: 'pass12#4',
+  newPass: 'Olpass12#4',
+  newPassConfirm: 'Olpass12#4'
+};
+
+// For Book Actions
+export const books = [
+  {
+    id: 6,
+    isbn: 6,
+    title: 'Gilead01',
+    author: 'Marilynne Robinson',
+    description: 'Gilead is a novel written by Marilynne Robinson',
+    image: 'https://res.cloudinary.com/dcl7tqhww/image/' +
+    'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+    status: true,
+    quantity: 11,
+    categoryId: 1,
+    createdAt: '2017-11-22T15:54:07.464Z',
+    updatedAt: '2017-11-22T17:35:37.158Z'
+  },
+  {
+    id: 7,
+    isbn: 7,
+    title: 'Gilead02',
+    author: 'Marilynne Robinson',
+    description: 'Gilead is a novel written by Marilynne Robinson',
+    image: 'https://res.cloudinary.com/dcl7tqhww/image/' +
+    'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+    status: true,
+    quantity: 11,
+    categoryId: 1,
+    createdAt: '2017-11-22T15:54:07.464Z',
+    updatedAt: '2017-11-22T15:54:07.464Z'
+  },
+];
+
+export const book = {
+  id: 7,
+  isbn: 7,
+  title: 'Gilead02',
+  author: 'Marilynne Robinson',
+  description: 'Gilead is a novel written by Marilynne Robinson',
+  image: 'https://res.cloudinary.com/dcl7tqhww/image/'
+  + 'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+  status: true,
+  quantity: 11,
+  categoryId: 1,
+  createdAt: '2017-11-22T15:54:07.464Z',
+  updatedAt: '2017-11-22T15:54:07.464Z'
+};
+
+// For Borrow Actions
+export const borrow = {
+  id: 3,
+  returned: false,
+  dueDate: '2017-11-26T15:29:27.869Z',
+  actualReturnDate: '2017-11-23T15:29:27.869Z',
+  createdAt: '2017-11-23T15:29:27.870Z',
+  updatedAt: '2017-11-23T15:29:27.870Z',
+  bookId: 7,
+  userId: 1
+};
+
+export const borrowedBooks = [
+  {
+    id: 1,
+    returned: true,
+    dueDate: '2017-11-25T17:35:25.150Z',
+    actualReturnDate: '2017-11-22T17:35:35.612Z',
+    createdAt: '2017-11-22T17:35:25.150Z',
+    updatedAt: '2017-11-22T17:35:35.613Z',
+    bookId: 8,
+    userId: 1,
+    book: {
+      id: 8,
+      isbn: 8,
+      title: 'Gilead03',
+      author: 'Marilynne Robinson',
+      description: 'Gilead is a novel written by Marilynne Robinson',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/up' +
+      'load/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      status: true,
+      quantity: 11,
+      categoryId: 1,
+      createdAt: '2017-11-22T15:54:07.464Z',
+      updatedAt: '2017-11-23T17:05:40.930Z'
+    }
+  },
+  {
+    id: 2,
+    returned: true,
+    dueDate: '2017-11-25T17:35:31.973Z',
+    actualReturnDate: '2017-11-22T17:35:37.153Z',
+    createdAt: '2017-11-22T17:35:31.973Z',
+    updatedAt: '2017-11-22T17:35:37.154Z',
+    bookId: 6,
+    userId: 1,
+    book: {
+      id: 6,
+      isbn: 6,
+      title: 'Gilead01',
+      author: 'Marilynne Robinson',
+      description: 'Gilead is a novel written by Marilynne Robinson',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/'
+      + 'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      status: true,
+      quantity: 11,
+      categoryId: 1,
+      createdAt: '2017-11-22T15:54:07.464Z',
+      updatedAt: '2017-11-23T17:05:39.851Z'
+    }
+  }
+];
+
+export const borrowedNotReturnedBooks = [
+  {
+    id: 1,
+    returned: false,
+    dueDate: '2017-11-25T17:35:25.150Z',
+    actualReturnDate: '2017-11-22T17:35:35.612Z',
+    createdAt: '2017-11-22T17:35:25.150Z',
+    updatedAt: '2017-11-22T17:35:35.613Z',
+    bookId: 8,
+    userId: 1,
+    book: {
+      id: 8,
+      isbn: 8,
+      title: 'Gilead03',
+      author: 'Marilynne Robinson',
+      description: 'Gilead is a novel written by Marilynne Robinson',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/up' +
+      'load/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      status: true,
+      quantity: 11,
+      categoryId: 1,
+      createdAt: '2017-11-22T15:54:07.464Z',
+      updatedAt: '2017-11-23T17:05:40.930Z'
+    }
+  },
+  {
+    id: 2,
+    returned: false,
+    dueDate: '2017-11-25T17:35:31.973Z',
+    actualReturnDate: '2017-11-22T17:35:37.153Z',
+    createdAt: '2017-11-22T17:35:31.973Z',
+    updatedAt: '2017-11-22T17:35:37.154Z',
+    bookId: 6,
+    userId: 1,
+    book: {
+      id: 6,
+      isbn: 6,
+      title: 'Gilead01',
+      author: 'Marilynne Robinson',
+      description: 'Gilead is a novel written by Marilynne Robinson',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/'
+      + 'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      status: true,
+      quantity: 11,
+      categoryId: 1,
+      createdAt: '2017-11-22T15:54:07.464Z',
+      updatedAt: '2017-11-23T17:05:39.851Z'
+    }
+  }
+];

@@ -99,7 +99,7 @@ class BookForm extends Component {
       const { id, isbn, title, author,
         description, quantity, category, image } = this.state;
       if (id) {
-        updateBook({
+        this.props.updateBook({
           id,
           isbn,
           title,
@@ -119,7 +119,7 @@ class BookForm extends Component {
             }
           });
       } else {
-        saveBook({
+        this.props.saveBook({
           isbn,
           title,
           author,
@@ -308,6 +308,8 @@ BookForm.propTypes = {
     image: PropTypes.string,
     createdAt: PropTypes.string,
   }),
+  saveBook: PropTypes.func.isRequired,
+  updateBook: PropTypes.func.isRequired
 };
 
 /**
@@ -322,4 +324,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  saveBook, fetchCategories })(BookForm);
+  saveBook,
+  updateBook,
+  fetchCategories
+})(BookForm);

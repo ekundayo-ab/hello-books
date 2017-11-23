@@ -30,7 +30,7 @@ class Header extends Component {
    */
   handleLogout(event) {
     event.preventDefault();
-    logout(this.state);
+    this.props.logout(this.state);
     Materialize.toast('Successfully Logged out.', 1000, 'red');
     return this.props.history.push('/');
   }
@@ -121,6 +121,7 @@ Header.defaultProps = {
 Header.propTypes = {
   history: PropTypes.shape({ push: PropTypes.func }).isRequired,
   isAdmin: PropTypes.string.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
 /**

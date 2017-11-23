@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import { saveCategory } from '../../../actions/categoryActions';
 
 /**
@@ -64,7 +65,7 @@ class CategoryForm extends Component {
     const isValid = Object.keys(errors).length === 0;
     if (isValid) {
       this.setState({ errors: {}, isLoading: true });
-      saveCategory(this.state)
+      this.props.saveCategory(this.state)
         .then((response) => {
           if (response.isDone) {
             this.setState({ title: '' });
@@ -113,5 +114,9 @@ class CategoryForm extends Component {
     );
   }
 }
+
+CategoryForm.propTypes = {
+  saveCategory: PropTypes.func.isRequired
+};
 
 export default connect(null, { saveCategory })(withRouter(CategoryForm));

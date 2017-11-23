@@ -59,7 +59,7 @@ class Shelf extends Component {
    */
   filterBooksByCategory(categoryId, event, title) {
     event.preventDefault();
-    fetchBooksByCategory(this.state.pageId, categoryId)
+    this.props.fetchBooksByCategory(this.state.pageId, categoryId)
       .then((res) => {
         if (res.isDone) {
           return this.setState({
@@ -142,7 +142,8 @@ Shelf.propTypes = {
     location: PropTypes.object.isRequired,
     push: PropTypes.func.isRequired
   }).isRequired,
-  categories: PropTypes.arrayOf(PropTypes.object).isRequired
+  categories: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fetchBooksByCategory: PropTypes.func.isRequired
 };
 
 /**
@@ -157,4 +158,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchBooks, fetchCategories })(Shelf);
+export default connect(mapStateToProps, {
+  fetchBooks,
+  fetchCategories,
+  fetchBooksByCategory
+})(Shelf);

@@ -89,7 +89,7 @@ class Admin extends Component {
         if (willDelete) {
           const pageId = this.query.get('page');
           this.setState({ pageId });
-          deleteBook(bookId)
+          this.props.deleteBook(bookId)
             .then(() =>
               paginate(this.props.fetchBooks, this.query.get('page'))
                 .then((res) => {
@@ -113,7 +113,7 @@ class Admin extends Component {
    */
   filterBooksByCategory(categoryId, event, title) {
     event.preventDefault();
-    fetchBooksByCategory(this.state.pageId, categoryId)
+    this.props.fetchBooksByCategory(this.state.pageId, categoryId)
       .then((res) => {
         if (res.isDone) {
           return this.setState({
@@ -205,6 +205,8 @@ Admin.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fetchBooksByCategory: PropTypes.func.isRequired,
+  deleteBook: PropTypes.func.isRequired
 };
 
 /**
@@ -222,5 +224,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   fetchBooks,
   fetchCategories,
+  fetchBooksByCategory,
   deleteBook
 })(Admin);

@@ -20,13 +20,13 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         isAuthenticated: !isEmpty(action.user),
-        user: action.user,
+        user: action.user
       };
     case UNSET_CURRENT_USER:
       return {
         ...state,
         isAuthenticated: false,
-        user: action.user,
+        user: action.user
       };
     default: return state;
   }

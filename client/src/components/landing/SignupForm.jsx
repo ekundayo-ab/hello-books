@@ -62,7 +62,7 @@ class SignUp extends Component {
       userSignUpRequest(this.state)
         .then((res) => {
           if (res.isDone) {
-            login({
+            this.props.login({
               identifier: this.state.username,
               password: this.state.password
             })
@@ -123,7 +123,7 @@ class SignUp extends Component {
    * @memberof SignUp
    */
   responseGoogle(response) {
-    googleAuth(response)
+    this.props.googleAuth(response)
       .then((res) => {
         if (res.success) {
           this.props.history.push('/shelf?page=1');
@@ -223,7 +223,9 @@ SignUp.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func
   }).isRequired,
+  googleAuth: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired
 };
 
 export default
-connect(null, { login })(withRouter(SignUp));
+connect(null, { googleAuth, login })(withRouter(SignUp));

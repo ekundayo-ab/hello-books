@@ -89,7 +89,7 @@ class Profile extends Component {
    */
   handleBookReturn(bookId, borrowId) {
     this.setState({ loading: bookId });
-    returnBook(this.userId, bookId, borrowId)
+    this.props.returnBook(this.userId, bookId, borrowId)
       .then(() =>
         paginate(
           this.props.getBorrowedNotReturned,
@@ -299,7 +299,9 @@ class Profile extends Component {
                           </td>
                           <td>
                             <button
-                              className={classnames('btn', { disabled: this.state.loading === bookNotReturned.book.id })}
+                              className={classnames('btn',
+                                { disabled: this.state.loading ===
+                                   bookNotReturned.book.id })}
                               onClick={() => {
                                 this.handleBookReturn(
                                   bookNotReturned.book.id,
@@ -346,7 +348,8 @@ Profile.propTypes = {
     pathname: PropTypes.string,
     search: PropTypes.string
   }).isRequired,
-  getBorrowedNotReturned: PropTypes.func.isRequired
+  getBorrowedNotReturned: PropTypes.func.isRequired,
+  returnBook: PropTypes.func.isRequired
 };
 
 /**
@@ -361,4 +364,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getBorrowedNotReturned })(Profile);
+export default connect(mapStateToProps, {
+  getBorrowedNotReturned,
+  returnBook
+})(Profile);
