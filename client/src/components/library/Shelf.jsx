@@ -33,22 +33,13 @@ class Shelf extends Component {
   }
 
   /**
-   * @description Invoked before page loads
-   * @param {void} null
-   * @memberof Shelf
-   * @returns {void} returns nothing
-   */
-  componentWillMount() {
-    this.props.fetchCategories();
-  }
-
-  /**
    * @description Invoked after the page loads
    * @param {void} null
    * @memberof Shelf
    * @returns {void} returns nothing
    */
   componentDidMount() {
+    this.props.fetchCategories();
     paginate(this.props.fetchBooks, this.query.get('page'))
       .then((res) => {
         this.setState({

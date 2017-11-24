@@ -34,7 +34,7 @@ const fetchCategories = () =>
         return res.data;
       })
       .catch((err) => {
-        dispatch(setCategories(err.response.data.categories));
+        dispatch(setCategories([]));
         return err.response.data.message;
       });
 

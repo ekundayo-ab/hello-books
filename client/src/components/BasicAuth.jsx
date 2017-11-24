@@ -30,21 +30,20 @@ export default function (ComposedComponent) {
         Materialize.toast('Oops! Something Happened, Please login.',
           3000, 'red');
         this.props.logout();
-        this.props.history.push('/login');
-      } else {
-        autoUpgrade();
-        verifyToken({ token: localStorage.getItem('jwtToken') })
-          .then((res) => {
-            this.props.setCurrentUser(res.user);
-          })
-          .catch(() => {
-            Materialize.toast(
-              'Oops! Something happened, Allow us verify you again',
-              3000, 'red');
-            this.props.history.push('/login');
-            this.props.logout();
-          });
+        return this.props.history.push('/login');
       }
+      verifyToken({ token: localStorage.getItem('jwtToken') })
+        .then((res) => {
+          autoUpgrade();
+          this.props.setCurrentUser(res.user);
+        })
+        .catch(() => {
+          Materialize.toast(
+            'Oops! Something happened, Allow us verify you again',
+            3000, 'red');
+          this.props.logout();
+          return this.props.history.push('/login');
+        });
     }
 
     /**
