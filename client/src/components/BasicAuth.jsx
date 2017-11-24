@@ -29,8 +29,8 @@ export default function (ComposedComponent) {
       if (localStorage.getItem('jwtToken') === null) {
         Materialize.toast('Oops! Something Happened, Please login.',
           3000, 'red');
-        this.props.history.push('/login');
         this.props.logout();
+        this.props.history.push('/login');
       } else {
         autoUpgrade();
         verifyToken({ token: localStorage.getItem('jwtToken') })
