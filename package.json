@@ -23,6 +23,7 @@
     "start:dev": "babel-watch app.js",
     "build": "webpack --config webpack.config.prod.js -p --progress --colors",
     "build:dev": "webpack-dev-server --open --config webpack.config.dev.js",
+    "e2e-test": "npm run db:reset && nightwatch",
     "test": "cross-env NODE_ENV=test mocha --timeout 5000 --compilers js:babel-register server/tests/**.js",
     "client-test": "jest",
     "client-coverage": "jest --coverage",

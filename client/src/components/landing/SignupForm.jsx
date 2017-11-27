@@ -207,7 +207,7 @@ class SignUp extends Component {
               <button
                 type="submit"
                 disabled={this.state.isLoading || this.state.invalid}
-                className="right-align btn teal"
+                className="right-align btn teal register-btn"
               >
                 <i className="fa fa-user" /> Register</button>
             </div>

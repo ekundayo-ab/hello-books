@@ -31,7 +31,6 @@ class Header extends Component {
   handleLogout(event) {
     event.preventDefault();
     this.props.logout(this.state);
-    Materialize.toast('Successfully Logged out.', 1000, 'red');
     return this.props.history.push('/');
   }
 
@@ -58,26 +57,26 @@ class Header extends Component {
               className="button-collapse"
             ><i className="material-icons">menu</i></a>
             <ul className="right hide-on-med-and-down">
-              <li>
+              <li id="lib-shelf">
                 <NavLink
                   activeClassName="active"
                   to="/shelf?page=1"
                 ><i className="fa fa-book" /> Shelf</NavLink>
               </li>
-              <li>
+              <li id="lib-history">
                 <NavLink activeClassName="active" to="/history?page=1">
                   <i className="fa fa-history" /> History</NavLink>
               </li>
               {this.props.isAdmin === 'admin'
-                && <li>
+                && <li id="lib-admin">
                   <NavLink activeClassName="active" to="/admin?page=1">
                     <i className="fa fa-gear" /> Admin Dashboard</NavLink>
                 </li>}
-              <li>
+              <li id="lib-profile">
                 <NavLink activeClassName="active" to="/profile?page=1">
                   <i className="fa fa-user" /> Profile</NavLink>
               </li>
-              <li>
+              <li className="logout">
                 <Link onClick={this.handleLogout} to="">
                   <i className="fa fa-sign-out" /> Logout</Link>
               </li>

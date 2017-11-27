@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 const UpdateBookDetails = (props) => {
   const dateCreated = new Date(props.book.createdAt);
   return (
-    <div className="row">
+    <div id="update-book-details" className="row">
       <div className="center-align book-detail col s12 m6 l4">
         <img
           className="center-align detail responsive-img"

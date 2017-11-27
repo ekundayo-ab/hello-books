@@ -42,7 +42,9 @@ const BookList = (props) => {
               <td>
                 <Modal
                   header="Update Book"
+                  id={`update-book-form${book.id}`}
                   trigger={<button
+                    id={`edit-btn${book.id}`}
                     className="btn white waves-effect waves-light"
                   >
                     <i className="fa fa-edit green-text" /></button>}
@@ -52,6 +54,7 @@ const BookList = (props) => {
               </td>
               <td>
                 <a
+                  id={`delete-book-btn${book.id}`}
                   role="button"
                   tabIndex={0}
                   className="btn white waves-effect"

@@ -162,14 +162,14 @@ class Admin extends Component {
               <div className="center-align">
                 <Modal
                   header="Add New Book"
-                  trigger={<Button>ADD BOOK</Button>}
+                  trigger={<Button id="book-form-btn">ADD BOOK</Button>}
                   id="book-form-modal"
                 >
                   <BookForm />
                 </Modal>&nbsp;&nbsp;
                 <Modal
                   header="Add New Category"
-                  trigger={<Button>ADD CATEGORY</Button>}
+                  trigger={<Button id="cat-form-btn" >ADD CATEGORY</Button>}
                   id="category-form-modal"
                 >
                   <CategoryForm />

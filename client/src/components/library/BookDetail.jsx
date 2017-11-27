@@ -105,7 +105,9 @@ class BookDetail extends Component {
                   className="btn green"
                 >Borrow
                 </button> {Object.keys(this.props.borrow).length > 0
-                  && <small>You borrowed this book, please return</small>}
+                  && <small className="borrow-notify">
+                  You borrowed this book, please return
+                  </small>}
                 <blockquote
                   style={detailStyle.bq}
                 >Added on {dateCreated.toUTCString()}</blockquote>

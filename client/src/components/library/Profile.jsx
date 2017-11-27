@@ -139,7 +139,7 @@ class Profile extends Component {
 
           <div className="row">
             <div className="col s12 m12 l3">
-              <div className="col s12 card">
+              <div className="change-password-card col s12 card">
                 <div className="card">
                   <div className="card-image">
                     <h5 className="center-align">Change Password</h5>
@@ -186,7 +186,7 @@ class Profile extends Component {
             </div>
 
             <div className="col s12 m12 l9">
-              <div className="card-panel row">
+              <div className="profile-card card-panel row">
                 <h4>Info & Details</h4>
                 <div className="row">
                   <div className="col s12 m4 l4">
@@ -299,6 +299,7 @@ class Profile extends Component {
                           </td>
                           <td>
                             <button
+                              id={`return-btn${index}`}
                               className={classnames('btn',
                                 { disabled: this.state.loading ===
                                    bookNotReturned.book.id })}

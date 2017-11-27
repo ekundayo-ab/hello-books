@@ -87,14 +87,14 @@ class CategoryForm extends Component {
   render() {
     const { errors } = this.state;
     return (
-      <div>
+      <div id="category-form">
         <form onSubmit={this.onSubmit}>
           <div className={classnames('input-field', 'col s12',
             { 'has-error': errors.title })}
           >
             <i className="fa fa-pencil prefix" />
             <input
-              id="icon_prefix"
+              id="category-title"
               onChange={this.onChange}
               name="title"
               placeholder="Category Name"
@@ -106,7 +106,7 @@ class CategoryForm extends Component {
               && <span className="help-block">{errors.title}</span> }
           </div>
           <div className="center-align col s12">
-            <button type="submit" className="btn waves-effect teal">
+            <button id="save-category" type="submit" className="btn waves-effect teal">
               <i className="fa fa-plus" /> Create Category</button>
           </div>
         </form>
