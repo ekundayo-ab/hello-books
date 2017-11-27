@@ -1,5 +1,4 @@
 import axios from 'axios';
-import store from '../helpers/store';
 import * as actionTypes from './types';
 import { setCurrentUser } from './authActions';
 
