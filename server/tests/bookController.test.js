@@ -1,8 +1,10 @@
 import supertest from 'supertest';
 import { expect } from 'chai';
+import model from '../models';
 import app from '../../app';
 import helperBeforeHooks from './../helpers/helperBeforeHooks';
 
+const Book = model.Book;
 const server = supertest.agent(app);
 let adminToken; // Token for an Admin User
 let normalToken; // Token for a Normal User
@@ -552,6 +554,36 @@ describe('BOOK Operations', () => {
     });
   });
 
+  describe('Upon filtering of books', () => {
+    it('should return books in a category', (done) => {
+      server
+        .get(`/api/v1/category/books?page=${1}&categoryId=${4}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', normalToken)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.success).to.equal(true);
+          expect(res.body).to.have.property('books');
+          expect(res.body.books).to.be.an('array');
+          done();
+        });
+    });
+    it('should return not found error if no book(s) exist in category',
+      (done) => {
+        server
+          .get(`/api/v1/category/books?page=${1}&categoryId=${6}`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', normalToken)
+          .end((err, res) => {
+            expect(res.status).to.equal(404);
+            expect(res.body.success).to.equal(false);
+            expect(res.body.message).to.equal('No book(s) in this category');
+            expect(res.body.books).to.have.lengthOf(0);
+            done();
+          });
+      });
+  });
+
   describe('Upon deleting of a book', () => {
     it('should ensure only admin can delete book', (done) => {
       server
@@ -601,5 +633,44 @@ describe('BOOK Operations', () => {
           done();
         });
     });
+    it('should notify raise error for unexpected outcome', (done) => {
+      Book.find = () => Promise.reject(1);
+      server
+        .delete(`/api/v1/books/${3}`)
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .end((err, res) => {
+          console.log(res.body);
+          expect(res.status).to.equal(500);
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Internal Server Error');
+          done();
+        });
+    });
   });
+
+  // describe('Upon further modification of a book', () => {
+  //   it('should raise error for unexpected outcome', (done) => {
+  //     // Book.update = () => Promise.reject(1);
+  //     server
+  //       .put(`/api/v1/books/${bookId}`)
+  //       .set('Accept', 'application/x-www-form-urlencoded')
+  //       .set('x-access-token', adminToken)
+  //       .send({
+  //         isbn: 456,
+  //         title: 'Learn Haskell New Edition',
+  //         author: 'Haskell Master',
+  //         description: 'Learn and Master Haskell in 16' +
+  //         'Months Updated with more projects and examples',
+  //         quantity: '',
+  //       })
+  //       .end((err, res) => {
+  //         expect(res.status).to.equal(500);
+  //         expect(res.body.success).to.equal(false);
+  //         expect(res.body.errors.quantity).to.equal('This field is required');
+  //         expect(res.status).to.equal(400);
+  //         done();
+  //       });
+  //   });
+  // });
 });

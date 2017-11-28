@@ -106,5 +106,38 @@ export default {
     newPass: '',
     newPassConfirm: '',
   },
+  user9e: {
+    body: {
+      username: 'li',
+      password: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
+      passwordConfirmation: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
+      email: 'murphus@gmail.com'
+    }
+  },
+  user9f: {
+    body: {
+      username: 'lincoln',
+      password: 'bhVz',
+      passwordConfirmation: 'bhVz',
+      email: 'murphus@gmail.com'
+    }
+  },
+  user9g: {
+    oldPass: '',
+    newPass: 'frlse',
+    newPassConfirm: 'flsee',
+  },
+  upgradeToken1: {
+    level: 'bronze',
+    totalBorrow: 10
+  },
+  upgradeToken2: {
+    level: 'silver',
+    totalBorrow: 20
+  },
+  upgradeToken3: {
+    level: 'gold',
+    totalBorrow: 30
+  },
 };
 
