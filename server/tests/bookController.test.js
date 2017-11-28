@@ -640,7 +640,6 @@ describe('BOOK Operations', () => {
         .set('Accept', 'application/x-www-form-urlencoded')
         .set('x-access-token', adminToken)
         .end((err, res) => {
-          console.log(res.body);
           expect(res.status).to.equal(500);
           expect(res.body.success).to.equal(false);
           expect(res.body.message).to.equal('Internal Server Error');
@@ -667,7 +666,8 @@ describe('BOOK Operations', () => {
   //       .end((err, res) => {
   //         expect(res.status).to.equal(500);
   //         expect(res.body.success).to.equal(false);
-  //         expect(res.body.errors.quantity).to.equal('This field is required');
+  //         expect(res.body.errors.quantity)
+  //           .to.equal('This field is required');
   //         expect(res.status).to.equal(400);
   //         done();
   //       });
