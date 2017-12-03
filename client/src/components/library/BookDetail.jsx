@@ -10,7 +10,7 @@ import { borrowBook, fetchBorrowedBook } from '../../actions/borrowActions';
  * @class BookDetail
  * @extends {Component}
  */
-class BookDetail extends Component {
+export class BookDetail extends Component {
   /**
    * Creates an instance of BookDetail.
    * @param {object} props
@@ -30,13 +30,7 @@ class BookDetail extends Component {
    */
   componentDidMount() {
     const { id } = this.props.match.params;
-    this.props.fetchBook(id)
-      .then((resp) => {
-        if (resp.response) {
-          this.props.history.push('/shelf');
-          Materialize.toast(resp.response.data.message, 1000, 'red');
-        }
-      });
+    this.props.fetchBook(id);
     this.props.fetchBorrowedBook(this.props.match.params.id);
   }
 
@@ -84,9 +78,9 @@ class BookDetail extends Component {
               </div>
               <div className="col white-text s12 m6 l6">
                 <h1>{this.props.book.title} </h1>
-                <small
+                <h6
                   className="text-white"
-                ><b>Category: </b>{this.props.book.category}</small>
+                ><b>Category: </b>{this.props.book.categoryName}</h6>
                 <h5 className="teal-text">{this.props.book.author}</h5>
                 <p>{this.props.book.description}</p>
                 <p
@@ -136,15 +130,13 @@ BookDetail.propTypes = {
     description: PropTypes.string,
     quantity: PropTypes.number,
     category: PropTypes.string,
+    categoryName: PropTypes.String,
     image: PropTypes.string,
     createdAt: PropTypes.string,
   }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.object,
     id: PropTypes.number,
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func
   }).isRequired,
   borrow: PropTypes.shape({
     id: PropTypes.number,
@@ -169,7 +161,7 @@ BookDetail.propTypes = {
  * @param {object} state
  * @returns {object} book, borrow, userId
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     book: state.bookReducer.book,
     borrow: state.borrowReducer.borrow,

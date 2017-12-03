@@ -2,6 +2,7 @@ import model from '../models';
 import helper from '../helpers/index';
 
 const Book = model.Book;
+const Category = model.Category;
 
 /**
  * @class BookController
@@ -254,7 +255,11 @@ class BookController {
         },
       }).then((book) => {
         if (book !== null) {
-          return res.status(200).send(book);
+          return Category.findOne({ where: { id: book.categoryId } })
+            .then((category) => {
+              book.dataValues.categoryName = category.title;
+              return res.status(200).send(book);
+            });
         }
         return res.status(404).send({
           success: false,

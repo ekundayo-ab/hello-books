@@ -16,7 +16,7 @@ import SingleInput from './../forms/SingleInput';
  * @class Profile
  * @extends {Component}
  */
-class Profile extends Component {
+export class Profile extends Component {
   /**
    * Creates an instance of Profile.
    * @param {object} props
@@ -34,7 +34,7 @@ class Profile extends Component {
       errors: {},
       loading: null
     };
-    this.query = new URLSearchParams(this.props.location.search);
+    this.query = (this.props.history.location.search).split('=')[1];
     this.handleBookReturn = this.handleBookReturn.bind(this);
     this.userId = JSON.parse(localStorage.getItem('userDetails')).id;
     this.onChange = this.onChange.bind(this);
@@ -50,7 +50,7 @@ class Profile extends Component {
   componentDidMount() {
     paginate(
       this.props.getBorrowedNotReturned,
-      this.query.get('page'),
+      this.query,
       this.userId
     )
       .then((res) => {
@@ -93,7 +93,7 @@ class Profile extends Component {
       .then(() =>
         paginate(
           this.props.getBorrowedNotReturned,
-          this.query.get('page'),
+          this.query,
           this.userId
         )
           .then((res) => {
@@ -176,7 +176,7 @@ class Profile extends Component {
                       />
                       <div className="center-align col s12">
                         <button type="submit" className="btn waves-effect teal">
-                          <i className="fa fa-send" /> Save Changes
+                          <i className="fa fa-send" /> Change Password
                         </button><br /><br />
                       </div>
                     </form>
@@ -344,7 +344,10 @@ Profile.propTypes = {
     borrowLimit: PropTypes.number,
     level: PropTypes.string
   }).isRequired,
-  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
+  history: PropTypes.shape({
+    location: PropTypes.object,
+    push: PropTypes.func
+  }).isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
     search: PropTypes.string
@@ -358,7 +361,7 @@ Profile.propTypes = {
  * @param {object} state
  * @returns {object} books
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     user: state.users.user,
     books: state.borrowsReducer.borrows,

@@ -217,7 +217,7 @@ module.exports = {
       .click('.btn')
       .waitForElementVisible('.toast', 5000)
       .assert
-      .containsText('.toast', 'The Amazing Adventures of Kavalier & Clay')
+      .containsText('.toast', 'Kavalier & Clay Successfully borrowed')
       .waitForElementVisible('small.borrow-notify', 5000)
       .assert.containsText('small.borrow-notify',
         'You borrowed this book, please return')

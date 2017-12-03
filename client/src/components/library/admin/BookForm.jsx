@@ -18,7 +18,7 @@ import UpdateBookDetails from '../../library/admin/UpdateBookDetails';
  * @class BookForm
  * @extends {Component}
  */
-class BookForm extends Component {
+export class BookForm extends Component {
   /**
    * Creates an instance of BookForm.
    * @param {object} props
@@ -113,7 +113,6 @@ class BookForm extends Component {
             if (!res.isDone) {
               this.setState({ errors: res.result.errors, loading: false });
             } else {
-              $('#book-form-modal').modal('close');
               this.setState({ errors: {} });
               this.props.fetchCategories();
             }
@@ -271,7 +270,9 @@ class BookForm extends Component {
             <button
               type="submit"
               id="save-book"
-              className={`btn waves-effect teal save-update${this.props.book.id}`}
+              className={
+                `btn waves-effect teal save-update${this.props.book.id}`
+              }
               disabled={classnames(this.state.loading ? 'disabled' : '')}
             >
               <i className="fa fa-send" />
@@ -322,7 +323,7 @@ BookForm.propTypes = {
  * @param {object} state
  * @returns {object} categories
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     categories: state.categoryReducer.categories,
   };

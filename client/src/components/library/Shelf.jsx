@@ -13,7 +13,7 @@ import CategoryList from '../../components/library/category/CategoryList';
  * @class Shelf
  * @extends {Component}
  */
-class Shelf extends Component {
+export class Shelf extends Component {
   /**
    * Creates an instance of Shelf.
    * @param {object} props
@@ -28,7 +28,7 @@ class Shelf extends Component {
       showCategoryTitle: false,
       categoryTitle: ''
     };
-    this.query = new URLSearchParams(this.props.history.location.search);
+    this.query = (this.props.history.location.search).split('=')[1];
     this.filterBooksByCategory = this.filterBooksByCategory.bind(this);
   }
 
@@ -40,7 +40,7 @@ class Shelf extends Component {
    */
   componentDidMount() {
     this.props.fetchCategories();
-    paginate(this.props.fetchBooks, this.query.get('page'))
+    paginate(this.props.fetchBooks, this.query)
       .then((res) => {
         this.setState({
           pages: res.pages,
@@ -139,8 +139,8 @@ Shelf.propTypes = {
   fetchBooks: PropTypes.func.isRequired,
   fetchCategories: PropTypes.func.isRequired,
   history: PropTypes.shape({
-    location: PropTypes.object.isRequired,
-    push: PropTypes.func.isRequired
+    location: PropTypes.object,
+    push: PropTypes.func
   }).isRequired,
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchBooksByCategory: PropTypes.func.isRequired
@@ -151,7 +151,7 @@ Shelf.propTypes = {
  * @param {object} state
  * @returns {object} books gotten from state
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     books: state.booksReducer.books,
     categories: state.categoryReducer.categories

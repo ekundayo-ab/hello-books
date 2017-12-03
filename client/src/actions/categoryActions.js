@@ -50,11 +50,15 @@ const saveCategory = categoryDetails =>
         const { category } = res.data;
         category.cat = [];
         dispatch(addCategory(category));
+        Materialize.toast(res.data.message, 4000, 'green');
         return { res: res.data, isDone: true };
       })
-      .catch(err =>
-        ({ errors: err.response.data, isDone: false }),
-      );
+      .catch((err) => {
+        Materialize.toast(err.response.data.message, 4000, 'red');
+        return {
+          isDone: false
+        };
+      });
 
 export {
   fetchCategories,

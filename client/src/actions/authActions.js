@@ -148,8 +148,10 @@ const changePassword = passwordData =>
       Materialize.toast(res.data.message, 2000, 'green');
       return res.data;
     })
-    .catch(err => Materialize.toast(err.response.data.message, 2000, 'red'));
-
+    .catch((err) => {
+      const message = err.response ? err.response.data.message : err;
+      Materialize.toast(message, 2000, 'red');
+    });
 
 export {
   setCurrentUser,

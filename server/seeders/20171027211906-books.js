@@ -5,7 +5,7 @@ module.exports = {
     return queryInterface.bulkInsert('Books', [
       {
         isbn : 1,
-        title : 'The Amazing Adventures of Kavalier & Clay',
+        title : 'Kavalier & Clay',
         author: 'Michael Chabon',
         quantity : 45,
         description: 'The Amazing Adventures of Kavalier & Clay is a 2000 novel by Jewish American author Michael Chabon that won the Pulitzer Prize for Fiction in 2001.',

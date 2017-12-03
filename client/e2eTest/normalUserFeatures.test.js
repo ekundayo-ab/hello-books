@@ -215,7 +215,7 @@ module.exports = {
       .click('.btn')
       .waitForElementVisible('.toast', 5000)
       .assert
-      .containsText('.toast', 'The Amazing Adventures of Kavalier & Clay')
+      .containsText('.toast', 'Kavalier & Clay Successfully borrowed')
       .waitForElementVisible('small.borrow-notify', 5000)
       .assert.containsText('small.borrow-notify',
         'You borrowed this book, please return')
@@ -294,8 +294,8 @@ module.exports = {
       .assert.visible('.responsive-table')
       .click('#return-btn0')
       .waitForElementVisible('.toast', 5000)
-      .assert.containsText('.toast', 'The Corrections' +
-      ' succesfully returned but pending review by Administrator')
+      .assert.containsText('.toast', 'The Corrections succesfully returned' +
+      ' but pending review by Administrator')
       .pause(2000)
       .end();
   }

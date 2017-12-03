@@ -10,7 +10,7 @@ import Home from './../../src/components/library/master/Home';
  * @param {object} props - available from withRouter HOC
  * @returns {string} HTML markup of component
  */
-const App = (props) => {
+export const App = (props) => {
   const trackPage = props.location.pathname;
   const trackMatch = /\/register|\/login|\/forgot/.test(trackPage);
   let viewToRender;

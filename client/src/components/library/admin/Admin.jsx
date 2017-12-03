@@ -18,7 +18,7 @@ import Paginator from './../../../helpers/Paginator';
  * @class Admin
  * @extends {Component}
  */
-class Admin extends Component {
+export class Admin extends Component {
   /**
    * Creates an instance of Admin.
    * @param {object} props
@@ -35,7 +35,7 @@ class Admin extends Component {
     };
     this.handleDelete = this.handleDelete.bind(this);
     this.filterBooksByCategory = this.filterBooksByCategory.bind(this);
-    this.query = new URLSearchParams(this.props.history.location.search);
+    this.query = (this.props.history.location.search).split('=')[1];
   }
 
   /**
@@ -59,10 +59,7 @@ class Admin extends Component {
    */
   componentDidMount() {
     this.props.fetchCategories();
-    $(document).ready(() => {
-      $('.modal').modal();
-    });
-    paginate(this.props.fetchBooks, this.query.get('page'))
+    paginate(this.props.fetchBooks, this.query)
       .then((res) => {
         this.setState({
           pages: res.pages,
@@ -91,7 +88,7 @@ class Admin extends Component {
           this.setState({ pageId });
           this.props.deleteBook(bookId)
             .then(() =>
-              paginate(this.props.fetchBooks, this.query.get('page'))
+              paginate(this.props.fetchBooks, this.query)
                 .then((res) => {
                   this.setState({
                     pages: res.pages,
@@ -214,7 +211,7 @@ Admin.propTypes = {
  * @param {object} state
  * @returns {object} book
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     books: state.booksReducer.books,
     categories: state.categoryReducer.categories

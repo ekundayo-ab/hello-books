@@ -10,7 +10,7 @@ import { logout } from '../../../actions/authActions';
  * @class Header
  * @extends {Component}
  */
-class Header extends Component {
+export class Header extends Component {
   /**
    * Creates an instance of Header.
    * @param {object} props
@@ -28,8 +28,7 @@ class Header extends Component {
    * @returns {string} redirects to landing page
    * @memberof Header
    */
-  handleLogout(event) {
-    event.preventDefault();
+  handleLogout() {
     this.props.logout(this.state);
     return this.props.history.push('/');
   }
@@ -100,8 +99,8 @@ class Header extends Component {
                   <i className="fa fa-user" /> Profile</NavLink>
               </li>
               <li>
-                <Link onClick={this.handleLogout} to="/">
-                  <i className="fa fa-sign-out" /> Logout</Link>
+                <button id="logout" onClick={this.handleLogout}>
+                  <i className="fa fa-sign-out" /> Logout</button>
               </li>
             </ul>
           </div>
@@ -128,7 +127,7 @@ Header.propTypes = {
  * @param {object} state
  * @returns {object} isAuthenticated, isAdmin
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     isAuthenticated: state.users.isAuthenticated,
     isAdmin: state.users.user.role,

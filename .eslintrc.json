@@ -13,6 +13,8 @@
     "curly": ["error", "multi-line"],
     "import/no-unresolved": [2, { "commonjs": true }],
     "import/extensions": "off",
+    "import/no-named-as-default": "off",
+    "react/jsx-filename-extension": "off",
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
     "no-shadow": ["error", { "allow": ["req", "res", "err"] }],
     "valid-jsdoc": ["error", {

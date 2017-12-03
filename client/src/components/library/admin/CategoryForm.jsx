@@ -10,7 +10,7 @@ import { saveCategory } from '../../../actions/categoryActions';
  * @class CategoryForm
  * @extends {Component}
  */
-class CategoryForm extends Component {
+export class CategoryForm extends Component {
   /**
    * Creates an instance of CategoryForm.
    * @param {object} props
@@ -67,13 +67,8 @@ class CategoryForm extends Component {
       this.setState({ errors: {}, isLoading: true });
       this.props.saveCategory(this.state)
         .then((response) => {
-          if (response.isDone) {
-            this.setState({ title: '' });
-            $('#category-form-modal').modal('close');
-            return Materialize.toast(response.res.message, 4000, 'green');
-          }
+          if (response.isDone) $('#category-form-modal').modal('close');
           this.setState({ title: '' });
-          return Materialize.toast(response.errors.message, 4000, 'red');
         });
     }
   }
@@ -106,7 +101,11 @@ class CategoryForm extends Component {
               && <span className="help-block">{errors.title}</span> }
           </div>
           <div className="center-align col s12">
-            <button id="save-category" type="submit" className="btn waves-effect teal">
+            <button
+              id="save-category"
+              type="submit"
+              className="btn waves-effect teal"
+            >
               <i className="fa fa-plus" /> Create Category</button>
           </div>
         </form>
