@@ -1,5 +1,6 @@
 import supertest from 'supertest';
 import chai from 'chai';
+import bcrypt from 'bcrypt';
 import app from '../../app';
 import model from '../models';
 import helperBeforeHooks from './../helpers/helperBeforeHooks';
@@ -8,6 +9,7 @@ const User = model.User;
 const expect = chai.expect;
 let adminUserToken;
 let normalUserToken;
+let specificUserToken;
 
 const server = supertest.agent(app);
 describe('AUTHENTICATION & USER Operations', () => {
@@ -475,6 +477,61 @@ describe('AUTHENTICATION & USER Operations', () => {
           expect(res.body.user.username).to.equal('ekundayo');
           expect(res.body).to.have.property('user');
           expect(res.body).to.have.property('decoded');
+          expect(res.body).to.be.an.instanceof(Object);
+          done();
+        });
+    });
+  });
+
+  describe('Autoupgrade unexpected outcome handling', () => {
+    it('should raise error if all fails', (done) => {
+      User.update = () => Promise.reject(1);
+      server
+        .post('/api/v1/users/autoupgrade')
+        .set('x-access-token', normalUserToken)
+        .send({})
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Not eligible');
+          expect(res.body).to.be.an.instanceof(Object);
+          done();
+        });
+    });
+
+    before((done) => {
+      User.create({
+        username: 'chiefoftesters',
+        email: 'chiefoftesters@mail.com',
+        password: bcrypt.hashSync('mypassword', 10),
+        role: 'normal',
+        level: 'bronze',
+        totalBorrow: 10
+      }).then(() => {
+        server
+          .post('/api/v1/users/signin')
+          .set('x-access-token', normalUserToken)
+          .send({
+            identifier: 'chiefoftesters',
+            password: 'mypassword'
+          })
+          .end((err, res) => {
+            specificUserToken = res.body.token;
+            done();
+          });
+      });
+    });
+
+    it('should raise error if unexpected outcome happens', (done) => {
+      User.update = () => Promise.reject(1);
+      server
+        .post('/api/v1/users/autoupgrade')
+        .set('x-access-token', specificUserToken)
+        .send({})
+        .end((err, res) => {
+          expect(res.status).to.equal(500);
+          expect(res.body.success).to.equal(false);
+          expect(res.body.message).to.equal('Internal Server Error');
           expect(res.body).to.be.an.instanceof(Object);
           done();
         });

@@ -9,7 +9,8 @@ const {
   inputValidation,
   userValidation,
   validateEmail,
-  validatePassForm
+  validatePassForm,
+  autoUpgradeJudge
 } = helper;
 
 describe('Helper Functions', () => {
@@ -97,12 +98,47 @@ describe('Helper Functions', () => {
       assert.equal(userValidation(helperUser.user9c)
         .errors.password, 'Passwords do not match');
     });
+    it('should not allow username less than 3 characters', () => {
+      assert.equal(userValidation(helperUser.user9e).isValid, false);
+      assert.equal(userValidation(helperUser.user9e)
+        .errors.username, 'minimum of 3 characters word allowed');
+    });
+    it('should not allow password less than 6 characters', () => {
+      assert.equal(userValidation(helperUser.user9f).isValid, false);
+      assert.equal(userValidation(helperUser.user9f)
+        .errors.password, 'minimum of 6 characters word allowed');
+    });
   });
   describe('Validation of inputs when changing password', () => {
     it('should return an error for invalid inputs supplied', () => {
       assert.equal(validatePassForm(helperUser.user9d).isValid, false);
       assert.equal(validatePassForm(helperUser.user9d)
         .errors.oldPass, 'field required');
+    });
+    it('should return an error for password mismatch', () => {
+      assert.equal(validatePassForm(helperUser.user9g).isValid, false);
+      assert.equal(validatePassForm(helperUser.user9g)
+        .errors.mismatch, 'Passwords do not match');
+    });
+  });
+  describe('Determination of user eligible for upgrade', () => {
+    it('should return silver update details', () => {
+      assert.equal(autoUpgradeJudge(helperUser.upgradeToken1)
+        .upgradeToken.levelName, 'silver');
+      assert.equal(autoUpgradeJudge(helperUser.upgradeToken1)
+        .upgradeToken.credit, 1);
+    });
+    it('should return gold update details', () => {
+      assert.equal(autoUpgradeJudge(helperUser.upgradeToken2)
+        .upgradeToken.levelName, 'gold');
+      assert.equal(autoUpgradeJudge(helperUser.upgradeToken2)
+        .upgradeToken.credit, 2);
+    });
+    it('should return unlimited update details', () => {
+      assert.equal(autoUpgradeJudge(helperUser.upgradeToken3)
+        .upgradeToken.levelName, 'unlimited');
+      assert.equal(autoUpgradeJudge(helperUser.upgradeToken3)
+        .upgradeToken.credit, 9000);
     });
   });
 });

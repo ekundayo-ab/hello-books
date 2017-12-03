@@ -315,10 +315,6 @@ class UserController {
   static autoUpgrade(req, res) {
     return User.findById(req.decoded.data.id)
       .then((user) => {
-        const upgradeToken = {
-          levelName: user.level,
-          credit: 0,
-        };
         if (user.totalBorrow !== 10
           && user.totalBorrow !== 20 && user.totalBorrow !== 30) {
           return res.status(200).send({
@@ -326,18 +322,7 @@ class UserController {
             message: 'Not eligible'
           });
         }
-        if (user.level === 'bronze' && user.totalBorrow === 10) {
-          upgradeToken.levelName = 'silver';
-          upgradeToken.credit = 1;
-        }
-        if (user.level === 'silver' && user.totalBorrow === 20) {
-          upgradeToken.levelName = 'gold';
-          upgradeToken.credit = 2;
-        }
-        if (user.level === 'gold' && user.totalBorrow === 30) {
-          upgradeToken.levelName = 'unlimited';
-          upgradeToken.credit = 9000;
-        }
+        const { upgradeToken } = Helper.autoUpgradeJudge(user);
         if (upgradeToken.credit > 0) {
           return User.update({
             level: upgradeToken.levelName,
@@ -354,10 +339,10 @@ class UserController {
               message: 'You\'ve been upgraded to ' +
               `${userUpdated[1].dataValues.level}`,
               user: userUpdated[1]
-            })).catch((err) => {
+            })).catch(() => {
             res.status(500).send({
               success: false,
-              message: err.message,
+              message: 'Internal Server Error',
             });
           });
         }

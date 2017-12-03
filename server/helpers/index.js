@@ -88,10 +88,10 @@ class Helper {
     for (let i = 0; i < 4; i += 1) {
       const field = Object.values(req.body)[i];
       const theKey = Object.keys(req.body)[i];
-      if (Object.keys(req.body)[i] === 'password' && field.trim().length < 6) {
+      if (theKey === 'password' && field.trim().length < 6) {
         errors[theKey] = 'minimum of 6 characters word allowed';
       }
-      if (Object.keys(req)[i] === 'username' && field.trim().length < 3) {
+      if (theKey === 'username' && field.trim().length < 3) {
         errors[theKey] = 'minimum of 3 characters word allowed';
       }
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
@@ -136,7 +136,7 @@ class Helper {
 
   /**
    * @static
-   * @description Ensures email supplied is a valid email address
+   * @description Ensures borrow limit and total limit is updated for user
    * @param {object} userData
    * @returns {boolean} true or false
    * @memberOf Helper
@@ -157,6 +157,32 @@ class Helper {
           plain: true
         }).then(userUpdated =>
           ({ ok: !!userUpdated, user: userUpdated[1].dataValues })));
+  }
+  /**
+   * @static
+   * @description Decides on credit to assign ugraded user
+   * @param {object} user
+   * @returns {boolean} true or false
+   * @memberOf Helper
+   */
+  static autoUpgradeJudge(user) {
+    const upgradeToken = {
+      levelName: user.level,
+      credit: 0,
+    };
+    if (user.level === 'bronze' && user.totalBorrow === 10) {
+      upgradeToken.levelName = 'silver';
+      upgradeToken.credit = 1;
+    }
+    if (user.level === 'silver' && user.totalBorrow === 20) {
+      upgradeToken.levelName = 'gold';
+      upgradeToken.credit = 2;
+    }
+    if (user.level === 'gold' && user.totalBorrow === 30) {
+      upgradeToken.levelName = 'unlimited';
+      upgradeToken.credit = 9000;
+    }
+    return { upgradeToken };
   }
 }
 
