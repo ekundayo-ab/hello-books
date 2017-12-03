@@ -1,5 +1,5 @@
 import axios from 'axios';
-import store from '../../src/index';
+import store from '../helpers/store';
 import * as actionTypes from './types';
 
 /**
@@ -72,18 +72,20 @@ const fetchBooks = pageNumber =>
  * @returns {array} action
  */
 const fetchBooksByCategory = (pageNumber, categoryId) =>
-  axios.get(`/api/v1/category/books?page=${pageNumber}&categoryId=${categoryId}`
-  )
-    .then((res) => {
-      store.dispatch(setBooks(res.data.books));
-      return {
-        isDone: true
-      };
-    })
-    .catch((err) => {
-      store.dispatch(setBooks(err.response.data.books));
-      return err.response.data;
-    });
+  dispatch =>
+    axios.get(
+      `/api/v1/category/books?page=${pageNumber}&categoryId=${categoryId}`
+    )
+      .then((res) => {
+        dispatch(setBooks(res.data.books));
+        return {
+          isDone: true
+        };
+      })
+      .catch((err) => {
+        store.dispatch(setBooks(err.response.data.books));
+        return err.response.data;
+      });
 
 /**
  * Get Single Book
@@ -91,10 +93,10 @@ const fetchBooksByCategory = (pageNumber, categoryId) =>
  * @param {number} id - book ID to get
  * @returns {object} action
  */
-const fetchBook = id =>
+const fetchBook = id => dispatch =>
   axios.get(`/api/v1/books/${id}`)
     .then((res) => {
-      store.dispatch(bookFetched(res.data));
+      dispatch(bookFetched(res.data));
       return res.data;
     })
     .catch(err => err);
@@ -106,10 +108,10 @@ const fetchBook = id =>
  * @param {object} data - book details
  * @returns {object} action
  */
-const saveBook = data =>
+const saveBook = data => dispatch =>
   axios.post('/api/v1/books', data)
     .then((res) => {
-      store.dispatch(addBook(res.data.book));
+      dispatch(addBook(res.data.book));
       Materialize.toast(res.data.message, 2000, 'green');
       return { res: res.data, isDone: true };
     })
@@ -126,11 +128,10 @@ const saveBook = data =>
  * @param {object} data - book detail
  * @returns {object} action
  */
-const updateBook = data =>
-  axios
-    .put(`/api/v1/books/${data.id}`, data)
+const updateBook = data => dispatch =>
+  axios.put(`/api/v1/books/${data.id}`, data)
     .then((res) => {
-      store.dispatch(bookUpdated(res.data.book));
+      dispatch(bookUpdated(res.data.book));
       Materialize.toast(res.data.message, 2000, 'green');
       return {
         isDone: true,
@@ -152,14 +153,15 @@ const updateBook = data =>
  * @returns {object} action
  */
 const deleteBook = bookId =>
-  axios.delete(`/api/v1/books/${bookId}`)
-    .then((res) => {
-      Materialize.toast('Poof! Book successfully deleted', 2000, 'green');
-      store.dispatch(deleteSuccess(res.data.book.id));
-    })
-    .catch((err) => {
-      Materialize.toast(err.response.data.message, 2000, 'red');
-    });
+  dispatch =>
+    axios.delete(`/api/v1/books/${bookId}`)
+      .then((res) => {
+        Materialize.toast('Poof! Book successfully deleted', 2000, 'green');
+        dispatch(deleteSuccess(res.data.book.id));
+      })
+      .catch((err) => {
+        Materialize.toast(err.response.data.message, 2000, 'red');
+      });
 
 export {
   fetchBooks,

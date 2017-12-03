@@ -12,7 +12,7 @@ import Paginator from '../../helpers/Paginator';
  * @class History
  * @extends {Component}
  */
-class History extends Component {
+export class History extends Component {
   /**
    * Creates an instance of Shelf.
    * @param {object} props
@@ -25,7 +25,7 @@ class History extends Component {
       pages: [],
       pageId: 1,
     };
-    this.query = new URLSearchParams(this.props.history.location.search);
+    this.query = (this.props.history.location.search).split('=')[1];
   }
 
   /**
@@ -36,7 +36,7 @@ class History extends Component {
    */
   componentDidMount() {
     const userId = JSON.parse(localStorage.getItem('userDetails')).id;
-    paginate(this.props.fetchAllBorrowedBooks, this.query.get('page'), userId)
+    paginate(this.props.fetchAllBorrowedBooks, this.query, userId)
       .then((res) => {
         this.setState({
           pages: res.pages,
@@ -137,7 +137,7 @@ History.propTypes = {
  * @param {object} state
  * @returns {object} userId and books
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     userId: state.users.user.id,
     books: state.borrowsReducer.borrows,

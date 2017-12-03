@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/ekundayo-ab/hello-books.svg?branch=develop)](https://travis-ci.org/ekundayo-ab/hello-books)
-[![Code Climate](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/gpa.svg)](https://codeclimate.com/github/ekundayo-ab/hello-books)
-[![Test Coverage](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/coverage.svg)](https://codeclimate.com/github/ekundayo-ab/hello-books/coverage)
+[![Code Climate](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/gpa.svg?branch=develop)](https://codeclimate.com/github/ekundayo-ab/hello-books)
+[![Test Coverage](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/coverage.svg?branch=develop)](https://codeclimate.com/github/ekundayo-ab/hello-books/coverage)
 [![Coverage Status](https://coveralls.io/repos/github/ekundayo-ab/hello-books/badge.svg?branch=develop)](https://coveralls.io/github/ekundayo-ab/hello-books?branch=develop)
-[![Issue Count](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/issue_count.svg)](https://codeclimate.com/github/ekundayo-ab/hello-books)
+[![Issue Count](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/issue_count.svg?branch=develop)](https://codeclimate.com/github/ekundayo-ab/hello-books)
 # HelloBooks
 
 HelloBooks is an application that helps manage a library and its processes like stocking, tracking and renting of books.

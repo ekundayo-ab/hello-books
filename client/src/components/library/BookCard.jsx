@@ -23,10 +23,11 @@ const BookCard = ({ book }) =>
             className="card-title activator grey-text text-darken-4"
           >{book.title}</span>
           <span>{book.author}</span>
-          <p><Link
+          <Link
+            id={`book${book.id}`}
             to={`/shelf/${book.id}`}
             className="btn"
-          >Borrow Now</Link></p>
+          >Borrow Now</Link>
         </div>
       </div>
     </div>

@@ -39,7 +39,7 @@ const Paginator = (props) => {
       <li>
         <button
           className={
-            classnames('btn',
+            classnames('btn', 'prev',
               {
                 disabled: parseInt(props.pageId, 10) <= 1
               }
@@ -56,6 +56,7 @@ const Paginator = (props) => {
           (
             <li
               key={page}
+              id={`page${page}`}
               className={
                 classnames(
                   'waves-effect',
@@ -63,7 +64,10 @@ const Paginator = (props) => {
                 )
               }
             >
-              <Link to={`${props.pageName}?page=${page}`}>{page}</Link>
+              <Link
+                to={`${props.pageName}?page=${page}`}
+              >{page}
+              </Link>
             </li>
           ))
       }
@@ -72,7 +76,7 @@ const Paginator = (props) => {
         <button
           onClick={nextPage}
           className={
-            classnames('btn', 'waves-effect',
+            classnames('btn', 'waves-effect', 'next',
               {
                 disabled: parseInt(props.pageId, 10) >=
                 props.pages.length

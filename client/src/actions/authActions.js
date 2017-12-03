@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { SET_CURRENT_USER, UNSET_CURRENT_USER } from '../actions/types';
 import setAuthorizationHeader from '../utils/setAuthorizationToken';
-import store from '../../src/index';
 
 /**
  * Set Current User
@@ -28,11 +27,11 @@ const unsetCurrentUser = user =>
  * @returns {object} action
  */
 const login = userData =>
-  axios.post('/api/v1/users/signin', userData)
+  dispatch => axios.post('/api/v1/users/signin', userData)
     .then((res) => {
       const token = res.data.token;
       localStorage.setItem('jwtToken', token);
-      store.dispatch(setCurrentUser(res.data.user));
+      dispatch(setCurrentUser(res.data.user));
       setAuthorizationHeader(token);
       return {
         isAuthenticated: true,
@@ -72,12 +71,12 @@ const googleAuth = (userData) => {
     password: userData.tokenObj.id_token,
     passwordConfirmation: userData.tokenObj.id_token,
   };
-  return axios.post('/api/v1/auth/google', user)
+  return dispatch => axios.post('/api/v1/auth/google', user)
     .then((res) => {
       Materialize.toast(res.data.message, 4000, 'green');
       const token = res.data.token;
       localStorage.setItem('jwtToken', token);
-      store.dispatch(setCurrentUser(user));
+      dispatch(setCurrentUser(user));
       setAuthorizationHeader(token);
       return {
         success: res.data.success,
@@ -99,11 +98,11 @@ const googleAuth = (userData) => {
  * @param {void} none - takes no argument
  * @returns {object} action
  */
-const logout = () => {
+const logout = () => (dispatch) => {
   const user = {};
-  store.dispatch(unsetCurrentUser(user));
   localStorage.removeItem('jwtToken');
   localStorage.removeItem('userDetails');
+  return dispatch(unsetCurrentUser(user));
 };
 
 /**
@@ -121,9 +120,7 @@ const userSignUpRequest = userData =>
         message: res.data.message
       };
     })
-    .catch(err =>
-      Materialize.toast(err.response.data.message, 3000, 'red')
-    );
+    .catch(err => Materialize.toast(err.response.data.message, 3000, 'red'));
 
 
 /**
@@ -134,7 +131,10 @@ const userSignUpRequest = userData =>
  */
 const isUserExists = userData =>
   axios.post('/api/v1/users', userData)
-    .catch(err => Materialize.toast(err.response.data.message, 2000, 'red'));
+    .catch((err) => {
+      Materialize.toast(err.response.data.message, 2000, 'red');
+      return err.response.data;
+    });
 
 /**
  * Check User existence
@@ -144,9 +144,14 @@ const isUserExists = userData =>
  */
 const changePassword = passwordData =>
   axios.post('/api/v1/users/pass', passwordData)
-    .then(res => Materialize.toast(res.data.message, 2000, 'green'))
-    .catch(err => Materialize.toast(err.response.data.message, 2000, 'red'));
-
+    .then((res) => {
+      Materialize.toast(res.data.message, 2000, 'green');
+      return res.data;
+    })
+    .catch((err) => {
+      const message = err.response ? err.response.data.message : err;
+      Materialize.toast(message, 2000, 'red');
+    });
 
 export {
   setCurrentUser,

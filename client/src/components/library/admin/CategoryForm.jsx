@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import { saveCategory } from '../../../actions/categoryActions';
 
 /**
@@ -9,7 +10,7 @@ import { saveCategory } from '../../../actions/categoryActions';
  * @class CategoryForm
  * @extends {Component}
  */
-class CategoryForm extends Component {
+export class CategoryForm extends Component {
   /**
    * Creates an instance of CategoryForm.
    * @param {object} props
@@ -64,15 +65,10 @@ class CategoryForm extends Component {
     const isValid = Object.keys(errors).length === 0;
     if (isValid) {
       this.setState({ errors: {}, isLoading: true });
-      saveCategory(this.state)
+      this.props.saveCategory(this.state)
         .then((response) => {
-          if (response.isDone) {
-            this.setState({ title: '' });
-            $('#category-form-modal').modal('close');
-            return Materialize.toast(response.res.message, 4000, 'green');
-          }
+          if (response.isDone) $('#category-form-modal').modal('close');
           this.setState({ title: '' });
-          return Materialize.toast(response.errors.message, 4000, 'red');
         });
     }
   }
@@ -86,14 +82,14 @@ class CategoryForm extends Component {
   render() {
     const { errors } = this.state;
     return (
-      <div>
+      <div id="category-form">
         <form onSubmit={this.onSubmit}>
           <div className={classnames('input-field', 'col s12',
             { 'has-error': errors.title })}
           >
             <i className="fa fa-pencil prefix" />
             <input
-              id="icon_prefix"
+              id="category-title"
               onChange={this.onChange}
               name="title"
               placeholder="Category Name"
@@ -105,7 +101,11 @@ class CategoryForm extends Component {
               && <span className="help-block">{errors.title}</span> }
           </div>
           <div className="center-align col s12">
-            <button type="submit" className="btn waves-effect teal">
+            <button
+              id="save-category"
+              type="submit"
+              className="btn waves-effect teal"
+            >
               <i className="fa fa-plus" /> Create Category</button>
           </div>
         </form>
@@ -113,5 +113,9 @@ class CategoryForm extends Component {
     );
   }
 }
+
+CategoryForm.propTypes = {
+  saveCategory: PropTypes.func.isRequired
+};
 
 export default connect(null, { saveCategory })(withRouter(CategoryForm));

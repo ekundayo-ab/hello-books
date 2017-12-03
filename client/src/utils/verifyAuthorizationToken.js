@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { setCurrentUser } from '../actions/authActions';
+import autoUpgrade from '../utils/autoUpgrade';
 
 /**
  *
@@ -6,11 +8,20 @@ import axios from 'axios';
  * @returns {string} // Decoded token
  */
 const verifyToken = data =>
-  axios.post('/api/v1/verify-token', data)
-    .then((resp) => {
-      const { decoded, user } = resp.data;
-      localStorage.setItem('userDetails', JSON.stringify(decoded));
-      return { decoded, user };
-    });
+  dispatch =>
+    axios.post('/api/v1/verify-token', data)
+      .then((res) => {
+        const { decoded } = res.data;
+        autoUpgrade();
+        dispatch(setCurrentUser(res.data.user));
+        localStorage.setItem('userDetails', JSON.stringify(decoded));
+        return { isDone: true };
+      })
+      .catch(() => {
+        Materialize.toast(
+          'Oops! Something happened, Allow us verify you again',
+          3000, 'red');
+        return { isDone: false };
+      });
 
 export default verifyToken;

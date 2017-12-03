@@ -18,7 +18,7 @@ import Paginator from './../../../helpers/Paginator';
  * @class Admin
  * @extends {Component}
  */
-class Admin extends Component {
+export class Admin extends Component {
   /**
    * Creates an instance of Admin.
    * @param {object} props
@@ -35,7 +35,7 @@ class Admin extends Component {
     };
     this.handleDelete = this.handleDelete.bind(this);
     this.filterBooksByCategory = this.filterBooksByCategory.bind(this);
-    this.query = new URLSearchParams(this.props.history.location.search);
+    this.query = (this.props.history.location.search).split('=')[1];
   }
 
   /**
@@ -59,10 +59,7 @@ class Admin extends Component {
    */
   componentDidMount() {
     this.props.fetchCategories();
-    $(document).ready(() => {
-      $('.modal').modal();
-    });
-    paginate(this.props.fetchBooks, this.query.get('page'))
+    paginate(this.props.fetchBooks, this.query)
       .then((res) => {
         this.setState({
           pages: res.pages,
@@ -89,9 +86,9 @@ class Admin extends Component {
         if (willDelete) {
           const pageId = this.query.get('page');
           this.setState({ pageId });
-          deleteBook(bookId)
+          this.props.deleteBook(bookId)
             .then(() =>
-              paginate(this.props.fetchBooks, this.query.get('page'))
+              paginate(this.props.fetchBooks, this.query)
                 .then((res) => {
                   this.setState({
                     pages: res.pages,
@@ -113,7 +110,7 @@ class Admin extends Component {
    */
   filterBooksByCategory(categoryId, event, title) {
     event.preventDefault();
-    fetchBooksByCategory(this.state.pageId, categoryId)
+    this.props.fetchBooksByCategory(this.state.pageId, categoryId)
       .then((res) => {
         if (res.isDone) {
           return this.setState({
@@ -162,14 +159,14 @@ class Admin extends Component {
               <div className="center-align">
                 <Modal
                   header="Add New Book"
-                  trigger={<Button>ADD BOOK</Button>}
+                  trigger={<Button id="book-form-btn">ADD BOOK</Button>}
                   id="book-form-modal"
                 >
                   <BookForm />
                 </Modal>&nbsp;&nbsp;
                 <Modal
                   header="Add New Category"
-                  trigger={<Button>ADD CATEGORY</Button>}
+                  trigger={<Button id="cat-form-btn" >ADD CATEGORY</Button>}
                   id="category-form-modal"
                 >
                   <CategoryForm />
@@ -205,6 +202,8 @@ Admin.propTypes = {
     push: PropTypes.func.isRequired
   }).isRequired,
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fetchBooksByCategory: PropTypes.func.isRequired,
+  deleteBook: PropTypes.func.isRequired
 };
 
 /**
@@ -212,7 +211,7 @@ Admin.propTypes = {
  * @param {object} state
  * @returns {object} book
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     books: state.booksReducer.books,
     categories: state.categoryReducer.categories
@@ -222,5 +221,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   fetchBooks,
   fetchCategories,
+  fetchBooksByCategory,
   deleteBook
 })(Admin);

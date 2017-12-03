@@ -1,5 +1,4 @@
 import axios from 'axios';
-import store from '../../src/index';
 import * as actionTypes from './types';
 import { setCurrentUser } from './authActions';
 
@@ -59,18 +58,19 @@ const setBorrowedNotReturnedBooks = bookList =>
  * @returns {object} action
  */
 const borrowBook = (userId, bookId) =>
-  axios.post(
-    `/api/v1/users/${userId}/books`,
-    bookId,
-  ).then((res) => {
-    store.dispatch(borrowedFetched(res.data.updatedBorrowedBook));
-    store.dispatch(bookFetched(res.data.updatedBorrowedBook));
-    Materialize.toast(
-      `${res.data.updatedBorrowedBook.title} Successfully borrowed`,
-      2000, 'green');
-  }).catch((err) => {
-    Materialize.toast(err.response.data.message, 2000, 'red');
-  });
+  dispatch =>
+    axios.post(
+      `/api/v1/users/${userId}/books`,
+      bookId,
+    ).then((res) => {
+      dispatch(bookFetched(res.data.updatedBorrowedBook));
+      dispatch(borrowedFetched(res.data.updatedBorrowedBook));
+      Materialize.toast(
+        `${res.data.updatedBorrowedBook.title} Successfully borrowed`,
+        2000, 'green');
+    }).catch((err) => {
+      Materialize.toast(err.response.data.message, 2000, 'red');
+    });
 
 /**
  * Get Borrowed Books
@@ -104,18 +104,19 @@ const fetchAllBorrowedBooks = (pageNumber, userId) =>
  * @returns {object} action
  */
 const fetchBorrowedBook = bookId =>
-  axios.get(`/api/v1/borrowed/${bookId}`)
-    .then((res) => {
-      if (res.data.foundBorrowedBook) {
-        store.dispatch(borrowedFetched(res.data.foundBorrowedBook));
-      } else {
-        const foundBorrowedBook = {};
-        store.dispatch(borrowedFetched(foundBorrowedBook));
-      }
-    })
-    .catch((err) => {
-      Materialize.toast(err.response.data.message, 2000, 'red');
-    });
+  dispatch =>
+    axios.get(`/api/v1/borrowed/${bookId}`)
+      .then((res) => {
+        if (res.data.foundBorrowedBook) {
+          dispatch(borrowedFetched(res.data.foundBorrowedBook));
+        } else {
+          const foundBorrowedBook = {};
+          dispatch(borrowedFetched(foundBorrowedBook));
+        }
+      })
+      .catch((err) => {
+        Materialize.toast(err.response.data.message, 2000, 'red');
+      });
 
 /**
  * Get All Books Borrowed Not Returned
@@ -149,21 +150,22 @@ const getBorrowedNotReturned = (pageNumber, userId) =>
    * @returns {object} action
    */
 const returnBook = (userId, bookId, borrowId) =>
-  axios.put(`/api/v1/users/${userId}/books`,
-    { bookId, borrowId }
-  ).then((res) => {
-    let toDispatch;
-    if (res.data.updatedBorrowedBook) {
-      toDispatch = res.data.updatedBorrowedBook;
-    } else {
-      toDispatch = [];
-    }
-    store.dispatch(bookReturned(toDispatch));
-    store.dispatch(setCurrentUser(res.data.userToUpdateInStore));
-    return Materialize.toast(res.data.message, 2000, 'green');
-  }).catch((err) => {
-    Materialize.toast(err.response.data.message, 2000, 'red');
-  });
+  dispatch =>
+    axios.put(`/api/v1/users/${userId}/books`,
+      { bookId, borrowId }
+    ).then((res) => {
+      let toDispatch;
+      if (res.data.updatedBorrowedBook) {
+        toDispatch = res.data.updatedBorrowedBook;
+      } else {
+        toDispatch = [];
+      }
+      dispatch(bookReturned(toDispatch));
+      dispatch(setCurrentUser(res.data.userToUpdateInStore));
+      return Materialize.toast(res.data.message, 2000, 'green');
+    }).catch((err) => {
+      Materialize.toast(err.response.data.message, 2000, 'red');
+    });
 
 export {
   borrowBook,

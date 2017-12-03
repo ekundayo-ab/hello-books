@@ -14,7 +14,7 @@ import requireAuth from '../../BasicAuth';
  * @param {void} null
  * @returns {string} - HTML markup for library home page
  */
-const Home = () =>
+export const Home = () =>
   (
     <div className="shelf-page" >
       <Switch>

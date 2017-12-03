@@ -10,7 +10,7 @@ import { logout } from '../../../actions/authActions';
  * @class Header
  * @extends {Component}
  */
-class Header extends Component {
+export class Header extends Component {
   /**
    * Creates an instance of Header.
    * @param {object} props
@@ -28,10 +28,8 @@ class Header extends Component {
    * @returns {string} redirects to landing page
    * @memberof Header
    */
-  handleLogout(event) {
-    event.preventDefault();
-    logout(this.state);
-    Materialize.toast('Successfully Logged out.', 1000, 'red');
+  handleLogout() {
+    this.props.logout(this.state);
     return this.props.history.push('/');
   }
 
@@ -58,26 +56,26 @@ class Header extends Component {
               className="button-collapse"
             ><i className="material-icons">menu</i></a>
             <ul className="right hide-on-med-and-down">
-              <li>
+              <li id="lib-shelf">
                 <NavLink
                   activeClassName="active"
                   to="/shelf?page=1"
                 ><i className="fa fa-book" /> Shelf</NavLink>
               </li>
-              <li>
+              <li id="lib-history">
                 <NavLink activeClassName="active" to="/history?page=1">
                   <i className="fa fa-history" /> History</NavLink>
               </li>
               {this.props.isAdmin === 'admin'
-                && <li>
+                && <li id="lib-admin">
                   <NavLink activeClassName="active" to="/admin?page=1">
                     <i className="fa fa-gear" /> Admin Dashboard</NavLink>
                 </li>}
-              <li>
+              <li id="lib-profile">
                 <NavLink activeClassName="active" to="/profile?page=1">
                   <i className="fa fa-user" /> Profile</NavLink>
               </li>
-              <li>
+              <li className="logout">
                 <Link onClick={this.handleLogout} to="">
                   <i className="fa fa-sign-out" /> Logout</Link>
               </li>
@@ -101,8 +99,8 @@ class Header extends Component {
                   <i className="fa fa-user" /> Profile</NavLink>
               </li>
               <li>
-                <Link onClick={this.handleLogout} to="/">
-                  <i className="fa fa-sign-out" /> Logout</Link>
+                <button id="logout" onClick={this.handleLogout}>
+                  <i className="fa fa-sign-out" /> Logout</button>
               </li>
             </ul>
           </div>
@@ -121,6 +119,7 @@ Header.defaultProps = {
 Header.propTypes = {
   history: PropTypes.shape({ push: PropTypes.func }).isRequired,
   isAdmin: PropTypes.string.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
 /**
@@ -128,7 +127,7 @@ Header.propTypes = {
  * @param {object} state
  * @returns {object} isAuthenticated, isAdmin
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     isAuthenticated: state.users.isAuthenticated,
     isAdmin: state.users.user.role,

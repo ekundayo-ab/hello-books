@@ -51,7 +51,7 @@ class SignIn extends Component {
     event.preventDefault();
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
-      login(this.state).then(
+      this.props.login(this.state).then(
         (res) => {
           if (res.isAuthenticated) {
             Materialize.toast(res.message, 1000, 'green');
@@ -114,7 +114,7 @@ class SignIn extends Component {
               <button
                 type="submit"
                 disabled={this.state.isLoading || this.state.invalid}
-                className="right-align btn teal"
+                className="right-align btn teal login-btn"
               ><i className="fa fa-user" /> Login</button>
             </div>
           </form>
@@ -128,6 +128,7 @@ SignIn.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func
   }).isRequired,
+  login: PropTypes.func.isRequired
 };
 
 export default connect(null, { login })(SignIn);

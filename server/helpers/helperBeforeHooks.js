@@ -51,6 +51,7 @@ class BeforeHooks {
           quantity: '30',
           categoryId: 4
         }).then((book) => {
+          Category.create({ id: 4, title: 'Anything' });
           process.env.bookId = book.id;
         });
       server

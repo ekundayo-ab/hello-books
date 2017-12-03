@@ -1,5 +1,4 @@
 import axios from 'axios';
-import store from '../../src/index';
 import * as actionTypes from '../actions/types';
 
 /**
@@ -27,17 +26,16 @@ const addCategory = category =>
  * @returns {object} action
  */
 const fetchCategories = () =>
-  ((dispatch) => {
+  dispatch =>
     axios.get('/api/v1/categories')
       .then((res) => {
         dispatch(setCategories(res.data.categories));
         return res.data;
       })
       .catch((err) => {
-        dispatch(setCategories(err.response.data.categories));
+        dispatch(setCategories([]));
         return err.response.data.message;
       });
-  });
 
 /**
  * Create/Add Category
@@ -46,16 +44,21 @@ const fetchCategories = () =>
  * @returns {object} action
  */
 const saveCategory = categoryDetails =>
-  axios.post('/api/v1/category', categoryDetails)
-    .then((res) => {
-      const { category } = res.data;
-      category.cat = [];
-      store.dispatch(addCategory(category));
-      return { res: res.data, isDone: true };
-    })
-    .catch(err =>
-      ({ errors: err.response.data, isDone: false }),
-    );
+  dispatch =>
+    axios.post('/api/v1/category', categoryDetails)
+      .then((res) => {
+        const { category } = res.data;
+        category.cat = [];
+        dispatch(addCategory(category));
+        Materialize.toast(res.data.message, 4000, 'green');
+        return { res: res.data, isDone: true };
+      })
+      .catch((err) => {
+        Materialize.toast(err.response.data.message, 4000, 'red');
+        return {
+          isDone: false
+        };
+      });
 
 export {
   fetchCategories,

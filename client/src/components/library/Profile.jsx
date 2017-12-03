@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import classnames from 'classnames';
 import { changePassword } from '../../actions/authActions';
 import { getBorrowedNotReturned, returnBook }
   from '../../actions/borrowActions';
@@ -15,7 +16,7 @@ import SingleInput from './../forms/SingleInput';
  * @class Profile
  * @extends {Component}
  */
-class Profile extends Component {
+export class Profile extends Component {
   /**
    * Creates an instance of Profile.
    * @param {object} props
@@ -30,9 +31,10 @@ class Profile extends Component {
       oldPass: '',
       newPass: '',
       newPassConfirm: '',
-      errors: {}
+      errors: {},
+      loading: null
     };
-    this.query = new URLSearchParams(this.props.location.search);
+    this.query = (this.props.history.location.search).split('=')[1];
     this.handleBookReturn = this.handleBookReturn.bind(this);
     this.userId = JSON.parse(localStorage.getItem('userDetails')).id;
     this.onChange = this.onChange.bind(this);
@@ -48,7 +50,7 @@ class Profile extends Component {
   componentDidMount() {
     paginate(
       this.props.getBorrowedNotReturned,
-      this.query.get('page'),
+      this.query,
       this.userId
     )
       .then((res) => {
@@ -86,11 +88,12 @@ class Profile extends Component {
    * @memberof Profile
    */
   handleBookReturn(bookId, borrowId) {
-    returnBook(this.userId, bookId, borrowId)
+    this.setState({ loading: bookId });
+    this.props.returnBook(this.userId, bookId, borrowId)
       .then(() =>
         paginate(
           this.props.getBorrowedNotReturned,
-          this.query.get('page'),
+          this.query,
           this.userId
         )
           .then((res) => {
@@ -136,7 +139,7 @@ class Profile extends Component {
 
           <div className="row">
             <div className="col s12 m12 l3">
-              <div className="col s12 card">
+              <div className="change-password-card col s12 card">
                 <div className="card">
                   <div className="card-image">
                     <h5 className="center-align">Change Password</h5>
@@ -173,7 +176,7 @@ class Profile extends Component {
                       />
                       <div className="center-align col s12">
                         <button type="submit" className="btn waves-effect teal">
-                          <i className="fa fa-send" /> Save Changes
+                          <i className="fa fa-send" /> Change Password
                         </button><br /><br />
                       </div>
                     </form>
@@ -183,7 +186,7 @@ class Profile extends Component {
             </div>
 
             <div className="col s12 m12 l9">
-              <div className="card-panel row">
+              <div className="profile-card card-panel row">
                 <h4>Info & Details</h4>
                 <div className="row">
                   <div className="col s12 m4 l4">
@@ -296,7 +299,10 @@ class Profile extends Component {
                           </td>
                           <td>
                             <button
-                              className="btn"
+                              id={`return-btn${index}`}
+                              className={classnames('btn',
+                                { disabled: this.state.loading ===
+                                   bookNotReturned.book.id })}
                               onClick={() => {
                                 this.handleBookReturn(
                                   bookNotReturned.book.id,
@@ -338,12 +344,16 @@ Profile.propTypes = {
     borrowLimit: PropTypes.number,
     level: PropTypes.string
   }).isRequired,
-  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
+  history: PropTypes.shape({
+    location: PropTypes.object,
+    push: PropTypes.func
+  }).isRequired,
   location: PropTypes.shape({
     pathname: PropTypes.string,
     search: PropTypes.string
   }).isRequired,
-  getBorrowedNotReturned: PropTypes.func.isRequired
+  getBorrowedNotReturned: PropTypes.func.isRequired,
+  returnBook: PropTypes.func.isRequired
 };
 
 /**
@@ -351,11 +361,14 @@ Profile.propTypes = {
  * @param {object} state
  * @returns {object} books
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     user: state.users.user,
     books: state.borrowsReducer.borrows,
   };
 }
 
-export default connect(mapStateToProps, { getBorrowedNotReturned })(Profile);
+export default connect(mapStateToProps, {
+  getBorrowedNotReturned,
+  returnBook
+})(Profile);

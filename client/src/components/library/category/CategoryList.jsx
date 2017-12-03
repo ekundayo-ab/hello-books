@@ -36,6 +36,7 @@ const CategoryList = props =>
             {
               props.categories.map(category => (
                 <a
+                  id={`cat${category.id}`}
                   key={category.id}
                   href="#!"
                   onClick={event => props.handleFilterBooksByCategory(

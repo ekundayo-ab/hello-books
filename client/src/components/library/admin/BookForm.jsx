@@ -18,7 +18,7 @@ import UpdateBookDetails from '../../library/admin/UpdateBookDetails';
  * @class BookForm
  * @extends {Component}
  */
-class BookForm extends Component {
+export class BookForm extends Component {
   /**
    * Creates an instance of BookForm.
    * @param {object} props
@@ -99,7 +99,7 @@ class BookForm extends Component {
       const { id, isbn, title, author,
         description, quantity, category, image } = this.state;
       if (id) {
-        updateBook({
+        this.props.updateBook({
           id,
           isbn,
           title,
@@ -113,13 +113,12 @@ class BookForm extends Component {
             if (!res.isDone) {
               this.setState({ errors: res.result.errors, loading: false });
             } else {
-              $('#book-form-modal').modal('close');
               this.setState({ errors: {} });
               this.props.fetchCategories();
             }
           });
       } else {
-        saveBook({
+        this.props.saveBook({
           isbn,
           title,
           author,
@@ -178,10 +177,10 @@ class BookForm extends Component {
         <form onSubmit={this.handleSubmit}>
           <SingleInputWithIcon
             placeholder="ISBN"
-            identifier="icon_prefix"
+            identifier="isbn"
             inputName="isbn"
             inputType="text"
-            inputClass="validate"
+            inputClass={`validate isbn${this.props.book.id}`}
             controlFunc={this.onChange}
             content={this.state.isbn}
             fieldError={errors.isbn}
@@ -189,10 +188,10 @@ class BookForm extends Component {
           />
           <SingleInputWithIcon
             placeholder="Title"
-            identifier="icon_prefix"
+            identifier="title"
             inputName="title"
             inputType="text"
-            inputClass="validate"
+            inputClass={`validate title${this.props.book.id}`}
             controlFunc={this.onChange}
             content={this.state.title}
             fieldError={errors.title}
@@ -200,7 +199,7 @@ class BookForm extends Component {
           />
           <SingleInputWithIcon
             placeholder="Author"
-            identifier="icon_prefix"
+            identifier="author"
             inputName="author"
             inputType="text"
             inputClass="validate"
@@ -211,30 +210,33 @@ class BookForm extends Component {
           />
           <SingleInputWithIcon
             placeholder="Quantity"
-            identifier="icon_prefix"
+            identifier="quantity"
             inputName="quantity"
             inputType="text"
-            inputClass="validate"
+            inputClass={`validate quantity${this.props.book.id}`}
             controlFunc={this.onChange}
             content={this.state.quantity}
             fieldError={errors.quantity}
             iconClass={'fa fa-plus-circle prefix'}
           />
           <TextAreaInput
-            placeholder={'Enter description'}
-            identifier={'description'}
-            name={'description'}
+            placeholder="Enter description"
+            identifier="description"
+            name="description"
             rows={50}
             cols={50}
             controlFunc={this.onChange}
             content={this.state.description}
             fieldError={errors.description}
           />
-          <div className={classnames('input-field col s12',
-            { 'has-error': !!this.state.errors.category })}
+          <div
+            id="category-list-area"
+            className={classnames('input-field col s12',
+              { 'has-error': !!this.state.errors.category })}
           >
             <i className="fa fa-list fa-2x prefix " />
             <Input
+              id="category"
               style={{ marginLeft: '44px !important' }}
               name="category"
               type="select"
@@ -249,6 +251,7 @@ class BookForm extends Component {
           </div>
           <p>Drop book image file below or click below to upload</p>
           <Dropzone
+            id="image-upload-container"
             onDrop={this.handleFileUpload}
             multiple
             accept="image/*"
@@ -266,7 +269,10 @@ class BookForm extends Component {
           <div className="center-align col s12">
             <button
               type="submit"
-              className="btn waves-effect teal"
+              id="save-book"
+              className={
+                `btn waves-effect teal save-update${this.props.book.id}`
+              }
               disabled={classnames(this.state.loading ? 'disabled' : '')}
             >
               <i className="fa fa-send" />
@@ -308,6 +314,8 @@ BookForm.propTypes = {
     image: PropTypes.string,
     createdAt: PropTypes.string,
   }),
+  saveBook: PropTypes.func.isRequired,
+  updateBook: PropTypes.func.isRequired
 };
 
 /**
@@ -315,11 +323,14 @@ BookForm.propTypes = {
  * @param {object} state
  * @returns {object} categories
  */
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
   return {
     categories: state.categoryReducer.categories,
   };
 }
 
 export default connect(mapStateToProps, {
-  saveBook, fetchCategories })(BookForm);
+  saveBook,
+  updateBook,
+  fetchCategories
+})(BookForm);

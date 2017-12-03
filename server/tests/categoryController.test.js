@@ -2,10 +2,12 @@ import supertest from 'supertest';
 import chai from 'chai';
 import app from '../../app';
 import helperBeforeHooks from './../helpers/helperBeforeHooks';
+import models from '../models/';
 
 const { expect } = chai;
 let adminToken;
 let normalToken;
+const Category = models.Category;
 
 const server = supertest.agent(app);
 describe('CATEGORY Operations', () => {
@@ -16,6 +18,7 @@ describe('CATEGORY Operations', () => {
   });
   describe('A typical category operation', () => {
     it('should show a descriptive message if no category exists', (done) => {
+      Category.destroy({ where: {} });
       server
         .get('/api/v1/categories')
         .set('Accept', 'application/x-www-form-urlencoded')

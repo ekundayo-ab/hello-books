@@ -47,7 +47,7 @@ SingleInputWithIcon.propTypes = {
   content: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
-  ]).isRequired,
+  ]),
   iconClass: PropTypes.string.isRequired,
 };
 
@@ -55,6 +55,7 @@ SingleInputWithIcon.defaultProps = {
   fieldError: null,
   inputClass: '',
   placeholder: '',
+  content: undefined
 };
 
 export default SingleInputWithIcon;

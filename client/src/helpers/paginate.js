@@ -8,7 +8,7 @@
  * @returns {object} // Returns the number of pages and the page ID
  */
 const paginate = (getData, pageId, userId) => {
-  if (pageId === null) pageId = 1;
+  if (pageId === null || pageId === undefined) pageId = 1;
   return getData(pageId, userId)
     .then((getDataResponse) => {
       const { numberOfPages } = getDataResponse;

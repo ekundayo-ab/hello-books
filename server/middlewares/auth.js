@@ -26,7 +26,7 @@ class Authenticate {
             message: 'Failed to authenticate token' });
         } else {
           req.decoded = decoded;
-          next();
+          return next();
         }
       });
     }
@@ -45,7 +45,7 @@ class Authenticate {
    * @memberof Authenticate
    */
   static verifyToken(req, res) {
-    User.findOne({ where: { id: req.decoded.data.id } })
+    return User.findOne({ where: { id: req.decoded.data.id } })
       .then(user =>
         res.status(200).send({ decoded: req.decoded.data, user }));
   }
