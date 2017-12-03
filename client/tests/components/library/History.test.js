@@ -4,7 +4,6 @@ import createHistory from 'history/createMemoryHistory';
 import { History, mapStateToProps }
   from '../../../src/components/library/History';
 import {
-  user,
   borrowedNotReturnedBooks,
   userDetails
 } from './../mockData';
