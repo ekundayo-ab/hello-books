@@ -3,13 +3,11 @@ import chai from 'chai';
 import app from '../../app';
 import model from '../models';
 import helperBeforeHooks from './../helpers/helperBeforeHooks';
-import models from '../models/';
 
 const Category = model.Category;
 const { expect } = chai;
 let adminToken;
 let normalToken;
-const Category = models.Category;
 
 const server = supertest.agent(app);
 describe('CATEGORY Operations', () => {
