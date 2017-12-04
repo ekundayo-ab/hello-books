@@ -517,3 +517,19 @@ blockquote {
 .borrow-now-btn {
   margin-top: 10px;
 }
+
+.helpful-links {
+  li {
+    display: inline-block;
+    padding-left: 15px;
+  }
+
+  a {
+    font-size: 16px;
+    color: $pure-white;
+    display: inline-block;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
