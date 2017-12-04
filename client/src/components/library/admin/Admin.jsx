@@ -84,7 +84,7 @@ export class Admin extends Component {
     })
       .then((willDelete) => {
         if (willDelete) {
-          const pageId = this.query.get('page');
+          const pageId = this.query;
           this.setState({ pageId });
           this.props.deleteBook(bookId)
             .then(() =>
