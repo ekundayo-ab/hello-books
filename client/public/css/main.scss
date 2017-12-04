@@ -479,7 +479,7 @@ span {
   }
 }
 
-// Modify materialize
+// Modify materialize toast location
 #toast-container {
   bottom: 82%;
   left: 7%;
@@ -493,8 +493,27 @@ blockquote {
   padding-left: 1.5rem;
 }
 
+// Book grid alignment on the shelf page
 .card {
   &.small {
     padding: 10px;
   }
+}
+
+.shelf-book {
+  &.card-content{
+    overflow: visible;
+    padding: 25px 15px 15px 15px;
+  }
+}
+
+.card.medium {
+  .card-content {
+    max-height: 100%;
+    overflow: visible;
+  }
+}
+
+.borrow-now-btn {
+  margin-top: 10px;
 }

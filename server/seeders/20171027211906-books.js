@@ -17,7 +17,7 @@ module.exports = {
       {
         isbn : 2,
         title : 'Half of a Yellow Sun',
-        author: 'Chimamanda Ngozi Adichie',
+        author: 'Chimamanda N.A',
         quantity : 32,
         description: 'Half of a Yellow Sun is a novel by Nigerian author Chimamanda Ngozi Adichie. Published in 2006 by Knopf/Anchor, the novel tells the story of the Biafran War through the perspective of the characters Olanna, Ugwu, and Richard.',
         categoryId: 1,

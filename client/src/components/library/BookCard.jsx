@@ -9,8 +9,8 @@ import { Link } from 'react-router-dom';
  */
 const BookCard = ({ book }) =>
   (
-    <div className="book col s12 m3 l3">
-      <div className="card">
+    <div className="book col s12 m4 l3">
+      <div className="card medium">
         <div className="card-image waves-block waves-light">
           <img
             className="activator responsive-img"
@@ -18,15 +18,15 @@ const BookCard = ({ book }) =>
             alt="book cover"
           />
         </div>
-        <div className="card-content">
-          <span
+        <div className="shelf-book card-content">
+          <p
             className="card-title activator grey-text text-darken-4"
-          >{book.title}</span>
-          <span>{book.author}</span>
+          >{book.title}</p>
+          <p>{book.author}</p>
           <Link
             id={`book${book.id}`}
             to={`/shelf/${book.id}`}
-            className="btn"
+            className="btn borrow-now-btn"
           >Borrow Now</Link>
         </div>
       </div>
