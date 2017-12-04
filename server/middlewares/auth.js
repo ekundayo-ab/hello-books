@@ -16,8 +16,7 @@ class Authenticate {
    */
   static authenticate(req, res, next) {
     // check header or url parameters or post parameters for token
-    const token = req.body.token ||
-        req.query.token || req.headers['x-access-token'];
+    const token = req.headers['x-access-token'];
     if (token) {
       return jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
