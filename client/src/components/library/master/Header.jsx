@@ -99,8 +99,8 @@ export class Header extends Component {
                   <i className="fa fa-user" /> Profile</NavLink>
               </li>
               <li>
-                <button id="logout" onClick={this.handleLogout}>
-                  <i className="fa fa-sign-out" /> Logout</button>
+                <Link onClick={this.handleLogout} to="">
+                  <i className="fa fa-sign-out" /> Logout</Link>
               </li>
             </ul>
           </div>
