@@ -13,7 +13,15 @@ const verifyToken = data =>
       .then((res) => {
         const { decoded } = res.data;
         autoUpgrade();
-        dispatch(setCurrentUser(res.data.user));
+        const composableUser = {
+          id: res.data.user.id,
+          username: res.data.user.username,
+          role: res.data.user.role,
+          level: res.data.user.level,
+          borrowLimit: res.data.user.borrowLimit,
+          totalBorrow: res.data.user.totalBorrow
+        };
+        dispatch(setCurrentUser(composableUser));
         localStorage.setItem('userDetails', JSON.stringify(decoded));
         return { isDone: true };
       })
