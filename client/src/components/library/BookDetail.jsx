@@ -41,7 +41,11 @@ export class BookDetail extends Component {
    * @memberof BookDetail
    */
   handleBorrowClick() {
-    this.props.borrowBook(this.props.userId, { bookId: this.props.book.id });
+    this.props.borrowBook(
+      this.props.user.id,
+      { bookId: this.props.book.id },
+      this.props.user.username
+    );
   }
 
   /**
@@ -114,14 +118,12 @@ export class BookDetail extends Component {
   }
 }
 
-// Specify default value for userId
-BookDetail.defaultProps = {
-  userId: null,
-};
-
 // Type checking for BookDetail Component
 BookDetail.propTypes = {
-  userId: PropTypes.number,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    username: PropTypes.string
+  }).isRequired,
   book: PropTypes.shape({
     id: PropTypes.number,
     isbn: PropTypes.number,
@@ -159,13 +161,13 @@ BookDetail.propTypes = {
 /**
  * @description maps the state in redux store to BookDetail props
  * @param {object} state
- * @returns {object} book, borrow, userId
+ * @returns {object} book, borrow, user
  */
 export function mapStateToProps(state) {
   return {
     book: state.bookReducer.book,
     borrow: state.borrowReducer.borrow,
-    userId: state.users.user.id,
+    user: state.users.user,
   };
 }
 

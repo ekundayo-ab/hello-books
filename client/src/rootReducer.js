@@ -3,6 +3,7 @@ import categoryReducer from './reducers/categoryReducer';
 import users from './reducers/authReducer';
 import booksReducer from './reducers/bookReducer';
 import borrowsReducer from './reducers/borrowReducer';
+import returnsReducer from './reducers/returnReducer';
 import bookReducer from './reducers/singleBookReducer';
 import borrowReducer from './reducers/singleBorrowReducer';
 
@@ -13,6 +14,7 @@ const appReducer = combineReducers({
   borrowsReducer,
   bookReducer,
   borrowReducer,
+  returnsReducer
 });
 
 const rootReducer = (state, action) => {

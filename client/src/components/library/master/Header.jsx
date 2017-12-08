@@ -20,6 +20,7 @@ export class Header extends Component {
   constructor(props) {
     super(props);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleNotify = this.handleNotify.bind(this);
   }
 
   /**
@@ -31,6 +32,21 @@ export class Header extends Component {
   handleLogout() {
     this.props.logout(this.state);
     return this.props.history.push('/');
+  }
+
+  /**
+   * @description reveals borrowing and return notifications
+   * @param {null} nothing
+   * @returns {string} redirects to admin page then shows notifications
+   * @memberof Header
+   */
+  handleNotify() {
+    this.props.history.push('/admin?page=1');
+    setTimeout(() => {
+      $('html, body').animate({
+        scrollTop: $('.notify-section').offset().top
+      }, 2000);
+    }, 50);
   }
 
   /**
@@ -48,6 +64,16 @@ export class Header extends Component {
               <h4>Hello<span className="nav-top-marker">books</span></h4></Link>
           </div>
         </div>
+        {this.props.isAdmin === 'admin' ?
+          <a
+            href="#!"
+            className="notify-container"
+            onClick={this.handleNotify}
+          >
+            <i className="fa fa-2x fa-bell" />
+          </a> : '' }
+        {this.props.isAdmin === 'admin' ?
+          <span id="notify-popout" >&#8595;</span> : ''}
         <nav>
           <div className="nav-wrapper">
             <a
@@ -99,8 +125,9 @@ export class Header extends Component {
                   <i className="fa fa-user" /> Profile</NavLink>
               </li>
               <li>
-                <button id="logout" onClick={this.handleLogout}>
-                  <i className="fa fa-sign-out" /> Logout</button>
+                <Link onClick={this.handleLogout} to="">
+                  <i className="fa fa-sign-out" /> Logout
+                </Link>
               </li>
             </ul>
           </div>

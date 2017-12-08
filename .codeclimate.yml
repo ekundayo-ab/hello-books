@@ -4,6 +4,10 @@ engines:
     checks:
       import/extensions:
         enabled: false
+      file-lines:
+        enabled: false
+      method-lines:
+        enabled: false
   duplication:
     enabled: false
     config:

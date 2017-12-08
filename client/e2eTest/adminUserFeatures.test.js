@@ -276,8 +276,10 @@ module.exports = {
       .setValue('#quantity', '56')
       .setValue('#description', 'This novel bees gives cue into insects life')
       .click('#category-list-area')
-      .waitForElementVisible('.dropdown-content li:nth-child(2)', 5000)
-      .click('.dropdown-content li:nth-child(2)')
+      .waitForElementVisible(
+        '.dropdown-content.select-dropdown li:nth-child(2)', 5000
+      )
+      .click('.dropdown-content.select-dropdown li:nth-child(2)')
       .execute("document.querySelectorAll('input[type=file]')[0]" +
       ".style.display = 'block';")
       .pause(2000)
@@ -382,7 +384,7 @@ module.exports = {
       .waitForElementVisible('.toast', 5000)
       .assert
       .containsText('.toast', 'Password successfully changed')
-      .pause(2000);
+      .pause(2500);
   },
   'User can return a book': (browser) => {
     browser

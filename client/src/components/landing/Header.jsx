@@ -17,6 +17,21 @@ const Header = () => (
         REGISTER</NavLink></li>
         <li><NavLink activeClassName="teal darken-2" to="/login">
         LOGIN</NavLink></li>
+        <li>
+          <a href="https://hellobooks-e.herokuapp.com/api/docs/" >
+          API Docs
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/ekundayo-ab/hello-books" >
+          Github Repo
+          </a>
+        </li>
+        <li>
+          <a href="https://www.pivotaltracker.com/n/projects/2087065" >
+          Project Management Board
+          </a>
+        </li>
       </ul>
       <ul className="side-nav" id="mobile-demo">
         <li className="mobile-header"><Link to="/">HelloBooks</Link></li>
@@ -24,6 +39,21 @@ const Header = () => (
           <i className="fa fa-users" /> REGISTER</NavLink></li>
         <li><NavLink activeClassName="teal white-text" to="/login">
           <i className="fa fa-sign-in" /> LOGIN</NavLink></li>
+        <li>
+          <a href="https://hellobooks-e.herokuapp.com/api/docs/" >
+            <i className="fa fa-book" /> API Docs
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/ekundayo-ab/hello-books" >
+            <i className="fa fa-code-fork" /> Github Repo
+          </a>
+        </li>
+        <li>
+          <a href="https://www.pivotaltracker.com/n/projects/2087065" >
+            <i className="fa fa-briefcase" /> Project Management Board
+          </a>
+        </li>
       </ul>
     </div>
   </nav>

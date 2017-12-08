@@ -36,7 +36,7 @@ export class History extends Component {
    */
   componentDidMount() {
     const userId = JSON.parse(localStorage.getItem('userDetails')).id;
-    paginate(this.props.fetchAllBorrowedBooks, this.query, userId)
+    paginate(this.props.fetchAllBorrowedBooks, this.query, userId, false)
       .then((res) => {
         this.setState({
           pages: res.pages,

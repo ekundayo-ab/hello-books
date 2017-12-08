@@ -23,6 +23,7 @@ export default (sequelize, DataTypes) => {
     });
     Borrow.belongsTo(models.User, {
       foreignKey: 'userId',
+      as: 'user',
       onDelete: 'CASCADE',
     });
   };
