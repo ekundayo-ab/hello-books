@@ -18,3 +18,7 @@ ratings:
   - "**.js"
 exclude_paths:
 - server/tests/
+- server/migrations/
+- server/seeders/
+- client/tests/
+- client/e2eTest/
