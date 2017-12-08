@@ -167,8 +167,7 @@ const returnBook = (userId, bookId, borrowId, username) =>
     axios.put(`/api/v1/users/${userId}/books`,
       { bookId, borrowId }
     ).then((res) => {
-      console.log(res.data.updatedBook);
-      const socket = io('localhost:8000');
+      const socket = io('https://hellobooks-e.herokuapp.com');
       socket.emit('return book', {
         book: res.data.updatedBook[1],
         username
