@@ -66,7 +66,7 @@ const borrowBook = (userId, bookId, username) =>
       `/api/v1/users/${userId}/books`,
       bookId,
     ).then((res) => {
-      const socket = io('localhost:8000');
+      const socket = io('https://hellobooks-e.herokuapp.com');
       socket.emit('borrow book', {
         book: res.data.updatedBorrowedBook,
         username
@@ -156,16 +156,23 @@ const getBorrowedNotReturned = (pageNumber, userId) =>
   /**
    * Return Book
    * @description Send ID of book to return, with a the borrower's identity
-   * @param {*} userId - id of user returning book
-   * @param {*} bookId - id of book returned
-   * @param {*} borrowId - id of the borrowed record
+   * @param {number} userId - id of user returning book
+   * @param {number} bookId - id of book returned
+   * @param {number} borrowId - id of the borrowed record
+   * @param {string} username - name of the user returning borrowed book
    * @returns {object} action
    */
-const returnBook = (userId, bookId, borrowId) =>
+const returnBook = (userId, bookId, borrowId, username) =>
   dispatch =>
     axios.put(`/api/v1/users/${userId}/books`,
       { bookId, borrowId }
     ).then((res) => {
+      console.log(res.data.updatedBook);
+      const socket = io('localhost:8000');
+      socket.emit('return book', {
+        book: res.data.updatedBook[1],
+        username
+      });
       let toDispatch;
       if (res.data.updatedBorrowedBook) {
         toDispatch = res.data.updatedBorrowedBook;

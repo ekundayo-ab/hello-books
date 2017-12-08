@@ -21,7 +21,8 @@ const BookCard = ({ book }) =>
         <div className="shelf-book card-content">
           <p
             className="card-title activator grey-text text-darken-4"
-          >{book.title}</p>
+          >{book.title}
+          </p>
           <p>{book.author}</p>
           <Link
             id={`book${book.id}`}

@@ -14,4 +14,15 @@ socket.on('borrow book', (res) => {
       }
     });
 });
+socket.on('return book', (res) => {
+  store.dispatch(fetchAllBorrowedBooks(1, 1, true, 10))
+    .then((done) => {
+      if (store.getState().users.user.role === 'admin') {
+        document.getElementById('notify-popout').innerHTML =
+        `<span className="notify-badge" >
+          <b>New:</b> ${res.username} returned ${res.book.title}
+        </span>`;
+      }
+    });
+});
 

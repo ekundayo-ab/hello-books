@@ -37,6 +37,7 @@ export class Profile extends Component {
     this.query = (this.props.history.location.search).split('=')[1];
     this.handleBookReturn = this.handleBookReturn.bind(this);
     this.userId = JSON.parse(localStorage.getItem('userDetails')).id;
+    this.username = JSON.parse(localStorage.getItem('userDetails')).username;
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -89,7 +90,7 @@ export class Profile extends Component {
    */
   handleBookReturn(bookId, borrowId) {
     this.setState({ loading: bookId });
-    this.props.returnBook(this.userId, bookId, borrowId)
+    this.props.returnBook(this.userId, bookId, borrowId, this.username)
       .then(() =>
         paginate(
           this.props.getBorrowedNotReturned,

@@ -95,6 +95,9 @@ io.on('connection', (socket) => {
   socket.on('borrow book', (data) => {
     io.emit('borrow book', data);
   });
+  socket.on('return book', (data) => {
+    io.emit('return book', data);
+  });
 });
 
 export default app;

@@ -1,7 +1,6 @@
 import model from '../models';
 import Helper from '../helpers/index';
 
-
 const Book = model.Book;
 const Borrow = model.Borrow;
 const User = model.User;
