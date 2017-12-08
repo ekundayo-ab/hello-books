@@ -126,7 +126,8 @@ export class Header extends Component {
               </li>
               <li>
                 <Link onClick={this.handleLogout} to="">
-                  <i className="fa fa-sign-out" /> Logout</Link>
+                  <i className="fa fa-sign-out" /> Logout
+                </Link>
               </li>
             </ul>
           </div>

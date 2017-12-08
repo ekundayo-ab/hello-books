@@ -31,7 +31,8 @@ const Footer = () => (
         <h5 className="white-text">Grow by reading</h5>
         <p
           className="grey-text text-lighten-4"
-        >Help this library grow, please return any book you borrow</p>
+        >Help this library grow, please return any book you borrow
+        </p>
       </div>
     </div>
     <div className="footer-copyright">

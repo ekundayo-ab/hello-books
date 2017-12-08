@@ -19,15 +19,18 @@ const NotFoundPage = () =>
                 <Link
                   to="/shelf"
                   className="white-text breadcrumb"
-                >Library Shelf</Link>
+                >Library Shelf
+                </Link>
                 <Link
                   to="/profile"
                   className="white-text text-darken-2 breadcrumb"
-                >View Your Profile</Link>
+                >View Your Profile
+                </Link>
                 <Link
                   to="/history"
                   className="white-text breadcrumb"
-                >Your Borrowing History</Link>
+                >Your Borrowing History
+                </Link>
               </div>
             </div>
           </nav>
