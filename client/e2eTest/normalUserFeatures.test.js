@@ -292,10 +292,10 @@ module.exports = {
       .assert.containsText('(//h3)[3]', 'Unreturned Books')
       .useCss()
       .assert.visible('.responsive-table')
-      .click('#return-btn0')
+      .click('#return-btn2')
       .waitForElementVisible('.toast', 5000)
-      .assert.containsText('.toast', 'The Corrections succesfully returned' +
-      ' but pending review by Administrator')
+      .assert.containsText('.toast', 'White Teeth succesfully returned ' +
+      'but pending review by Administrator')
       .pause(2000)
       .end();
   }

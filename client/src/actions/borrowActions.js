@@ -1,6 +1,8 @@
 import axios from 'axios';
+import io from 'socket.io-client';
 import * as actionTypes from './types';
 import { setCurrentUser } from './authActions';
+
 
 /**
  * Gets Borrowed Book
@@ -55,14 +57,20 @@ const setBorrowedNotReturnedBooks = bookList =>
  * function borrowFetched and function bookFetched to redux store
  * @param {number} userId - id of user borrowing
  * @param {number} bookId - id of book to borrow
+ * @param {string} username - username of user borrowing
  * @returns {object} action
  */
-const borrowBook = (userId, bookId) =>
+const borrowBook = (userId, bookId, username) =>
   dispatch =>
     axios.post(
       `/api/v1/users/${userId}/books`,
       bookId,
     ).then((res) => {
+      const socket = io('localhost:8000');
+      socket.emit('borrow book', {
+        book: res.data.updatedBorrowedBook,
+        username
+      });
       dispatch(bookFetched(res.data.updatedBorrowedBook));
       dispatch(borrowedFetched(res.data.updatedBorrowedBook));
       Materialize.toast(
@@ -79,21 +87,25 @@ const borrowBook = (userId, bookId) =>
  * in the redux store
  * @param {number} pageNumber - page number
  * @param {number} userId - id of user
+ * @param {boolean} notify - id of user
+ * @param {number} more - id of user
  * @returns {object} action
  */
-const fetchAllBorrowedBooks = (pageNumber, userId) =>
+const fetchAllBorrowedBooks = (pageNumber, userId, notify, more) =>
   dispatch =>
-    axios.get(`/api/v1/borrowed/${userId}/books?page=${pageNumber}`)
-      .then((res) => {
-        let toDispatch;
-        if (res.data.borrowedBooks) {
-          toDispatch = res.data.borrowedBooks;
-        } else {
-          toDispatch = [];
-        }
-        dispatch(setBorrowedBooks(toDispatch));
-        return res.data;
-      }).catch(err => err.response.data);
+    axios.get(
+      `/api/v1/borrowed/${userId}/books?` +
+      `page=${pageNumber}&notify=${notify}&more=${more}`
+    ).then((res) => {
+      let toDispatch;
+      if (res.data.borrowedBooks) {
+        toDispatch = res.data.borrowedBooks;
+      } else {
+        toDispatch = [];
+      }
+      dispatch(setBorrowedBooks(toDispatch));
+      return res.data;
+    }).catch(err => err.response.data);
 
 /**
  * Get Single Borrowed Book

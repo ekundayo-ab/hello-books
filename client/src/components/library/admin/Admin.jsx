@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Modal, Button } from 'react-materialize';
 import swal from 'sweetalert';
 import BookForm from './BookForm';
@@ -10,6 +11,7 @@ import BookList from './BookList';
 import { fetchBooks, deleteBook, fetchBooksByCategory }
   from './../../../actions/bookActions';
 import { fetchCategories } from './../../../actions/categoryActions';
+import { fetchAllBorrowedBooks } from '../../../actions/borrowActions';
 import paginate from './../../../helpers/paginate';
 import Paginator from './../../../helpers/Paginator';
 
@@ -31,10 +33,14 @@ export class Admin extends Component {
       pages: [],
       pageId: 1,
       showCategoryTitle: false,
-      categoryTitle: ''
+      categoryTitle: '',
+      more: 0,
+      loadMore: false,
+      scrollPages: 2
     };
     this.handleDelete = this.handleDelete.bind(this);
     this.filterBooksByCategory = this.filterBooksByCategory.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
     this.query = (this.props.history.location.search).split('=')[1];
   }
 
@@ -59,6 +65,7 @@ export class Admin extends Component {
    */
   componentDidMount() {
     this.props.fetchCategories();
+    this.props.fetchAllBorrowedBooks(1, 1, true, 0);
     paginate(this.props.fetchBooks, this.query)
       .then((res) => {
         this.setState({
@@ -66,6 +73,27 @@ export class Admin extends Component {
           pageId: res.pageId
         });
       });
+  }
+
+  /**
+   * @description Invoked after component has mounted
+   * @param {void} null
+   * @returns {void} returns nothing
+   * @memberof Admin
+   */
+  handleScroll() {
+    const wrapper = $('.notify-section .card-panel');
+    if (
+      $(wrapper).scrollTop() +
+      $(wrapper).innerHeight() >=
+      $(wrapper)[0].scrollHeight && this.state.scrollPages > 1
+    ) {
+      this.setState({ more: this.state.more + 10, loadMore: true });
+      this.props.fetchAllBorrowedBooks(1, 1, true, this.state.more)
+        .then((res) => {
+          this.setState({ loadMore: false, scrollPages: res.numberOfPages });
+        });
+    }
   }
 
   /**
@@ -132,6 +160,26 @@ export class Admin extends Component {
    * @memberof Admin
    */
   render() {
+    const noBorrowHistory = (
+      <h5>You have not borrowed any book(s)!</h5>
+    );
+    const historySingle = this.props.borrows.map((borrowedBook, index) =>
+      (<li key={borrowedBook.id} className="collection-item">
+        <b>{index + 1}. </b>
+        <span>{borrowedBook.book.title} borrowed by </span>
+        <span>{borrowedBook.user.username} on </span>
+        <span>
+          {(moment(borrowedBook.createdAt).format('MMMM Do YYYY, h:mm a'))}
+          &nbsp;
+        </span>
+        {borrowedBook.returned ?
+          <span className="green-badge">
+          &nbsp;Returned on {(moment(borrowedBook.updatedAt)
+              .format('MMMM Do YYYY, h:mm a'))}
+          </span> :
+          <span className="red-badge"> Not yet returned</span>}
+      </li>),
+    );
     return (
       <div>
         <div className="nav-bottom" />
@@ -186,6 +234,22 @@ export class Admin extends Component {
               }
             </div>
           </div>
+          <div className="notify-section row">
+            <h3 className="col s12"> All Notifications</h3>
+            <div className="col s12">
+              <div onScroll={this.handleScroll} className="card-panel">
+                <b>Scroll to see more notifications</b>
+                {this.props.books.length > 0 ?
+                  <ul className="collection">
+                    {historySingle}
+                  </ul> : noBorrowHistory }
+                {this.state.loadMore &&
+                  <div className="progress">
+                    <div className="indeterminate" />
+                  </div>}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -195,6 +259,7 @@ export class Admin extends Component {
 // Type checking for Admin component
 Admin.propTypes = {
   books: PropTypes.arrayOf(PropTypes.object).isRequired,
+  borrows: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchBooks: PropTypes.func.isRequired,
   fetchCategories: PropTypes.func.isRequired,
   history: PropTypes.shape({
@@ -203,7 +268,8 @@ Admin.propTypes = {
   }).isRequired,
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchBooksByCategory: PropTypes.func.isRequired,
-  deleteBook: PropTypes.func.isRequired
+  deleteBook: PropTypes.func.isRequired,
+  fetchAllBorrowedBooks: PropTypes.func.isRequired
 };
 
 /**
@@ -214,6 +280,7 @@ Admin.propTypes = {
 export function mapStateToProps(state) {
   return {
     books: state.booksReducer.books,
+    borrows: state.borrowsReducer.borrows,
     categories: state.categoryReducer.categories
   };
 }
@@ -222,5 +289,6 @@ export default connect(mapStateToProps, {
   fetchBooks,
   fetchCategories,
   fetchBooksByCategory,
-  deleteBook
+  deleteBook,
+  fetchAllBorrowedBooks
 })(Admin);

@@ -44,7 +44,17 @@ class Authenticate {
    * @memberof Authenticate
    */
   static verifyToken(req, res) {
-    return User.findOne({ where: { id: req.decoded.data.id } })
+    return User.findOne({
+      where: { id: req.decoded.data.id },
+      attributes: [
+        'id',
+        'username',
+        'role',
+        'level',
+        'borrowLimit',
+        'totalBorrow'
+      ]
+    })
       .then(user =>
         res.status(200).send({ decoded: req.decoded.data, user }));
   }

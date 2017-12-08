@@ -10,20 +10,23 @@ const NotFoundPage = () =>
   (
     <div>
       <div>
-        <div style={{ padding: '300' }} className="card">
+        <div style={{ padding: 300 }} className="card">
           <h1>OOPS PAGE NOT FOUND</h1>
           <h3>Please try out the links below!</h3>
           <nav>
-            <div className="nav-wrapper">
-              <div className="col s12">
-                <Link to="/shelf" className="breadcrumb">Library Shelf</Link>
+            <div className="teal">
+              <div className="notfound-nav-wrapper col s12 center-align">
+                <Link
+                  to="/shelf"
+                  className="white-text breadcrumb"
+                >Library Shelf</Link>
                 <Link
                   to="/profile"
-                  className="breadcrumb"
+                  className="white-text text-darken-2 breadcrumb"
                 >View Your Profile</Link>
                 <Link
                   to="/history"
-                  className="breadcrumb"
+                  className="white-text breadcrumb"
                 >Your Borrowing History</Link>
               </div>
             </div>

@@ -9,6 +9,7 @@ import App from './components/App';
 import setAuthorizationHeader from './utils/setAuthorizationToken';
 import '../public/css/main.scss';
 import '../public/js/main';
+import '../public/js/notifications';
 
 // Get token from Local Storage
 const token = localStorage.getItem('jwtToken');

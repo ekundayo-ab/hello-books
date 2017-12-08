@@ -3,6 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import swagger from 'swagger-jsdoc';
+import socketIO from 'socket.io';
 import router from './server/routes/';
 import authMiddleware from './server/middlewares/auth';
 
@@ -83,10 +84,17 @@ app.get('*', (req, res) => {
 });
 
 // Listens to port for requests
-app.listen(port, (err) => {
+const server = app.listen(port, (err) => {
   /* eslint-disable no-console */
   if (err) console.log(err);
   console.log(`app started on port ${port} running in ${app.get('env')}`);
+});
+
+const io = socketIO(server);
+io.on('connection', (socket) => {
+  socket.on('borrow book', (data) => {
+    io.emit('borrow book', data);
+  });
 });
 
 export default app;

@@ -1,8 +1,10 @@
 import model from '../models';
 import Helper from '../helpers/index';
 
+
 const Book = model.Book;
 const Borrow = model.Borrow;
+const User = model.User;
 /**
  * @class BorrowController
  * @description Borrowing operations
@@ -268,15 +270,24 @@ class BorrowController {
    * @memberof BorrowController
    */
   static getAllBorrowedBooks(req, res) {
-    const limit = 4; // number of records per page
+    let limit = 4; // number of records per page
+    const levelQuery = ((req) => {
+      if (req.query.notify === 'true') {
+        limit = 10 + parseInt(req.query.more, 10);
+        return {};
+      }
+      return { userId: req.params.userId };
+    });
     const { page } = req.query; // page number
     const offset = limit * (page - 1);
     return Borrow.findAndCountAll({
-      where: {
-        userId: req.params.userId,
-      },
+      where: levelQuery(req),
+      order: [
+        ['updatedAt', 'DESC'],
+      ],
       include: [
         { model: Book, as: 'book', required: true },
+        { model: User, as: 'user', attributes: ['username'], required: true },
       ],
       limit,
       offset,

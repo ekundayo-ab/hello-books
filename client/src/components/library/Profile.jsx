@@ -364,7 +364,7 @@ Profile.propTypes = {
 export function mapStateToProps(state) {
   return {
     user: state.users.user,
-    books: state.borrowsReducer.borrows,
+    books: state.returnsReducer.returns,
   };
 }
 

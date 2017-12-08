@@ -518,6 +518,7 @@ blockquote {
   margin-top: 10px;
 }
 
+// Footer section
 .helpful-links {
   li {
     display: inline-block;
@@ -525,11 +526,75 @@ blockquote {
   }
 
   a {
-    font-size: 16px;
     color: $pure-white;
     display: inline-block;
+    font-size: 16px;
+
     &:hover {
       text-decoration: underline;
     }
   }
+}
+
+// Not Found page navigation
+.notfound-nav-wrapper {
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Notification
+.notify-container {
+  left: 42%;
+  position: absolute;
+  top: 86px;
+  z-index: 1;
+}
+
+.fa-bell {
+  &::before {
+    color: $gray-color;
+  }
+}
+
+#notify-popout {
+  background-color: $pure-green;
+  color: $pure-white;
+  left: 42.5%;
+  padding: 5px;
+  position: absolute;
+  top: 120px;
+}
+
+.red-badge {
+  background-color: $pure-red;
+  border-radius: 3px;
+  color: $pure-white;
+  padding: 1px 8px;
+}
+
+.green-badge {
+  background-color: $pure-green;
+  border-radius: 3px;
+  color: $pure-white;
+  padding: 1px 8px;
+}
+
+.notify-section {
+  .card-panel {
+    height: 400px;
+    overflow: auto;
+  }
+
+  .collection {
+    li {
+      font-weight: normal;
+    }
+  }
+}
+
+.progress {
+  height: 20px;
 }

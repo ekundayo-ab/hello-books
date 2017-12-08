@@ -1,13 +1,3 @@
-
-function ConfirmDelete()
-{
-  var confirmDelete = confirm("Are you sure you want to delete?");
-  if (confirmDelete)
-  Materialize.toast('Successfully Deleted', 4000, 'redded');
-  else
-  return false;
-}
-
 $(document).ready(function(){
   $('select').material_select();
   $('body').on('click', '.button-collapse', function(event){
@@ -21,3 +11,4 @@ $(document).ready(function(){
     closeOnClick: true,
   });
 });
+
