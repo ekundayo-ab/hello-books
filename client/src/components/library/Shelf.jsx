@@ -107,6 +107,13 @@ export class Shelf extends Component {
             <div className="col s12 m12 l9">
               <div className="card-panel">
                 <div className="row">
+                  <b>
+                  Books borrowed must be returned
+                  on or before 3 days after borrowing.
+                    <blockquote>
+                    Borrowing credit deduction applies for late returns
+                    </blockquote>
+                  </b>
                   {
                     this.props.books.length > 0 ?
                       this.props.books.map(book =>

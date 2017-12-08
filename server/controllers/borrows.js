@@ -124,7 +124,7 @@ class BorrowController {
   static returnBook(req, res) {
     let bookToReturn;
     let userToUpdateInStore;
-    const dueDate = req.body.borrow.dueDate;
+    const { dueDate } = req.body.borrow;
 
     // Compares the current date with the dueDate specified for returning a book
     // If current date is greater than the due date, then user is returning late
