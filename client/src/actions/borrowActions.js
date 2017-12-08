@@ -160,12 +160,13 @@ const getBorrowedNotReturned = (pageNumber, userId) =>
    * @param {number} bookId - id of book returned
    * @param {number} borrowId - id of the borrowed record
    * @param {string} username - name of the user returning borrowed book
+   * @param {object} borrow - specific borrowing record
    * @returns {object} action
    */
-const returnBook = (userId, bookId, borrowId, username) =>
+const returnBook = (userId, bookId, borrowId, username, borrow) =>
   dispatch =>
     axios.put(`/api/v1/users/${userId}/books`,
-      { bookId, borrowId }
+      { bookId, borrowId, borrow }
     ).then((res) => {
       const socket = io('https://hellobooks-e.herokuapp.com');
       socket.emit('return book', {
