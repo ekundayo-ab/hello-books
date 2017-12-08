@@ -85,12 +85,13 @@ export class Profile extends Component {
    * @description handles returning of Book
    * @param {number} bookId
    * @param {number} borrowId
+   * @param {object} borrow - specific borrowing record
    * @returns {object} action
    * @memberof Profile
    */
-  handleBookReturn(bookId, borrowId) {
+  handleBookReturn(bookId, borrowId, borrow) {
     this.setState({ loading: bookId });
-    this.props.returnBook(this.userId, bookId, borrowId, this.username)
+    this.props.returnBook(this.userId, bookId, borrowId, this.username, borrow)
       .then(() =>
         paginate(
           this.props.getBorrowedNotReturned,
@@ -307,7 +308,8 @@ export class Profile extends Component {
                               onClick={() => {
                                 this.handleBookReturn(
                                   bookNotReturned.book.id,
-                                  bookNotReturned.id
+                                  bookNotReturned.id,
+                                  bookNotReturned
                                 );
                               }}
                             >

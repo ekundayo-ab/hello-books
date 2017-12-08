@@ -115,6 +115,13 @@ export class Shelf extends Component {
                       <h5>Woof! No book(s) available in this
                        shelf currently, please check back later</h5>
                   }
+                  <p>
+                    <b>
+                    Books borrowed must be returned
+                    on or before 3 days after borrowing.
+                    Borrowing credit deduction applies for late returns
+                    </b>
+                  </p>
                 </div>
               </div>
               {!this.state.showCategoryTitle && this.state.pages.length > 1 ?

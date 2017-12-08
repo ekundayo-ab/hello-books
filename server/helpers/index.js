@@ -147,7 +147,7 @@ class Helper {
         User.update({
           borrowLimit: userData.ops ?
             user.borrowLimit - 1 : user.borrowLimit + 1,
-          totalBorrow: userData.ops ?
+          totalBorrow: userData.updateTotalBorrows ?
             user.totalBorrow + 1 : user.totalBorrow
         }, {
           where: {

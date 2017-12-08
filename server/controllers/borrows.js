@@ -1,3 +1,5 @@
+import moment from 'moment';
+import nodemailer from 'nodemailer';
 import model from '../models';
 import Helper from '../helpers/index';
 
@@ -90,6 +92,7 @@ class BorrowController {
                   }).then((borrowingRecord) => {
                     const userToUpdate = {
                       ops: true,
+                      updateTotalBorrows: true,
                       userId: req.decoded.data.id,
                     };
                     Helper.updateBorrowLimitAndTotalBorrows(userToUpdate);
@@ -121,6 +124,14 @@ class BorrowController {
   static returnBook(req, res) {
     let bookToReturn;
     let userToUpdateInStore;
+    const { dueDate } = req.body.borrow;
+
+    // Compares the current date with the dueDate specified for returning a book
+    // If current date is greater than the due date, then user is returning late
+    // Hence surcharge variable evaluates to true,
+    // meaning user borrowing credit would be deducted by one.
+    const surcharge = moment(Date.now()) > moment(dueDate);
+
     // Searches if book is available in the database
     return Book.findById(req.body.bookId).then((bookFound) => {
       if (!bookFound) {
@@ -160,12 +171,55 @@ class BorrowController {
               plain: true
             }).then((updatedBook) => {
               const userToUpdate = {
-                ops: false,
-                userId: req.decoded.data.id
+                ops: surcharge,
+                updateTotalBorrows: false,
+                userId: req.decoded.data.id,
               };
               Helper.updateBorrowLimitAndTotalBorrows(userToUpdate)
                 .then((resp) => {
                   userToUpdateInStore = resp.ok ? resp.user : {};
+
+                  // If a user is returning late, send them a mail stating
+                  // that they've been surcharged because they are
+                  // returning late
+                  if (surcharge === true) {
+                    const transporter = nodemailer.createTransport({
+                      service: 'gmail',
+                      auth: {
+                        user: 'ekprogs@gmail.com',
+                        pass: process.env.TRANSPORT_PASS
+                      }
+                    });
+                    const mailOptions = {
+                      from: 'admin@hellobooks.com',
+                      to: userToUpdateInStore.email,
+                      subject: 'Notice of surcharge on late ' +
+                      `return of ${updatedBook[1].dataValues.title}`,
+                      html: `<p>Hi ${userToUpdateInStore.username}</p>` +
+                      '<p>In a bid to satisfy hellobooks users, we ' +
+                      'encourage all users to return book(s) borrowed' +
+                      ' on or as at when due, so we can have books to serve' +
+                      ' other users.</p>' +
+                      '<p>In order to checkmate this we deduct a borrowing' +
+                      ' credit per book returned late</p>' +
+                      '<p>We have therefore deducted 1 credit point from your' +
+                      ' total credit, find below the updated details of your' +
+                      ' borrowing credit account</p>' +
+                      `<p><b>Total Credit: </b>
+                      ${userToUpdateInStore.borrowLimit}</p>` +
+                      '<blockquote>To replenish your credit at the rate of $1' +
+                      ' (One Dollar) per 10 credit points send funds to ' +
+                      '<b>HelloBooks Account: AAABBBXXXXXX</b></blockquote>' +
+                      '<p>Thanks. for more info visit' +
+                      ' https://hellobooks-e.herokuapp.com</p>'
+                    };
+                    transporter.sendMail(mailOptions, (err, info) => {
+                      /* eslint-disable no-console */
+                      if (err) return console.log(err);
+                      return console.log(info);
+                      /* eslint-enable */
+                    });
+                  }
                   res.status(200).send({
                     success: true,
                     message: `${updatedBook[1].dataValues.title} succesfully` +

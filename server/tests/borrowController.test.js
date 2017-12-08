@@ -182,7 +182,13 @@ describe('BORROWING & RETURNING Operations', () => {
         .set('x-access-token', adminToken)
         .send({
           bookId,
-          borrowId
+          borrowId,
+          borrow: {
+            id: borrowId,
+            book: {
+              id: bookId
+            }
+          }
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(true);
@@ -231,7 +237,13 @@ describe('BORROWING & RETURNING Operations', () => {
         .set('x-access-token', adminToken)
         .send({
           bookId: 24,
-          borrowId
+          borrowId,
+          borrow: {
+            id: borrowId,
+            book: {
+              id: bookId
+            }
+          }
         })
         .end((err, res) => {
           expect(res.body.success).to.equal(false);
