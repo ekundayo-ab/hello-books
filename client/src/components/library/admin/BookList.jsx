@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-materialize';
-import BookForm from '../../library/admin/BookForm';
 
 /**
  * @description displays list of books
@@ -40,17 +38,13 @@ const BookList = (props) => {
               <td>{book.author}</td>
               <td>{book.quantity}</td>
               <td>
-                <Modal
-                  header="Update Book"
-                  id={`update-book-form${book.id}`}
-                  trigger={<button
-                    id={`edit-btn${book.id}`}
-                    className="btn white waves-effect waves-light"
-                  >
-                    <i className="fa fa-edit green-text" /></button>}
+                <button
+                  id={`edit-btn${book.id}`}
+                  className="btn white waves-effect waves-light"
+                  onClick={() => props.handleEdit(book)}
                 >
-                  <BookForm book={book} />
-                </Modal>
+                  <i className="fa fa-edit green-text" />
+                </button>
               </td>
               <td>
                 <a

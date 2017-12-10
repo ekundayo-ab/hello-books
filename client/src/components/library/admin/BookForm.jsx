@@ -28,15 +28,14 @@ export class BookForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.book.id ? this.props.book.id : '',
-      isbn: this.props.book.isbn ? this.props.book.isbn : '',
-      title: this.props.book.title ? this.props.book.title : '',
-      author: this.props.book.author ? this.props.book.author : '',
-      quantity: this.props.book.quantity ? this.props.book.quantity : '',
-      description: this.props.book.description ?
-        this.props.book.description : '',
-      image: this.props.book.image ? this.props.book.image : '',
-      category: this.props.book.categoryId ? this.props.book.categoryId : '',
+      id: props.book.id || '',
+      isbn: props.book.isbn || '',
+      title: props.book.title || '',
+      author: props.book.author || '',
+      quantity: props.book.quantity || '',
+      description: props.book.description || '',
+      image: props.book.image || '',
+      category: props.book.categoryId || '',
       errors: {},
       loading: false,
       coverUploaded: false,
