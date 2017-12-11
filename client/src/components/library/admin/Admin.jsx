@@ -227,7 +227,7 @@ export class Admin extends Component {
                   trigger={<Button id="book-form-btn">ADD BOOK</Button>}
                   id="book-form-modal"
                 >
-                  <BookForm book={this.state.bookToEdit} />
+                  <BookForm />
                 </Modal>&nbsp;&nbsp;
                 <Modal
                   header="Add New Category"
