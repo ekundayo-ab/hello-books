@@ -286,6 +286,7 @@ module.exports = {
   },
   'User can return a book': (browser) => {
     browser
+      .click('#lib-profile')
       .execute('scrollTo(0, 800)')
       .waitForElementVisible('h3', 5000)
       .useXpath()
@@ -294,8 +295,8 @@ module.exports = {
       .assert.visible('.responsive-table')
       .click('#return-btn2')
       .waitForElementVisible('.toast', 5000)
-      .assert.containsText('.toast', 'White Teeth succesfully returned ' +
-      'but pending review by Administrator')
+      .assert.containsText('.toast', 'White Teeth succesfully returned' +
+      ' but pending review by Administrator')
       .pause(2000)
       .end();
   }

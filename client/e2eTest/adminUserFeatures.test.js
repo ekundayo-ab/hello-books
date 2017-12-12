@@ -291,25 +291,24 @@ module.exports = {
       .waitForElementVisible('.toast', 5000)
       .assert
       .containsText('.toast', 'The return of the bees, successfully added')
-      .pause(1000);
+      .pause(2000);
   },
   'User can edit book details': (browser) => {
     browser
       .click('#lib-admin')
       .waitForElementVisible('body', 5000)
       .click('#edit-btn6')
-      .waitForElementVisible('#update-book-form6', 5000)
+      .waitForElementVisible('#update-book-modal', 5000)
       .pause(1000)
       .clearValue('.title6')
-      .setValue('.title6', 'Gilead (first book in the shelf arrangement)')
+      .setValue('.title6', 'Gilead New Revision')
       .clearValue('.quantity6')
       .setValue('.quantity6', '56')
       .click('.save-update6')
       .waitForElementVisible('.toast', 5000)
       .assert
       .containsText('.toast',
-        'Gilead01 successfully updated to Gilead' +
-      ' (first book in the shelf arrangement)')
+        'Gilead New Revision')
       .pause(3000);
   },
   'User can delete book': (browser) => {

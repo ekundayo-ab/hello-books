@@ -36,9 +36,12 @@ export class Admin extends Component {
       categoryTitle: '',
       more: 0,
       loadMore: false,
-      scrollPages: 2
+      scrollPages: 2,
+      bookToEdit: {},
+      wouldEdit: false
     };
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
     this.filterBooksByCategory = this.filterBooksByCategory.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.query = (this.props.history.location.search).split('=')[1];
@@ -73,6 +76,20 @@ export class Admin extends Component {
           pageId: res.pageId
         });
       });
+  }
+
+  /**
+   * @param {object} book
+   * @returns {void} - none
+   * @memberof Admin
+   */
+  handleEdit(book) {
+    this.setState({
+      bookToEdit: { ...book },
+      wouldEdit: true
+    }, () => {
+      $('#update-book-modal').modal('open');
+    });
   }
 
   /**
@@ -223,7 +240,14 @@ export class Admin extends Component {
               <BookList
                 books={this.props.books}
                 handleDelete={this.handleDelete}
+                handleEdit={this.handleEdit}
               />
+              {this.state.wouldEdit && <Modal
+                header="Update Book"
+                id="update-book-modal"
+              >
+                <BookForm book={this.state.bookToEdit} />
+              </Modal>}
               {!this.state.showCategoryTitle && this.state.pages.length > 1 ?
                 <Paginator
                   pages={this.state.pages}

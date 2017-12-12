@@ -1,6 +1,7 @@
 import axios from 'axios';
 import io from 'socket.io-client';
 import * as actionTypes from './types';
+import autoUpgrade from '../utils/autoUpgrade';
 import { setCurrentUser } from './authActions';
 
 
@@ -76,6 +77,7 @@ const borrowBook = (userId, bookId, username) =>
       Materialize.toast(
         `${res.data.updatedBorrowedBook.title} Successfully borrowed`,
         2000, 'green');
+      autoUpgrade();
     }).catch((err) => {
       Materialize.toast(err.response.data.message, 2000, 'red');
     });
