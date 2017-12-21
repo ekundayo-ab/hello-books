@@ -462,7 +462,7 @@ describe('Library book(s)', () => {
     });
     it('should return error message if book is not found', (done) => {
       server
-        .delete('/api/v1/books/003')
+        .delete('/api/v1/books/1502')
         .set('Accept', 'application/x-www-form-urlencoded')
         .set('x-access-token', adminToken)
         .end((err, res) => {
