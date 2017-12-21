@@ -45,6 +45,7 @@ module.exports = (env) => {
   const configOptions = env === 'production' ? prodOptions : devOptions;
   configOptions.plugins.push(
     new webpack.EnvironmentPlugin([
+      'NODE_ENV',
       'API_KEY',
       'UPLOAD_PRESET'
     ]),
