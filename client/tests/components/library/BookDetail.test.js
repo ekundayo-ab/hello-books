@@ -5,8 +5,9 @@ import { mapStateToProps, BookDetail }
 import {
   book,
   borrow,
-  userDetails
-} from './../mockData';
+  userDetails,
+  user
+} from '../../__mocks__/mockData';
 
 localStorage.setItem('userDetails', JSON.stringify(userDetails));
 const props = {
@@ -15,6 +16,7 @@ const props = {
   borrowBook: () => Promise.resolve(1),
   book,
   borrow,
+  user,
   match: {
     params: {},
     id: 1
@@ -38,9 +40,7 @@ describe('History Component', () => {
   it('should ensure mapStateToProps returns state from store', () => {
     const storeState = {
       users: {
-        user: {
-          id: 1
-        }
+        user
       },
       bookReducer: {
         book
@@ -49,7 +49,8 @@ describe('History Component', () => {
         borrow
       }
     };
-    expect(mapStateToProps(storeState).userId).toEqual(1);
+    expect(mapStateToProps(storeState).user).toEqual(user);
     expect(mapStateToProps(storeState).book).toEqual(book);
+    expect(mapStateToProps(storeState).borrow).toEqual(borrow);
   });
 });

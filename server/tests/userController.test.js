@@ -14,7 +14,7 @@ let specificUserToken;
 const server = supertest.agent(app);
 describe('AUTHENTICATION & USER Operations', () => {
   helperBeforeHooks.clearDatabaseTables();
-  describe('A typical User registration', () => {
+  describe('A Typical User registration', () => {
     it('should allow admin user to be seeded', (done) => {
       server
         .post('/api/v1/users/signup')
@@ -27,10 +27,13 @@ describe('AUTHENTICATION & USER Operations', () => {
           role: 'admin',
         })
         .end((err, res) => {
-          expect(res.body.success).to.equal(true);
           expect(res.body.message)
             .to.equal('Hi ekundayo, registration successful!');
           expect(res.status).to.equal(201);
+          expect(res.body.user).to.be.an('object');
+          expect(res.body.user.username).to.equal('ekundayo');
+          expect(res.body.user.email).to.equal('ekprogs@gmail.com');
+          expect(res.body.user.role).to.equal('admin');
           done();
         });
     });
@@ -41,13 +44,16 @@ describe('AUTHENTICATION & USER Operations', () => {
         .send({
           username: 'bootcamp',
           email: 'bootcamp@gmail.com',
-          password: '123456',
-          passwordConfirmation: '123456',
+          password: '654321',
+          passwordConfirmation: '654321',
         })
         .end((err, res) => {
-          expect(res.body.success).to.equal(true);
           expect(res.body.message)
             .to.equal('Hi bootcamp, registration successful!');
+          expect(res.body.user).to.be.an('object');
+          expect(res.body.user.username).to.equal('bootcamp');
+          expect(res.body.user.email).to.equal('bootcamp@gmail.com');
+          expect(res.body.user.role).to.equal('normal');
           expect(res.status).to.equal(201);
           done();
         });
@@ -64,28 +70,9 @@ describe('AUTHENTICATION & USER Operations', () => {
           passwordConfirmation: '123456',
         })
         .end((err, res) => {
-          expect(res.body.success).to.equal(false);
           expect(res.body.message)
             .to.equal('Check your username, email or password and try again!');
           expect(res.status).to.equal(400);
-          done();
-        });
-    });
-
-    it('should ensure all signup fields are defined', (done) => {
-      server
-        .post('/api/v1/users/signup')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .send({
-          usename: '',
-          email: '',
-          password: '',
-          passwordConfirmation: '',
-        })
-        .end((err, res) => {
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message)
-            .to.equal('Check your username, email or password and try again!');
           done();
         });
     });
@@ -101,9 +88,9 @@ describe('AUTHENTICATION & USER Operations', () => {
           passwordConfirmation: 'testuser',
         })
         .end((err, res) => {
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Invalid email address, try again');
           expect(res.status).to.equal(400);
+          expect(res.body.message.email)
+            .to.equal('Invalid email address, try again');
           done();
         });
     });
@@ -115,12 +102,11 @@ describe('AUTHENTICATION & USER Operations', () => {
         .send({
           username: 'spartan',
           email: 'bootcamp@gmail.com',
-          password: '123456',
-          passwordConfirmation: '123456',
+          password: '654321',
+          passwordConfirmation: '654321',
         })
         .end((err, res) => {
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('User with that email exists');
+          expect(res.body.message).to.equal('User with this email exists');
           expect(res.status).to.equal(409);
           done();
         });
@@ -133,11 +119,10 @@ describe('AUTHENTICATION & USER Operations', () => {
         .send({
           username: 'bootcamp',
           email: 'spartan@gmail.com',
-          password: '123456',
-          passwordConfirmation: '123456',
+          password: '654321',
+          passwordConfirmation: '654321',
         })
         .end((err, res) => {
-          expect(res.body.success).to.equal(false);
           expect(res.body.message).to.equal('Username already taken');
           expect(res.status).to.equal(409);
           done();
@@ -155,27 +140,9 @@ describe('AUTHENTICATION & USER Operations', () => {
           email: 'ekprogs@gmail.com',
         })
         .end((err, res) => {
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message)
-            .to.equal('Bad request!, Check your username or email.');
           expect(res.status).to.equal(400);
-          done();
-        });
-    });
-
-    it('should require all fields', (done) => {
-      server
-        .post('/api/v1/users/signin')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .send({
-          identfier: 'ekundayo',
-          email: 'ekprogs@gmail.com',
-        })
-        .end((err, res) => {
-          expect(res.body.success).to.equal(false);
           expect(res.body.message)
-            .to.equal('Bad request!, Check your username or email.');
-          expect(res.status).to.equal(400);
+            .to.equal('Check your username or email.');
           done();
         });
     });
@@ -186,10 +153,9 @@ describe('AUTHENTICATION & USER Operations', () => {
         .set('Accept', 'application/x-www-form-urlencoded')
         .send({
           identifier: 'bootcamp',
-          password: '123456',
+          password: '654321',
         })
         .end((err, res) => {
-          expect(res.body.success).to.equal(true);
           expect(res.body.message).to.equal('Hi bootcamp, you are logged in');
           expect(res.status).to.equal(200);
           expect(res.body).to.have.property('token');
@@ -205,7 +171,6 @@ describe('AUTHENTICATION & USER Operations', () => {
           password: '123456',
         })
         .end((err, res) => {
-          expect(res.body.success).to.equal(true);
           expect(res.body.message).to.equal('Hi ekundayo, you are logged in');
           expect(res.status).to.equal(200);
           expect(res.body).to.have.property('token');
@@ -222,10 +187,9 @@ describe('AUTHENTICATION & USER Operations', () => {
           password: 'wrongpass',
         })
         .end((err, res) => {
-          expect(res.body.success).to.equal(false);
           expect(res.body.message)
-            .to.equal('Authentication failed. check password or email');
-          expect(res.status).to.equal(401);
+            .to.equal('Authentication failed, check password or email');
+          expect(res.status).to.equal(400);
           done();
         });
     });
@@ -239,9 +203,8 @@ describe('AUTHENTICATION & USER Operations', () => {
           password: 'dayo',
         })
         .end((err, res) => {
-          expect(res.body.success).to.equal(false);
           expect(res.body.message)
-            .to.equal('Authentication failed. check password or email');
+            .to.equal('Authentication failed. User does not exist');
           expect(res.status).to.equal(404);
           done();
         });
@@ -258,7 +221,6 @@ describe('AUTHENTICATION & USER Operations', () => {
         })
         .end((err, res) => {
           expect(res.status).to.equal(201);
-          expect(res.body.success).to.equal(true);
           expect(res.body.message)
             .to.equal('Hi emmanuel, registration successful!');
           expect(res.body).to.be.an.instanceOf(Object);
@@ -277,40 +239,39 @@ describe('AUTHENTICATION & USER Operations', () => {
           passwordConfirmation: 'ekundayo',
         })
         .end((err, res) => {
+          normalUserToken = res.body.token;
           expect(res.status).to.equal(200);
-          expect(res.body.success).to.equal(true);
           expect(res.body.message)
             .to.equal('Hi emmanuel, you are logged in');
           expect(res.body).to.be.an.instanceOf(Object);
           expect(res.body).to.have.property('token');
-          normalUserToken = res.body.token;
+          expect(res.body.token).to.equal(normalUserToken);
           done();
         });
     });
-    it('should raise error for bad request on google authentiation', (done) => {
+    it('should raise error for bad request on google sign in', (done) => {
       server
         .post('/api/v1/auth/google')
         .set('Accept', 'application/x-www-form-urlencoded')
         .set('x-access-token', normalUserToken)
         .send({
-          username: '',
+          username: '    ',
           email: 'ekundayo.abiona@andela.com',
           password: 'ekundayo',
           passwordConfirmation: 'ekundayo',
         })
         .end((err, res) => {
           expect(res.status).to.equal(400);
-          expect(res.body.success).to.equal(false);
-          expect(res.body).to.have.property('errors');
-          expect(res.body.errors).to.be.an.instanceOf(Object);
-          expect(res.body.errors.username).to.equal('This field is required');
+          expect(res.body.message).to.have.property('username');
+          expect(res.body.message.username).to.equal('This field is required');
+          expect(res.body.message).to.be.an.instanceOf(Object);
           done();
         });
     });
   });
 
   describe('When searching for a single user', () => {
-    it('should send a message if username has not been taken', (done) => {
+    it('should return a message if username has not been taken', (done) => {
       server
         .post('/api/v1/users')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -321,13 +282,12 @@ describe('AUTHENTICATION & USER Operations', () => {
         })
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body.success).to.equal(true);
-          expect(res.body.message).to.equal('Username available');
           expect(res.body).to.be.an.instanceof(Object);
+          expect(res.body.message).to.equal('Username not taken');
           done();
         });
     });
-    it('should respond with user data if user exists', (done) => {
+    it('should return exists to be true if user exists', (done) => {
       server
         .post('/api/v1/users')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -339,9 +299,7 @@ describe('AUTHENTICATION & USER Operations', () => {
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.an.instanceof(Object);
-          expect(res.body.username).to.be.a('string');
-          expect(res.body.password).to.be.a('string');
-          expect(res.body.username).to.equal('emmanuel');
+          expect(res.body.exists).to.equal(true);
           done();
         });
     });
@@ -355,8 +313,8 @@ describe('AUTHENTICATION & USER Operations', () => {
         .set('x-access-token', adminUserToken)
         .send({
           oldPass: '123456',
-          newPass: 'dayo',
-          newPassConfirm: 'dayo',
+          newPass: '1dayo2',
+          newPassConfirm: '1dayo2',
         })
         .end((err, res) => {
           expect(res.status).to.equal(200);
@@ -366,6 +324,27 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
+    it('should give error message for password confirmation mismatch',
+      (done) => {
+        server
+          .post('/api/v1/users/pass')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminUserToken)
+          .send({
+            oldPass: '123456',
+            newPass: '1dayo',
+            newPassConfirm: '1dayo2',
+          })
+          .end((err, res) => {
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.be.an.instanceof(Object);
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.have.property('mismatch');
+            expect(res.body.message.mismatch)
+              .to.equal('Passwords do not match');
+            done();
+          });
+      });
     it('should respond with bad request for invalid input', (done) => {
       server
         .post('/api/v1/users/pass')
@@ -379,7 +358,8 @@ describe('AUTHENTICATION & USER Operations', () => {
         .end((err, res) => {
           expect(res.status).to.equal(400);
           expect(res.body).to.be.an.instanceof(Object);
-          expect(res.body).to.have.property('errors');
+          expect(res.body).to.have.property('message');
+          expect(res.body.message).to.equal('All fields must exist');
           done();
         });
     });
@@ -391,34 +371,31 @@ describe('AUTHENTICATION & USER Operations', () => {
           .set('x-access-token', adminUserToken)
           .send({
             oldPass: 'ekundayo',
-            newPass: 'dayo',
-            newPassConfirm: 'dayo',
+            newPass: 'dayodayo',
+            newPassConfirm: 'dayodayo',
           })
           .end((err, res) => {
-            expect(res.status).to.equal(401);
-            expect(res.body.success).to.equal(false);
-            expect(res.body).to.be.an.instanceof(Object);
+            expect(res.status).to.equal(400);
             expect(res.body.message)
-              .to.equal('Authentication failed, old password incorrect');
+              .to.equal('Authentication failed, Old password incorrect');
             done();
           });
       });
-    it('should respond with failure message if user is not found', (done) => {
+    it('should respond with error message if user is not found', (done) => {
       process.env.TRIGGER_ENV = true;
       server
         .post('/api/v1/users/pass')
         .set('Accept', 'application/x-www-form-urlencoded')
         .set('x-access-token', normalUserToken)
         .send({
-          oldPass: 'dayo',
-          newPass: 'dayo',
-          newPassConfirm: 'dayo',
+          oldPass: 'ekundayo',
+          newPass: 'ekundayo',
+          newPassConfirm: 'ekundayo',
           userId: 9825
         })
         .end((err, res) => {
           process.env.TRIGGER_ENV = false;
           expect(res.status).to.equal(404);
-          expect(res.body.success).to.equal(false);
           expect(res.body).to.be.an.instanceof(Object);
           expect(res.body.message)
             .to.equal('Password change failed, try again');
@@ -445,7 +422,6 @@ describe('AUTHENTICATION & USER Operations', () => {
         .send({})
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body.success).to.equal(false);
           expect(res.body.message).to.equal('Not eligible');
           expect(res.body).to.be.an.instanceof(Object);
           done();
@@ -458,9 +434,13 @@ describe('AUTHENTICATION & USER Operations', () => {
         .send({})
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body.success).to.equal(true);
+          expect(res.body.user.username).to.equal('emmanuel');
+          expect(res.body.user.email).to.equal('ekundayo.abiona@andela.com');
+          expect(res.body.user.role).to.equal('normal');
+          expect(res.body.user.level).to.equal('silver');
+          expect(res.body.user.borrowLimit).to.equal(3);
+          expect(res.body.user.totalBorrow).to.equal(10);
           expect(res.body.message).to.equal('You\'ve been upgraded to silver');
-          expect(res.body).to.be.an.instanceof(Object);
           done();
         });
     });
@@ -474,10 +454,13 @@ describe('AUTHENTICATION & USER Operations', () => {
         .send({})
         .end((err, res) => {
           expect(res.status).to.equal(200);
+          expect(res.body.decoded.role).to.equal('admin');
+          expect(res.body.decoded.username).to.equal('ekundayo');
           expect(res.body.user.username).to.equal('ekundayo');
-          expect(res.body).to.have.property('user');
-          expect(res.body).to.have.property('decoded');
-          expect(res.body).to.be.an.instanceof(Object);
+          expect(res.body.user.role).to.equal('admin');
+          expect(res.body.user.level).to.equal('bronze');
+          expect(res.body.user.borrowLimit).to.equal(2);
+          expect(res.body.user.totalBorrow).to.equal(0);
           done();
         });
     });
@@ -492,7 +475,6 @@ describe('AUTHENTICATION & USER Operations', () => {
         .send({})
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body.success).to.equal(false);
           expect(res.body.message).to.equal('Not eligible');
           expect(res.body).to.be.an.instanceof(Object);
           done();
@@ -530,7 +512,6 @@ describe('AUTHENTICATION & USER Operations', () => {
         .send({})
         .end((err, res) => {
           expect(res.status).to.equal(500);
-          expect(res.body.success).to.equal(false);
           expect(res.body.message).to.equal('Internal Server Error');
           expect(res.body).to.be.an.instanceof(Object);
           done();

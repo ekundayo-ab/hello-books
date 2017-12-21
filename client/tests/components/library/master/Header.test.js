@@ -25,6 +25,12 @@ describe('Header Component', () => {
     expect(wrapper.instance().handleLogout).toHaveBeenCalled();
   });
 
+  it('should call handleNotify when user clicks notify bell', () => {
+    const handleNotify = jest.spyOn(wrapper.instance(), 'handleNotify');
+    wrapper.instance().handleNotify();
+    expect(handleNotify).toHaveBeenCalled();
+  });
+
   it('should ensure mapStateToProps returns prop from redux store', () => {
     const storeState = {
       users: {

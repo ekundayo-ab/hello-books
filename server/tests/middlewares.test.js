@@ -59,7 +59,6 @@ describe('Middleware', () => {
         .set('Accept', 'application/x-www-form-urlencoded')
         .expect(200)
         .end((err, res) => {
-          expect(res.body.success).to.equal(false);
           expect(res.statusCode).to.equal(401);
           expect(res.body.message).to.equal('Unauthenticated, token not found');
           done();
@@ -73,7 +72,6 @@ describe('Middleware', () => {
           .set('x-access-token', `${loggedInToken}giberrish`)
           .expect(200)
           .end((err, res) => {
-            expect(res.body.success).to.equal(false);
             expect(res.statusCode).to.equal(400);
             expect(res.body.message).to.equal('Failed to authenticate token');
             done();

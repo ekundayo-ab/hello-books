@@ -7,32 +7,16 @@ import helperBeforeHooks from './../helpers/helperBeforeHooks';
 const Category = model.Category;
 const { expect } = chai;
 let adminToken;
-let normalToken;
 
 const server = supertest.agent(app);
-describe('CATEGORY Operations', () => {
+describe('Library', () => {
   helperBeforeHooks.makeDataAvailable();
   beforeEach((done) => {
-    ({ adminToken, normalToken } = process.env);
+    ({ adminToken } = process.env);
     done();
   });
-  describe('A typical category operation', () => {
-    it('should show a descriptive message if no category exists', (done) => {
-      Category.destroy({ where: {} });
-      server
-        .get('/api/v1/categories')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .end((err, res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message)
-            .to.equal('Categories not available, check back later.');
-          expect(res.body).to.be.an.instanceOf(Object);
-          done();
-        });
-    });
-    it('should allow admin user to create category', (done) => {
+  describe('category addition', () => {
+    it('should return success message with added category', (done) => {
       server
         .post('/api/v1/category')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -42,46 +26,12 @@ describe('CATEGORY Operations', () => {
         })
         .end((err, res) => {
           expect(res.status).to.equal(201);
-          expect(res.body.success).to.equal(true);
           expect(res.body.message).to.equal('Music, successfully added');
-          expect(res.body).to.be.an.instanceOf(Object);
-          expect(res.body).to.have.property('category');
+          expect(res.body.category.title).to.equal('Music');
           done();
         });
     });
-    it('should disallow disallow non authenticated' +
-    'user from creating a category', (done) => {
-      server
-        .post('/api/v1/category')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .send({
-          title: 'Music',
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(401);
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Unauthenticated, token not found');
-          expect(res.body).to.be.an.instanceOf(Object);
-          done();
-        });
-    });
-    it('should disallow normal user from creating a category', (done) => {
-      server
-        .post('/api/v1/category')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', normalToken)
-        .send({
-          title: 'Music',
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(403);
-          expect(res.body.success).to.equal(false);
-          expect(res.body.message).to.equal('Permission Denied');
-          expect(res.body).to.be.an.instanceOf(Object);
-          done();
-        });
-    });
-    it('should ensure title field is required', (done) => {
+    it('should return error message if no title field exists', (done) => {
       server
         .post('/api/v1/category')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -91,13 +41,11 @@ describe('CATEGORY Operations', () => {
         })
         .end((err, res) => {
           expect(res.status).to.equal(400);
-          expect(res.body.success).to.equal(false);
           expect(res.body.message).to.equal('All fields must exist');
-          expect(res.body).to.be.an.instanceOf(Object);
           done();
         });
     });
-    it('should throw error when same category is added again', (done) => {
+    it('should return error message for same category', (done) => {
       server
         .post('/api/v1/category')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -107,24 +55,38 @@ describe('CATEGORY Operations', () => {
         })
         .end((err, res) => {
           expect(res.status).to.equal(409);
-          expect(res.body.success).to.equal(false);
           expect(res.body.message).to.equal('Conflict! Music exists already');
-          expect(res.body).to.have.property('foundCat');
-          expect(res.body).to.be.an.instanceOf(Object);
+          expect(res.body.foundCat.title).to.equal('Music');
           done();
         });
     });
-    it('should allow an authenticated user see all categories', (done) => {
+  });
+
+  describe('category listing', () => {
+    it('should return all categories for authenticated user', (done) => {
       server
         .get('/api/v1/categories')
         .set('Accept', 'application/x-www-form-urlencoded')
         .set('x-access-token', adminToken)
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body.success).to.equal(true);
-          expect(res.body).to.have.property('categories');
+          expect(res.body.categories).to.have.lengthOf(3);
+          expect(res.body.categories[0].title).to.equal('Anything');
+          expect(res.body.categories[1].title).to.equal('Music');
+          expect(res.body.categories[2].title).to.equal('Sciences');
+          done();
+        });
+    });
+    it('should return (no-content) message if no category exist', (done) => {
+      Category.destroy({ where: {} });
+      server
+        .get('/api/v1/categories')
+        .set('Accept', 'application/x-www-form-urlencoded')
+        .set('x-access-token', adminToken)
+        .end((err, res) => {
+          expect(res.status).to.equal(204);
+          expect(Object.keys(res.body)).to.have.lengthOf(0);
           expect(res.body).to.be.an.instanceOf(Object);
-          expect(res.body.categories).to.be.an.instanceOf(Object);
           done();
         });
     });
@@ -141,7 +103,6 @@ describe('CATEGORY Operations', () => {
         })
         .end((err, res) => {
           expect(res.status).to.equal(500);
-          expect(res.body.success).to.equal(false);
           expect(res.body.message).to.equal('Internal Server Error');
           done();
         });
@@ -156,7 +117,6 @@ describe('CATEGORY Operations', () => {
         .set('x-access-token', adminToken)
         .end((err, res) => {
           expect(res.status).to.equal(500);
-          expect(res.body.success).to.equal(false);
           expect(res.body.message).to.equal('Internal Server Error');
           done();
         });

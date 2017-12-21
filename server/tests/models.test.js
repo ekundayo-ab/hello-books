@@ -43,7 +43,7 @@ describe('Models', () => {
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeUniqueConstraintError');
-          expect(err.errors[0].message).to.equal('username must be unique');
+          expect(err.errors[0].message).to.equal('Username already taken');
           done();
         });
     });
@@ -52,7 +52,7 @@ describe('Models', () => {
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeUniqueConstraintError');
-          expect(err.errors[0].message).to.equal('email must be unique');
+          expect(err.errors[0].message).to.equal('User with this email exists');
           done();
         });
     });

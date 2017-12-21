@@ -4,7 +4,7 @@ import {
   category3,
   categories1,
   categories2
-} from './testData';
+} from '../__mocks__/testData';
 
 describe('category reducer', () => {
   it('should return the initial state', () => {

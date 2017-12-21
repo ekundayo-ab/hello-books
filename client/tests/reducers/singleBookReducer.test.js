@@ -2,7 +2,7 @@ import singleBookReducer from '../../src/reducers/singleBookReducer';
 import * as actionTypes from '../../src/actions/types';
 import {
   book1,
-} from './testData';
+} from '../__mocks__/testData';
 
 describe('single book reducer', () => {
   it('should return the initial state', () => {

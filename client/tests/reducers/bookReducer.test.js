@@ -7,7 +7,7 @@ import {
   book3,
   booksAfterDeletion,
   booksAfterUpdating
-} from './testData';
+} from '../__mocks__/testData';
 
 describe('book reducer', () => {
   it('should return the initial state', () => {

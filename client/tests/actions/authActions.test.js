@@ -10,7 +10,7 @@ import {
   googleDetails,
   regUserData,
   passData
-} from '../reducers/testData';
+} from '../__mocks__/testData';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -45,6 +45,20 @@ describe('Authentication actions', () => {
           done();
         });
     });
+
+    it('should return error message on request failure', (done) => {
+      moxios.stubRequest('/api/v1/users/signin', {
+        status: 500,
+        response: { message: 'Internal Server Error' }
+      });
+      const expectedActions = [];
+      const store = mockStore({});
+      store.dispatch(authAction.login(user))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+          done();
+        });
+    });
   });
 
   describe('Register action', () => {
@@ -61,7 +75,23 @@ describe('Authentication actions', () => {
         isDone: true,
         message: 'Hi ekundayo, registration successful'
       };
-      authAction.userSignUpRequest(regUserData)
+      const store = mockStore({});
+      store.dispatch(authAction.userSignUpRequest(regUserData))
+        .then((res) => {
+          expect(res).toEqual(expectedResponse);
+          done();
+        });
+      done();
+    });
+
+    it('should return error message on request failure', (done) => {
+      moxios.stubRequest('/api/v1/users/signup', {
+        status: 500,
+        response: { message: 'Internal Server Error' }
+      });
+      const expectedResponse = { message: 'Internal Server Error' };
+      const store = mockStore({});
+      store.dispatch(authAction.userSignUpRequest(regUserData))
         .then((res) => {
           expect(res).toEqual(expectedResponse);
           done();
@@ -91,6 +121,20 @@ describe('Authentication actions', () => {
           done();
         });
     });
+
+    it('should return error message when request fails', (done) => {
+      moxios.stubRequest('/api/v1/auth/google', {
+        status: 500,
+        response: { message: 'Internal Server Error' }
+      });
+      const store = mockStore({});
+      const expectedActions = [];
+      store.dispatch(authAction.googleAuth(googleDetails))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+          done();
+        });
+    });
   });
 
   describe('Logout action', () => {
@@ -108,7 +152,7 @@ describe('Authentication actions', () => {
   describe('Username confirm action', () => {
     it('should ensure a new username has not been taken', (done) => {
       moxios.stubRequest('/api/v1/users', {
-        status: 404,
+        status: 200,
         response: {
           success: false,
           message: 'User does not exist'
@@ -118,9 +162,24 @@ describe('Authentication actions', () => {
         success: false,
         message: 'User does not exist'
       };
-      authAction.isUserExists(regUserData)
+      const store = mockStore({});
+      store.dispatch(authAction.isUserExists(regUserData))
         .then((res) => {
           expect(res).toEqual(expected404Response);
+          done();
+        });
+    });
+
+    it('should return error message for request failure', (done) => {
+      moxios.stubRequest('/api/v1/users', {
+        status: 500,
+        response: { message: 'Internal Server Error' }
+      });
+      const expected500Response = { message: 'Internal Server Error' };
+      const store = mockStore({});
+      store.dispatch(authAction.isUserExists(regUserData))
+        .then((res) => {
+          expect(res).toEqual(expected500Response);
           done();
         });
     });
@@ -139,6 +198,19 @@ describe('Authentication actions', () => {
         success: true,
         message: 'Password successfully changed'
       };
+      authAction.changePassword(passData)
+        .then((res) => {
+          expect(res).toEqual(expectedResponse);
+          done();
+        });
+    });
+
+    it('should return error message on request failure', (done) => {
+      moxios.stubRequest('/api/v1/users/pass', {
+        status: 500,
+        response: { message: 'Internal Server Error' }
+      });
+      const expectedResponse = { message: 'Internal Server Error' };
       authAction.changePassword(passData)
         .then((res) => {
           expect(res).toEqual(expectedResponse);

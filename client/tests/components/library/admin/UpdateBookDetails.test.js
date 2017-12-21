@@ -4,7 +4,7 @@ import UpdateBookDetails
   from '../../../../src/components/library/admin/UpdateBookDetails';
 import {
   book
-} from '../../mockData';
+} from '../../../__mocks__/mockData';
 
 
 const props = {

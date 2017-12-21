@@ -7,7 +7,7 @@ import {
   user,
   borrowedNotReturnedBooks,
   userDetails
-} from './../mockData';
+} from '../../__mocks__/mockData';
 
 localStorage.setItem('userDetails', JSON.stringify(userDetails));
 
@@ -15,6 +15,7 @@ const props = {
   location: { pathname: '/' },
   getBorrowedNotReturned: () => Promise.resolve(1),
   returnBook: () => Promise.resolve(1),
+  setCurrentPage: () => Promise.resolve(1),
   user,
   books: borrowedNotReturnedBooks,
   history: createHistory()
@@ -60,13 +61,67 @@ describe('Profile Component', () => {
     expect(wrapInstance.state.newPassConfirm).toEqual('newSecret');
   });
 
+  it('should render info & details section', () => {
+    expect(wrapper.find('h4').text()).toEqual('Info & Details');
+    expect(wrapper.find('p').at(0).text()).toEqual('Total Books Borrowed');
+    expect(wrapper.find('p').at(1).text()).toEqual('0');
+    expect(wrapper.find('p').at(2).text()).toEqual('Level');
+    expect(wrapper.find('p').at(3).text()).toEqual('bronze');
+    expect(wrapper.find('p').at(4).text()).toEqual('Borrow Credit');
+    expect(wrapper.find('p').at(5).text()).toEqual('2');
+    expect(wrapper.find('p').at(0).text()).toEqual('Total Books Borrowed');
+    expect(wrapper.find('p').at(0).text()).toEqual('Total Books Borrowed');
+    expect(wrapper.find('p').at(0).text()).toEqual('Total Books Borrowed');
+  });
+
+  it('should render library guide section', () => {
+    expect(wrapper.find('h3').at(1).text()).toEqual('Library Guide');
+    expect(wrapper.find('h5').at(1).text())
+      .toEqual('Default Membership Points');
+    expect(wrapper.find('h5').at(2).text())
+      .toEqual('Borrowing Modalities');
+    expect(wrapper.find('h5').at(3).text())
+      .toEqual(' Membership Upgrade Eligibility ');
+    expect(wrapper.find('.small p').at(0).text().slice(2, 28))
+      .toEqual('Bronze - 2 Credit Points');
+    expect(wrapper.find('.small p').at(3).text().slice(2, 40))
+      .toEqual('Credit point deducted for every borrow');
+    expect(wrapper.find('.small p').at(6).text().slice(2, 42))
+      .toEqual('Bronze to Silver - Minimum of 10 borrows');
+  });
+
+  it('should render password change card with form', () => {
+    expect(wrapper.find('.change-password-card').exists()).toBe(true);
+    expect(wrapper.find('SingleInput')).toHaveLength(3);
+    expect(wrapper.find('button[type="submit"]').text())
+      .toEqual(' Change Password');
+  });
+
+  it('should render un-returned books with details', () => {
+    expect(wrapper.find('h3').at(2).text()).toBe('Unreturned Books');
+    expect(wrapper.find('td').at(2).text()).toBe('Half of a Yellow Sun');
+    expect(wrapper.find('td').at(3).text()).toBe('Chimamanda Ngozi Adichie');
+    expect(wrapper.find('td').at(4).text())
+      .toBe('November 24th 2017, 11:59 pm');
+    expect(wrapper.find('#return-btn1').text()).toBe('Return');
+    expect(wrapper.find('td').at(8).text()).toBe('The Corrections');
+    expect(wrapper.find('td').at(9).text()).toBe('Jonathan Franzen');
+    expect(wrapper.find('td').at(10).text())
+      .toBe('November 24th 2017, 11:59 pm');
+    expect(wrapper.find('#return-btn2').text()).toBe('Return');
+  });
+
+  it('should not render pagination component', () => {
+    expect(wrapper.find('Paginator').exists()).toBe(false);
+  });
+
   it('should ensure mapStateToProps returns state from store', () => {
     const storeState = {
       users: {
         user
       },
-      borrowsReducer: {
-        borrows: borrowedNotReturnedBooks
+      returnsReducer: {
+        returns: borrowedNotReturnedBooks
       }
     };
     expect(mapStateToProps(storeState).user.id).toEqual(1);

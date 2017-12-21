@@ -1,15 +1,34 @@
 const path = require('path');
 
 module.exports = {
-  'User cannot sign in with invalid credentials': (browser) => {
+  'User can view sign in page': (browser) => {
     browser
       .url('http://localhost:3000/login')
+      .waitForElementVisible('body', 5000)
+      .assert.elementPresent('a')
+      .assert.containsText('a:nth-of-type(1)', 'HelloBooks')
+      .assert.containsText('ul li:nth-of-type(1) a', 'REGISTER')
+      .assert.containsText('ul li:nth-of-type(2) a', 'LOGIN')
+      .assert.containsText('ul li:nth-of-type(3) a', 'API Docs')
+      .assert.containsText('ul li:nth-of-type(4) a', 'Github Repo')
+      .assert.containsText('ul li:nth-of-type(5) a', 'Project Management Board')
+      .assert.elementPresent('h1.white-text')
+      .assert.containsText('h1.white-text', 'Read, think & Innovate')
+      .assert.containsText('.login-btn', 'LOGIN');
+  },
+  'User cannot sign in with invalid credentials': (browser) => {
+    browser
       .waitForElementVisible('body', 5000)
       .setValue('input[name=identifier]', '')
       .setValue('input[name=password]', '')
       .click('.login-btn')
       .waitForElementVisible('span', 5000)
+      .assert.visible('form div:nth-of-type(1) span.help-block')
+      .assert.visible('form div:nth-of-type(2) span.help-block')
       .assert.containsText('.help-block', 'This field is required')
+      .assert.containsText('.help-block:nth-of-type(1)',
+        'This field is required')
+      .assert.containsText('.login-btn', 'LOGIN')
       .pause(600);
   },
   'User cannot sign in with wrong credentials': (browser) => {
@@ -20,9 +39,25 @@ module.exports = {
       .setValue('input[name=password]', 'jaketheprogrammer')
       .click('.login-btn')
       .waitForElementVisible('.toast', 5000)
+      .assert.visible('.toast')
       .assert
-      .containsText('.toast', 'Authentication failed. check password or email')
+      .containsText('.toast', 'Authentication failed. User does not exist')
       .pause(600);
+  },
+  'User can view registration page': (browser) => {
+    browser
+      .url('http://localhost:3000/register')
+      .waitForElementVisible('body', 5000)
+      .assert.elementPresent('a')
+      .assert.containsText('a:nth-of-type(1)', 'HelloBooks')
+      .assert.containsText('ul li:nth-of-type(1) a', 'REGISTER')
+      .assert.containsText('ul li:nth-of-type(2) a', 'LOGIN')
+      .assert.containsText('ul li:nth-of-type(3) a', 'API Docs')
+      .assert.containsText('ul li:nth-of-type(4) a', 'Github Repo')
+      .assert.containsText('ul li:nth-of-type(5) a', 'Project Management Board')
+      .assert.elementPresent('h1.white-text')
+      .assert.containsText('h1.white-text', 'Read, think & Innovate')
+      .assert.containsText('.register-btn', 'REGISTER');
   },
   'User cannot register with invalid credentials': (browser) => {
     browser
@@ -35,35 +70,37 @@ module.exports = {
       .setValue('input[name=passwordConfirmation]', '')
       .click('.register-btn')
       .waitForElementVisible('span', 5000)
-      .assert.containsText('.help-block', 'This field is required')
+      .assert.visible('form .input-field:nth-of-type(2)')
+      .assert.containsText('form .input-field:nth-of-type(2) span.help-block',
+        'This field is required')
+      .assert.visible('form .input-field:nth-of-type(3)')
+      .assert.containsText('form .input-field:nth-of-type(3) span.help-block',
+        'This field is required')
+      .assert.visible('form .input-field:nth-of-type(4)')
+      .assert.containsText('form .input-field:nth-of-type(4) span.help-block',
+        'This field is required')
+      .assert.visible('form .input-field:nth-of-type(5)')
+      .assert.containsText('form .input-field:nth-of-type(5) span.help-block',
+        'This field is required')
       .pause(600);
   },
-  'User cannot register with already registered username': (browser) => {
+  'User cannot register with existing username or email': (browser) => {
     browser
       .url('http://localhost:3000/register')
       .waitForElementVisible('body', 5000)
       .assert.urlEquals('http://localhost:3000/register')
       .setValue('input[name=username]', 'ekundayo')
-      .setValue('input[name=email]', 'ctester@gmail.com')
-      .setValue('input[name=password]', 'password')
-      .setValue('input[name=passwordConfirmation]', 'password')
-      .click('.register-btn')
-      .waitForElementVisible('span', 5000)
-      .assert.containsText('.help-block', 'User exists with this username')
-      .pause(600);
-  },
-  'User cannot register with already registered email': (browser) => {
-    browser
-      .url('http://localhost:3000/register')
-      .waitForElementVisible('body', 5000)
-      .assert.urlEquals('http://localhost:3000/register')
-      .setValue('input[name=username]', 'ctester')
       .setValue('input[name=email]', 'ekprogs@gmail.com')
       .setValue('input[name=password]', 'password')
       .setValue('input[name=passwordConfirmation]', 'password')
       .click('.register-btn')
       .waitForElementVisible('span', 5000)
-      .assert.containsText('.help-block', 'User exists with this email')
+      .assert.containsText('form .input-field:nth-of-type(2) span.help-block',
+        'User exists with this username')
+      .assert.containsText('form .input-field:nth-of-type(3) span.help-block',
+        'User exists with this email')
+      .assert.attributeEquals('.register-btn',
+        'disabled', 'true')
       .pause(600);
   },
   'User cannot register with short password': (browser) => {
@@ -78,7 +115,11 @@ module.exports = {
       .click('.register-btn')
       .waitForElementVisible('span', 5000)
       .assert
-      .containsText('.help-block', 'minimum of 6 characters word allowed')
+      .containsText('form .input-field:nth-of-type(4) .help-block',
+        'minimum of 6 characters word allowed')
+      .assert
+      .containsText('form .input-field:nth-of-type(5) .help-block',
+        'minimum of 6 characters word allowed')
       .pause(600);
   },
   'User can register with valid credentials and be logged in': (browser) => {
@@ -96,6 +137,18 @@ module.exports = {
         '.toast',
         'Hi chieftester, registration successful! You\'re logged in'
       )
+      .waitForElementVisible('body', 5000)
+      .assert.urlEquals('http://localhost:3000/shelf')
+      .assert.containsText('a h4', 'Hellobooks')
+      .assert.containsText('#lib-shelf a', 'Shelf')
+      .assert.containsText('#lib-history a', 'History')
+      .assert.containsText('#lib-profile a', 'Profile')
+      .assert.containsText('.logout', 'Logout')
+      .assert.containsText('h3', 'Available Books')
+      .assert.visible('.card-panel .row .book')
+      .assert.visible('.card-panel .collection #cat3')
+      .assert.containsText('.card-panel .collection #cat3',
+        'Mechanical Engineering')
       .pause(600);
   },
   'User can sign out of the application': (browser) => {
@@ -107,6 +160,8 @@ module.exports = {
       .waitForElementVisible('h1', 5000)
       .assert.containsText('h1', 'Read, think & Innovate')
       .assert.visible('.intro-text')
+      .assert.visible('.google-btn')
+      .assert.visible('.or')
       .pause(600);
   },
   'User can sign in with correct and valid credentials': (browser) => {
@@ -120,6 +175,18 @@ module.exports = {
       .assert
       .containsText('.toast', 'Hi ekundayo, you are logged in')
       .assert.urlEquals('http://localhost:3000/shelf?page=1')
+      .waitForElementVisible('body', 5000)
+      .assert.containsText('a h4', 'Hellobooks')
+      .assert.containsText('#lib-shelf a', 'Shelf')
+      .assert.containsText('#lib-history a', 'History')
+      .assert.containsText('#lib-profile a', 'Profile')
+      .assert.containsText('#lib-admin a', 'Admin Dashboard')
+      .assert.containsText('.logout', 'Logout')
+      .assert.containsText('h3', 'Available Books')
+      .assert.visible('.card-panel .row .book')
+      .assert.visible('.card-panel .collection #cat3')
+      .assert.containsText('.card-panel .collection #cat3',
+        'Mechanical Engineering')
       .pause(600);
   },
   'User can view all books': (browser) => {
@@ -129,6 +196,26 @@ module.exports = {
       .assert.visible('.available-books')
       .assert.visible('.card-title')
       .assert.visible('.book')
+      .assert.visible('.book:nth-of-type(1) .card-image img')
+      .assert.containsText('.book:nth-of-type(1) .shelf-book p:nth-of-type(1)',
+        'Gilead01')
+      .assert.containsText('.book:nth-of-type(1) .shelf-book p:nth-of-type(2)',
+        'Marilynne Robinson')
+      .assert.visible('.book:nth-of-type(2) .card-image img')
+      .assert.containsText('.book:nth-of-type(2) .shelf-book p:nth-of-type(1)',
+        'Gilead02')
+      .assert.containsText('.book:nth-of-type(2) .shelf-book p:nth-of-type(2)',
+        'Marilynne Robinson')
+      .assert.visible('.book:nth-of-type(3) .card-image img')
+      .assert.containsText('.book:nth-of-type(3) .shelf-book p:nth-of-type(1)',
+        'Gilead03')
+      .assert.containsText('.book:nth-of-type(3) .shelf-book p:nth-of-type(2)',
+        'Marilynne Robinson')
+      .assert.visible('.book:nth-of-type(4) .card-image img')
+      .assert.containsText('.book:nth-of-type(4) .shelf-book p:nth-of-type(1)',
+        'Gilead04')
+      .assert.containsText('.book:nth-of-type(4) .shelf-book p:nth-of-type(2)',
+        'Marilynne Robinson')
       .pause(600);
   },
   'User can paginate through books with page links': (browser) => {
@@ -142,6 +229,27 @@ module.exports = {
       .assert.visible('.available-books')
       .assert.visible('.card-title')
       .assert.visible('.book')
+      .assert.visible('.book:nth-of-type(1) .card-image img')
+      .pause(1000)
+      .assert.containsText('.book:nth-of-type(1) .shelf-book p:nth-of-type(1)',
+        'Gilead05')
+      .assert.containsText('.book:nth-of-type(1) .shelf-book p:nth-of-type(2)',
+        'Marilynne Robinson')
+      .assert.visible('.book:nth-of-type(2) .card-image img')
+      .assert.containsText('.book:nth-of-type(2) .shelf-book p:nth-of-type(1)',
+        'Half of a Yellow Sun')
+      .assert.containsText('.book:nth-of-type(2) .shelf-book p:nth-of-type(2)',
+        'Chimamanda N.A')
+      .assert.visible('.book:nth-of-type(3) .card-image img')
+      .assert.containsText('.book:nth-of-type(3) .shelf-book p:nth-of-type(1)',
+        'Kavalier & Clay')
+      .assert.containsText('.book:nth-of-type(3) .shelf-book p:nth-of-type(2)',
+        'Michael Chabon')
+      .assert.visible('.book:nth-of-type(4) .card-image img')
+      .assert.containsText('.book:nth-of-type(4) .shelf-book p:nth-of-type(1)',
+        'The Corrections')
+      .assert.containsText('.book:nth-of-type(4) .shelf-book p:nth-of-type(2)',
+        'Jonathan Franzen')
       .pause(600);
   },
   'User can paginate through books with back or forward button': (browser) => {
@@ -156,6 +264,26 @@ module.exports = {
       .assert.visible('.available-books')
       .assert.visible('.card-title')
       .assert.visible('.book')
+      .assert.visible('.book:nth-of-type(1) .card-image img')
+      .assert.containsText('.book:nth-of-type(1) .shelf-book p:nth-of-type(1)',
+        'Gilead05')
+      .assert.containsText('.book:nth-of-type(1) .shelf-book p:nth-of-type(2)',
+        'Marilynne Robinson')
+      .assert.visible('.book:nth-of-type(2) .card-image img')
+      .assert.containsText('.book:nth-of-type(2) .shelf-book p:nth-of-type(1)',
+        'Half of a Yellow Sun')
+      .assert.containsText('.book:nth-of-type(2) .shelf-book p:nth-of-type(2)',
+        'Chimamanda N.A')
+      .assert.visible('.book:nth-of-type(3) .card-image img')
+      .assert.containsText('.book:nth-of-type(3) .shelf-book p:nth-of-type(1)',
+        'Kavalier & Clay')
+      .assert.containsText('.book:nth-of-type(3) .shelf-book p:nth-of-type(2)',
+        'Michael Chabon')
+      .assert.visible('.book:nth-of-type(4) .card-image img')
+      .assert.containsText('.book:nth-of-type(4) .shelf-book p:nth-of-type(1)',
+        'The Corrections')
+      .assert.containsText('.book:nth-of-type(4) .shelf-book p:nth-of-type(2)',
+        'Jonathan Franzen')
       .pause(600);
   },
   'User can filter books by category': (browser) => {
@@ -167,6 +295,15 @@ module.exports = {
       .assert.visible('small.white-text')
       .assert.visible('.card-title')
       .assert.visible('.book')
+      .assert.visible('.book:nth-of-type(4) .card-image img')
+      .assert.containsText('.book:nth-of-type(4) .shelf-book p:nth-of-type(1)',
+        'Wolf Hall')
+      .assert.containsText('.book:nth-of-type(4) .shelf-book p:nth-of-type(2)',
+        'Hilary Mantel')
+      .assert.containsText('.book:nth-of-type(10) .shelf-book p:nth-of-type(1)',
+        'Gilead05')
+      .assert.containsText('.book:nth-of-type(10) .shelf-book p:nth-of-type(2)',
+        'Marilynne Robinson')
       .pause(600);
   },
   'User can view history of all books borrowed': (browser) => {
@@ -179,13 +316,41 @@ module.exports = {
       .assert.containsText('h3', 'Borrowing History')
       .waitForElementVisible('.responsive-table', 5000)
       .assert.visible('.responsive-table')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(1)', '1')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(2)',
+        'Not Returned')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)', 'Gilead01')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(4)',
+        'Marilynne Robinson')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(5)',
+        'November 25th 2017, 12:07 am')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(6)', 'Not Yet')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(1)', '2')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(2)',
+        'Returned')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(3)', 'Gilead01')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(4)',
+        'Marilynne Robinson')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(5)',
+        'November 25th 2017, 12:06 am')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(6)',
+        'November 25th 2017, 12:07 am')
       .pause(1000);
   },
   'User can paginate through history of books with page links': (browser) => {
     browser
-      .waitForElementVisible('body', 5000)
       .click('#page2')
-      .assert.urlEquals('http://localhost:3000/history?page=2')
+      .waitForElementVisible('body', 5000)
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(1)', '2')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(2)',
+        'Not Returned')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(3)', 'Wolf Hall')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(4)',
+        'Hilary Mantel')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(5)',
+        'November 24th 2017, 11:59 pm')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(6)',
+        'Not Yet')
       .pause(600);
   },
   'User can paginate through history books with back or forward button':
@@ -195,9 +360,30 @@ module.exports = {
       .click('.next')
       .pause(600)
       .assert.urlEquals('http://localhost:3000/history?page=3')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(1)', '1')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(2)',
+        'Returned')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)',
+        'Kavalier & Clay')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(4)',
+        'Michael Chabon')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(5)',
+        'November 24th 2017, 11:59 pm')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(6)',
+        'November 24th 2017, 11:59 pm')
       .click('.prev')
       .pause(600)
       .assert.urlEquals('http://localhost:3000/history?page=2')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(1)', '2')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(2)',
+        'Not Returned')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(3)', 'Wolf Hall')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(4)',
+        'Hilary Mantel')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(5)',
+        'November 24th 2017, 11:59 pm')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(6)',
+        'Not Yet')
       .pause(600);
   },
   'User can borrow a book': (browser) => {
@@ -224,6 +410,35 @@ module.exports = {
       .execute('scrollTo(0, 0)')
       .pause(2000);
   },
+  'User can view Administrator Dashboard': (browser) => {
+    browser
+      .click('#lib-admin')
+      .waitForElementVisible('body', 5000)
+      .click('#page2')
+      .waitForElementVisible('body', 5000)
+      .assert.urlEquals('http://localhost:3000/admin?page=2')
+      .assert.containsText('#lib-shelf a', 'Shelf')
+      .assert.containsText('#lib-history a', 'History')
+      .assert.containsText('#lib-profile a', 'Profile')
+      .assert.containsText('#lib-admin a', 'Admin Dashboard')
+      .assert.containsText('.logout', 'Logout')
+      .assert.visible('#book-form-btn')
+      .assert.visible('#cat-form-btn')
+      .assert.containsText('h6', 'SELECT A CATEGORY')
+      .assert.containsText('#cat3', 'Mechanical Engineering')
+      .assert.containsText('#cat1', 'Novels')
+      .assert.containsText('#cat2', 'Programming')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(1)', '2')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(3)',
+        'Half of a Yellow Sun')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(4)',
+        'Chimamanda N.A')
+      .assert.containsText('tr:nth-of-type(2) td:nth-of-type(5)', '32')
+      .assert.visible('#edit-btn2')
+      .assert.visible('#delete-book-btn2')
+      .assert.visible('.pagination')
+      .pause(1000);
+  },
   'User can only add category with valid input': (browser) => {
     browser
       .click('#lib-admin')
@@ -246,6 +461,10 @@ module.exports = {
       .click('#save-category')
       .waitForElementVisible('.toast', 5000)
       .assert.containsText('.toast', 'Motivationals, successfully added')
+      .assert.containsText('#cat3', 'Mechanical Engineering')
+      .assert.containsText('#cat4', 'Motivationals')
+      .assert.containsText('#cat1', 'Novels')
+      .assert.containsText('#cat2', 'Programming')
       .pause(1000);
   },
   'User can only add book with valid inputs': (browser) => {
@@ -291,7 +510,27 @@ module.exports = {
       .waitForElementVisible('.toast', 5000)
       .assert
       .containsText('.toast', 'The return of the bees, successfully added')
+      .assert.containsText('tr:nth-of-type(5) td:nth-of-type(1)', '5')
+      .assert.containsText('tr:nth-of-type(5) td:nth-of-type(3)',
+        'The return of the bees')
+      .assert.containsText('tr:nth-of-type(5) td:nth-of-type(4)',
+        'Loma Grand')
+      .assert.containsText('tr:nth-of-type(5) td:nth-of-type(5)', '56')
+      .assert.visible('#edit-btn11')
+      .assert.visible('#delete-book-btn11')
       .pause(2000);
+  },
+  'User can view all Notifications': (browser) => {
+    browser
+      .click('#lib-admin')
+      .waitForElementVisible('body', 5000)
+      .execute('scrollTo(0, 750)')
+      .assert.containsText('.notify-section h3', 'All Notifications')
+      .assert.containsText('b.notify-note',
+        'Click below for more notifications')
+      .assert.visible('.notify-section .collection .collection-item')
+      .assert.visible('.notify-section button')
+      .assert.containsText('.notify-section button', 'SEE MORE');
   },
   'User can edit book details': (browser) => {
     browser
@@ -309,12 +548,20 @@ module.exports = {
       .assert
       .containsText('.toast',
         'Gilead New Revision')
+      .assert.visible('tr:nth-of-type(1) td:nth-of-type(3)')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)',
+        'Gilead New Revision')
+      .assert.visible('tr:nth-of-type(1) td:nth-of-type(5)')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(5)', '56')
       .pause(3000);
   },
   'User can delete book': (browser) => {
     browser
       .url('http://localhost:3000/admin?page=1')
       .waitForElementVisible('body', 5000)
+      .assert.visible('tr:nth-of-type(1) td:nth-of-type(3)')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)',
+        'Gilead New Revision')
       .click('#delete-book-btn6')
       .waitForElementVisible('div.swal-modal', 5000)
       .pause(2000)
@@ -323,6 +570,9 @@ module.exports = {
       .waitForElementVisible('.toast', 5000)
       .assert
       .containsText('.toast', 'Poof! Book successfully deleted')
+      .assert.visible('tr:nth-of-type(1) td:nth-of-type(3)')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)',
+        'Gilead02')
       .pause(1000);
   },
   'User cannot change password with invalid details': (browser) => {
@@ -362,7 +612,7 @@ module.exports = {
       .click('button')
       .waitForElementVisible('.toast', 5000)
       .assert
-      .containsText('.toast', 'Authentication failed, old password incorrect')
+      .containsText('.toast', 'Authentication failed, Old password incorrect')
       .pause(2000);
   },
   'User can change password with correct old and new data': (browser) => {
@@ -383,7 +633,7 @@ module.exports = {
       .waitForElementVisible('.toast', 5000)
       .assert
       .containsText('.toast', 'Password successfully changed')
-      .pause(2500);
+      .pause(3000);
   },
   'User can return a book': (browser) => {
     browser
@@ -393,10 +643,20 @@ module.exports = {
       .assert.containsText('(//h3)[3]', 'Unreturned Books')
       .useCss()
       .assert.visible('.responsive-table')
+      .assert.visible('tr:nth-of-type(1) td:nth-of-type(3)')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)',
+        'Kavalier & Clay')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(4)',
+        'Michael Chabon')
       .click('#return-btn0')
       .waitForElementVisible('.toast', 5000)
-      .assert.containsText('.toast', 'Half of a Yellow Sun succesfully' +
+      .assert.containsText('.toast', 'Kavalier & Clay succesfully' +
       ' returned but pending review by Administrator')
+      .assert.visible('tr:nth-of-type(1) td:nth-of-type(3)')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)',
+        'Wolf Hall')
+      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(4)',
+        'Hilary Mantel')
       .pause(1000)
       .end();
   }

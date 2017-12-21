@@ -216,7 +216,6 @@ export const user = {
   level: 'bronze',
   borrowLimit: 2,
   totalBorrow: 0,
-  createdAt: '2017-11-29T14:49:04.299Z',
   updatedAt: '2017-11-29T14:49:04.299Z'
 };
 
@@ -344,3 +343,142 @@ export const borrow = {
   bookId: 6,
   userId: 1
 };
+
+export const borrows = [
+  {
+    id: 3,
+    returned: true,
+    dueDate: '2017-11-27T22:58:49.864Z',
+    actualReturnDate: '2017-12-17T14:07:12.547Z',
+    createdAt: '2017-11-24T22:58:49.865Z',
+    updatedAt: '2017-12-17T14:07:12.547Z',
+    bookId: 7,
+    userId: 1,
+    book: {
+      id: 7,
+      isbn: 7,
+      title: 'Gilead02',
+      author: 'Marilynne Robinson',
+      description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      status: true,
+      quantity: 12,
+      categoryId: 1,
+      createdAt: '2017-12-17T14:05:10.680Z',
+      updatedAt: '2017-12-17T14:07:12.551Z'
+    },
+    user: {
+      id: 1,
+      username: 'ekundayo'
+    }
+  },
+  {
+    id: 4,
+    returned: true,
+    dueDate: '2017-11-27T22:58:52.547Z',
+    actualReturnDate: '2017-12-17T14:07:11.946Z',
+    createdAt: '2017-11-24T22:58:52.548Z',
+    updatedAt: '2017-12-17T14:07:11.946Z',
+    bookId: 8,
+    userId: 1,
+    book: {
+      id: 8,
+      isbn: 8,
+      title: 'Gilead03',
+      author: 'Marilynne Robinson',
+      description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      status: true,
+      quantity: 12,
+      categoryId: 1,
+      createdAt: '2017-12-17T14:05:10.680Z',
+      updatedAt: '2017-12-17T14:07:11.949Z'
+    },
+    user: {
+      id: 1,
+      username: 'ekundayo'
+    }
+  },
+  {
+    id: 5,
+    returned: true,
+    dueDate: '2017-11-27T22:59:23.642Z',
+    actualReturnDate: '2017-12-17T14:07:11.226Z',
+    createdAt: '2017-11-24T22:59:23.642Z',
+    updatedAt: '2017-12-17T14:07:11.226Z',
+    bookId: 9,
+    userId: 1,
+    book: {
+      id: 9,
+      isbn: 9,
+      title: 'Gilead04',
+      author: 'Marilynne Robinson',
+      description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      status: true,
+      quantity: 12,
+      categoryId: 1,
+      createdAt: '2017-12-17T14:05:10.680Z',
+      updatedAt: '2017-12-17T14:07:11.230Z'
+    },
+    user: {
+      id: 1,
+      username: 'ekundayo'
+    }
+  },
+  {
+    id: 6,
+    returned: true,
+    dueDate: '2017-11-27T22:59:31.967Z',
+    actualReturnDate: '2017-12-17T14:07:06.645Z',
+    createdAt: '2017-11-24T22:59:31.967Z',
+    updatedAt: '2017-12-17T14:07:06.645Z',
+    bookId: 10,
+    userId: 1,
+    book: {
+      id: 10,
+      isbn: 10,
+      title: 'Gilead05',
+      author: 'Marilynne Robinson',
+      description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      status: true,
+      quantity: 12,
+      categoryId: 1,
+      createdAt: '2017-12-17T14:05:10.680Z',
+      updatedAt: '2017-12-17T14:07:06.650Z'
+    },
+    user: {
+      id: 1,
+      username: 'ekundayo'
+    }
+  },
+  {
+    id: 9,
+    returned: false,
+    dueDate: '2017-11-27T22:59:33.821Z',
+    actualReturnDate: '2017-12-17T14:07:03.920Z',
+    createdAt: '2017-11-24T22:59:33.821Z',
+    updatedAt: '2017-12-17T14:07:03.920Z',
+    bookId: 2,
+    userId: 1,
+    book: {
+      id: 2,
+      isbn: 2,
+      title: 'Half of a Yellow Sun',
+      author: 'Chimamanda N.A',
+      description: 'Half of a Yellow Sun is a novel by Nigerian author Chimamanda Ngozi Adichie. Published in 2006 by Knopf/Anchor, the novel tells the story of the Biafran War through the perspective of the characters Olanna, Ugwu, and Richard.',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/v1509139535/ycj4vsbhobcxiowafaas.png',
+      status: true,
+      quantity: 33,
+      categoryId: 1,
+      createdAt: '2017-12-17T14:05:10.680Z',
+      updatedAt: '2017-12-17T14:07:03.924Z'
+    },
+    user: {
+      id: 1,
+      username: 'ekundayo'
+    }
+  },
+];
+

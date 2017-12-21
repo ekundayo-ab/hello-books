@@ -1,6 +1,6 @@
 import authReducer from '../../src/reducers/authReducer';
 import * as actionTypes from '../../src/actions/types';
-import { userAuthenticated, userNotAuthenticated } from './testData';
+import { userAuthenticated, userNotAuthenticated } from '../__mocks__/testData';
 
 describe('authentication reducer', () => {
   it('should return the initial state', () => {
