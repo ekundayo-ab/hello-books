@@ -3,7 +3,9 @@ import { Link, NavLink } from 'react-router-dom';
 
 /**
  * @description Displays the Header section of the landing page
+ *
  * @param {void} null
+ *
  * @returns {string} - HTML markup of the landing page header section
  */
 const Header = () => (

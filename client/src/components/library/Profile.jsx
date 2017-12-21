@@ -3,31 +3,35 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classnames from 'classnames';
+import Helper from '../../helpers/Helper';
 import { changePassword } from '../../actions/authActions';
 import { getBorrowedNotReturned, returnBook }
   from '../../actions/borrowActions';
-import validator from '../../helpers/validators';
+import Validators from '../../helpers/Validators';
 import paginate from './../../helpers/paginate';
 import Paginator from './../../helpers/Paginator';
 import SingleInput from './../forms/SingleInput';
 
 /**
  * @description represents Profile Page
+ *
  * @class Profile
+ *
  * @extends {Component}
  */
 export class Profile extends Component {
   /**
    * Creates an instance of Profile.
+   *
    * @param {object} props
+   *
    * @memberof Profile
+   *
    * @constructor
    */
   constructor(props) {
     super(props);
     this.state = {
-      pages: [],
-      pageId: 1,
       oldPass: '',
       newPass: '',
       newPassConfirm: '',
@@ -43,78 +47,54 @@ export class Profile extends Component {
   }
 
   /**
-   * @description Invoked after component has mounted
-   * @param {void} null
-   * @returns {void} returns nothing
-   * @memberof Profile
-   */
-  componentDidMount() {
-    paginate(
-      this.props.getBorrowedNotReturned,
-      this.query,
-      this.userId
-    )
-      .then((res) => {
-        this.setState({
-          pages: res.pages,
-          pageId: res.pageId
-        });
-      });
-  }
-
-  /**
    * @description handles changes to the input fields value
+   *
    * @param {object} event
+   *
    * @returns {void} returns nothing
+   *
    * @memberof Profile
    */
   onChange(event) {
-    if (!this.state.errors[event.target.name]) {
-      const errors = Object.assign({}, this.state.errors);
-      delete errors[event.target.name];
-      this.setState({
-        [event.target.name]: event.target.value,
-        errors,
-      });
-    } else {
-      this.setState({ [event.target.name]: event.target.value });
-    }
+    const categoryState = this.state;
+    const changeResults = Helper.handleFormChange(categoryState, event);
+    this.setState(changeResults);
   }
 
   /**
    * @description handles returning of Book
+   *
    * @param {number} bookId
    * @param {number} borrowId
    * @param {object} borrow - specific borrowing record
+   *
    * @returns {object} action
+   *
    * @memberof Profile
    */
   handleBookReturn(bookId, borrowId, borrow) {
     this.setState({ loading: bookId });
     this.props.returnBook(this.userId, bookId, borrowId, this.username, borrow)
       .then(() =>
-        paginate(
+        this.props.paginate(
           this.props.getBorrowedNotReturned,
           this.query,
           this.userId
-        )
-          .then((res) => {
-            this.setState({
-              pages: res.pages,
-              pageId: res.pageId
-            });
-          }));
+        ));
   }
 
   /**
  * @description handles returning of Book
+ *
  * @param {number} event - form submission event
+ *
  * @returns {object} action
+ *
  * @memberof Profile
  */
   handleSubmit(event) {
     event.preventDefault();
-    const { isValid, errors } = validator.validatePassForm(this.state);
+    const { isValid, errors } = Validators.validatePassForm(this.state);
     this.setState({ errors });
     if (isValid) {
       changePassword(this.state);
@@ -128,8 +108,11 @@ export class Profile extends Component {
 
   /**
    * @description displays the Profile Page
+   *
    * @param {void} null
+   *
    * @returns {string} - HTML markup for Profile Page
+   *
    * @memberof Profile
    */
   render() {
@@ -323,14 +306,12 @@ export class Profile extends Component {
                   </table>) :
                   (<h5>All Clean!, You have no books to return</h5>)}
               </div>
-              {this.state.pages.length > 1 ?
-                <Paginator
-                  pages={this.state.pages}
-                  pageId={this.state.pageId.toString()}
-                  redirect={this.props.history.push}
-                  pageName={this.props.location.pathname}
-                /> : ''
-              }
+              <Paginator
+                fetchData={this.props.getBorrowedNotReturned}
+                redirect={this.props.history}
+                pageName={this.props.history.location.pathname}
+                userId={this.userId}
+              />
             </div>
           </div>
         </div>
@@ -351,17 +332,16 @@ Profile.propTypes = {
     location: PropTypes.object,
     push: PropTypes.func
   }).isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-    search: PropTypes.string
-  }).isRequired,
   getBorrowedNotReturned: PropTypes.func.isRequired,
-  returnBook: PropTypes.func.isRequired
+  returnBook: PropTypes.func.isRequired,
+  paginate: PropTypes.func.isRequired
 };
 
 /**
  * @description maps the state in redux store to Profile props
+ *
  * @param {object} state
+ *
  * @returns {object} books
  */
 export function mapStateToProps(state) {
@@ -372,6 +352,7 @@ export function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  paginate,
   getBorrowedNotReturned,
-  returnBook
+  returnBook,
 })(Profile);

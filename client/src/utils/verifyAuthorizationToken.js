@@ -3,12 +3,13 @@ import { setCurrentUser } from '../actions/authActions';
 
 /**
  *
- * @param {*} data
- * @returns {string} // Decoded token
+ * @param {object} userDetails
+ *
+ * @returns {string} - Decoded token
  */
-const verifyToken = data =>
+const verifyToken = userDetails =>
   dispatch =>
-    axios.post('/api/v1/verify-token', data)
+    axios.post('/api/v1/verify-token', userDetails)
       .then((res) => {
         const { decoded } = res.data;
         dispatch(setCurrentUser(res.data.user));

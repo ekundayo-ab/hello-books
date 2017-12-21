@@ -6,18 +6,23 @@ import PropTypes from 'prop-types';
 import SingleInput from '../forms/SingleInput';
 import { userSignUpRequest, isUserExists, login, googleAuth }
   from '../../actions/authActions';
-import Helper from './../../helpers/index';
+import Helper from './../../helpers/Helper';
 
 /**
  * @description represents SignUp form
+ *
  * @class SignUp
+ *
  * @extends {Component}
  */
-class SignUp extends Component {
+export class SignUpForm extends Component {
   /**
    * Creates an instance of SignUp.
+   *
    * @param {object} props
+   *
    * @memberof SignUp
+   *
    * @constructor
    */
   constructor(props) {
@@ -50,47 +55,45 @@ class SignUp extends Component {
 
   /**
    * @description handles form submission
+   *
    * @param {object} event
+   *
    * @returns {boolean} isLoading - needed to disable submit button
+   *
    * @returns {object} redirects to library shelf
+   *
    * @memberof SignUp
    */
   onSubmit(event) {
     event.preventDefault();
-    if (this.isValid()) {
+    const { errors, isValid } = Helper.userValidation(this.state);
+    if (isValid) {
       this.setState({ errors: {}, isLoading: true });
-      userSignUpRequest(this.state)
-        .then((res) => {
-          if (res.isDone) {
-            this.props.login({
-              identifier: this.state.username,
-              password: this.state.password
-            })
-              .then((response) => {
-                if (response.isAuthenticated) {
-                  return this.props.history.push('/shelf');
-                }
-              });
-          }
-        });
+      return this.props.userSignUpRequest(this.state)
+        .then(() => this.props.history.push('/shelf'));
     }
+    this.setState({ errors });
   }
 
   /**
    * @description checks if username or email exists
+   *
    * @param {object} event
+   *
    * @returns {void} null
+   *
    * @memberof SignUp
    */
   checkUserExists(event) {
     const field = event.target.name;
     const val = event.target.value;
     if (val !== '') {
-      isUserExists(this.state)
+      this.props.isUserExists(this.state)
         .then((res) => {
-          const errors = this.state.errors;
+          const { errors } = this.state;
+          const { exists } = res;
           let invalid;
-          if (res.data.username || res.data.email) {
+          if (exists) {
             errors[field] = `User exists with this ${field}`;
             invalid = true;
           } else {
@@ -103,23 +106,12 @@ class SignUp extends Component {
   }
 
   /**
-   * @description ensures form fields are filled with expected inputs
-   * @param {void} null
-   * @returns {boolean} isValid
-   * @memberof SignUp
-   */
-  isValid() {
-    const { errors, isValid } = Helper.userValidation(this.state);
-    if (!isValid) {
-      this.setState({ errors });
-    }
-    return isValid;
-  }
-
-  /**
    * @description handles callback during Google signup and signin
+   *
    * @param {object} response
+   *
    * @returns {boolean} or redirects
+   *
    * @memberof SignUp
    */
   responseGoogle(response) {
@@ -134,8 +126,11 @@ class SignUp extends Component {
 
   /**
    * @description displays the registration form
+   *
    * @param {void} null
+   *
    * @returns {string} HTML markup for the SignUp form
+   *
    * @memberof SignUp
    */
   render() {
@@ -147,13 +142,17 @@ class SignUp extends Component {
           <form onSubmit={this.onSubmit}>
             <div className="center-align col s12">
               <GoogleLogin
-                className="google-btn"
+                className="red darken-2 google-btn"
                 clientId={'1037424306341' +
                 '-av656qd87qifs0vsbhp67ej5n' +
                 '04359us.apps.googleusercontent.com'}
                 buttonText="Login"
                 onSuccess={this.responseGoogle}
-                onFailure={this.responseGoogle}
+                onFailure={
+                  () => {
+                    Materialize.toast('Oops! try again', 4000, 'red');
+                  }
+                }
               >
                 <i className="fa fa-google-plus-official fa-2x" />
                  &nbsp; GOOGLE+
@@ -219,13 +218,15 @@ class SignUp extends Component {
 }
 
 // Type checking for SignUp form
-SignUp.propTypes = {
+SignUpForm.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func
   }).isRequired,
   googleAuth: PropTypes.func.isRequired,
-  login: PropTypes.func.isRequired
+  userSignUpRequest: PropTypes.func.isRequired,
+  isUserExists: PropTypes.func.isRequired
 };
 
 export default
-connect(null, { googleAuth, login })(withRouter(SignUp));
+connect(null, { googleAuth, login, userSignUpRequest, isUserExists })(
+  withRouter(SignUpForm));

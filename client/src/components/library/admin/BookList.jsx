@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 
 /**
  * @description displays list of books
+ *
  * @param {object} props
+ *
  * @returns {string} - HTML markup of CategoryList component
+ *
  * @memberof BookList
  */
 const BookList = (props) => {

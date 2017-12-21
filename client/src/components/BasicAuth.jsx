@@ -7,7 +7,9 @@ import { logout } from '../actions/authActions';
 
 /**
  * @description maps state from store to component props
+ *
  * @param {object} state
+ *
  * @returns {boolean} false or true
  */
 export const mapStateToProps = state =>
@@ -15,21 +17,29 @@ export const mapStateToProps = state =>
 
 /**
  * Higher Order Function
+ *
  * @description A function which returns another function
+ *
  * @param {class} ComposedComponent
+ *
  * @returns {function} connect
  */
 export default function (ComposedComponent) {
   /**
    * @description Represents a component middleware for protected pages
+   *
    * @class Authenticate
+   *
    * @extends {Component}
    */
   class Authenticate extends Component {
     /**
      * @description Executed after component mounts
+     *
      * @param {void} null
+     *
      * @returns {void} returns nothing
+     *
      * @memberof Authenticate
      */
     componentWillMount() {
@@ -51,7 +61,9 @@ export default function (ComposedComponent) {
 
     /**
      * @description Renders the component
+     *
      * @returns {string} - HTML markup for component which passes authentication
+     *
      * @memberof Authenticate
      */
     render() {

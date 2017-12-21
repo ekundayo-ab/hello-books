@@ -4,8 +4,11 @@ import classname from 'classnames';
 
 /**
  * Abstracts Input form fields
+ *
  * @description abstracts the input form fields
+ *
  * @param {object} props
+ *
  * @returns {void} returns nothing
  */
 const SingleInput = props => (

@@ -2,7 +2,10 @@ export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     username: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: {
+        args: true,
+        msg: 'Username already taken'
+      },
       allowNull: false,
       validate: {
         is: /^[a-z0-9_-]+$/i,
@@ -14,7 +17,10 @@ export default (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: {
+        args: true,
+        msg: 'User with this email exists'
+      },
       allowNull: false,
     },
     role: {

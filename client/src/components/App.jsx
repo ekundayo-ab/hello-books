@@ -6,8 +6,11 @@ import Home from './../../src/components/library/master/Home';
 
 /**
  * Renders a component(s)
+ *
  * @description Renders page based on URL supplied
+ *
  * @param {object} props - available from withRouter HOC
+ *
  * @returns {string} HTML markup of component
  */
 export const App = (props) => {

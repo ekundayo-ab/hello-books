@@ -4,8 +4,11 @@ import classnames from 'classnames';
 
 /**
  * Abstracts TextArea form fields
+ *
  * @description abstracts the text area form field into a function
+ *
  * @param {object} props
+ *
  * @returns {void} returns nothing
  */
 const TextAreaInput = props => (

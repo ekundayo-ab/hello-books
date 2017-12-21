@@ -1,5 +1,6 @@
 /**
  * @description sets all immutable types for the pure redux actions
+ *
  * @constant all as listed below
  */
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
@@ -28,3 +29,7 @@ export const BORROWED_RETURNED = 'BORROWED_RETURNED';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 
 export const ADD_CATEGORY = 'ADD_CATEGORY';
+
+export const SET_PAGES = 'SET_PAGES';
+
+export const SET_EXISTENCE = 'SET_EXISTENCE';

@@ -2,19 +2,24 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SingleInput from '../forms/SingleInput';
-import Helper from './../../helpers/index';
+import Helper from './../../helpers/Helper';
 import { login } from '../../actions/authActions';
 
 /**
  * @description represents SignIn form
+ *
  * @class SignIn
+ *
  * @extends {Component}
  */
-class SignIn extends Component {
+export class SignInForm extends Component {
   /**
    * Creates an instance of SignIn.
+   *
    * @param {object} props
+   *
    * @memberof SignUp
+   *
    * @constructor
    */
   constructor(props) {
@@ -31,8 +36,11 @@ class SignIn extends Component {
 
   /**
    * @description handles event changes for form fields
+   *
    * @param {object} event
+   *
    * @returns {void} null
+   *
    * @memberof SignIn
    */
   onChange(event) {
@@ -41,15 +49,19 @@ class SignIn extends Component {
 
   /**
    * @description handles form submission
+   *
    * @param {object} event
+   *
    * @returns {boolean} isLoading - needed to disable submit button
    * @returns {object} action - redirects to library shelf
    * @returns {object} action - notifies of errors
+   *
    * @memberof SignIn
    */
   onSubmit(event) {
     event.preventDefault();
-    if (this.isValid()) {
+    const { errors, isValid } = Helper.loginValidation(this.state);
+    if (isValid) {
       this.setState({ errors: {}, isLoading: true });
       this.props.login(this.state).then(
         (res) => {
@@ -62,26 +74,16 @@ class SignIn extends Component {
         },
       );
     }
-  }
-
-  /**
-   * @description ensures form fields are filled with expected inputs
-   * @param {void} null
-   * @returns {boolean} isValid
-   * @memberof SignIn
-   */
-  isValid() {
-    const { errors, isValid } = Helper.loginValidation(this.state);
-    if (!isValid) {
-      this.setState({ errors });
-    }
-    return isValid;
+    this.setState({ errors });
   }
 
   /**
    * @description displays the registration form
+   *
    * @param {void} null
+   *
    * @returns {string} HTML markup for SignIn form
+   *
    * @memberof SignIn
    */
   render() {
@@ -124,11 +126,11 @@ class SignIn extends Component {
   }
 }
 
-SignIn.propTypes = {
+SignInForm.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func
   }).isRequired,
   login: PropTypes.func.isRequired
 };
 
-export default connect(null, { login })(SignIn);
+export default connect(null, { login })(SignInForm);

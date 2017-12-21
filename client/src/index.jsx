@@ -19,7 +19,6 @@ if (token) {
   setAuthorizationHeader(token);
 }
 
-
 ReactDOM.render(
   <Provider store={store}>
     <Router>

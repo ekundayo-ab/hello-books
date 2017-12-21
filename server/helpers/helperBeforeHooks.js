@@ -12,9 +12,12 @@ const server = supertest.agent(app);
  */
 class BeforeHooks {
   /**
-   * Basically performed before any test runs
+   * @description Basically performed before any test runs
+   *
    * @param {void} null
+   *
    * @return {object} action
+   *
    * @memberof BeforeHooks
    */
   static clearDatabaseTables() {
@@ -30,9 +33,12 @@ class BeforeHooks {
   }
 
   /**
-   * Basically performed before any test runs
+   * @description Basically performed before any test runs
+   *
    * @param {void} null
+   *
    * @return {object} action
+   *
    * @memberof BeforeHooks
    */
   static makeDataAvailable() {
@@ -53,6 +59,18 @@ class BeforeHooks {
         }).then((book) => {
           Category.create({ id: 4, title: 'Anything' });
           process.env.bookId = book.id;
+        });
+      Book
+        .create({
+          isbn: 612,
+          title: 'Theory of Music',
+          author: 'Jazz Fingers',
+          description: 'Learn and Master Music basics',
+          quantity: 50,
+          categoryId: 9
+        }).then((book) => {
+          Category.create({ id: 9, title: 'Sciences' });
+          process.env.book2Id = book.id;
         });
       server
         .post('/api/v1/users/signup')

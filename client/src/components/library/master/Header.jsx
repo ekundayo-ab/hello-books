@@ -7,14 +7,19 @@ import { logout } from '../../../actions/authActions';
 /**
  *
  * @description represents Header for the library pages
+ *
  * @class Header
+ *
  * @extends {Component}
  */
 export class Header extends Component {
   /**
    * Creates an instance of Header.
+   *
    * @param {object} props
+   *
    * @memberof Header
+   *
    * @constructor
    */
   constructor(props) {
@@ -25,8 +30,11 @@ export class Header extends Component {
 
   /**
    * @description logs out user and clears local storage
+   *
    * @param {object} event
+   *
    * @returns {string} redirects to landing page
+   *
    * @memberof Header
    */
   handleLogout() {
@@ -36,8 +44,11 @@ export class Header extends Component {
 
   /**
    * @description reveals borrowing and return notifications
+   *
    * @param {null} nothing
+   *
    * @returns {string} redirects to admin page then shows notifications
+   *
    * @memberof Header
    */
   handleNotify() {
@@ -51,8 +62,11 @@ export class Header extends Component {
 
   /**
    * @description Displays the Header section of the library pages
+   *
    * @param {void} null
+   *
    * @returns {string} - HTML markup of Header component
+   *
    * @memberof Header
    */
   render() {
@@ -116,10 +130,11 @@ export class Header extends Component {
                 <NavLink activeClassName="active" to="/history?page=1">
                   <i className="fa fa-history" /> History</NavLink>
               </li>
+              {this.props.isAdmin === 'admin' &&
               <li>
                 <NavLink activeClassName="active" to="/admin?page=1">
                   <i className="fa fa-gear" /> Admin Dashboard</NavLink>
-              </li>
+              </li>}
               <li>
                 <NavLink activeClassName="active" to="/profile?page=1">
                   <i className="fa fa-user" /> Profile</NavLink>
@@ -151,7 +166,9 @@ Header.propTypes = {
 
 /**
  * @description maps the state in redux store to Header props
+ *
  * @param {object} state
+ *
  * @returns {object} isAuthenticated, isAdmin
  */
 export function mapStateToProps(state) {

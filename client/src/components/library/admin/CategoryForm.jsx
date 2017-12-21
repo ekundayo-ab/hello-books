@@ -3,18 +3,24 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import Helper from '../../../helpers/Helper';
 import { saveCategory } from '../../../actions/categoryActions';
 
 /**
  * @description represents form for adding Category
+ *
  * @class CategoryForm
+ *
  * @extends {Component}
  */
 export class CategoryForm extends Component {
   /**
    * Creates an instance of CategoryForm.
+   *
    * @param {object} props
+   *
    * @memberof CategoryForm
+   *
    * @constructor
    */
   constructor(props) {
@@ -31,28 +37,26 @@ export class CategoryForm extends Component {
 
   /**
    * @description handles changes to the input fields value
+   *
    * @param {object} event
+   *
    * @returns {void} nothing
+   *
    * @memberof CategoryForm
    */
   onChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
-    if (!this.state.errors[event.target.name]) {
-      const errors = Object.assign({}, this.state.errors);
-      delete errors[event.target.name];
-      this.setState({
-        [event.target.name]: event.target.value,
-        errors,
-      });
-    } else {
-      this.setState({ [event.target.name]: event.target.value });
-    }
+    const categoryState = this.state;
+    const formChanges = Helper.handleFormChange(categoryState, event);
+    this.setState(formChanges);
   }
 
   /**
    * @description handles Category form submission
+   *
    * @param {object} event
+   *
    * @returns {string} alert message
+   *
    * @memberof CategoryForm
    */
   onSubmit(event) {
@@ -75,8 +79,11 @@ export class CategoryForm extends Component {
 
   /**
    * @description displays the form for adding category
+   *
    * @param {void} null
+   *
    * @returns {string} - HTML markup for the form
+   *
    * @memberof CategoryForm
    */
   render() {

@@ -7,14 +7,19 @@ import { borrowBook, fetchBorrowedBook } from '../../actions/borrowActions';
 
 /**
  * @description represents BookDetail Page
+ *
  * @class BookDetail
+ *
  * @extends {Component}
  */
 export class BookDetail extends Component {
   /**
    * Creates an instance of BookDetail.
+   *
    * @param {object} props
+   *
    * @memberof BookDetail
+   *
    * @constructor
    */
   constructor(props) {
@@ -24,8 +29,11 @@ export class BookDetail extends Component {
 
   /**
    * @description Invoked after component has mounted
+   *
    * @param {void} null
+   *
    * @returns {void} returns nothing
+   *
    * @memberof BookDetail
    */
   componentDidMount() {
@@ -36,8 +44,11 @@ export class BookDetail extends Component {
 
   /**
    * @description handles borrowing of book
+   *
    * @param {void} null
+   *
    * @returns {void} nothing
+   *
    * @memberof BookDetail
    */
   handleBorrowClick() {
@@ -50,8 +61,11 @@ export class BookDetail extends Component {
 
   /**
    * @description Displays the page showing the book details
+   *
    * @param {void} null
+   *
    * @returns {string} - HTML markup of BookDetail Page
+   *
    * @memberof BookDetail
    */
   render() {
@@ -84,16 +98,20 @@ export class BookDetail extends Component {
                 <h1>{this.props.book.title} </h1>
                 <h6
                   className="text-white"
-                ><b>Category: </b>{this.props.book.categoryName}</h6>
+                ><b>Category: </b>{this.props.book.categoryName &&
+                  this.props.book.categoryName}</h6>
                 <h5 className="teal-text">{this.props.book.author}</h5>
                 <p>{this.props.book.description}</p>
                 <p
                   className={classnames('book-count', 'badge', 'white',
-                    { 'red-text': this.props.book.quantity < 0,
+                    { 'red-text': this.props.book.quantity === 0,
                       'green-text': this.props.book.quantity > 0 })}
                   style={detailStyle.p}
                 >
-                  <b>{this.props.book.quantity > 0 ? 'Available' : ''}</b>
+                  <b>
+                    {this.props.book.quantity > 0 ?
+                      'Available' : 'Not Available'}
+                  </b>
                   <b> {this.props.book.quantity}</b>
                 </p>
                 <button
@@ -160,7 +178,9 @@ BookDetail.propTypes = {
 
 /**
  * @description maps the state in redux store to BookDetail props
+ *
  * @param {object} state
+ *
  * @returns {object} book, borrow, user
  */
 export function mapStateToProps(state) {

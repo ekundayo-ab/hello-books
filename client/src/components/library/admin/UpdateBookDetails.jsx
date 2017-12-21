@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 
 /**
  * @description displays form for updating books
+ *
  * @param {object} props
+ *
  * @returns {string} - HTML markup of UpdateBookDetails component
+ *
  * @memberof BookList
  */
 const UpdateBookDetails = (props) => {

@@ -5,7 +5,8 @@ engines:
       import/extensions:
         enabled: false
       file-lines:
-        enabled: false
+        config:
+          threshold: 300
       method-lines:
         enabled: false
   duplication:

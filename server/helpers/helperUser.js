@@ -102,9 +102,11 @@ export default {
     }
   },
   user9d: {
-    oldPass: '',
-    newPass: '',
-    newPassConfirm: '',
+    body: {
+      oldPass: '',
+      newPass: '',
+      newPassConfirm: '',
+    }
   },
   user9e: {
     body: {
@@ -123,9 +125,11 @@ export default {
     }
   },
   user9g: {
-    oldPass: '',
-    newPass: 'frlse',
-    newPassConfirm: 'flsee',
+    body: {
+      oldPass: '',
+      newPass: 'frlse',
+      newPassConfirm: 'flsee',
+    }
   },
   upgradeToken1: {
     level: 'bronze',

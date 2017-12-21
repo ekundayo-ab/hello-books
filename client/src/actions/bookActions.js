@@ -4,8 +4,11 @@ import * as actionTypes from './types';
 
 /**
  * Make books available
+ *
  * @description Sets the books in the store
+ *
  * @param {array} books - list of books
+ *
  * @returns {object} action
  */
 const setBooks = books =>
@@ -13,8 +16,11 @@ const setBooks = books =>
 
 /**
  * Add Book
+ *
  * @description {object} Adds a new book to the store
+ *
  * @param {object} book - book to add
+ *
  * @returns {object} action
  */
 const addBook = book =>
@@ -22,8 +28,11 @@ const addBook = book =>
 
 /**
  * Deletes Book
+ *
  * @description Deletes a book from the store
+ *
  * @param {any} bookId - id of book to delete
+ *
  * @returns {object} action
  */
 const deleteSuccess = bookId =>
@@ -32,8 +41,11 @@ const deleteSuccess = bookId =>
 
 /**
  * Updates Book
+ *
  * @description Updates a single book in the store
+ *
  * @param {object} book - book details
+ *
  * @returns {object} action
  */
 export const bookUpdated = book =>
@@ -41,17 +53,47 @@ export const bookUpdated = book =>
 
 /**
  * Get Single Book
+ *
  * @description Gets single book from store
+ *
  * @param {object} book - book detail
+ *
  * @returns {object} action
  */
 export const bookFetched = book =>
   ({ type: actionTypes.BOOK_FETCHED, book });
 
 /**
- * Get Books
+ * Prepares page details based on Pagination
+ *
  * @description Gets books from the server page by page
+ *
+ * @param {number} pageDetails - page details to send to store
+ *
+ * @returns {array} action
+ */
+export const setPages = pageDetails =>
+  ({ type: actionTypes.SET_PAGES, pageDetails });
+
+/**
+ * Dispatches details of page to set for pagination
+ *
+ * @description Gets books from the server page by page
+ *
+ * @param {object} pageDetails - page details required to set
+ *
+ * @returns {array} action
+ */
+export const setCurrentPage = pageDetails => dispatch =>
+  dispatch(setPages(pageDetails));
+
+/**
+ * Get Books
+ *
+ * @description Gets books from the server page by page
+ *
  * @param {number} pageNumber - page ID to get
+ *
  * @returns {array} action
  */
 const fetchBooks = pageNumber =>
@@ -66,9 +108,12 @@ const fetchBooks = pageNumber =>
 
 /**
  * Get Books
+ *
  * @description Gets books from the server by category
+ *
  * @param {number} pageNumber - page ID to get
  * @param {number} categoryId - page ID to get
+ *
  * @returns {array} action
  */
 const fetchBooksByCategory = (pageNumber, categoryId) =>
@@ -77,10 +122,10 @@ const fetchBooksByCategory = (pageNumber, categoryId) =>
       `/api/v1/category/books?page=${pageNumber}&categoryId=${categoryId}`
     )
       .then((res) => {
-        dispatch(setBooks(res.data.books));
-        return {
-          isDone: true
-        };
+        const { books } = res.data;
+        const toDispatch = books || [];
+        dispatch(setBooks(toDispatch));
+        return { isDone: !!books };
       })
       .catch((err) => {
         store.dispatch(setBooks(err.response.data.books));
@@ -89,8 +134,11 @@ const fetchBooksByCategory = (pageNumber, categoryId) =>
 
 /**
  * Get Single Book
+ *
  * @description Gets a single book from the server
+ *
  * @param {number} id - book ID to get
+ *
  * @returns {object} action
  */
 const fetchBook = id => dispatch =>
@@ -104,8 +152,11 @@ const fetchBook = id => dispatch =>
 
 /**
  * Create/Add Book
+ *
  * @description Sends book to the server to save in database
+ *
  * @param {object} data - book details
+ *
  * @returns {object} action
  */
 const saveBook = data => dispatch =>
@@ -117,15 +168,16 @@ const saveBook = data => dispatch =>
     })
     .catch((err) => {
       Materialize.toast(err.response.data.message, 2000, 'red');
-      return {
-        isDone: false
-      };
+      return { isDone: false };
     });
 
 /**
  * Update Book
+ *
  * @description Sends details of book to update to the server
+ *
  * @param {object} data - book detail
+ *
  * @returns {object} action
  */
 const updateBook = data => dispatch =>
@@ -133,31 +185,38 @@ const updateBook = data => dispatch =>
     .then((res) => {
       dispatch(bookUpdated(res.data.book));
       Materialize.toast(res.data.message, 2000, 'green');
-      return {
-        isDone: true,
-        result: res.data,
-      };
+      return { isDone: true, result: res.data };
     })
     .catch((err) => {
       Materialize.toast(err.response.data.message, 2000, 'red');
-      return {
-        hasError: true,
-        result: err.response.data
-      };
+      return { hasError: true, result: err.response.data };
     });
 
 /**
  * Delete A Book
+ *
  * @description Sends ID of book to server for deletion
+ *
  * @param {number} bookId - id of book to delete
+ * @param {number} pageNumber - id of book to delete
+ *
  * @returns {object} action
  */
-const deleteBook = bookId =>
+const deleteBook = (bookId, pageNumber) =>
   dispatch =>
     axios.delete(`/api/v1/books/${bookId}`)
       .then((res) => {
-        Materialize.toast('Poof! Book successfully deleted', 2000, 'green');
+        Materialize
+          .toast('Poof! Book successfully deleted', 2000, 'green');
         dispatch(deleteSuccess(res.data.book.id));
+        dispatch(fetchBooks(pageNumber))
+          .then((res) => {
+            const { numberOfPages } = res;
+            const pages =
+              Array.from(Array(numberOfPages)).map((e, i) => i + 1);
+            const pageDetails = { pages, pageId: pageNumber };
+            dispatch(setCurrentPage(pageDetails));
+          });
       })
       .catch((err) => {
         Materialize.toast(err.response.data.message, 2000, 'red');
