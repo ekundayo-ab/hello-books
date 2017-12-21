@@ -1,20 +1,24 @@
+const dotenv = require('dotenv');
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+dotenv.load();
+
 module.exports = (env) => {
   const prodOptions = {
-    devtool: '',
+    devtool: 'source-map',
     devServer: {},
     plugins: [
       new webpack.optimize.UglifyJsPlugin({
+        minimize: true,
+        sourceMap: true,
         comments: false,
         compress: {
           warnings: false,
           drop_console: true
         },
       }),
-      new ExtractTextPlugin('bundle.css')
     ]
   };
 
@@ -35,13 +39,17 @@ module.exports = (env) => {
         },
       },
     },
-    plugins: [
-      new webpack.HotModuleReplacementPlugin(),
-      new ExtractTextPlugin('bundle.css')
-    ]
+    plugins: [new webpack.HotModuleReplacementPlugin()]
   };
 
   const configOptions = env === 'production' ? prodOptions : devOptions;
+  configOptions.plugins.push(
+    new webpack.EnvironmentPlugin([
+      'API_KEY',
+      'UPLOAD_PRESET'
+    ]),
+    new ExtractTextPlugin('bundle.css')
+  );
 
   const CONFIG = {
     entry: [
@@ -84,7 +92,12 @@ module.exports = (env) => {
         },
       ],
     },
-    plugins: configOptions.plugins
+    plugins: configOptions.plugins,
+    node: {
+      dns: 'empty',
+      net: 'empty',
+      fs: 'empty'
+    }
   };
   return CONFIG;
 };
