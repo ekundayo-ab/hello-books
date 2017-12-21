@@ -1,9 +1,23 @@
 import express from 'express';
-import usersController from '../controllers/users';
-import booksController from '../controllers/books';
-import borrowsController from '../controllers/borrows';
-import authMiddleware from '../middlewares/auth';
-import catController from '../controllers/category';
+import UserController from '../controllers/UserController';
+import BookController from '../controllers/BookController';
+import BorrowController from '../controllers/BorrowController';
+import CategoryController from '../controllers/CategoryController';
+import AuthMiddleware from '../middlewares/AuthMiddleware';
+import BookMiddleware from '../middlewares/BookMiddleware';
+import BorrowMiddleware from '../middlewares/BorrowMiddleware';
+import ValidationMiddleware from '../middlewares/ValidationMiddleware';
+
+const { signup, googleAuth, changePassword, autoUpgrade } = UserController;
+const { addBook, updateBook, deleteBook, listBooks, findBook, filterBooks }
+  = BookController;
+const { addCategory, listCategory } = CategoryController;
+const { validateAndCheckIfBookExist } = BookMiddleware;
+const { checkIfDefinedAndValid } = ValidationMiddleware;
+const { hasAdminRights, checkOrSignInUser, authenticate } = AuthMiddleware;
+const { borrowBook, returnBook,
+  AllBorrowedOrNotReturnedBooks, getBorrowedBook } = BorrowController;
+const { checkIfBorrowExist, sendMailAndResponse } = BorrowMiddleware;
 
 const Router = express.Router();
 /**
@@ -12,7 +26,9 @@ const Router = express.Router();
  *   get:
  *     tags:
  *       - Welcome to Hello Books
- *     description: Returns the homepage
+ *     summary:
+ *       - Library API welcome message
+ *     description: Displays the application API welcome message
  *     responses:
  *       200:
  *         description: Welcome to Hello Books Library
@@ -45,6 +61,7 @@ Router.get('/', (req, res) => res.status(200).send({
  *       "passwordConfirmation": c1$#t0&slda__!
  *     }
  */
+
 /**
  * @swagger
  * definitions:
@@ -81,8 +98,8 @@ Router.get('/', (req, res) => res.status(200).send({
  *         example: JAVA Master
  *       description:
  *         type: string
- *         default: Learn and master the fundamentals of JAVA two months
- *         example: Learn and master the fundamentals of JAVA two months
+ *         default: Learn and master the fundamentals of JAVA in two months
+ *         example: Learn and master the fundamentals of JAVA in two months
  *       quantity:
  *         type: integer
  *         default: 10
@@ -99,12 +116,14 @@ Router.get('/', (req, res) => res.status(200).send({
  *   post:
  *     tags:
  *       - Users & Authentication
- *     description: Register/Signs up a User
+ *     summary:
+ *       - Register/Sign up a new User to the library
+ *     description: Register / Sign up a new User to the library
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: user
- *         description: User object
+ *         description: User object to add to the library
  *         in: body
  *         required: true
  *         schema:
@@ -124,7 +143,8 @@ Router.get('/', (req, res) => res.status(200).send({
  *       500:
  *         description: Internal Server Error
  */
-Router.post('/users/signup', usersController.signup); // Route to sign up
+Router.post('/users/signup',
+  checkIfDefinedAndValid, signup); // Route to sign up
 
 /**
  * @swagger
@@ -139,11 +159,7 @@ Router.post('/users/signup', usersController.signup); // Route to sign up
  *         example: Hi chieftester, you are logged in
  *       token:
  *         type: string
- *         example: |
- *           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo1
- *           Miwicm9sZSI6Im5vcm1hbCIsInVzZXJuYW1lIjoiY2hpZWZ0ZXN0ZXIifS
- *           wiaWF0IjoxNTA5OTQ0NjUzLCJleHAiOjE1MDk5NDgyNTN9
- *           .IvVYw1nB79PUyrBWpywwxJxvv6NRcMzXGXNEPKI9slI"
+ *         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo1Miwicm9sZSI6Im5vcm1hbCIsInVzZXJuYW1lIjoiY2hpZWZ0ZXN0ZXIifSwiaWF0IjoxNTA5OTQ0NjUzLCJleHAiOjE1MDk5NDgyNTN9.IvVYw1nB79PUyrBWpywwxJxvv6NRcMzXGXNEPKI9slI"
  */
 
 /**
@@ -152,7 +168,9 @@ Router.post('/users/signup', usersController.signup); // Route to sign up
  *   post:
  *     tags:
  *       - Users & Authentication
- *     description: Signs in a User
+ *     summary:
+ *       - Sign In a User to the library
+ *     description: Signs in a User to the library
  *     produces:
  *       - application/json
  *     parameters:
@@ -176,39 +194,36 @@ Router.post('/users/signup', usersController.signup); // Route to sign up
  *       500:
  *         description: Internal Server Error
  */
-Router.post('/users/signin', usersController.signin); // Route to sign in
-
+// Route to sign in
+Router.post('/users/signin', checkIfDefinedAndValid, checkOrSignInUser);
 
 // Authentication for google signup and signin
-Router.post('/auth/google', usersController.googleAuth);
+Router.post('/auth/google',
+  checkIfDefinedAndValid, checkOrSignInUser, googleAuth);
 
 // Checks if a User exists in the database
-Router.post('/users', usersController.findUser);
+Router.post('/users', checkOrSignInUser);
 
-Router.use(authMiddleware.authenticate); // Authentication middleware
-
+Router.use(authenticate); // Authentication middleware
 
 /**
  * @swagger
  * definitions:
  *   BookCreationResponse:
  *     properties:
- *       success:
- *         type: boolean
- *         example: true
  *       message:
  *         type: string
  *         example: Learn JAVA in two months, successfully added
  *       book:
  *         type: object
- *         example: |
+ *         example:
  *           book: {
  *             "id": 74,
  *             "isbn": 287,
  *             "title": "Learn JAVA in two months",
  *             "author": "JAVA Master",
- *             "description": "Learn and master the |
- *                fundamentals of JAVA in two months",
+ *             "description": "Learn and master the
+ *              fundamentals of JAVA in two months",
  *             "image": "learn_java_two_months.jpg",
  *             "status": true,
  *             "quantity": 10,
@@ -224,19 +239,21 @@ Router.use(authMiddleware.authenticate); // Authentication middleware
  *   post:
  *     tags:
  *       - Book Operations
- *     description: Add a new book as an Admin User
+ *     summary:
+ *       - Add a new book to the library
+ *     description: Add a new Book as an Admin User to the library
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: book
- *         description: Book object
+ *         description: Book object to be added to the library
  *         in: body
  *         required: true
  *         schema:
  *           $ref: '#/definitions/Book'
  *       - name: x-access-token
  *         in: header
- *         description: an authentication header
+ *         description: An authentication header for secure library access
  *         required: true
  *         type: string
  *     responses:
@@ -255,30 +272,30 @@ Router.use(authMiddleware.authenticate); // Authentication middleware
  *       500:
  *         description: Internal Server Error
  */
-Router.post('/books', booksController.create); // Route to add new book
+
+// Route to add new book
+Router.post('/books', hasAdminRights,
+  checkIfDefinedAndValid, validateAndCheckIfBookExist, addBook);
 
 /**
  * @swagger
  * definitions:
  *   BookUpdateResponse:
  *     properties:
- *       success:
- *         type: boolean
- *         example: true
  *       message:
  *         type: string
- *         example: Learn JAVA in two months, successfully updated to |
+ *         example: Learn JAVA in two months, successfully updated to
  *           Learn JAVA in three months
  *       book:
  *         type: object
- *         example: |
+ *         example:
  *           old: {
  *             "id": 74,
  *             "isbn": 287,
  *             "title": "Learn JAVA in two months",
  *             "author": "JAVA Master",
- *             "description": "Learn and master the |
- *                fundamentals of JAVA two months",
+ *             "description": "Learn and master the
+ *              fundamentals of JAVA in two months",
  *             "image": "learn_java_two_months.jpg",
  *             "status": true,
  *             "quantity": 10,
@@ -308,29 +325,31 @@ Router.post('/books', booksController.create); // Route to add new book
  *   put:
  *     tags:
  *       - Book Operations
+ *     summary:
+ *       - Update a book in the library
  *     description: Modify an already added Book's information as an Admin User
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: bookId
- *         description: ID of the Book
+ *         description: ID of the Book to update
  *         in: path
  *         required: true
  *         type: integer
  *       - name: book
- *         description: Book object with updated information
+ *         description: Book object with updated information to update a book
  *         in: body
  *         required: true
  *         schema:
  *           $ref: '#/definitions/Book'
  *       - name: x-access-token
  *         in: header
- *         description: an authentication header
+ *         description: An authentication header for secure library access
  *         required: true
  *         type: string
  *     responses:
  *       200:
- *         description: Learn JAVA in two months, successfully updated to |
+ *         description: Learn JAVA in two months, successfully updated to
  *           Learn JAVA in three months
  *         schema:
  *           $ref: '#/definitions/BookUpdateResponse'
@@ -345,29 +364,28 @@ Router.post('/books', booksController.create); // Route to add new book
  *       500:
  *         description: Internal Server Error
  */
+
 // Route to modify a book information
-Router.put('/books/:bookId', booksController.update);
+Router.put('/books/:bookId', hasAdminRights,
+  checkIfDefinedAndValid, validateAndCheckIfBookExist, updateBook);
 
 /**
  * @swagger
  * definitions:
  *   BookDeletionResponse:
  *     properties:
- *       success:
- *         type: boolean
- *         example: true
  *       message:
  *         type: string
  *         example: Book successfully deleted
  *       book:
  *         type: object
- *         example: |
+ *         example:
  *           book: {
  *             "id": 74,
  *             "isbn": 287,
  *             "title": "Learn JAVA in two months",
  *             "author": "JAVA Master",
- *             "description": "Learn and master the |
+ *             "description": "Learn and master the
  *                fundamentals of JAVA in two months",
  *             "image": "learn_java_two_months.jpg",
  *             "status": true,
@@ -384,18 +402,20 @@ Router.put('/books/:bookId', booksController.update);
  *   delete:
  *     tags:
  *       - Book Operations
+ *     summary:
+ *       - Delete a book from the library
  *     description: Delete a specified Book as an Admin User
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: bookId
- *         description: ID of the Book
+ *         description: ID of the Book to delete
  *         in: path
  *         required: true
  *         type: integer
  *       - name: x-access-token
  *         in: header
- *         description: an authentication header
+ *         description: An authentication header for secure library access
  *         required: true
  *         type: string
  *     responses:
@@ -412,17 +432,16 @@ Router.put('/books/:bookId', booksController.update);
  *       500:
  *         description: Internal Server Error
  */
+
 // Route to delete a book
-Router.delete('/books/:bookId', booksController.destroy);
+Router.delete('/books/:bookId',
+  hasAdminRights, validateAndCheckIfBookExist, deleteBook);
 
 /**
  * @swagger
  * definitions:
  *   BookListingResponse:
  *     properties:
- *       success:
- *         type: boolean
- *         example: true
  *       books:
  *         type: object
  *         example:
@@ -431,7 +450,7 @@ Router.delete('/books/:bookId', booksController.destroy);
  *             "isbn": 287,
  *             "title": "Learn JAVA in two months",
  *             "author": "JAVA Master",
- *             "description": "Learn and master the |
+ *             "description": "Learn and master the
  *                fundamentals of JAVA in two months",
  *             "image": "learn_java_two_months.jpg",
  *             "status": true,
@@ -445,7 +464,7 @@ Router.delete('/books/:bookId', booksController.destroy);
  *             "isbn": 287,
  *             "title": "Learn Kotlin in two months",
  *             "author": "Kotlin Master",
- *             "description": "Learn and master the |
+ *             "description": "Learn and master the
  *                fundamentals of Kotlin in two months",
  *             "image": "learn_kotlin_two_months.jpg",
  *             "status": true,
@@ -459,7 +478,7 @@ Router.delete('/books/:bookId', booksController.destroy);
  *             "isbn": 287,
  *             "title": "Learn CSharp in two months",
  *             "author": "CSharp Master",
- *             "description": "Learn and master the |
+ *             "description": "Learn and master the
  *                fundamentals of CSharp in two months",
  *             "image": "learn_csharp_two_months.jpg",
  *             "status": true,
@@ -473,7 +492,7 @@ Router.delete('/books/:bookId', booksController.destroy);
  *             "isbn": 287,
  *             "title": "Learn Android in two months",
  *             "author": "Android Master",
- *             "description": "Learn and master the |
+ *             "description": "Learn and master the
  *                fundamentals of Android in two months",
  *             "image": "learn_android_two_months.jpg",
  *             "status": true,
@@ -493,18 +512,20 @@ Router.delete('/books/:bookId', booksController.destroy);
  *   get:
  *     tags:
  *       - Book Operations
+ *     summary:
+ *       - List books in the library by pages
  *     description: Returns all Books
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: x-access-token
  *         in: header
- *         description: an authentication header
+ *         description: An authentication header for secure library access
  *         required: true
  *         type: string
  *       - name: page
  *         in: query
- *         description: page number for list
+ *         description: Page number for listing books returned
  *         required: true
  *         type: integer
  *         example: 1
@@ -514,17 +535,15 @@ Router.delete('/books/:bookId', booksController.destroy);
  *         schema:
  *           $ref: '#/definitions/BookListingResponse'
  */
+
 // Route to list all books in library
-Router.get('/books', booksController.list);
+Router.get('/books', listBooks);
 
 /**
  * @swagger
  * definitions:
  *   BookBorrowedResponse:
  *     properties:
- *       success:
- *         type: boolean
- *         example: true
  *       message:
  *         type: string
  *         example: Learn JAVA in two months successfully borrowed
@@ -536,7 +555,7 @@ Router.get('/books', booksController.list);
  *             "isbn": 287,
  *             "title": "Learn JAVA in two months",
  *             "author": "JAVA Master",
- *             "description": "Learn and master the |
+ *             "description": "Learn and master the
  *                fundamentals of JAVA in two months",
  *             "image": "learn_java_two_months.jpg",
  *             "status": true,
@@ -556,12 +575,14 @@ Router.get('/books', booksController.list);
  *   post:
  *     tags:
  *       - Borrowing Operations
+ *     summary:
+ *       - Borrow a book from the library
  *     description: Borrow a specific Book
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: userId
- *         description: ID of the User
+ *         description: ID of the User borrowing a book
  *         in: path
  *         required: true
  *         type: integer
@@ -581,7 +602,7 @@ Router.get('/books', booksController.list);
  *           }
  *       - name: x-access-token
  *         in: header
- *         description: an authentication header
+ *         description: An authentication header for secure library access
  *         required: true
  *         type: string
  *     responses:
@@ -600,20 +621,17 @@ Router.get('/books', booksController.list);
  *       500:
  *         description: Internal Server Error
  */
+
 // Route to borrow a book
-Router.post(
-  '/users/:userId/books',
-  authMiddleware.doesUserExist, borrowsController.create
-);
+Router.post('/users/:userId/books', checkOrSignInUser,
+  validateAndCheckIfBookExist, checkIfBorrowExist, borrowBook,
+  sendMailAndResponse);
 
 /**
  * @swagger
  * definitions:
  *   BookReturnedResponse:
  *     properties:
- *       success:
- *         type: boolean
- *         example: true
  *       message:
  *         type: string
  *         example: Learn JAVA in two months successfully
@@ -670,12 +688,14 @@ Router.post(
  *   put:
  *     tags:
  *       - Borrowing Operations
+ *     summary:
+ *       - Return a book to the library
  *     description: Return a specific Book
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: userId
- *         description: ID of the User
+ *         description: ID of the User returning a book
  *         in: path
  *         required: true
  *         type: integer
@@ -695,7 +715,7 @@ Router.post(
  *           }
  *       - name: x-access-token
  *         in: header
- *         description: an authentication header
+ *         description: An authentication header for secure library access
  *         required: true
  *         type: string
  *     responses:
@@ -716,21 +736,17 @@ Router.post(
  *       500:
  *         description: Internal Server Error
  */
+
 // Route to return a book
-Router.put(
-  '/users/:userId/books',
-  authMiddleware.doesUserExist,
-  borrowsController.returnBook
-);
+Router.put('/users/:userId/books',
+  checkOrSignInUser, validateAndCheckIfBookExist, returnBook,
+  sendMailAndResponse);
 
 /**
  * @swagger
  * definitions:
  *   BookNotReturnedListResponse:
  *     properties:
- *       success:
- *         type: boolean
- *         example: true
  *       borrow:
  *         type: object
  *         example:
@@ -795,7 +811,9 @@ Router.put(
  *   get:
  *     tags:
  *       - Borrowing Operations
- *     description: Returns all Books borrowed but not returned by a User
+ *     summary:
+ *       - List a books borrowed by a user and not returned to the library
+ *     description: List all Books borrowed but not returned by a User
  *     produces:
  *       - application/json
  *     parameters:
@@ -806,12 +824,12 @@ Router.put(
  *         default: false
  *       - name: userId
  *         in: path
- *         description: ID of the User to show list for
+ *         description: ID of the User yet to return the books
  *         required: true
  *         type: integer
  *       - name: x-access-token
  *         in: header
- *         description: an authentication header
+ *         description: An authentication header for secure library access
  *         required: true
  *         type: string
  *     responses:
@@ -820,21 +838,31 @@ Router.put(
  *         schema:
  *           $ref: '#/definitions/BookNotReturnedListResponse'
  */
-// Route to list borrowed but not returned book
-Router.get('/users/:userId/books', borrowsController.listNotReturned);
 
-Router.get('/books/:bookId', booksController.findBook);
-Router.get('/category/books', booksController.filterBooks);
-Router.get('/borrowed/:bookId', borrowsController.getBorrowedBook);
-Router.get('/borrowed/:userId/books', borrowsController.getAllBorrowedBooks);
-Router.post('/users/pass', usersController.changePassword);
-Router.post('/users/autoupgrade', usersController.autoUpgrade);
+// Route to list borrowed but not returned book
+Router.get('/users/:userId/books', AllBorrowedOrNotReturnedBooks);
+
+// Find a specific book and return it
+Router.get('/books/:bookId', validateAndCheckIfBookExist, findBook);
+
+// Filter books according to a category
+Router.get('/category/books', filterBooks);
+
+// Get a specific book that was borrowed
+Router.get('/borrowed/:bookId', getBorrowedBook);
+Router.get('/borrowed/:userId/books', AllBorrowedOrNotReturnedBooks);
+Router.post('/users/pass', checkIfDefinedAndValid,
+  checkOrSignInUser, changePassword);
+Router.post('/users/autoupgrade', autoUpgrade);
+
 /**
  * @swagger
  * /category:
  *   post:
  *     tags:
  *       - Category Operations
+ *     summary:
+ *       - Add a Book Category to the library
  *     description: Adds a category specification to the library
  *     produces:
  *       - application/json
@@ -847,7 +875,7 @@ Router.post('/users/autoupgrade', usersController.autoUpgrade);
  *         default: "Sciences"
  *       - name: x-access-token
  *         in: header
- *         description: an authentication header
+ *         description: An authentication header for secure library access
  *         required: true
  *         type: string
  *     responses:
@@ -869,7 +897,7 @@ Router.post('/users/autoupgrade', usersController.autoUpgrade);
  *       500:
  *         description: Internal Server Error
  */
-Router.post('/category', catController.create);
+Router.post('/category', hasAdminRights, checkIfDefinedAndValid, addCategory);
 
 /**
  * @swagger
@@ -877,13 +905,15 @@ Router.post('/category', catController.create);
  *   get:
  *     tags:
  *       - Category Operations
- *     description: Lists all categories in the library
+ *     summary:
+ *       - List all Book Categories available in the library
+ *     description: Lists all Book Categories available in the library
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: x-access-token
  *         in: header
- *         description: an authentication header
+ *         description: An authentication header for secure library access
  *         required: true
  *         type: string
  *     responses:
@@ -892,9 +922,6 @@ Router.post('/category', catController.create);
  *         schema:
  *           type: object
  *           properties:
- *             success:
- *               type: boolean
- *               example: true
  *             categories:
  *               type: array
  *               example:
@@ -927,6 +954,6 @@ Router.post('/category', catController.create);
  *       500:
  *         description: Internal Server Error
  */
-Router.get('/categories', catController.list);
+Router.get('/categories', listCategory);
 
 export default Router;
