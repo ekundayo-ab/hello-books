@@ -232,14 +232,12 @@ nav {
   }
 }
 
-
-
-
 .available-books {
   background-color: $slight-black-color;
   padding: 0 10px;
 
   &.row {
+    min-height: 510px;
     margin-bottom: 0;
     padding-bottom: 150px;
   }
@@ -518,7 +516,7 @@ blockquote {
   margin-top: 10px;
 }
 
-// Footer section
+// Not Found section
 .helpful-links {
   li {
     display: inline-block;
@@ -598,3 +596,14 @@ blockquote {
 .progress {
   height: 20px;
 }
+
+// Footer Section
+.page-footer {
+  min-height: 300px;
+  padding-top: 61px;
+
+  .footer-copyright {
+    min-height: 100px;
+  }
+}
+
