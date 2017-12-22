@@ -11,8 +11,8 @@ const {
   autoUpgradeJudge
 } = helper;
 
-describe('Helper Functions', () => {
-  describe('Validates fields for book operations', () => {
+describe('Helper methods', () => {
+  describe('fields validation for book operations', () => {
     it('should return empty errors object', () => {
       assert.equal(inputValidation(helperBook.book1).isValid, true);
       assert.deepEqual(inputValidation(helperBook.book1).errors, {});
@@ -53,7 +53,7 @@ describe('Helper Functions', () => {
         .errors.numeric, 'quantity must be a number');
     });
   });
-  describe('Validates email for sign up & sign in', () => {
+  describe('field validation for email on signup or signin', () => {
     it('should return true for ekprogs@gmail.com', () => {
       assert.equal(validateEmail(helperUser.user3.email), true);
     });
@@ -64,7 +64,7 @@ describe('Helper Functions', () => {
       assert.equal(validateEmail(helperUser.user5.email), false);
     });
   });
-  describe('Validation of user inputs when registering', () => {
+  describe('field validation for registration inputs', () => {
     it('should return an error for invalid username supplied', () => {
       assert.equal(userValidation(helperUser.user9a).isValid, false);
       assert.equal(userValidation(helperUser.user9a)
@@ -91,7 +91,7 @@ describe('Helper Functions', () => {
         .errors.password, 'minimum of 6 characters word allowed');
     });
   });
-  describe('Validation of inputs when changing password', () => {
+  describe('field validation for password change inputs', () => {
     it('should return an error for invalid inputs supplied', () => {
       assert.equal(validatePassForm(helperUser.user9d).isValid, false);
       assert.equal(validatePassForm(helperUser.user9d)
@@ -103,7 +103,7 @@ describe('Helper Functions', () => {
         .errors.mismatch, 'Passwords do not match');
     });
   });
-  describe('Determination of user eligible for upgrade', () => {
+  describe('user upgrade eligibility', () => {
     it('should return silver update details', () => {
       assert.equal(autoUpgradeJudge(helperUser.upgradeToken1)
         .upgradeToken.levelName, 'silver');

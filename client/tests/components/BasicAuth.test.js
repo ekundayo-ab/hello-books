@@ -21,7 +21,7 @@ const props = {
 describe('BasicAuth Component', () => {
   beforeEach(() => {
     global.Materialize = { toast: () => {} };
-    localStorage.setItem('jwtToken', 'fakeTokenValue');
+    localStorage.setItem('jwtToken', null);
     MockComponentToProtect = () => (<div>Fake Component to be protected</div>);
     WrapperComponent = BasicAuth(MockComponentToProtect);
     wrapper = shallow(
@@ -33,17 +33,17 @@ describe('BasicAuth Component', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('should call verifyToken when component is to mount', () => {
+  it('should call logout and login for no token on componentWillMount', () => {
+    localStorage.setItem('jwtToken', null);
     wrapper.instance().componentWillMount = jest.fn();
     expect(props.logout).toHaveBeenCalled();
-    // expect(props.verifyToken).toHaveBeenCalled();
+    expect(props.history.push).toHaveBeenCalled();
   });
 
-  it('should log user out if not authenticated on component mount', () => {
-    process.env.noToken = true;
+  it('should call verifyToken if token exists on componentWillMount', () => {
     wrapper.instance().componentWillMount = jest.fn();
-    expect(props.logout).toHaveBeenCalled();
-    // expect(props.verifyToken).toHaveBeenCalled();
+    props.verifyToken({ token: 'somefaketoken' });
+    expect(props.verifyToken).toHaveBeenCalled();
   });
 
   it('should ensure mapStateToProps returns prop from redux store', () => {

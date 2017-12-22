@@ -5,8 +5,8 @@ import helperBeforeHooks from './../helpers/helperBeforeHooks';
 
 
 const server = supertest.agent(app);
-let adminToken; // Token for an Admin User
-let normalToken; // Token for a Normal User
+let adminToken;
+let normalToken;
 let bookId;
 let book2Id;
 describe('Library book(s)', () => {
@@ -15,7 +15,7 @@ describe('Library book(s)', () => {
     ({ adminToken, normalToken, bookId, book2Id } = process.env);
     done();
   });
-  describe('addition operation by an admin user', () => {
+  describe('addition operation', () => {
     it('should return book with success message for a new book', (done) => {
       server
         .post('/api/v1/books')
@@ -30,7 +30,7 @@ describe('Library book(s)', () => {
           quantity: 30,
         })
         .end((err, res) => {
-          expect(res.status).to.equal(200);
+          expect(res.status).to.equal(201);
           expect(res.body.message).to.equal('Learn JAVA, successfully added');
           expect(res.body.book.isbn).to.equal(20234);
           expect(res.body.book.title).to.equal('Learn JAVA');
@@ -328,7 +328,7 @@ describe('Library book(s)', () => {
           .set('Accept', 'application/x-www-form-urlencoded')
           .set('x-access-token', `${adminToken}gibberish`)
           .end((err, res) => {
-            expect(res.status).to.equal(400);
+            expect(res.status).to.equal(401);
             expect(res.body.message).to.equal('Failed to authenticate token');
             done();
           });

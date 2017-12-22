@@ -21,19 +21,21 @@ class BookController {
    * @memberOf BookController
    */
   static addBook(req, res) {
+    const { isbn, title, author, description, image, quantity, category } =
+      req.body;
     return Book
       .create({
-        isbn: req.body.isbn,
-        title: req.body.title,
-        author: req.body.author,
-        description: req.body.description,
-        image: req.body.image,
+        isbn,
+        title,
+        author,
+        description,
+        image,
         status: 1,
-        quantity: req.body.quantity,
-        categoryId: req.body.category,
+        quantity,
+        categoryId: category,
       })
       .then((book) => {
-        res.status(200).send({
+        res.status(201).send({
           message: `${book.title}, successfully added`,
           book
         });
@@ -56,7 +58,6 @@ class BookController {
   static updateBook(req, res) {
     const { isbn, title, author, description, image, quantity, category }
       = req.body;
-    // If book exists, update the book.
     return Book
       .update({
         isbn,

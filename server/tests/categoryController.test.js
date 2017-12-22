@@ -16,7 +16,7 @@ describe('Library', () => {
     done();
   });
   describe('category addition', () => {
-    it('should return success message with added category', (done) => {
+    it('should return success message for added category', (done) => {
       server
         .post('/api/v1/category')
         .set('Accept', 'application/x-www-form-urlencoded')

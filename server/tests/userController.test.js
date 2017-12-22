@@ -15,7 +15,7 @@ const server = supertest.agent(app);
 describe('AUTHENTICATION & USER Operations', () => {
   helperBeforeHooks.clearDatabaseTables();
   describe('A Typical User registration', () => {
-    it('should allow admin user to be seeded', (done) => {
+    it('should return seeded admin user', (done) => {
       server
         .post('/api/v1/users/signup')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -37,7 +37,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should allow normal user to register', (done) => {
+    it('should return created user', (done) => {
       server
         .post('/api/v1/users/signup')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -59,7 +59,7 @@ describe('AUTHENTICATION & USER Operations', () => {
         });
     });
 
-    it('should ensure all signup fields are required', (done) => {
+    it('should return error message for invalid required fields', (done) => {
       server
         .post('/api/v1/users/signup')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -77,7 +77,7 @@ describe('AUTHENTICATION & USER Operations', () => {
         });
     });
 
-    it('should ensure valid email is entered', (done) => {
+    it('should return error message for invalid email', (done) => {
       server
         .post('/api/v1/users/signup')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -95,7 +95,7 @@ describe('AUTHENTICATION & USER Operations', () => {
         });
     });
 
-    it('should ensure email is unique', (done) => {
+    it('should return error message if email exists', (done) => {
       server
         .post('/api/v1/users/signup')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -112,7 +112,7 @@ describe('AUTHENTICATION & USER Operations', () => {
         });
     });
 
-    it('should ensure username is unique', (done) => {
+    it('should return error message if username exists', (done) => {
       server
         .post('/api/v1/users/signup')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -131,7 +131,7 @@ describe('AUTHENTICATION & USER Operations', () => {
   });
 
   describe('A typical User Logging In', () => {
-    it('should ensure all fields exists', (done) => {
+    it('should return error message for no required fields', (done) => {
       server
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -147,7 +147,7 @@ describe('AUTHENTICATION & USER Operations', () => {
         });
     });
 
-    it('should sign in and assign token to normal user', (done) => {
+    it('should return success message and token for normal user', (done) => {
       server
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -162,7 +162,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should sign in and assign token to admin user', (done) => {
+    it('should return success message and token for admin user', (done) => {
       server
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -178,7 +178,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should disallow wrong password sign in', (done) => {
+    it('should return error message for wrong email or password', (done) => {
       server
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -194,7 +194,7 @@ describe('AUTHENTICATION & USER Operations', () => {
         });
     });
 
-    it('should disallow unregistered user sign in', (done) => {
+    it('should return error message if user does not exist', (done) => {
       server
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -209,7 +209,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should register a user through google', (done) => {
+    it('should return success message and token for google signup', (done) => {
       server
         .post('/api/v1/auth/google')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -228,7 +228,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should sign in a registered user through google', (done) => {
+    it('should return success and token for google signin', (done) => {
       server
         .post('/api/v1/auth/google')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -249,7 +249,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should raise error for bad request on google sign in', (done) => {
+    it('should return error for wrong inputs on google signin', (done) => {
       server
         .post('/api/v1/auth/google')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -271,7 +271,7 @@ describe('AUTHENTICATION & USER Operations', () => {
   });
 
   describe('When searching for a single user', () => {
-    it('should return a message if username has not been taken', (done) => {
+    it('should return success message if username is available', (done) => {
       server
         .post('/api/v1/users')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -306,7 +306,7 @@ describe('AUTHENTICATION & USER Operations', () => {
   });
 
   describe('Upon a user password change request', () => {
-    it('should successfully update password', (done) => {
+    it('should return success message if password was updated', (done) => {
       server
         .post('/api/v1/users/pass')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -324,7 +324,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should give error message for password confirmation mismatch',
+    it('should return error message for password confirmation mismatch',
       (done) => {
         server
           .post('/api/v1/users/pass')
@@ -345,7 +345,7 @@ describe('AUTHENTICATION & USER Operations', () => {
             done();
           });
       });
-    it('should respond with bad request for invalid input', (done) => {
+    it('should return error message for invalid input', (done) => {
       server
         .post('/api/v1/users/pass')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -363,7 +363,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should respond with failure message if old password is incorrect',
+    it('should return error message if old password is incorrect',
       (done) => {
         server
           .post('/api/v1/users/pass')
@@ -381,7 +381,7 @@ describe('AUTHENTICATION & USER Operations', () => {
             done();
           });
       });
-    it('should respond with error message if user is not found', (done) => {
+    it('should return error message if user is not found', (done) => {
       process.env.TRIGGER_ENV = true;
       server
         .post('/api/v1/users/pass')
@@ -415,7 +415,7 @@ describe('AUTHENTICATION & USER Operations', () => {
         }
       });
     });
-    it('should not upgrade if not eligible', (done) => {
+    it('should return not-eligible message', (done) => {
       server
         .post('/api/v1/users/autoupgrade')
         .set('x-access-token', adminUserToken)
@@ -427,7 +427,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should upgrade if eligible', (done) => {
+    it('should return upgrade details if eligible', (done) => {
       server
         .post('/api/v1/users/autoupgrade')
         .set('x-access-token', normalUserToken)

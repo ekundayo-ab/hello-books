@@ -1,4 +1,8 @@
 // For authentication operations
+export const userExistence = {
+  userExists: 'User exists'
+};
+
 export const userAuthenticated = {
   isAuthenticated: true,
   user: {

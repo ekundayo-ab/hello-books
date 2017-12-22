@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
 import PropTypes from 'prop-types';
 import SingleInput from '../forms/SingleInput';
-import { userSignUpRequest, isUserExists, login, googleAuth }
+import { userSignUpRequest, doesUserExist, login, googleAuth }
   from '../../actions/authActions';
 import Helper from './../../helpers/Helper';
 
@@ -88,7 +88,7 @@ export class SignUpForm extends Component {
     const field = event.target.name;
     const val = event.target.value;
     if (val !== '') {
-      this.props.isUserExists(this.state)
+      this.props.doesUserExist(this.state)
         .then((res) => {
           const { errors } = this.state;
           const { exists } = res;
@@ -224,9 +224,9 @@ SignUpForm.propTypes = {
   }).isRequired,
   googleAuth: PropTypes.func.isRequired,
   userSignUpRequest: PropTypes.func.isRequired,
-  isUserExists: PropTypes.func.isRequired
+  doesUserExist: PropTypes.func.isRequired
 };
 
 export default
-connect(null, { googleAuth, login, userSignUpRequest, isUserExists })(
+connect(null, { googleAuth, login, userSignUpRequest, doesUserExist })(
   withRouter(SignUpForm));

@@ -163,7 +163,7 @@ describe('Authentication actions', () => {
         message: 'User does not exist'
       };
       const store = mockStore({});
-      store.dispatch(authAction.isUserExists(regUserData))
+      store.dispatch(authAction.doesUserExist(regUserData))
         .then((res) => {
           expect(res).toEqual(expected404Response);
           done();
@@ -177,7 +177,7 @@ describe('Authentication actions', () => {
       });
       const expected500Response = { message: 'Internal Server Error' };
       const store = mockStore({});
-      store.dispatch(authAction.isUserExists(regUserData))
+      store.dispatch(authAction.doesUserExist(regUserData))
         .then((res) => {
           expect(res).toEqual(expected500Response);
           done();

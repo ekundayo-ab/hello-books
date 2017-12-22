@@ -4,12 +4,11 @@ import jwt from 'jsonwebtoken';
 import app from '../../app';
 import helperBeforeHooks from './../helpers/helperBeforeHooks';
 
-// Provides interface to ascertain expected results are true
 const expect = chai.expect;
 
 const server = supertest.agent(app);
-let adminToken; // Token for an Admin User
-let normalToken; // Token for a Normal User
+let adminToken;
+let normalToken;
 let userId;
 let user2Id;
 let bookId;

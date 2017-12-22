@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+
 import { User } from '../models';
 import Helper from '../helpers/Helper';
 

@@ -9,7 +9,9 @@ describe('pagination reducer', () => {
   });
 
   it('should handle SET_PAGES and save the payload to the store', () => {
-    expect(paginationReducer(newPages, actionTypes.SET_PAGES))
+    expect(paginationReducer(newPages, {
+      type: actionTypes.SET_PAGES, pageDetails: newPages
+    }))
       .toEqual({ pageId: 1, pages: [1, 2, 3] });
   });
 });

@@ -22,10 +22,7 @@ const initialState = {
 export default (state = initialState, action = {}) => {
   switch (action.type) {
     case SET_EXISTENCE:
-      return {
-        ...state,
-        userExists: action.message
-      };
+      return { ...state, userExists: action.message };
     case SET_CURRENT_USER:
       return {
         ...state,

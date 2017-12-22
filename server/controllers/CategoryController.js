@@ -3,7 +3,7 @@ import model from '../models';
 const { Book, Category } = model;
 
 /**
- * @class CatController
+ * @class CategoryController
  *
  * @description Book Category operations
  */
@@ -18,7 +18,7 @@ class CategoryController {
    *
    * @returns {object} - Message
    *
-   * @memberOf CatController
+   * @memberOf CategoryController
    */
   static addCategory(req, res) {
     const { title } = req.body;

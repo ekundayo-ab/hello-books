@@ -14,13 +14,8 @@ const verifyToken = userDetails =>
         const { decoded } = res.data;
         dispatch(setCurrentUser(res.data.user));
         localStorage.setItem('userDetails', JSON.stringify(decoded));
-        return { isDone: true };
+        return true;
       })
-      .catch(() => {
-        Materialize.toast(
-          'Oops! Something happened, Allow us verify you again',
-          3000, 'red');
-        return { isDone: false };
-      });
+      .catch(() => false);
 
 export default verifyToken;

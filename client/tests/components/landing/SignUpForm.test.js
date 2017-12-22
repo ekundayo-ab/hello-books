@@ -7,7 +7,7 @@ import { googleDetails } from '../../__mocks__/testData';
 const props = {
   userSignUpRequest: jest.fn(() => Promise.resolve(1)),
   googleAuth: jest.fn(() => Promise.resolve(1)),
-  isUserExists: jest.fn(() => Promise.resolve(1)),
+  doesUserExist: jest.fn(() => Promise.resolve(1)),
   history: {
     push: jest.fn(() => Promise.resolve(1)),
   },
@@ -80,7 +80,7 @@ describe('SignUpForm Component', () => {
     const checkUserExists = jest.spyOn(action, 'checkUserExists');
     action.checkUserExists(event);
     expect(checkUserExists).toBeCalled();
-    expect(props.isUserExists).toBeCalled();
+    expect(props.doesUserExist).toBeCalled();
   });
 
   it('should call responseGoogle to sign in user with gmail', () => {

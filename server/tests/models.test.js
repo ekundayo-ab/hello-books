@@ -3,13 +3,9 @@ import models from '../models/';
 import helperUser from '../helpers/helperUser';
 import helperBook from '../helpers/helperBook';
 
-// Makes User model available globally in this fil
 const User = models.User;
-// Makes Book model available globally in this file
 const Book = models.Book;
-// Makes Borrow model available globally in this file
 const Borrow = models.Borrow;
-// Provides interface to ascertain expected results are true
 const expect = chai.expect;
 let userId;
 let bookId;
@@ -17,11 +13,8 @@ let borrowId;
 
 describe('Models', () => {
   before((done) => {
-    // Purges Data already in the table after testing
     User.destroy({ where: {} });
-    // Purges Data already in the table after testing
     Book.destroy({ where: {} });
-    // Purges Data already in the table after testing
     Borrow.destroy({ where: {} });
     User.create(helperUser.user9)
       .then((user) => { userId = user.id; });
@@ -30,15 +23,15 @@ describe('Models', () => {
       .then((book) => { bookId = book.id; });
     done();
   });
-  describe('User Model Operations', () => {
-    it('should create a user', (done) => {
+  describe('User model methods', () => {
+    it('should return created user', (done) => {
       User.create(helperUser.user6)
         .then((user) => {
           expect(user.username).to.equal(helperUser.user6.username);
           done();
         });
     });
-    it('should raise validation error for unique username', (done) => {
+    it('should return validation error for unique username', (done) => {
       User.create(helperUser.user6)
         .then()
         .catch((err) => {
@@ -47,7 +40,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should raise validation error for unique email', (done) => {
+    it('should return validation error for unique email', (done) => {
       User.create(helperUser.user7)
         .then()
         .catch((err) => {
@@ -56,7 +49,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should raise validation error for null values', (done) => {
+    it('should return validation error for null values', (done) => {
       User.create(helperUser.user002) // This value does not exist
         .then()
         .catch((err) => {
@@ -67,7 +60,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should raise validation error for empty username', (done) => {
+    it('should return validation error for empty username', (done) => {
       User.create(helperUser.user8) // This value does not exist
         .then()
         .catch((err) => {
@@ -77,7 +70,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should find user', (done) => {
+    it('should return found user', (done) => {
       User.findOne({
         where: {
           email: helperUser.user6.email,
@@ -89,7 +82,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should list all users', (done) => {
+    it('should return list of all users', (done) => {
       User.findAll()
         .then((user) => {
           expect(user[0].dataValues.username)
@@ -100,15 +93,15 @@ describe('Models', () => {
         });
     });
   });
-  describe('Book Model Operations', () => {
-    it('should create a book', (done) => {
+  describe('Book model methods', () => {
+    it('should return created book', (done) => {
       Book.create(helperBook.book8)
         .then((book) => {
           expect(book.isbn).to.equal(helperBook.book8.isbn);
           done();
         });
     });
-    it('should raise error for unique isbn of book', (done) => {
+    it('should return error for unique isbn of book', (done) => {
       Book.create(helperBook.book8)
         .then((book) => {
           expect(book.isbn).to.equal(helperBook.book8.isbn);
@@ -118,7 +111,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should raise validation error for null values', (done) => {
+    it('should return validation error for null values', (done) => {
       Book.create(helperBook.book234) // This value does not exist
         .then()
         .catch((err) => {
@@ -131,7 +124,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should raise validation error for invalid value in isbn', (done) => {
+    it('should return validation error for invalid value in isbn', (done) => {
       Book.create(helperBook.book9) // This value does not exist
         .then()
         .catch((err) => {
@@ -142,7 +135,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should raise validation error for invalid value in quantity',
+    it('should return validation error for invalid value in quantity',
       (done) => {
         Book.create(helperBook.book10) // This value does not exist
           .then()
@@ -153,7 +146,7 @@ describe('Models', () => {
             done();
           });
       });
-    it('should find a book', (done) => {
+    it('should return found book', (done) => {
       Book.findOne({
         where: {
           isbn: helperBook.book8.isbn,
@@ -164,14 +157,14 @@ describe('Models', () => {
           done();
         });
     });
-    it('should list all books', (done) => {
+    it('should return all books', (done) => {
       Book.findAll()
         .then((book) => {
           expect(book[1].dataValues.isbn).to.equal(helperBook.book14.isbn);
           done();
         });
     });
-    it('should update a book', (done) => {
+    it('should return updated book', (done) => {
       Book.update({
         isbn: 4,
         title: 'Learn Haskell Edition 2017',
@@ -183,7 +176,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should raise error for unique isbn of book', (done) => {
+    it('should return error for unique isbn of book', (done) => {
       Book.update(helperBook.book11, { where: { isbn: 4 } })
         .then().catch((err) => {
           expect(err.name).to.equal('SequelizeUniqueConstraintError');
@@ -191,7 +184,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should raise validation error for null values', (done) => {
+    it('should return validation error for null values', (done) => {
       Book.update(helperBook.book12, { where: { isbn: helperBook.book8.isbn } })
         .then()
         .catch((err) => {
@@ -204,7 +197,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should raise validation error for undefined values', (done) => {
+    it('should return validation error for undefined values', (done) => {
       Book.update(helperBook.book13, { where: { isbn: helperBook.book8.isbn } })
         .then()
         .catch((err) => {
@@ -217,7 +210,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should raise validation error for invalid value in isbn', (done) => {
+    it('should return validation error for invalid value in isbn', (done) => {
       Book.update(helperBook.book9, { where: { isbn: helperBook.book8.isbn } })
         .then()
         .catch((err) => {
@@ -227,7 +220,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should raise validation error for invalid value in isbn', (done) => {
+    it('should return validation error for invalid value in isbn', (done) => {
       Book.update(helperBook.book10, { where: { isbn: helperBook.book8.isbn } })
         .then()
         .catch((err) => {
@@ -237,14 +230,14 @@ describe('Models', () => {
           done();
         });
     });
-    it('should delete a book', (done) => {
+    it('should return one on successful book deletion', (done) => {
       Book.destroy({ where: { isbn: helperBook.book11.isbn } })
         .then((book) => {
           expect(book).to.equal(1);
           done();
         });
     });
-    it('should give zero rows if book not found', (done) => {
+    it('should return zero rows if book is not found', (done) => {
       Book.destroy({ where: { isbn: helperBook.book8.isbn } })
         .then((book) => {
           expect(book).to.equal(0);
@@ -252,8 +245,8 @@ describe('Models', () => {
         });
     });
   });
-  describe('Borrow Model Operations', () => {
-    it('should create a borrow record', (done) => {
+  describe('Borrow model methods', () => {
+    it('should return created borrow record', (done) => {
       Borrow.create({
         userId,
         bookId,
@@ -267,7 +260,7 @@ describe('Models', () => {
         done();
       });
     });
-    it('should raise error for no foreign key of book', (done) => {
+    it('should return error for no foreign key of book', (done) => {
       Borrow.create({
         userId,
         bookId: 76,
@@ -282,7 +275,7 @@ describe('Models', () => {
         done();
       });
     });
-    it('should raise error for no foreign key of user', (done) => {
+    it('should return error for no foreign key of user', (done) => {
       Borrow.create({
         userId: 30,
         bookId,
@@ -297,7 +290,7 @@ describe('Models', () => {
         done();
       });
     });
-    it('should update a borrow record', (done) => {
+    it('should return updated borrowed record', (done) => {
       Borrow.update({
         returned: true,
         dueDate: new Date(Date.now() + (3 * 24 * 60 * 60 * 1000)),
@@ -311,7 +304,7 @@ describe('Models', () => {
         done();
       });
     });
-    it('should find a borrow record', (done) => {
+    it('should return one borrow record', (done) => {
       Borrow.findOne({
         where: {
           id: borrowId,
@@ -322,7 +315,7 @@ describe('Models', () => {
         done();
       });
     });
-    it('should list all borrow records', (done) => {
+    it('should return list of all borrow records', (done) => {
       Borrow.findAll({
         where: {
           userId,

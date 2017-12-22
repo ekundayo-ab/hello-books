@@ -63,11 +63,6 @@ class BorrowController {
    */
   static returnBook(req, res, next) {
     const { dueDate } = req.body.borrow;
-
-    // Compares the current date with the dueDate specified for returning a book
-    // If current date is greater than the due date, then user is returning late
-    // Hence surcharge variable evaluates to true,
-    // meaning user borrowing credit would be deducted by one.
     const surcharge = moment(Date.now()) > moment(dueDate);
     const bookToReturn = req.foundBook;
     return Borrow
@@ -85,7 +80,6 @@ class BorrowController {
             message: 'You have not borrowed this book'
           });
         }
-        // Book is returned with the count increased by one
         return Book
           .update({
             quantity: bookToReturn.quantity + 1,
@@ -157,7 +151,9 @@ class BorrowController {
     const { page } = req.query; // page number
     const { userId } = req.params;
     const { notify, returned, more } = req.query;
-    let limit = 4; // number of records per page
+
+    // number of records per page
+    let limit = 4;
     const userAttributes = ['id', 'username'];
 
     // conditional query for getting related table

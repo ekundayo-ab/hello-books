@@ -27,6 +27,7 @@ app.use((req, res, next) => {
 
 // Initialize swagger
 const swaggerJSDoc = swagger;
+
 // swagger definition
 const swaggerDefinition = {
   info: {
@@ -40,7 +41,6 @@ const swaggerDefinition = {
     ' the ones used in the sample models are just for sample purposes',
   },
   host: 'hellobooks-e.herokuapp.com',
-  // host: 'localhost:8000', // This can be enabled for localhost
   basePath: '/api/v1',
 };
 

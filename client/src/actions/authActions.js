@@ -13,7 +13,7 @@ import setAuthorizationHeader from '../utils/setAuthorizationToken';
  * @returns {object} action
  */
 const setCurrentUser = user =>
-  ({ type: SET_CURRENT_USER, user, });
+  ({ type: SET_CURRENT_USER, user });
 
 /**
  * Unset Current User
@@ -157,7 +157,7 @@ const userSignUpRequest = userData =>
  *
  * @returns {object} action
  */
-const isUserExists = userData =>
+const doesUserExist = userData =>
   dispatch =>
     axios.post('/api/v1/users', userData)
       .then((res) => {
@@ -195,7 +195,7 @@ export {
   setCurrentUser,
   userSignUpRequest,
   login,
-  isUserExists,
+  doesUserExist,
   logout,
   googleAuth,
   changePassword

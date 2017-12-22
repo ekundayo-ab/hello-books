@@ -85,9 +85,6 @@ class BorrowMiddleware {
         const formedUser =
           { id, username, email, role, level, borrowLimit, totalBorrow };
         userToUpdateInStore = resp.ok ? formedUser : {};
-        // If a user is returning late, send them a mail stating
-        // that they've been surcharged because they are
-        // returning late
         if (surcharge === true) {
           Helper.sendEmail(userToUpdateInStore, newBookRecord);
         }

@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+
 import model from './../models';
 
 const { User } = model;
@@ -17,15 +18,15 @@ class AuthMiddleware {
    * @param {object} res - The response payload sent back from controller
    * @param {object} next - The next action
    *
-   * @returns {next} //verifies and allows route continue to endpoint
+   * @returns {next} - verifies and allows route continue to endpoint
    */
   static authenticate(req, res, next) {
-    // check header or url parameters or post parameters for token
-    const token = req.headers['x-access-token'];
+    const token = req.url === '/api/v1/verify-token' ?
+      req.body.token : req.headers['x-access-token'];
     if (token) {
       return jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-          return res.status(400)
+          return res.status(401)
             .send({ message: 'Failed to authenticate token' });
         }
         req.decoded = decoded;

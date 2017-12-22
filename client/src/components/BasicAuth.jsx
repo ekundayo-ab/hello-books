@@ -52,8 +52,11 @@ export default function (ComposedComponent) {
       }
       return this.props.verifyToken({ token: localStorage.getItem('jwtToken') })
         .then((res) => {
-          if (!res.isDone) {
+          if (!res) {
             this.props.logout();
+            Materialize.toast(
+              'Oops! Something happened, Allow us verify you again',
+              3000, 'red');
             return this.props.history.push('/login');
           }
         });
