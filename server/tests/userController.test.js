@@ -451,7 +451,7 @@ describe('AUTHENTICATION & USER Operations', () => {
       server
         .post('/api/v1/verify-token')
         .set('x-access-token', adminUserToken)
-        .send({})
+        .send({ token: adminUserToken })
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body.decoded.role).to.equal('admin');
