@@ -89,7 +89,6 @@ module.exports = (env) => {
           exclude: /node_modules/,
           query: {
             cacheDirectory: true,
-            presets: ['react'],
           },
         },
       ],
