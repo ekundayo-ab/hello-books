@@ -21,7 +21,7 @@ describe('Helper Functions', () => {
         .toEqual('Passwords do not match');
       expect(userValidation(testData.req1).isValid).toEqual(false);
       expect(userValidation(testData.req1).errors.username)
-        .toEqual('minimum of 3 characters word allowed');
+        .toEqual('minimum of 2 characters word allowed');
       expect(userValidation(testData.req1).errors.password)
         .toEqual('minimum of 6 characters word allowed');
       expect(userValidation(testData.req1).errors.passwordConfirmation)

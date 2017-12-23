@@ -47,7 +47,7 @@ describe('Middleware', () => {
     done();
   });
   describe('An Authentication middleware', () => {
-    it('should prevent access to authenticated route without token', (done) => {
+    it('should return error message if no token exists', (done) => {
       server
         .get('/api/v1/books')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -57,7 +57,7 @@ describe('Middleware', () => {
           done();
         });
     });
-    it('should prevent access to authenticated route with tampered token',
+    it('should return error message if token is altered',
       (done) => {
         server
           .get('/api/v1/books')

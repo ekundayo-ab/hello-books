@@ -8,13 +8,15 @@ import BookMiddleware from '../middlewares/BookMiddleware';
 import BorrowMiddleware from '../middlewares/BorrowMiddleware';
 import ValidationMiddleware from '../middlewares/ValidationMiddleware';
 
-const { signup, googleAuth, changePassword, autoUpgrade } = UserController;
+const { signup, signin, googleAuth, changePassword, autoUpgrade, isUserTaken } =
+  UserController;
 const { addBook, updateBook, deleteBook, listBooks, findBook, filterBooks }
   = BookController;
 const { addCategory, listCategory } = CategoryController;
 const { validateAndCheckIfBookExist } = BookMiddleware;
 const { checkIfDefinedAndValid } = ValidationMiddleware;
-const { hasAdminRights, checkOrSignInUser, authenticate } = AuthMiddleware;
+const { hasAdminRights,
+  checkUser, checkPassword, authenticate } = AuthMiddleware;
 const { borrowBook, returnBook,
   AllBorrowedOrNotReturnedBooks, getBorrowedBook } = BorrowController;
 const { checkIfBorrowExist, sendMailAndResponse } = BorrowMiddleware;
@@ -195,14 +197,15 @@ Router.post('/users/signup',
  *         description: Internal Server Error
  */
 // Route to sign in
-Router.post('/users/signin', checkIfDefinedAndValid, checkOrSignInUser);
+Router.post('/users/signin',
+  checkIfDefinedAndValid, checkUser, checkPassword, signin);
 
 // Authentication for google signup and signin
 Router.post('/auth/google',
-  checkIfDefinedAndValid, checkOrSignInUser, googleAuth);
+  checkIfDefinedAndValid, checkUser, googleAuth);
 
 // Checks if a User exists in the database
-Router.post('/users', checkOrSignInUser);
+Router.post('/users', checkUser, isUserTaken);
 
 Router.use(authenticate); // Authentication middleware
 
@@ -623,7 +626,7 @@ Router.get('/books', listBooks);
  */
 
 // Route to borrow a book
-Router.post('/users/:userId/books', checkOrSignInUser,
+Router.post('/users/:userId/books', checkUser,
   validateAndCheckIfBookExist, checkIfBorrowExist, borrowBook,
   sendMailAndResponse);
 
@@ -738,9 +741,8 @@ Router.post('/users/:userId/books', checkOrSignInUser,
  */
 
 // Route to return a book
-Router.put('/users/:userId/books',
-  checkOrSignInUser, validateAndCheckIfBookExist, returnBook,
-  sendMailAndResponse);
+Router.put('/users/:userId/books', checkUser,
+  validateAndCheckIfBookExist, returnBook, sendMailAndResponse);
 
 /**
  * @swagger
@@ -852,7 +854,7 @@ Router.get('/category/books', filterBooks);
 Router.get('/borrowed/:bookId', getBorrowedBook);
 Router.get('/borrowed/:userId/books', AllBorrowedOrNotReturnedBooks);
 Router.post('/users/pass', checkIfDefinedAndValid,
-  checkOrSignInUser, changePassword);
+  checkUser, checkPassword, changePassword);
 Router.post('/users/autoupgrade', autoUpgrade);
 
 /**

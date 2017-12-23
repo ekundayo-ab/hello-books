@@ -13,31 +13,31 @@ const {
 
 describe('Helper methods', () => {
   describe('fields validation for book operations', () => {
-    it('should return empty errors object', () => {
+    it('should return empty errors object for valid fields', () => {
       assert.equal(inputValidation(helperBook.book1).isValid, true);
       assert.deepEqual(inputValidation(helperBook.book1).errors, {});
     });
-    it('should return error value for isbn field ', () => {
+    it('should return error value for invalid isbn field ', () => {
       assert.equal(inputValidation(helperBook.book3).isValid, false);
       assert.equal(inputValidation(helperBook.book3)
         .errors.isbn, 'This field is required');
     });
-    it('should return error value for title field', () => {
+    it('should return error value for invalid title field', () => {
       assert.equal(inputValidation(helperBook.book4).isValid, false);
       assert.equal(inputValidation(helperBook.book4)
         .errors.title, 'This field is required');
     });
-    it('should return error value for author field', () => {
+    it('should return error value for invalid author field', () => {
       assert.equal(inputValidation(helperBook.book5).isValid, false);
       assert.equal(inputValidation(helperBook.book5)
         .errors.author, 'This field is required');
     });
-    it('should return error value for description field', () => {
+    it('should return error value for invalid description field', () => {
       assert.equal(inputValidation(helperBook.book6).isValid, false);
       assert.equal(inputValidation(helperBook.book6)
         .errors.description, 'This field is required');
     });
-    it('should return error value for quantity field', () => {
+    it('should return error value for invalid quantity field', () => {
       assert.equal(inputValidation(helperBook.book7).isValid, false);
       assert.equal(inputValidation(helperBook.book7)
         .errors.quantity, 'This field is required');
@@ -80,10 +80,10 @@ describe('Helper methods', () => {
       assert.equal(userValidation(helperUser.user9c)
         .errors.password, 'Passwords do not match');
     });
-    it('should not allow username less than 3 characters', () => {
+    it('should not allow username less than 2 characters', () => {
       assert.equal(userValidation(helperUser.user9e).isValid, false);
       assert.equal(userValidation(helperUser.user9e)
-        .errors.username, 'minimum of 3 characters word allowed');
+        .errors.username, 'minimum of 2 characters word allowed');
     });
     it('should not allow password less than 6 characters', () => {
       assert.equal(userValidation(helperUser.user9f).isValid, false);

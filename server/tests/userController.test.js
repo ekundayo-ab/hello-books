@@ -194,7 +194,7 @@ describe('AUTHENTICATION & USER Operations', () => {
         });
     });
 
-    it('should return error message if user does not exist', (done) => {
+    it('should return error message if username is wrong', (done) => {
       server
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -204,8 +204,8 @@ describe('AUTHENTICATION & USER Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.message)
-            .to.equal('Authentication failed. User does not exist');
-          expect(res.status).to.equal(404);
+            .to.equal('Authentication failed, check password or email');
+          expect(res.status).to.equal(400);
           done();
         });
     });
@@ -381,27 +381,6 @@ describe('AUTHENTICATION & USER Operations', () => {
             done();
           });
       });
-    it('should return error message if user is not found', (done) => {
-      process.env.TRIGGER_ENV = true;
-      server
-        .post('/api/v1/users/pass')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', normalUserToken)
-        .send({
-          oldPass: 'ekundayo',
-          newPass: 'ekundayo',
-          newPassConfirm: 'ekundayo',
-          userId: 9825
-        })
-        .end((err, res) => {
-          process.env.TRIGGER_ENV = false;
-          expect(res.status).to.equal(404);
-          expect(res.body).to.be.an.instanceof(Object);
-          expect(res.body.message)
-            .to.equal('Password change failed, try again');
-          done();
-        });
-    });
   });
 
   describe('Membership auto-upgrade', () => {
@@ -447,7 +426,7 @@ describe('AUTHENTICATION & USER Operations', () => {
   });
 
   describe('Token verification', () => {
-    it('should ensure an authenticated user has a valid token', (done) => {
+    it('should return user details if token is valid', (done) => {
       server
         .post('/api/v1/verify-token')
         .set('x-access-token', adminUserToken)
@@ -467,7 +446,7 @@ describe('AUTHENTICATION & USER Operations', () => {
   });
 
   describe('Autoupgrade unexpected outcome handling', () => {
-    it('should raise error if all fails', (done) => {
+    it('should return error message for upgrade ineligibility', (done) => {
       User.update = () => Promise.reject(1);
       server
         .post('/api/v1/users/autoupgrade')
@@ -504,7 +483,7 @@ describe('AUTHENTICATION & USER Operations', () => {
       });
     });
 
-    it('should raise error if unexpected outcome happens', (done) => {
+    it('should return error message for unexpected response', (done) => {
       User.update = () => Promise.reject(1);
       server
         .post('/api/v1/users/autoupgrade')

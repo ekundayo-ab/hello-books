@@ -55,17 +55,17 @@ const login = userData =>
       localStorage.setItem('jwtToken', token);
       dispatch(setCurrentUser(user));
       setAuthorizationHeader(token);
+      Materialize.toast(res.message, 1000, 'green');
       return {
         isAuthenticated: true,
         message,
       };
     })
-    .catch(err =>
-      ({
-        isAuthenticated: false,
-        message: err.response.data.message,
-      }),
-    );
+    .catch((err) => {
+      const { message } = err.response.data;
+      Materialize.toast(message, 2000, 'red');
+      return { isAuthenticated: false, message };
+    });
 
 /**
  * Register and Logs in User with Google
@@ -89,7 +89,7 @@ const googleAuth = (userData) => {
   return dispatch => axios.post('/api/v1/auth/google', user)
     .then((res) => {
       const { token, message } = res.data;
-      Materialize.toast(message, 4000, 'green');
+      Materialize.toast(message, 2000, 'green');
       localStorage.setItem('jwtToken', token);
       dispatch(setCurrentUser(user));
       setAuthorizationHeader(token);
@@ -100,7 +100,7 @@ const googleAuth = (userData) => {
     })
     .catch((err) => {
       const { message } = err.response.data;
-      Materialize.toast(message, 4000, 'red');
+      Materialize.toast(message, 2000, 'red');
       return { success: false, message };
     });
 };
@@ -143,7 +143,7 @@ const userSignUpRequest = userData =>
         });
       })
       .catch((err) => {
-        Materialize.toast(err.response.data.message, 3000, 'red');
+        Materialize.toast(err.response.data.message, 2000, 'red');
         return err.response.data;
       });
 

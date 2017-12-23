@@ -179,8 +179,8 @@ class Helper {
       if (theKey === 'password' && field.trim().length < 6) {
         errors[theKey] = 'minimum of 6 characters word allowed';
       }
-      if (theKey === 'username' && field.trim().length < 3) {
-        errors[theKey] = 'minimum of 3 characters word allowed';
+      if (theKey === 'username' && field.trim().length < 2) {
+        errors[theKey] = 'minimum of 2 characters word allowed';
       }
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
         errors[theKey] = 'This field is required';

@@ -38,7 +38,10 @@ export class BookDetail extends Component {
    */
   componentDidMount() {
     const { id } = this.props.match.params;
-    this.props.fetchBook(id);
+    this.props.fetchBook(id)
+      .then((res) => {
+        if (res.notFound) return this.props.history.push('/shelf');
+      });
     this.props.fetchBorrowedBook(this.props.match.params.id);
   }
 
@@ -173,7 +176,10 @@ BookDetail.propTypes = {
   }).isRequired,
   fetchBook: PropTypes.func.isRequired,
   borrowBook: PropTypes.func.isRequired,
-  fetchBorrowedBook: PropTypes.func.isRequired
+  fetchBorrowedBook: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func
+  }).isRequired
 };
 
 /**

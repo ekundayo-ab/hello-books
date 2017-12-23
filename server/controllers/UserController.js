@@ -52,6 +52,32 @@ class UserController {
   /**
    * @static
    *
+   * @description Signs in a user
+   *
+   * @param {object} req - The request payload sent to the controller
+   * @param {object} res - The request payload sent from the contorller
+   *
+   * @returns {object} - registered user and message
+   *
+   * @memberOf UserController
+   */
+  static signin(req, res) {
+    const { foundUser } = req;
+    const { id, role, username } = foundUser;
+    const token = jwt.sign({
+      data: { id, role, username },
+    }, process.env.JWT_SECRET, { expiresIn: 60 * 60 });
+
+    return res.status(200).send({
+      message: `Hi ${username}, you are logged in`,
+      token,
+      user: foundUser
+    });
+  }
+
+  /**
+   * @static
+   *
    * @description Registers and Logs In a user with their google credentials
    *
    * @param {object} req - The request payload sent to the controller
@@ -62,6 +88,7 @@ class UserController {
    * @memberof UserController
    */
   static googleAuth(req, res) {
+    if (req.foundUser) return UserController.signin(req, res);
     const { username, email, password, role } = req.body;
     return User
       .create({
@@ -105,15 +132,9 @@ class UserController {
           id: process.env.TRIGGER_ENV
             ? userId : req.decoded.data.id
         }
-      }).then((user) => {
-        if (user[0] === 0) {
-          return res.status(404)
-            .send({ message: 'Password change failed, try again' });
-        }
-        return res.status(200)
-          .send({ message: 'Password successfully changed' });
-      }).catch(() =>
-        res.status(500).send({ message: 'Internal Server Error' }));
+      }).then(() => res.status(200)
+        .send({ message: 'Password successfully changed' }))
+      .catch(() => res.status(500).send({ message: 'Internal Server Error' }));
   }
 
   /**
@@ -159,6 +180,24 @@ class UserController {
         return res.status(200).send({ message: 'Not eligible' });
       }).catch(() => res.status(500)
         .send({ message: 'Internal Server Error' }));
+  }
+
+  /**
+   * @static
+   *
+   * @description Checks if a user detail has been taken when registering
+   *
+   * @param {object} req - The request payload sent from the route
+   * @param {object} res - The response payload sent to the controller
+   *
+   * @returns {object} - Sends response
+   *
+   * @memberof AuthMiddleware
+   */
+  static isUserTaken(req, res) {
+    if (req.foundUser) return res.status(200).send({ exists: true });
+    return res.status(200)
+      .send({ message: 'Username not taken', exists: false });
   }
 }
 

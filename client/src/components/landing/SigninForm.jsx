@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import GoogleLogin from 'react-google-login';
 import SingleInput from '../forms/SingleInput';
 import Helper from './../../helpers/Helper';
-import { login } from '../../actions/authActions';
+import { login, googleAuth } from '../../actions/authActions';
 
 /**
  * @description represents SignIn form
@@ -32,6 +33,7 @@ export class SignInForm extends Component {
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.responseGoogle = this.responseGoogle.bind(this);
   }
 
   /**
@@ -66,15 +68,32 @@ export class SignInForm extends Component {
       this.props.login(this.state).then(
         (res) => {
           if (res.isAuthenticated) {
-            Materialize.toast(res.message, 1000, 'green');
             return this.props.history.push('/shelf?page=1');
           }
           this.setState({ errors: {}, isLoading: false });
-          return Materialize.toast(res.message, 1000, 'red');
         },
       );
     }
     this.setState({ errors });
+  }
+
+  /**
+   * @description handles callback during Google signup and signin
+   *
+   * @param {object} response
+   *
+   * @returns {boolean} or redirects
+   *
+   * @memberof SignUp
+   */
+  responseGoogle(response) {
+    this.props.googleAuth(response)
+      .then((res) => {
+        if (res.success) {
+          this.props.history.push('/shelf?page=1');
+        }
+        return false;
+      });
   }
 
   /**
@@ -91,6 +110,25 @@ export class SignInForm extends Component {
     return (
       <div id="login">
         <div className="row">
+          <div className="center-align col s12">
+            <GoogleLogin
+              className="red darken-2 google-btn"
+              clientId={'1037424306341' +
+              '-av656qd87qifs0vsbhp67ej5n' +
+              '04359us.apps.googleusercontent.com'}
+              buttonText="Login"
+              onSuccess={this.responseGoogle}
+              onFailure={
+                () => {
+                  Materialize.toast('Oops! try again', 4000, 'red');
+                }
+              }
+            >
+              <i className="fa fa-google-plus-official fa-2x" />
+              &nbsp; GOOGLE+
+            </GoogleLogin><br /> <br />
+            <span className="or"><i>Or</i></span>
+          </div>
           <form onSubmit={this.onSubmit}>
             <SingleInput
               placeholder="Username or Email"
@@ -130,7 +168,8 @@ SignInForm.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func
   }).isRequired,
-  login: PropTypes.func.isRequired
+  login: PropTypes.func.isRequired,
+  googleAuth: PropTypes.func.isRequired
 };
 
-export default connect(null, { login })(SignInForm);
+export default connect(null, { login, googleAuth })(SignInForm);

@@ -110,7 +110,7 @@ export default {
   },
   user9e: {
     body: {
-      username: 'li',
+      username: 'l',
       password: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
       passwordConfirmation: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
       email: 'murphus@gmail.com'

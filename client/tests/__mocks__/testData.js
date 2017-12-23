@@ -411,7 +411,7 @@ export const req = {
 };
 
 export const req1 = {
-  username: 'ek',
+  username: 'e',
   email: 'ekprogs@mail.com',
   password: 'pa',
   passwordConfirmation: 'pa'

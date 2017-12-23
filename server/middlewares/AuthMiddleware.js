@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-
 import model from './../models';
 
 const { User } = model;
@@ -47,7 +46,7 @@ class AuthMiddleware {
    *
    * @returns {object} - Sends decoded data
    *
-   * @memberof Authenticate
+   * @memberof AuthMiddleware
    */
   static verifyToken(req, res) {
     return User.findOne({
@@ -62,24 +61,25 @@ class AuthMiddleware {
       ]
     })
       .then(user =>
-        res.status(200).send({ decoded: req.decoded.data, user }));
+        res.status(200).send({ decoded: req.decoded.data, user }))
+      .catch(() =>
+        res.status(500).send({ message: 'Internal Server Error' }));
   }
 
   /**
    * @static
    *
-   * @description Checks if a user exists in the database and signs such user
-   * into the application in some cases, or just return the user
-   *
+   * @description Checks if a user exists and return the user or
+   * return a message if not
    * @param {object} req - The request payload sent from the route
    * @param {object} res - The response payload sent to the controller
    * @param {object} next - The next action
    *
-   * @returns {object} - Ensure a user exists, Sign in message
+   * @returns {object} foundUser - Ensure a user exists
    *
-   * @memberof Authenticate
+   * @memberof AuthMiddleware
    */
-  static checkOrSignInUser(req, res, next) {
+  static checkUser(req, res, next) {
     let query;
     // Set query and validate conditionally based on request
     query = req.url === '/users/signin' ?
@@ -89,56 +89,48 @@ class AuthMiddleware {
     if (req.query.loan === 'borrowOrReturn') query = { id: req.params.userId };
     if (req.url === '/users/pass') query = { id: req.decoded.data.id };
     return User
-      .findOne({
-        where: {
-          ...query
-        },
-      })
+      .findOne({ where: { ...query } })
       .then((foundUser) => {
-        if (req.url === '/users') {
-          if (foundUser) return res.status(200).send({ exists: true });
-          return res.status(200)
-            .send({ message: 'Username not taken', exists: false });
-        }
-
         if (req.url === '/auth/google' && !foundUser) {
           return next();
         }
-
-        if (!foundUser) {
-          return res.status(404).send({
-            message: 'Authentication failed. User does not exist'
-          });
-        }
-
         if (req.query.loan === 'borrowOrReturn') {
+          const message = 'User not found';
+          if (!foundUser) return res.status(404).send({ message });
           res.locals.borrowStatus = foundUser.borrowLimit < 1;
           return next();
         }
-
-        if (!bcrypt.compareSync(req.body.password || req.body.oldPass,
-          foundUser.password)) {
-          const message = `Authentication failed, ${req.url === '/users/pass' ?
-            'Old password incorrect' : 'check password or email'}`;
-          return res.status(400).send({ message });
-        }
-
-        if (req.url === '/users/pass') return next();
-
-        const { id, role, username } = foundUser;
-        const token = jwt.sign({
-          data: { id, role, username },
-        }, process.env.JWT_SECRET, { expiresIn: 60 * 60 });
-
         req.foundUser = foundUser;
-
-        return res.status(200).send({
-          message: `Hi ${username}, you are logged in`,
-          token,
-          user: foundUser
-        });
+        return next();
       })
       .catch(err => res.status(500).send({ message: err }));
+  }
+
+  /**
+   * @static
+   *
+   * @description Compares password
+   *
+   * @param {object} req
+   * @param {object} res
+   * @param {object} next
+   *
+   * @returns {object} checkSuccess and or message
+   *
+   * @memberOf AuthMiddleware
+   */
+  static checkPassword(req, res, next) {
+    if (req.url === '/users/signin' && !req.foundUser) {
+      return res.status(400)
+        .send({ message: 'Authentication failed, check password or email' });
+    }
+    if (!bcrypt.compareSync(req.body.password || req.body.oldPass,
+      req.foundUser.password)) {
+      const message = `Authentication failed, ${req.url === '/users/pass' ?
+        'Old password incorrect' : 'check password or email'}`;
+      return res.status(400).send({ message });
+    }
+    return next();
   }
 
   /**
@@ -152,7 +144,7 @@ class AuthMiddleware {
    *
    * @returns {object} - Sends response or allow route request to continue
    *
-   * @memberof Authenticate
+   * @memberof AuthMiddleware
    */
   static hasAdminRights(req, res, next) {
     // Ensure user has administrative priviledges to perform certain operations

@@ -128,7 +128,7 @@ const fetchBooksByCategory = (pageNumber, categoryId) =>
         return { isDone: !!books };
       })
       .catch((err) => {
-        store.dispatch(setBooks(err.response.data.books));
+        dispatch(setBooks([]));
         return err.response.data;
       });
 
@@ -147,7 +147,11 @@ const fetchBook = id => dispatch =>
       dispatch(bookFetched(res.data));
       return res.data;
     })
-    .catch(err => err);
+    .catch((err) => {
+      const { message } = err.response.data;
+      Materialize.toast(message, 2000, 'red');
+      return { notFound: true, message };
+    });
 
 
 /**

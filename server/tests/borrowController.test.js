@@ -216,7 +216,7 @@ describe('Library books', () => {
         .end((err, res) => {
           expect(res.status).to.equal(404);
           expect(res.body.message)
-            .to.equal('Authentication failed. User does not exist');
+            .to.equal('User not found');
           done();
         });
     });
