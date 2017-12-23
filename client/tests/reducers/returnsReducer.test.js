@@ -1,4 +1,4 @@
-import returnReducer from '../../src/reducers/returnReducer';
+import returnReducer from '../../src/reducers/returnsReducer';
 import * as actionTypes from '../../src/actions/types';
 import {
   borrow1,

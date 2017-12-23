@@ -1,20 +1,22 @@
 import { combineReducers } from 'redux';
 import categoryReducer from './reducers/categoryReducer';
-import users from './reducers/authReducer';
-import booksReducer from './reducers/bookReducer';
-import borrowsReducer from './reducers/borrowReducer';
-import returnsReducer from './reducers/returnReducer';
-import bookReducer from './reducers/singleBookReducer';
-import borrowReducer from './reducers/singleBorrowReducer';
+import authReducer from './reducers/authReducer';
+import booksReducer from './reducers/booksReducer';
+import borrowsReducer from './reducers/borrowsReducer';
+import returnsReducer from './reducers/returnsReducer';
+import singleBookReducer from './reducers/singleBookReducer';
+import singleBorrowReducer from './reducers/singleBorrowReducer';
 import paginationReducer from './reducers/paginationReducer';
+
+const users = authReducer;
 
 const appReducer = combineReducers({
   users,
   categoryReducer,
   booksReducer,
   borrowsReducer,
-  bookReducer,
-  borrowReducer,
+  singleBookReducer,
+  singleBorrowReducer,
   returnsReducer,
   paginationReducer
 });

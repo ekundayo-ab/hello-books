@@ -148,7 +148,7 @@ describe('Book actions', () => {
         });
     });
 
-    it('should return error message on request failure', (done) => {
+    it('should return error message on book deletion failure', (done) => {
       moxios.stubRequest(`/api/v1/books/${7}`, {
         status: 500,
         response: { message: 'Internal Server Error' }

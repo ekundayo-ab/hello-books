@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
 import * as actionType from '../../src/actions/types';
-import verifyAuthorizationToken from '../../src/utils/verifyAuthorizationToken';
+import verifyToken from '../../src/utils/verifyToken';
 import { user } from '../__mocks__/mockData';
 
 const middlewares = [thunk];
@@ -27,7 +27,7 @@ describe('Authentication actions', () => {
         user
       }];
       const store = mockStore({});
-      store.dispatch(verifyAuthorizationToken())
+      store.dispatch(verifyToken())
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
           done();
@@ -41,7 +41,7 @@ describe('Authentication actions', () => {
       });
       const expectedActions = [];
       const store = mockStore({});
-      store.dispatch(verifyAuthorizationToken())
+      store.dispatch(verifyToken())
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
           done();

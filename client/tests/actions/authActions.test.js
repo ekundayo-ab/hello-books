@@ -24,7 +24,7 @@ describe('Authentication actions', () => {
     moxios.uninstall();
   });
   describe('Login action', () => {
-    it('should respond with a success message when a user logs in', (done) => {
+    it('should return success message when a user logs in', (done) => {
       moxios.stubRequest('/api/v1/users/signin', {
         status: 200,
         response: {
@@ -46,7 +46,7 @@ describe('Authentication actions', () => {
         });
     });
 
-    it('should return error message on request failure', (done) => {
+    it('should return error message on login failure', (done) => {
       moxios.stubRequest('/api/v1/users/signin', {
         status: 500,
         response: { message: 'Internal Server Error' }
@@ -62,7 +62,7 @@ describe('Authentication actions', () => {
   });
 
   describe('Register action', () => {
-    it('should respond with a success message when a' +
+    it('should return success message when a' +
     ' user successfully registers', (done) => {
       moxios.stubRequest('/api/v1/users/signup', {
         status: 200,
@@ -84,7 +84,7 @@ describe('Authentication actions', () => {
       done();
     });
 
-    it('should return error message on request failure', (done) => {
+    it('should return error message on registration failure', (done) => {
       moxios.stubRequest('/api/v1/users/signup', {
         status: 500,
         response: { message: 'Internal Server Error' }
@@ -100,7 +100,7 @@ describe('Authentication actions', () => {
   });
 
   describe('Google authentication action', () => {
-    it('should respond with a success message when a' +
+    it('should return success message when a' +
     ' user registers and logs in with google', (done) => {
       moxios.stubRequest('/api/v1/auth/google', {
         status: 200,
@@ -122,7 +122,7 @@ describe('Authentication actions', () => {
         });
     });
 
-    it('should return error message when request fails', (done) => {
+    it('should return error message on google login failure', (done) => {
       moxios.stubRequest('/api/v1/auth/google', {
         status: 500,
         response: { message: 'Internal Server Error' }
@@ -138,7 +138,7 @@ describe('Authentication actions', () => {
   });
 
   describe('Logout action', () => {
-    it('should logout a user clearing the store', (done) => {
+    it('should return no user after clearing store', (done) => {
       const expectedActions = {
         type: actionType.UNSET_CURRENT_USER,
         user: {}
@@ -150,7 +150,7 @@ describe('Authentication actions', () => {
   });
 
   describe('Username confirm action', () => {
-    it('should ensure a new username has not been taken', (done) => {
+    it('should return error message if user does not exist', (done) => {
       moxios.stubRequest('/api/v1/users', {
         status: 200,
         response: {
@@ -170,7 +170,7 @@ describe('Authentication actions', () => {
         });
     });
 
-    it('should return error message for request failure', (done) => {
+    it('should return error message on username exists failure', (done) => {
       moxios.stubRequest('/api/v1/users', {
         status: 500,
         response: { message: 'Internal Server Error' }
@@ -186,7 +186,7 @@ describe('Authentication actions', () => {
   });
 
   describe('Password change action', () => {
-    it('should make known if password was successfully changed', (done) => {
+    it('should return success message for password change', (done) => {
       moxios.stubRequest('/api/v1/users/pass', {
         status: 200,
         response: {
@@ -205,7 +205,7 @@ describe('Authentication actions', () => {
         });
     });
 
-    it('should return error message on request failure', (done) => {
+    it('should return error message on password change failure', (done) => {
       moxios.stubRequest('/api/v1/users/pass', {
         status: 500,
         response: { message: 'Internal Server Error' }

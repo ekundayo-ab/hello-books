@@ -13,9 +13,10 @@ localStorage.setItem('userDetails', JSON.stringify(userDetails));
 
 const props = {
   location: { pathname: '/' },
-  getBorrowedNotReturned: () => Promise.resolve(1),
-  returnBook: () => Promise.resolve(1),
-  setCurrentPage: () => Promise.resolve(1),
+  getBorrowedNotReturned: jest.fn(() => Promise.resolve(1)),
+  returnBook: jest.fn(() => Promise.resolve(1)),
+  setCurrentPage: jest.fn(() => Promise.resolve(1)),
+  paginate: jest.fn(() => Promise.resolve(1)),
   user,
   books: borrowedNotReturnedBooks,
   history: createHistory()

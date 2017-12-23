@@ -15,7 +15,7 @@ const initialState = {
  *
  * @returns {object} // Borrowed book
  */
-const borrowReducer = (state = initialState, action = {}) => {
+const singleBorrowReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case BORROWED_FETCHED: {
       return { ...state, borrow: action.borrow };
@@ -25,4 +25,4 @@ const borrowReducer = (state = initialState, action = {}) => {
   }
 };
 
-export default borrowReducer;
+export default singleBorrowReducer;

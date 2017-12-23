@@ -45,7 +45,7 @@ describe('Borrowing actions', () => {
         });
     });
 
-    it('should return error message on request failure', (done) => {
+    it('should return error message on borrow action failure', (done) => {
       moxios.stubOnce('POST', `/api/v1/users/${1}/books?loan=borrowOrReturn`, {
         status: 500,
         response: { message: 'Internal Server Error' }
@@ -106,7 +106,7 @@ describe('Borrowing actions', () => {
         });
     });
 
-    it('should return error message on request failure', (done) => {
+    it('should return error message on book listing failure', (done) => {
       moxios
         .stubRequest(`/api/v1/borrowed/${1}/books?page=${1}` +
         `&notify=${false}&more=${0}&returned=${0}`, {
@@ -165,7 +165,7 @@ describe('Borrowing actions', () => {
         });
     });
 
-    it('should return error message on request failure', (done) => {
+    it('should return error message on checking failure', (done) => {
       moxios.stubRequest(`/api/v1/borrowed/${1}`, {
         status: 500,
         response: { message: 'Internal Server Error' }
@@ -223,7 +223,7 @@ describe('Borrowing actions', () => {
         });
     });
 
-    it('should return error message on request failure', (done) => {
+    it('should return error message on listing failure', (done) => {
       moxios.stubRequest(
         `/api/v1/users/${1}/books?returned=false&page=${1}`, {
           status: 500,
@@ -283,7 +283,7 @@ describe('Borrowing actions', () => {
         });
     });
 
-    it('should return error message on request failure', (done) => {
+    it('should return error message on return action failure', (done) => {
       moxios.stubOnce('PUT', `/api/v1/users/${1}/books?loan=borrowOrReturn`, {
         status: 500,
         response: { message: 'Internal Server Error' }

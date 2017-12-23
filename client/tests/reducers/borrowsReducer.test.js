@@ -1,4 +1,4 @@
-import borrowReducer from '../../src/reducers/borrowReducer';
+import borrowsReducer from '../../src/reducers/borrowsReducer';
 import * as actionTypes from '../../src/actions/types';
 import {
   borrows1,
@@ -6,12 +6,12 @@ import {
 
 describe('borrow reducer', () => {
   it('should return the initial state', () => {
-    expect(borrowReducer({}, {})).toEqual({});
+    expect(borrowsReducer({}, {})).toEqual({});
   });
 
   it('should handle SET_BORROWED_BOOKS and save to store', () => {
     expect(
-      borrowReducer(
+      borrowsReducer(
         { borrows: [] },
         { type: actionTypes.SET_BORROWED_BOOKS, borrowedBooks: borrows1 }
       )

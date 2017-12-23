@@ -42,10 +42,10 @@ describe('History Component', () => {
       users: {
         user
       },
-      bookReducer: {
+      singleBookReducer: {
         book
       },
-      borrowReducer: {
+      singleBorrowReducer: {
         borrow
       }
     };

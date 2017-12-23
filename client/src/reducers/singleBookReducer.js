@@ -15,7 +15,7 @@ const initialState = {
  *
  * @returns {object} - Single Book
  */
-const bookReducer = (state = initialState, action = {}) => {
+const singleBookReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case BOOK_FETCHED: {
       return { ...state, book: action.book };
@@ -25,4 +25,4 @@ const bookReducer = (state = initialState, action = {}) => {
   }
 };
 
-export default bookReducer;
+export default singleBookReducer;

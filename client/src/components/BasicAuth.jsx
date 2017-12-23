@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import verifyToken from '../utils/verifyAuthorizationToken';
+import verifyToken from '../utils/verifyToken';
 import Header from '../components/library/master/Header';
 import { logout } from '../actions/authActions';
 
