@@ -55,7 +55,6 @@ const login = userData =>
       localStorage.setItem('jwtToken', token);
       dispatch(setCurrentUser(user));
       setAuthorizationHeader(token);
-      Materialize.toast(res.message, 1000, 'green');
       return {
         isAuthenticated: true,
         message,

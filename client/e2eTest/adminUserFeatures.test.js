@@ -41,7 +41,7 @@ module.exports = {
       .waitForElementVisible('.toast', 5000)
       .assert.visible('.toast')
       .assert
-      .containsText('.toast', 'Authentication failed. User does not exist')
+      .containsText('.toast', 'Authentication failed, check password or email')
       .pause(600);
   },
   'User can view registration page': (browser) => {

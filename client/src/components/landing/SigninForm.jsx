@@ -68,6 +68,7 @@ export class SignInForm extends Component {
       this.props.login(this.state).then(
         (res) => {
           if (res.isAuthenticated) {
+            Materialize.toast(res.message, 1000, 'green');
             return this.props.history.push('/shelf?page=1');
           }
           this.setState({ errors: {}, isLoading: false });
