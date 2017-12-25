@@ -359,8 +359,11 @@ export const borrows = [
       isbn: 7,
       title: 'Gilead02',
       author: 'Marilynne Robinson',
-      description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
-      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      description: 'Gilead is a novel written by Marilynne' +
+      ' Robinson that was published in 2004. Gilead won the 2005 Pulitzer ' +
+      'Prize for Fiction, as well as the National Book Critics Circle Award.',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image' +
+      '/upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
       status: true,
       quantity: 12,
       categoryId: 1,
@@ -386,8 +389,11 @@ export const borrows = [
       isbn: 8,
       title: 'Gilead03',
       author: 'Marilynne Robinson',
-      description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
-      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      description: 'Gilead is a novel written by Marilynne Robinson that was' +
+      ' published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as' +
+      ' well as the National Book Critics Circle Award.',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/' +
+      'v1509139554/kf18x2ukcnygh6bau1o2.png',
       status: true,
       quantity: 12,
       categoryId: 1,
@@ -413,8 +419,11 @@ export const borrows = [
       isbn: 9,
       title: 'Gilead04',
       author: 'Marilynne Robinson',
-      description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
-      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      description: 'Gilead is a novel written by Marilynne Robinson' +
+      ' that was published in 2004. Gilead won the 2005 Pulitzer Prize' +
+      ' for Fiction, as well as the National Book Critics Circle Award.',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/' +
+      'v1509139554/kf18x2ukcnygh6bau1o2.png',
       status: true,
       quantity: 12,
       categoryId: 1,
@@ -440,8 +449,11 @@ export const borrows = [
       isbn: 10,
       title: 'Gilead05',
       author: 'Marilynne Robinson',
-      description: 'Gilead is a novel written by Marilynne Robinson that was published in 2004. Gilead won the 2005 Pulitzer Prize for Fiction, as well as the National Book Critics Circle Award.',
-      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      description: 'Gilead is a novel written by Marilynne Robinson that' +
+      ' was published in 2004. Gilead won the 2005 Pulitzer Prize for ' +
+      'Fiction, as well as the National Book Critics Circle Award.',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/' +
+      'v1509139554/kf18x2ukcnygh6bau1o2.png',
       status: true,
       quantity: 12,
       categoryId: 1,
@@ -467,8 +479,12 @@ export const borrows = [
       isbn: 2,
       title: 'Half of a Yellow Sun',
       author: 'Chimamanda N.A',
-      description: 'Half of a Yellow Sun is a novel by Nigerian author Chimamanda Ngozi Adichie. Published in 2006 by Knopf/Anchor, the novel tells the story of the Biafran War through the perspective of the characters Olanna, Ugwu, and Richard.',
-      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/v1509139535/ycj4vsbhobcxiowafaas.png',
+      description: 'Half of a Yellow Sun is a novel by Nigerian author' +
+      ' Chimamanda Ngozi Adichie. Published in 2006 by Knopf/Anchor, the ' +
+      'novel tells the story of the Biafran War through the perspective of ' +
+      'the characters Olanna, Ugwu, and Richard.',
+      image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/' +
+      'v1509139535/ycj4vsbhobcxiowafaas.png',
       status: true,
       quantity: 33,
       categoryId: 1,

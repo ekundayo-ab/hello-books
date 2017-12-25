@@ -270,7 +270,7 @@ describe('Borrowing actions', () => {
           updatedBook,
           userToUpdateInStore: user,
         }
-      }); 
+      });
       const expectedActions = [
         { type: actionType.BORROWED_RETURNED, book: {} },
         { type: actionType.SET_CURRENT_USER, user }
