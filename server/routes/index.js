@@ -98,6 +98,10 @@ Router.get('/', (req, res) => res.status(200).send({
  *         type: string
  *         default: JAVA Master
  *         example: JAVA Master
+ *       category:
+ *         type: string
+ *         default: 5
+ *         example: 5
  *       description:
  *         type: string
  *         default: Learn and master the fundamentals of JAVA in two months
@@ -110,6 +114,32 @@ Router.get('/', (req, res) => res.status(200).send({
  *         type: string
  *         default: learn_java_two_months.jpg
  *         example: learn_java_two_months.jpg
+ */
+
+/**
+ * @swagger
+ * definitions:
+ *   UserCreationResponse:
+ *     properties:
+ *       message:
+ *         type: string
+ *         example: Hi chieftester, registration successful!
+ *       user:
+ *         type: object
+ *         example:
+ *           {
+ *             "role": normal,
+ *             "level": bronze,
+ *             "borrowLimit": 2,
+ *             "totalBorrow": 0,
+ *             "id": 3,
+ *             "username": "chieftester",
+ *             "email": chieftester@mail.com,
+ *             "password":
+ *             $2a$10$4MCpVEkVpRfSUV0PWzhP4u6RCK567fp1z52wxTrChZFNwt4GuI4Oa,
+ *             "updatedAt": "2018-01-02T16:43:34.261Z",
+ *             "createdAt": "2018-01-02T16:43:34.261Z"
+ *           }
  */
 
 /**
@@ -133,15 +163,28 @@ Router.get('/', (req, res) => res.status(200).send({
  *     responses:
  *       201:
  *         description: Hi chieftester, registration successful!
+ *         schema:
+ *           $ref: '#/definitions/UserCreationResponse'
  *       400:
  *         description: |
  *           Passwords do not match
  *           Check your username, email or password and try again!
  *           Invalid email address, try again
+ *           errors: {
+ *             username: 'This field is required',
+ *             email: 'This field is required',
+ *             password: 'This field is required',
+ *             passwordConfirmation: 'This field is required',
+ *             username: 'One word, only letters or underscore',
+ *             username: 'minimum of 2 characters word allowed',
+ *             password: 'minimum of 6 characters word allowed',
+ *             password: 'Passwords do not match',
+ *             email: 'Invalid email address, try again',
+ *           }
  *       409:
  *         description: |
- *           User with that email exists
  *           Username already taken
+ *           User with this email exists
  *       500:
  *         description: Internal Server Error
  */
@@ -153,15 +196,28 @@ Router.post('/users/signup',
  * definitions:
  *   SignInResponse:
  *     properties:
- *       success:
- *         type: boolean
- *         example: true
  *       message:
  *         type: string
  *         example: Hi chieftester, you are logged in
  *       token:
  *         type: string
  *         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo1Miwicm9sZSI6Im5vcm1hbCIsInVzZXJuYW1lIjoiY2hpZWZ0ZXN0ZXIifSwiaWF0IjoxNTA5OTQ0NjUzLCJleHAiOjE1MDk5NDgyNTN9.IvVYw1nB79PUyrBWpywwxJxvv6NRcMzXGXNEPKI9slI"
+ *       user:
+ *         type: object
+ *         example:
+ *           {
+ *             "role": normal,
+ *             "level": bronze,
+ *             "borrowLimit": 2,
+ *             "totalBorrow": 0,
+ *             "id": 3,
+ *             "username": "chieftester",
+ *             "email": chieftester@mail.com,
+ *             "password":
+ *             $2a$10$4MCpVEkVpRfSUV0PWzhP4u6RCK567fp1z52wxTrChZFNwt4GuI4Oa,
+ *             "updatedAt": "2018-01-02T16:43:34.261Z",
+ *             "createdAt": "2018-01-02T16:43:34.261Z"
+ *           }
  */
 
 /**
@@ -188,11 +244,11 @@ Router.post('/users/signup',
  *         schema:
  *           $ref: '#/definitions/SignInResponse'
  *       400:
- *         description: Bad request!, Check your username or email.
+ *         description: Check your username or email.
  *       404:
- *         description: Authentication failed. check password or email
+ *         description: Authentication failed, Wrong password or email
  *       401:
- *         description: Authentication failed. check password or email
+ *         description: Authentication failed. Wrong password or email
  *       500:
  *         description: Internal Server Error
  */
@@ -220,7 +276,7 @@ Router.use(authenticate); // Authentication middleware
  *       book:
  *         type: object
  *         example:
- *           book: {
+ *           {
  *             "id": 74,
  *             "isbn": 287,
  *             "title": "Learn JAVA in two months",
@@ -230,7 +286,7 @@ Router.use(authenticate); // Authentication middleware
  *             "image": "learn_java_two_months.jpg",
  *             "status": true,
  *             "quantity": 10,
- *             "category": "Unsorted",
+ *             "category": 5,
  *             "updatedAt": "2017-11-06T06:15:58.583Z",
  *             "createdAt": "2017-11-06T06:15:58.583Z"
  *           }
@@ -266,8 +322,17 @@ Router.use(authenticate); // Authentication middleware
  *           $ref: '#/definitions/BookCreationResponse'
  *       400:
  *         description: |
- *           All fields must exist
- *           All fields are required
+ *           All required fields must exist
+ *           errors: {
+ *             isbn: 'This field is required',
+ *             title: 'This field is required',
+ *             author: 'This field is required',
+ *             description: 'This field is required',
+ *             category: 'This field is required',
+ *             isbn: 'ISBN must be a number',
+ *             quantity: 'quantity must be a number,
+ *             category: 'categoryId must be a number'
+ *           }
  *       403:
  *         description: Permission Denied
  *       409:
@@ -358,8 +423,17 @@ Router.post('/books', hasAdminRights,
  *           $ref: '#/definitions/BookUpdateResponse'
  *       400:
  *         description: |
- *           All fields must exist
- *           All fields are required
+ *           All required fields must exist
+ *           errors: {
+ *             isbn: 'This field is required',
+ *             title: 'This field is required',
+ *             author: 'This field is required',
+ *             description: 'This field is required',
+ *             category: 'This field is required',
+ *             isbn: 'ISBN must be a number',
+ *             quantity: 'quantity must be a number,
+ *             category: 'categoryId must be a number'
+ *           }
  *       403:
  *         description: Permission Denied
  *       404:
@@ -537,6 +611,10 @@ Router.delete('/books/:bookId',
  *         description: An array of Books
  *         schema:
  *           $ref: '#/definitions/BookListingResponse'
+ *       400:
+ *         description: Ooops! something happened, ensure page is specified
+ *       500:
+ *         description: Internal Server Error
  */
 
 // Route to list all books in library
@@ -550,10 +628,10 @@ Router.get('/books', listBooks);
  *       message:
  *         type: string
  *         example: Learn JAVA in two months successfully borrowed
- *       books:
+ *       updatedBorrowedBook:
  *         type: object
  *         example:
- *           - updatedBorrowedBook: {
+ *           {
  *             "id": 74,
  *             "isbn": 287,
  *             "title": "Learn JAVA in two months",
@@ -567,6 +645,19 @@ Router.get('/books', listBooks);
  *             "updatedAt": "2017-11-06T06:15:58.583Z",
  *             "createdAt": "2017-11-06T06:15:58.583Z"
  *           }
+ *       borrowingRecord:
+ *          type: object
+ *          example:
+ *            {
+ *              "id": 25,
+ *              "returned": false,
+ *              "userId": 3,
+ *              "bookId": 6,
+ *              "dueDate": 2018-01-05T20:20:22.360Z,
+ *              "actualReturnDate": 2018-01-02T20:20:22.360Z,
+ *              "updatedAt": 2018-01-02T20:20:22.361Z,
+ *              "createdAt": 2018-01-02T20:20:22.361Z
+ *            }
  *       numberOfPages:
  *         type: integer
  *         example: 3
@@ -584,6 +675,12 @@ Router.get('/books', listBooks);
  *     produces:
  *       - application/json
  *     parameters:
+ *       - name: loan
+ *         description: flag to signify if book is to be borrowed or returned
+ *         in: query
+ *         required: true
+ *         type: string
+ *         default: 'borrowOrReturn'
  *       - name: userId
  *         description: ID of the User borrowing a book
  *         in: path
@@ -614,13 +711,17 @@ Router.get('/books', listBooks);
  *         schema:
  *           $ref: '#/definitions/BookBorrowedResponse'
  *       400:
- *         description: Oops! something happened, [error message]
+ *         description: |
+ *           Oops! something happened, [error message]
+ *           Ensure book ID is supplied
+ *       401:
+ *         description: Loan credit exhausted, upgrade or return borrowed book
  *       404:
  *         description: |
  *           Book not found
- *           User does not exist
+ *           User not found
  *       409:
- *         description: Book borrowed already
+ *         description: Book borrowed already please return
  *       500:
  *         description: Internal Server Error
  */
@@ -656,7 +757,7 @@ Router.post('/users/:userId/books', checkUser,
  *             "updatedAt": "2017-11-06T06:15:58.583Z",
  *             "createdAt": "2017-11-06T06:15:58.583Z"
  *           }
- *       updatedBorrowedBook:
+ *       borrowUpdated:
  *         type: object
  *         example:
  *           {
@@ -683,6 +784,17 @@ Router.post('/users/:userId/books', checkUser,
  *                "updatedAt": "2017-11-06T21:55:10.936Z"
  *              }
  *             }
+ *       userToUpdateInStore:
+ *         type: object
+ *         example:
+ *           {
+ *              "id": 3,
+ *              "username": chieftester,
+ *              "email": chieftester@mail.com,
+ *              "role": normal,
+ *              "borrowLimit": 5,
+ *              "totalBorrow": 30
+ *           }
  */
 
 /**
@@ -697,24 +809,58 @@ Router.post('/users/:userId/books', checkUser,
  *     produces:
  *       - application/json
  *     parameters:
+ *       - name: loan
+ *         description: flag to notify if a book is to be borrowed or returned
+ *         in: query
+ *         required: true
+ *         type: string
+ *         default: 'borrowOrReturn'
  *       - name: userId
  *         description: ID of the User returning a book
  *         in: path
  *         required: true
  *         type: integer
+ *         default: 3
  *       - name: bookId
  *         description: ID of Book to Return
  *         in: body
  *         required: true
+ *         type: integer
+ *         default: 6
  *         schema:
  *           type: object
- *           required:
- *             - bookId
- *           properties:
- *             bookId:
- *               type: integer
+ *           required: true
  *           example: {
- *             "bookId": 4
+ *             "bookId": 6
+ *           }
+ *       - name: borrowId
+ *         description: ID of borrowing record
+ *         in: body
+ *         required: true
+ *         type: integer
+ *         default: 25
+ *         schema:
+ *           type: object
+ *           required: true
+ *           example: {
+ *             "borrowId": 25
+ *           }
+ *       - name: borrow
+ *         description: Payload of the borrowed record
+ *         in: body
+ *         required: true
+ *         schema:
+ *           type: object
+ *           required: true
+ *           example: {
+ *             "id": 25,
+ *             "returned": false,
+ *             "userId": 3,
+ *             "bookId": 6,
+ *             "dueDate": 2018-01-05T20:20:22.360Z,
+ *             "actualReturnDate": 2018-01-02T20:20:22.360Z,
+ *             "updatedAt": 2018-01-02T20:20:22.361Z,
+ *             "createdAt": 2018-01-02T20:20:22.361Z
  *           }
  *       - name: x-access-token
  *         in: header
@@ -733,9 +879,9 @@ Router.post('/users/:userId/books', checkUser,
  *           Oops! something happenned [error message]
  *       404:
  *         description: |
- *           User does not exist
- *           You have not borrowed this book
+ *           User not found
  *           Book not found
+ *           You have not borrowed this book
  *       500:
  *         description: Internal Server Error
  */
@@ -749,7 +895,7 @@ Router.put('/users/:userId/books', checkUser,
  * definitions:
  *   BookNotReturnedListResponse:
  *     properties:
- *       borrow:
+ *       borrowedBooks:
  *         type: object
  *         example:
  *           - {
@@ -805,6 +951,10 @@ Router.put('/users/:userId/books', checkUser,
  *                 "updatedAt": "2017-11-09T01:22:13.098Z"
  *                }
  *              }
+ *       numberOfPages:
+ *         type: integer
+ *         default: 1
+ *         example: 1
  */
 
 /**
@@ -814,7 +964,7 @@ Router.put('/users/:userId/books', checkUser,
  *     tags:
  *       - Borrowing Operations
  *     summary:
- *       - List a books borrowed by a user and not returned to the library
+ *       - List of books borrowed by a user and not returned to the library
  *     description: List all Books borrowed but not returned by a User
  *     produces:
  *       - application/json
@@ -840,8 +990,6 @@ Router.put('/users/:userId/books', checkUser,
  *         schema:
  *           $ref: '#/definitions/BookNotReturnedListResponse'
  */
-
-// Route to list borrowed but not returned book
 Router.get('/users/:userId/books', AllBorrowedOrNotReturnedBooks);
 
 // Find a specific book and return it
@@ -852,7 +1000,104 @@ Router.get('/category/books', filterBooks);
 
 // Get a specific book that was borrowed
 Router.get('/borrowed/:bookId', getBorrowedBook);
+
+/**
+ * @swagger
+ * definitions:
+ *   AllBorrowedBooks:
+ *     properties:
+ *       borrowedBooks:
+ *         type: object
+ *         example:
+ *           - {
+ *              "id": 157,
+ *              "returned": false,
+ *              "dueDate": "2017-11-09T21:55:10.947Z",
+ *              "actualReturnDate": "2017-11-09T00:59:41.374Z",
+ *              "createdAt": "2017-11-06T21:55:10.947Z",
+ *              "updatedAt": "2017-11-09T00:59:41.375Z",
+ *              "bookId": 61,
+ *              "userId": 52,
+ *              "book": {
+ *                "id": 61,
+ *                "isbn": 1,
+ *                "title": "The Amazing Adventures of Kavalier & Clay",
+ *                "author": "Michael Chabon",
+ *                "description": "The Amazing Adventures of Kavalier & Clay
+ *                   is a 2000 novel by Jewish American author Michael Chabon
+ *                   that won the Pulitzer Prize for Fiction in 2001.",
+ *                "image": "https://res.cloudinary.com/dcl7tqhww/image
+ *                  /upload/v1509138852/emfohjtwnjz1crabccy4.png",
+ *                "status": true,
+ *                "quantity": 45,
+ *                "category": "Arts",
+ *                "createdAt": "2017-11-04T11:52:28.207Z",
+ *                "updatedAt": "2017-11-09T00:59:41.420Z"
+ *                }
+ *              }
+ *           - {
+ *              "id": 158,
+ *              "returned": true,
+ *              "dueDate": "2017-11-09T22:06:07.839Z",
+ *              "actualReturnDate": "2017-11-09T01:22:13.032Z",
+ *              "createdAt": "2017-11-06T22:06:07.839Z",
+ *              "updatedAt": "2017-11-09T01:22:13.032Z",
+ *              "bookId": 64,
+ *              "userId": 52,
+ *              "book": {
+ *                 "id": 64,
+ *                 "isbn": 4,
+ *                 "title": "Wolf Hall",
+ *                 "author": "Hilary Mantel",
+ *                 "description": "Wolf Hall is a historical novel by
+ *                  English author Hilary Mantel, published by Fourth
+ *                  Estate, namedafter the Seymour family seat of Wolfhall or
+ *                  Wulfhall in Wiltshire.",
+ *                 "image": "http://res.cloudinary.com/dcl7tqhww/image
+ *                    /upload/v1509139539/w9wpuonkyguo32i90mg8.png",
+ *                 "status": true,
+ *                 "quantity": 10,
+ *                 "category": "Arts",
+ *                 "createdAt": "2017-11-04T11:52:28.207Z",
+ *                 "updatedAt": "2017-11-09T01:22:13.098Z"
+ *                }
+ *              }
+ *       numberOfPages:
+ *         type: integer
+ *         default: 1
+ *         example: 1
+ */
+
+/**
+ * @swagger
+ * /borrowed/{userId}/books:
+ *   get:
+ *     tags:
+ *       - Borrowing Operations
+ *     summary:
+ *       - List of all books borrowed by a user
+ *     description: List of all Books borrowed by a User
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         description: ID of the User whose borrowing records are to be listed
+ *         required: true
+ *         type: integer
+ *       - name: x-access-token
+ *         in: header
+ *         description: An authentication header for secure library access
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: An array of Books
+ *         schema:
+ *           $ref: '#/definitions/AllBorrowedBooks'
+ */
 Router.get('/borrowed/:userId/books', AllBorrowedOrNotReturnedBooks);
+
 Router.post('/users/pass', checkIfDefinedAndValid,
   checkUser, checkPassword, changePassword);
 Router.post('/users/autoupgrade', autoUpgrade);
@@ -951,8 +1196,8 @@ Router.post('/category', hasAdminRights, checkIfDefinedAndValid, addCategory);
  *                  "createdAt": "2017-10-14T17:58:29.869Z",
  *                  "updatedAt": "2017-10-14T17:58:29.869Z",
  *                 }
- *       301:
- *         description: Categories not available, check back later.
+ *       204:
+ *         description: No Content
  *       500:
  *         description: Internal Server Error
  */
