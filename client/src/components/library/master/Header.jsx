@@ -16,7 +16,7 @@ export class Header extends Component {
   /**
    * Creates an instance of Header.
    *
-   * @param {object} props
+   * @param {object} props - The properties passed into the component
    *
    * @memberof Header
    *

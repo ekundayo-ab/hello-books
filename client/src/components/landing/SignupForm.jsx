@@ -19,7 +19,7 @@ export class SignUpForm extends Component {
   /**
    * Creates an instance of SignUp.
    *
-   * @param {object} props
+   * @param {object} props - The properties passed to the component
    *
    * @memberof SignUp
    *
@@ -45,8 +45,11 @@ export class SignUpForm extends Component {
 
   /**
    * @description handles event changes for form fields
-   * @param {object} event
+   *
+   * @param {object} event - Form inputs events on the sign-up form
+   *
    * @returns {void} null
+   *
    * @memberof SignUp
    */
   onChange(event) {
@@ -56,7 +59,8 @@ export class SignUpForm extends Component {
   /**
    * @description handles form submission
    *
-   * @param {object} event
+   * @param {object} event - Form submission event caught when submitting the
+   * Sign-Up form
    *
    * @returns {boolean} isLoading - needed to disable submit button
    *
@@ -78,7 +82,8 @@ export class SignUpForm extends Component {
   /**
    * @description checks if username or email exists
    *
-   * @param {object} event
+   * @param {object} event - Form inputs event fired when filling the Sign-Up
+   * form
    *
    * @returns {void} null
    *
@@ -108,7 +113,8 @@ export class SignUpForm extends Component {
   /**
    * @description handles callback during Google signup and signin
    *
-   * @param {object} response
+   * @param {object} response - The response payload sent from google when
+   * signing up a user through google
    *
    * @returns {boolean} or redirects
    *
@@ -127,7 +133,7 @@ export class SignUpForm extends Component {
   /**
    * @description displays the registration form
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {string} HTML markup for the SignUp form
    *

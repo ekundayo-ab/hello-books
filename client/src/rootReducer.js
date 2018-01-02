@@ -24,8 +24,8 @@ const appReducer = combineReducers({
 /**
  * @description ensures whole application state can be managed and cleared
  *
- * @param {object} state - state passed to the rootReducer
- * @param {object} action - action passed to the rootReducer
+ * @param {object} state - The state passed to the rootReducer
+ * @param {object} action - The action passed to the rootReducer
  *
  * @returns {object} appReducer - the application reducer
  */

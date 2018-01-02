@@ -8,7 +8,7 @@ import setAuthorizationHeader from '../utils/setAuthorizationToken';
  *
  * @description Set the current user
  *
- * @param {object} user - user to set
+ * @param {object} user - The current user payload to be dispatched
  *
  * @returns {object} action
  */
@@ -20,7 +20,7 @@ const setCurrentUser = user =>
  *
  * @description Unset the current user
  *
- * @param {object} user - user to unset
+ * @param {object} user - current user to payload to be dispatched
  *
  * @returns {object} action
  */
@@ -32,7 +32,7 @@ const unsetCurrentUser = user =>
  *
  * @description Sets message if user exists or not
  *
- * @param {object} message - message to set
+ * @param {object} message - The message to be dispatched
  *
  * @returns {object} action
  */
@@ -44,7 +44,7 @@ export const setUserExists = message =>
  *
  * @description Sign in user to the library
  *
- * @param {object} userData - user details
+ * @param {object} userData - The user details to log into the application
  *
  * @returns {object} action
  */
@@ -72,7 +72,8 @@ const login = userData =>
  * @description Gets user details from google,
  * then signs in the user with the detail gotten
  *
- * @param {object} userData - user details
+ * @param {object} userData - The user details to Sign-Up or Log-in through
+ * google
  *
  * @returns {object} action
  */
@@ -109,7 +110,7 @@ const googleAuth = (userData) => {
  *
  * @description Signs out user from the library
  *
- * @param {void} none - takes no argument
+ * @param {void} none - Has no parameter
  *
  * @returns {object} action
  */
@@ -125,7 +126,7 @@ const logout = () => (dispatch) => {
  *
  * @description Gets user details by registering them
  *
- * @param {object} userData - user details
+ * @param {object} userData - The user details to sign-up
  *
  * @returns {object} action
  */
@@ -152,7 +153,7 @@ const userSignUpRequest = userData =>
  *
  * @description Checks if a users exists in the library
  *
- * @param {object} userData - user details
+ * @param {object} userData - The user details to to check if existing
  *
  * @returns {object} action
  */
@@ -175,7 +176,7 @@ const doesUserExist = userData =>
  *
  * @description Checks if a users exists in the library
  *
- * @param {object} passwordData - user details
+ * @param {object} passwordData - The password details to be changed
  *
  * @returns {object} action
  */

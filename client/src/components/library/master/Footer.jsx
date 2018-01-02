@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * @description functional component footer for the library pages
  *
- * @param {void} null
+ * @param {void} null - Has no parameter
  *
  * @returns {string} - HTML markup of the Footer component
  */

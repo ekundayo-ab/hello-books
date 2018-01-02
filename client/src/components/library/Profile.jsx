@@ -23,7 +23,7 @@ export class Profile extends Component {
   /**
    * Creates an instance of Profile.
    *
-   * @param {object} props
+   * @param {object} props - The properties passed into the component
    *
    * @memberof Profile
    *
@@ -49,7 +49,7 @@ export class Profile extends Component {
   /**
    * @description handles changes to the input fields value
    *
-   * @param {object} event
+   * @param {object} event - The form inputs event
    *
    * @returns {void} returns nothing
    *
@@ -64,9 +64,9 @@ export class Profile extends Component {
   /**
    * @description handles returning of Book
    *
-   * @param {number} bookId
-   * @param {number} borrowId
-   * @param {object} borrow - specific borrowing record
+   * @param {number} bookId - ID of the book to return
+   * @param {number} borrowId - Borrowing record ID of the book to return
+   * @param {object} borrow - Specific borrowing record
    *
    * @returns {object} action
    *
@@ -86,7 +86,7 @@ export class Profile extends Component {
   /**
  * @description handles returning of Book
  *
- * @param {number} event - form submission event
+ * @param {number} event - Form submission event
  *
  * @returns {object} action
  *
@@ -109,7 +109,7 @@ export class Profile extends Component {
   /**
    * @description displays the Profile Page
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {string} - HTML markup for Profile Page
    *
@@ -340,7 +340,7 @@ Profile.propTypes = {
 /**
  * @description maps the state in redux store to Profile props
  *
- * @param {object} state
+ * @param {object} state - The application state payload gotten from the store
  *
  * @returns {object} books
  */

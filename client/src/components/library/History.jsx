@@ -17,7 +17,7 @@ export class History extends Component {
   /**
    * Creates an instance of Shelf.
    *
-   * @param {object} props
+   * @param {object} props - The properties passed into the component
    *
    * @memberof History
    *
@@ -31,7 +31,7 @@ export class History extends Component {
   /**
    * @description Displays the History Page
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {string} - HTML markup of the History Page
    *
@@ -119,7 +119,7 @@ History.propTypes = {
  *
  * @description maps the state in redux store to Shelf props
  *
- * @param {object} state
+ * @param {object} state - The application state payload gotten from the store
  *
  * @returns {object} userId and books
  */

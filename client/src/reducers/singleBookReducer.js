@@ -10,8 +10,8 @@ const initialState = {
  *
  * @description Return each action by its type
  *
- * @param {object} [state={}]
- * @param {object} [action={}]
+ * @param {object} state - The state passed to the singleBookReducer
+ * @param {object} action - The action passed to the singleBookReducer
  *
  * @returns {object} - Single Book
  */

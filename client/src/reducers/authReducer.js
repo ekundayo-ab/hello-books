@@ -14,12 +14,13 @@ const initialState = {
  *
  * @description Returns each action by its type
  *
- * @param {array} [state=[]]
- * @param {object} [action={}]
+ * @param {array} state - The state passed to the authReducer
+ * @param {object} action - The action passed to the authReducer
  *
- * @returns {object} User(s)
+ * @returns {object} User(s), isAuthenticated - Returns user(s) and their
+ * authentication state
  */
-export default (state = initialState, action = {}) => {
+const authReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case SET_EXISTENCE:
       return { ...state, userExists: action.message };
@@ -38,3 +39,5 @@ export default (state = initialState, action = {}) => {
     default: return state;
   }
 };
+
+export default authReducer;

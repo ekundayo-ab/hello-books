@@ -6,7 +6,7 @@ import * as actionTypes from '../actions/types';
  *
  * @description Set the categories in the store
  *
- * @param {object} categories - details categories to set
+ * @param {object} categories - Payload of categories to dispatch to store
  *
  * @returns {object} action
  */
@@ -18,7 +18,7 @@ const setCategories = categories =>
  *
  * @description Adds a new category to the store
  *
- * @param {object} category - category to add
+ * @param {object} category - Payload of single category to add to store
  *
  * @returns {object} action
  */
@@ -30,7 +30,7 @@ const addCategory = category =>
  *
  * @description Makes request to the server to get categories
  *
- * @param {void} null
+ * @param {void} null - Has no parameter
  *
  * @returns {object} action
  */
@@ -51,7 +51,8 @@ const fetchCategories = () =>
  *
  * @description Sends category to be saved to the server
  *
- * @param {object} categoryDetails
+ * @param {object} categoryDetails - Details of the category to be added to the
+ * library
  *
  * @returns {object} action
  */

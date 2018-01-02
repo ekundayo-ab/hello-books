@@ -7,7 +7,7 @@ import classname from 'classnames';
  *
  * @description abstracts the input form fields
  *
- * @param {object} props
+ * @param {object} props - The properties passed into the component
  *
  * @returns {void} returns nothing
  */

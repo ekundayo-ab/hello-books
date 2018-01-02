@@ -15,7 +15,7 @@ export class Home extends Component {
   /**
    * @description Invoked before component mounts
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {void} returns nothing, but redirects conditionally
    *

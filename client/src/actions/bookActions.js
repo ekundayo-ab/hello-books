@@ -6,7 +6,7 @@ import * as actionTypes from './types';
  *
  * @description Sets the books in the store
  *
- * @param {array} books - list of books
+ * @param {array} books - List of books to be dispatched
  *
  * @returns {object} action
  */
@@ -18,7 +18,7 @@ const setBooks = books =>
  *
  * @description {object} Adds a new book to the store
  *
- * @param {object} book - book to add
+ * @param {object} book - A single book to be dispatched
  *
  * @returns {object} action
  */
@@ -30,7 +30,7 @@ const addBook = book =>
  *
  * @description Deletes a book from the store
  *
- * @param {any} bookId - id of book to delete
+ * @param {any} bookId - ID of the book to be deleted
  *
  * @returns {object} action
  */
@@ -43,7 +43,7 @@ const deleteSuccess = bookId =>
  *
  * @description Updates a single book in the store
  *
- * @param {object} book - book details
+ * @param {object} book - A single book to be dispatched
  *
  * @returns {object} action
  */
@@ -55,7 +55,7 @@ export const bookUpdated = book =>
  *
  * @description Gets single book from store
  *
- * @param {object} book - book detail
+ * @param {object} book - Payload of book to be dispatch
  *
  * @returns {object} action
  */
@@ -67,7 +67,7 @@ export const bookFetched = book =>
  *
  * @description Gets books from the server page by page
  *
- * @param {number} pageDetails - page details to send to store
+ * @param {number} pageDetails - Payload of pages to set in store
  *
  * @returns {array} action
  */
@@ -79,7 +79,7 @@ export const setPages = pageDetails =>
  *
  * @description Gets books from the server page by page
  *
- * @param {object} pageDetails - page details required to set
+ * @param {object} pageDetails - Payload of single page to set in store
  *
  * @returns {array} action
  */
@@ -91,7 +91,7 @@ export const setCurrentPage = pageDetails => dispatch =>
  *
  * @description Gets books from the server page by page
  *
- * @param {number} pageNumber - page ID to get
+ * @param {number} pageNumber - ID of each page to be rendered
  *
  * @returns {array} action
  */
@@ -110,8 +110,8 @@ const fetchBooks = pageNumber =>
  *
  * @description Gets books from the server by category
  *
- * @param {number} pageNumber - page ID to get
- * @param {number} categoryId - page ID to get
+ * @param {number} pageNumber - ID of each page to be rendered
+ * @param {number} categoryId - ID of category used to fetch books
  *
  * @returns {array} action
  */
@@ -136,7 +136,7 @@ const fetchBooksByCategory = (pageNumber, categoryId) =>
  *
  * @description Gets a single book from the server
  *
- * @param {number} id - book ID to get
+ * @param {number} id - ID of a single book to be fetched
  *
  * @returns {object} action
  */
@@ -158,7 +158,7 @@ const fetchBook = id => dispatch =>
  *
  * @description Sends book to the server to save in database
  *
- * @param {object} data - book details
+ * @param {object} data - Details of the book to be added
  *
  * @returns {object} action
  */
@@ -179,7 +179,7 @@ const saveBook = data => dispatch =>
  *
  * @description Sends details of book to update to the server
  *
- * @param {object} data - book detail
+ * @param {object} data - Details of the book to be updated
  *
  * @returns {object} action
  */
@@ -200,8 +200,9 @@ const updateBook = data => dispatch =>
  *
  * @description Sends ID of book to server for deletion
  *
- * @param {number} bookId - id of book to delete
- * @param {number} pageNumber - id of book to delete
+ * @param {number} bookId - ID of the book to be deleted
+ * @param {number} pageNumber - ID of the current page in which the book is
+ * to be deleted
  *
  * @returns {object} action
  */

@@ -2,11 +2,12 @@ import axios from 'axios';
 import { setCurrentUser } from '../actions/authActions';
 
 /**
-   * Validates Email
+   * Auto Upgrade
    *
-   * @description Ensures email supplied is a valid email address
+   * @description Ensures a user is automatically upgraded when certain
+   * conditions are met
    *
-   * @returns {boolean} true or false
+   * @returns {object} user - Payload of user to upgrade
    */
 const autoUpgrade = () =>
   dispatch =>

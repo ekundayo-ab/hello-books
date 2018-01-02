@@ -11,8 +11,8 @@ const initialState = {
  *
  * @description Return each action by its type
  *
- * @param {array} [state=[]]
- * @param {object} [action={}]
+ * @param {array} state - The state passed to the categoryReducer
+ * @param {object} action - The action passed to the categoryReducer
  *
  * @returns {object} - Category/Categories
  */

@@ -2,8 +2,9 @@ import axios from 'axios';
 import { setCurrentUser } from '../actions/authActions';
 
 /**
+ * @description Verifies an authorization token
  *
- * @param {object} userDetails
+ * @param {object} userDetails - Payload of the user to be verified
  *
  * @returns {string} - Decoded token
  */
@@ -14,7 +15,7 @@ const verifyToken = userDetails =>
         const { decoded } = res.data;
         dispatch(setCurrentUser(res.data.user));
         localStorage.setItem('userDetails', JSON.stringify(decoded));
-        return true;
+        return decoded;
       })
       .catch(() => false);
 

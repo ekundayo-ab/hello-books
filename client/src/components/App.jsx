@@ -9,7 +9,7 @@ import Home from './../../src/components/library/master/Home';
  *
  * @description Renders page based on URL supplied
  *
- * @param {object} props - available from withRouter HOC
+ * @param {object} props - available from withRouter Higher Order Component
  *
  * @returns {string} HTML markup of component
  */
@@ -18,7 +18,7 @@ export const App = (props) => {
   const trackMatch = /\/register|\/login|\/forgot/.test(trackPage);
   let viewToRender;
   if (trackMatch || trackPage === '/'
-    || localStorage.getItem('jwtToken') === null) {
+    || !localStorage.getItem('jwtToken')) {
     viewToRender = <LandingHome />;
   } else {
     viewToRender = <Home />;

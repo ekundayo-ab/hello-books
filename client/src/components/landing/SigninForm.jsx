@@ -17,7 +17,7 @@ export class SignInForm extends Component {
   /**
    * Creates an instance of SignIn.
    *
-   * @param {object} props
+   * @param {object} props - The properties passed into the component
    *
    * @memberof SignUp
    *
@@ -39,7 +39,7 @@ export class SignInForm extends Component {
   /**
    * @description handles event changes for form fields
    *
-   * @param {object} event
+   * @param {object} event - Form inputs events on the sign-in form
    *
    * @returns {void} null
    *
@@ -52,11 +52,12 @@ export class SignInForm extends Component {
   /**
    * @description handles form submission
    *
-   * @param {object} event
+   * @param {object} event - Form submission event caught when submitting the
+   * Sign-In form
    *
-   * @returns {boolean} isLoading - needed to disable submit button
-   * @returns {object} action - redirects to library shelf
-   * @returns {object} action - notifies of errors
+   * @returns {boolean} isLoading - Needed to disable submit button
+   * @returns {object} action - Redirects to library shelf
+   * @returns {object} action - Notifies of errors
    *
    * @memberof SignIn
    */
@@ -100,7 +101,7 @@ export class SignInForm extends Component {
   /**
    * @description displays the registration form
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {string} HTML markup for SignIn form
    *

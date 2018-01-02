@@ -12,7 +12,7 @@ import requireAuth from '../../BasicAuth';
 /**
  * @description functional component for library home page
  *
- * @param {void} null
+ * @param {void} null - Has no parameter
  *
  * @returns {string} - HTML markup for library home page
  */

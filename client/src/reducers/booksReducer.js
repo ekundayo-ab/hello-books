@@ -11,10 +11,10 @@ const initialState = {
  *
  * @description Return each action by its type
  *
- * @param {object} [state={}]
- * @param {object} [action={}]
+ * @param {object} state - The state passed to the booksReducer
+ * @param {object} action - The action passed to the booksReducer
  *
- * @returns {object} // Book(s)
+ * @returns {object} Book(s)
  */
 const booksReducer = (state = initialState, action = {}) => {
   switch (action.type) {

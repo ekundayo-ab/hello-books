@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 /**
  * @description Displays the Header section of the landing page
  *
- * @param {void} null
+ * @param {void} null - Has no parameter
  *
  * @returns {string} - HTML markup of the landing page header section
  */

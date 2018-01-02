@@ -5,7 +5,7 @@ import axios from 'axios';
  *
  * @param {string} token - token gotten from local storage
  *
- * @returns {object} action
+ * @returns {null} nothing - Returns nothing
  */
 const setAuthorizationToken = (token) => {
   if (token) {

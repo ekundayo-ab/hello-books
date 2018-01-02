@@ -11,12 +11,12 @@ const initialState = {
  *
  * @description Returns each action by its type
  *
- * @param {array} [state=[]]
- * @param {object} [action={}]
+ * @param {array} state - The state passed to the paginationReducer
+ * @param {object} action - The action passed to the paginationReducer
  *
  * @returns {object} User(s)
  */
-export default (state = initialState, action = {}) => {
+const paginationReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case SET_PAGES:
       return {
@@ -27,3 +27,5 @@ export default (state = initialState, action = {}) => {
     default: return state;
   }
 };
+
+export default paginationReducer;

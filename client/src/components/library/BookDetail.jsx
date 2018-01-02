@@ -16,7 +16,7 @@ export class BookDetail extends Component {
   /**
    * Creates an instance of BookDetail.
    *
-   * @param {object} props
+   * @param {object} props - The properties passed into the component
    *
    * @memberof BookDetail
    *
@@ -30,7 +30,7 @@ export class BookDetail extends Component {
   /**
    * @description Invoked after component has mounted
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {void} returns nothing
    *
@@ -48,7 +48,7 @@ export class BookDetail extends Component {
   /**
    * @description handles borrowing of book
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {void} nothing
    *
@@ -65,7 +65,7 @@ export class BookDetail extends Component {
   /**
    * @description Displays the page showing the book details
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {string} - HTML markup of BookDetail Page
    *
@@ -185,7 +185,7 @@ BookDetail.propTypes = {
 /**
  * @description maps the state in redux store to BookDetail props
  *
- * @param {object} state
+ * @param {object} state - The application state payload gotten from the store
  *
  * @returns {object} book, borrow, user
  */

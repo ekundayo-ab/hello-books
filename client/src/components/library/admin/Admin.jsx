@@ -25,7 +25,7 @@ export class Admin extends Component {
   /**
    * Creates an instance of Admin.
    *
-   * @param {object} props
+   * @param {object} props - The properties passed into the component
    *
    * @memberof Admin
    *
@@ -52,7 +52,7 @@ export class Admin extends Component {
   /**
    * @description Invoked after component has mounted
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {void} returns nothing
    *
@@ -80,7 +80,7 @@ export class Admin extends Component {
   /**
    * @description Invoked after component has mounted
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {void} returns nothing
    *
@@ -99,7 +99,7 @@ export class Admin extends Component {
   /**
    * @description deletes a book from the library
    *
-   * @param {number} bookId
+   * @param {number} bookId - ID of the book to be deleted
    *
    * @returns {function} action
    *
@@ -123,9 +123,9 @@ export class Admin extends Component {
   /**
    * @description deletes a book from the library
    *
-   * @param {number} categoryId - id of the category to filter by
-   * @param {object} event - click event
-   * @param {string} title - category name
+   * @param {number} categoryId - ID of the category to filter by
+   * @param {object} event - Click event executed when filtering by category
+   * @param {string} title - The name of the category to filter books by
    *
    * @returns {function} action
    *
@@ -285,7 +285,7 @@ Admin.propTypes = {
 /**
  * @description maps the state in redux store to Admin props
  *
- * @param {object} state
+ * @param {object} state - The application state gotten from the store
  *
  * @returns {object} book
  */

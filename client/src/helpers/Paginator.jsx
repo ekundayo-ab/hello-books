@@ -6,17 +6,16 @@ import { connect } from 'react-redux';
 import paginate from '../helpers/paginate';
 
 /**
- * @description functional component for 404 Page
+ * @class Paginator
  *
- * @param {object} props - component data
+ * @description Pagination component for certain pages with tabular data
  *
- * @returns {string} - HTML markup of the 404 component
  */
 export class Paginator extends Component {
   /**
    * Creates an instance of Shelf.
    *
-   * @param {object} props
+   * @param {object} props - properties passed into the component
    *
    * @memberof Paginator
    *
@@ -30,7 +29,7 @@ export class Paginator extends Component {
   /**
    * @description Invoked after the page loads
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @memberof Shelf
    *
@@ -46,7 +45,7 @@ export class Paginator extends Component {
    *
    * @description generates next page of books
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {void} returns nothing
    */
@@ -62,7 +61,7 @@ export class Paginator extends Component {
    *
    * @description generates previous page of books
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {void} returns nothing
    */
@@ -76,7 +75,7 @@ export class Paginator extends Component {
   /**
    * @description Displays the History Page
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {string} - HTML markup of the Paginator Component
    *
@@ -159,9 +158,9 @@ Paginator.propTypes = {
 /**
  * @description maps the state in redux store to Shelf props
  *
- * @param {object} state
+ * @param {object} state - The application state payload gotten from the store
  *
- * @returns {object} books gotten from state
+ * @returns {object} books - List of books gotten from the state
  */
 export function mapStateToProps(state) {
   return {

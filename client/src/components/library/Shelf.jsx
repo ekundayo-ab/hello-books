@@ -19,7 +19,7 @@ export class Shelf extends Component {
   /**
    * Creates an instance of Shelf.
    *
-   * @param {object} props
+   * @param {object} props - The properties passed into the component
    *
    * @memberof Shelf
    *
@@ -37,7 +37,7 @@ export class Shelf extends Component {
   /**
    * @description Invoked after the page loads
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @memberof Shelf
    *
@@ -50,9 +50,9 @@ export class Shelf extends Component {
   /**
    * @description deletes a book from the library
    *
-   * @param {number} categoryId - id of the category to filter by
-   * @param {object} event - click event
-   * @param {string} title - category name
+   * @param {number} categoryId - ID of the category to filter by
+   * @param {object} event - Click event executed to filter a category
+   * @param {string} title - Name of the category to filter by
    *
    * @returns {function} action
    * @memberof Admin
@@ -72,7 +72,7 @@ export class Shelf extends Component {
   /**
    * @description renders the shelf page
    *
-   * @param {void} null
+   * @param {void} null - Has no parameter
    *
    * @returns {string} - HTML markup of shelf page
    *
@@ -154,8 +154,7 @@ Shelf.propTypes = {
 /**
  * @description maps the state in redux store to Shelf props
  *
- * @param {object} state
- *
+ * @param {object} state - The application state payload gotten from the store
  * @returns {object} books gotten from state
  */
 export function mapStateToProps(state) {
