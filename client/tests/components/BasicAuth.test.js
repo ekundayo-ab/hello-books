@@ -10,6 +10,9 @@ const props = {
   logout: jest.fn(),
   setCurrentUser: jest.fn(),
   verifyToken: jest.fn(() => Promise.resolve(1)),
+  location: {
+    pathname: '/admin'
+  },
   history: {
     push: jest.fn(),
     location: {
