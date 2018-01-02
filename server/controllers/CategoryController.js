@@ -67,10 +67,7 @@ class CategoryController {
       })
       .then((categories) => {
         if (categories[0] === undefined) {
-          return res.status(204).send({
-            message: 'Categories not available, check back later.',
-            categories: []
-          });
+          return res.status(204).send();
         }
         return res.status(200).send({ categories });
       })

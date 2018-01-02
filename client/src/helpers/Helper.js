@@ -10,7 +10,7 @@ class Helper {
    *
    * @description Ensures all inputs are validated
    *
-   * @param {object} req
+   * @param {object} req - The request payload sent to the function
    *
    * @returns {object } isValid and errors
    *
@@ -47,7 +47,7 @@ class Helper {
    *
    * @description Ensures all inputs are validated when registering
    *
-   * @param {object} req
+   * @param {object} req - The request payload sent to the function
    *
    * @returns {object} isValid and errors
    *
@@ -95,7 +95,7 @@ class Helper {
    *
    * @description Ensures all inputs are validated when logging in
    *
-   * @param {object} req
+   * @param {object} req - The request payload sent to the function
    *
    * @returns {object} isValid and errors
    *
@@ -125,7 +125,7 @@ class Helper {
    *
    * @description Ensures email supplied is a valid email address
    *
-   * @param {string} email
+   * @param {string} email - The email to be validated
    *
    * @returns {boolean} true or false
    *
@@ -141,9 +141,8 @@ class Helper {
    *
    * @description Ensures email supplied is a valid email address
    *
-   * @param {object} state
-   * @param {object} event
-   * @param {object} setState
+   * @param {object} state - The current state sent to the function
+   * @param {object} event - The current event being executed
    *
    * @returns {boolean} true or false
    * @memberOf Helper

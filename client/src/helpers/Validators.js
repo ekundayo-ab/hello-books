@@ -1,6 +1,5 @@
 /**
  * @description represents logics used in validating inputs
- *
  * when updating or creating a book
  *
  * @class Validators
@@ -11,7 +10,7 @@ class Validators {
    *
    * @param {object} formState - state data in the form
    *
-   * @returns {object} - This contains errors and isvalid a boolean
+   * @returns {object} - This contains errors and isvalid which is a boolean
    *
    * @memberof Validators
    */

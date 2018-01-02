@@ -91,7 +91,9 @@ class AuthMiddleware {
     return User
       .findOne({ where: { ...query } })
       .then((foundUser) => {
-        if (req.url === '/auth/google' && !foundUser) {
+        const isGuestRoute = (req.url === '/auth/google'
+          || req.url === '/users');
+        if (isGuestRoute && !foundUser) {
           return next();
         }
         if (req.query.loan === 'borrowOrReturn') {
@@ -99,6 +101,11 @@ class AuthMiddleware {
           if (!foundUser) return res.status(404).send({ message });
           res.locals.borrowStatus = foundUser.borrowLimit < 1;
           return next();
+        }
+        if (!foundUser) {
+          const message = req.url === '/users/signin' ?
+            'Authentication failed, Wrong password or email' : 'User not found';
+          return res.status(404).send({ message });
         }
         req.foundUser = foundUser;
         return next();
@@ -109,11 +116,11 @@ class AuthMiddleware {
   /**
    * @static
    *
-   * @description Compares password
+   * @description Compares password supplied to one existing in the database
    *
-   * @param {object} req
-   * @param {object} res
-   * @param {object} next
+   * @param {object} req - The request payload sent to the route
+   * @param {object} res - The request payload sent to the route
+   * @param {object} next - The next action
    *
    * @returns {object} checkSuccess and or message
    *
@@ -122,7 +129,7 @@ class AuthMiddleware {
   static checkPassword(req, res, next) {
     if (req.url === '/users/signin' && !req.foundUser) {
       return res.status(400)
-        .send({ message: 'Authentication failed, check password or email' });
+        .send({ message: 'Authentication failed, Wrong password or email' });
     }
     if (!bcrypt.compareSync(req.body.password || req.body.oldPass,
       req.foundUser.password)) {

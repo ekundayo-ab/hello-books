@@ -120,6 +120,11 @@ class BookController {
    * @memberOf BookController
    */
   static listBooks(req, res) {
+    if (!req.query.page) {
+      return res.status(400).send({
+        message: 'Ooops! something happened, ensure page is specified'
+      });
+    }
     const limit = 4; // number of records per page
     const { page } = req.query; // page number
     const offset = limit * (page - 1);
@@ -133,10 +138,7 @@ class BookController {
       .then((books) => {
         const pages = Math.ceil(books.count / limit);
         if (books.rows.length < 1) {
-          return res.status(204).send({
-            message: 'Books not available, check back later.',
-            numberOfPages: 0
-          });
+          return res.status(204).send();
         }
         return res.status(200).send({
           books: books.rows,
@@ -144,9 +146,8 @@ class BookController {
         });
       })
       .catch(() =>
-        res.status(400).send({
-          message: 'Ooops! something happened,' +
-            'check your inputs and try again.'
+        res.status(500).send({
+          message: 'Internal Server Error'
         }));
   }
 

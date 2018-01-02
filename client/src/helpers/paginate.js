@@ -7,10 +7,11 @@ import { setCurrentPage } from '../actions/bookActions';
  *
  * data from the database in a paginated format
  *
- * @param {object} getData
- * @param {number} pageId
- * @param {number} userId
- * @param {boolean} notify
+ * @param {object} getData - Asynchronous function to execute when paginating
+ * @param {number} pageId - ID of each page when paginating
+ * @param {number} userId - Currently logged in User ID
+ * @param {boolean} notify - Boolean value for checking if admin should be
+ * notified
  *
  * @returns {object} // Returns the number of pages and the page ID
  */

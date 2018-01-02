@@ -25,13 +25,12 @@ class UserController {
    * @memberOf UserController
    */
   static signup(req, res) {
-    const { password, username, email, role } = req.body;
+    const { password, username, email } = req.body;
     return User
       .create({
         username,
         email,
-        password: bcrypt.hashSync(password, 10),
-        role
+        password: bcrypt.hashSync(password, 10)
       })
       .then((user) => {
         res.status(201).send({
@@ -89,13 +88,12 @@ class UserController {
    */
   static googleAuth(req, res) {
     if (req.foundUser) return UserController.signin(req, res);
-    const { username, email, password, role } = req.body;
+    const { username, email, password } = req.body;
     return User
       .create({
         username,
         email,
-        password: bcrypt.hashSync(password, 10),
-        role,
+        password: bcrypt.hashSync(password, 10)
       })
       .then((user) => {
         const token = jwt.sign({

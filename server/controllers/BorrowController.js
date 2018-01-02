@@ -54,7 +54,7 @@ class BorrowController {
    * @description Returns a borrowed book to the library
    *
    * @param {object} req - The request payload sent to the route
-   * @param {object} res - The response payload sent back from controller
+   * @param {object} res - The response payload sent back from the controller
    * @param {object} next - After endpoint middleware call
    *
    * @returns {object} - Message, Returned book

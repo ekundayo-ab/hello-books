@@ -14,7 +14,7 @@ class Helper {
    *
    * @description Ensures all fields are present when adding or updating book
    *
-   * @param {object} req - request payload sent to function
+   * @param {object} req - The request payload sent to the function
    *
    * @returns {boolean} true or false and message
    *
@@ -116,7 +116,7 @@ class Helper {
    *
    * @description Ensures all inputs are validated
    *
-   * @param {object} req
+   * @param {object} req - The request payload sent to the function
    *
    * @returns {object} isValid and errors
    *
@@ -155,7 +155,7 @@ class Helper {
    *
    * @description Ensures all inputs are validated
    *
-   * @param {object} req
+   * @param {object} req - The request payload sent to the function
    *
    * @returns {object} isValid and errors
    *
@@ -200,7 +200,7 @@ class Helper {
    *
    * @param {object} formState - state data in the form
    *
-   * @returns {object} - This contains errors and isvalid a boolean
+   * @returns {object} - This contains errors and isvalid which is a boolean
    *
    * @memberof Validators
    */
@@ -223,7 +223,7 @@ class Helper {
    *
    * @description Ensures email supplied is a valid email address
    *
-   * @param {string} email
+   * @param {string} email - The email supplied to the function
    *
    * @returns {boolean} true or false
    *
@@ -239,7 +239,8 @@ class Helper {
    *
    * @description Ensures borrow limit and total limit is updated for user
    *
-   * @param {object} userData
+   * @param {object} userData - The data of the user whose details are to be
+   * updated
    *
    * @returns {boolean} true or false
    *
@@ -267,7 +268,7 @@ class Helper {
    *
    * @description Decides on credit to assign ugraded user
    *
-   * @param {object} user
+   * @param {object} user - Payload of user to be upgraded
    *
    * @returns {boolean} true or false
    *
@@ -298,9 +299,9 @@ class Helper {
    *
    * @description Sends email to user for late return of borrowed book
    *
-   * @param {object} userToUpdateInStore
+   * @param {object} userToUpdateInStore - Payload of user to update
    *
-   * @param {object} updatedBook
+   * @param {object} updatedBook - Payload of the updated book
    *
    * @returns {object} - console information as to whether email was successful
    *

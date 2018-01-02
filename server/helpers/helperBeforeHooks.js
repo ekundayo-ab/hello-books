@@ -1,22 +1,20 @@
-import supertest from 'supertest';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import app from '../../app';
 import models from '../models/';
 
 const { User, Book, Borrow, Category } = models;
-
-const server = supertest.agent(app);
+const server = require('supertest');
+// const server = supertest.agent(app);
 
 /**
  * @class BeforeHooks
  */
-class BeforeHooks {
+class HelperBeforeHooks {
   /**
-   * @description Basically performed before any test runs
+   * @description This is executed before the userController test runs
    *
-   * @param {void} null
-   *
-   * @return {object} action
+   * @return {null} nothing - Returns nothing
    *
    * @memberof BeforeHooks
    */
@@ -27,17 +25,23 @@ class BeforeHooks {
       Book.destroy({ where: {} });
       Borrow.destroy({ where: {} });
       Category.destroy({ where: {} });
+      User
+        .create({
+          username: 'ekundayo',
+          email: 'ekprogs@gmail.com',
+          password: bcrypt.hashSync('123456', 10),
+          role: 'admin',
+          borrowLimit: 9005,
+        });
       setTimeout(done, 5000);
       done();
     });
   }
 
   /**
-   * @description Basically performed before any test runs
+   * @description This is executed before the tests in which it is placed runs
    *
-   * @param {void} null
-   *
-   * @return {object} action
+   * @return {null} nothing - Returns nothing
    *
    * @memberof BeforeHooks
    */
@@ -72,18 +76,15 @@ class BeforeHooks {
           Category.create({ id: 9, title: 'Sciences' });
           process.env.book2Id = book.id;
         });
-      server
-        .post('/api/v1/users/signup')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .send({
+      User
+        .create({
           username: 'ekundayo',
           email: 'ekprogs@gmail.com',
-          password: '123456',
-          passwordConfirmation: '123456',
+          password: bcrypt.hashSync('123456', 10),
           role: 'admin',
-        })
-        .end(() => {
-          server
+          borrowLimit: 9005,
+        }).then(() => {
+          server(app)
             .post('/api/v1/users/signin')
             .set('Accept', 'application/x-www-form-urlencoded')
             .send({
@@ -98,7 +99,7 @@ class BeforeHooks {
                 });
             });
         });
-      server
+      server(app)
         .post('/api/v1/users/signup')
         .set('Accept', 'application/x-www-form-urlencoded')
         .send({
@@ -108,7 +109,7 @@ class BeforeHooks {
           passwordConfirmation: '123456',
         })
         .end(() => {
-          server
+          server(app)
             .post('/api/v1/users/signin')
             .set('Accept', 'application/x-www-form-urlencoded')
             .send({
@@ -128,4 +129,4 @@ class BeforeHooks {
   }
 }
 
-export default BeforeHooks;
+export default HelperBeforeHooks;

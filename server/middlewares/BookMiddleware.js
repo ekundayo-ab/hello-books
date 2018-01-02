@@ -11,7 +11,7 @@ class BookMiddleware {
    * @description Checks and ensures a book exists
    *
    * @param {object} req - The request payload sent to the route
-   * @param {object} res - The response payload sent back from controller
+   * @param {object} res - The response payload sent back from the controller
    * @param {object} next - The next action
    *
    * @returns {next} - verifies and allows route continue to endpoint
