@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import chai from 'chai';
 import jwt from 'jsonwebtoken';
 import app from '../../app';
-import helperBeforeHooks from './../helpers/helperBeforeHooks';
+import HelperBeforeHooks from './../helpers/HelperBeforeHooks';
 
 const expect = chai.expect;
 
@@ -15,25 +15,26 @@ let bookId;
 let borrowId;
 
 describe('Library books', () => {
-  helperBeforeHooks.makeDataAvailable();
+  HelperBeforeHooks.makeDataAvailable();
   beforeEach((done) => {
     ({ adminToken, normalToken, bookId, userId, user2Id } = process.env);
     done();
   });
 
-  describe('borrowing operations by authenticated user', () => {
-    it('should return (no-content) empty object if no borrows', (done) => {
-      server
-        .get(`/api/v1/borrowed/${userId}/books?page=${24556789451}`)
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .end((err, res) => {
-          expect(res.status).to.equal(204);
-          expect(Object.keys(res.body).length).to.equal(0);
-          done();
-        });
-    });
-    it('should return success message and updated book and new borrow records',
+  describe('borrowing operations by an authenticated user', () => {
+    it('should return (no-content)empty object if user has no borrow records',
+      (done) => {
+        server
+          .get(`/api/v1/borrowed/${userId}/books?page=${24556789451}`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .end((err, res) => {
+            expect(res.status).to.equal(204);
+            expect(Object.keys(res.body).length).to.equal(0);
+            done();
+          });
+      });
+    it('should return success message, updated book and new borrow records',
       (done) => {
         server
           .post(`/api/v1/users/${userId}/books?loan=borrowOrReturn`)
@@ -76,7 +77,7 @@ describe('Library books', () => {
           done();
         });
     });
-    it('should return error message for already borrowed book',
+    it('should return error message if book is already borrowed',
       (done) => {
         server
           .post(`/api/v1/users/${userId}/books?loan=borrowOrReturn`)
@@ -92,36 +93,37 @@ describe('Library books', () => {
       });
   });
 
-  describe('borrows listing operations by authenticated user', () => {
-    it('should return all borrowed books', (done) => {
-      server
-        .get(`/api/v1/borrowed/${userId}/books?page=${1}&notify=${false}`)
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body.numberOfPages).to.equal(1);
-          expect(res.body.numberOfPages).to.be.a('number');
-          expect(res.body.borrowedBooks).to.be.an('array');
-          expect(res.body.borrowedBooks[0]).to.have.property('dueDate');
-          expect(res.body.borrowedBooks[0].bookId)
-            .to.equal(res.body.borrowedBooks[0].book.id);
-          expect(res.body.borrowedBooks[0].book.isbn).to.equal(1);
-          expect(res.body.borrowedBooks[0].book.title)
-            .to.equal('Learn Haskell');
-          expect(res.body.borrowedBooks[0].book.author)
-            .to.equal('Haskell Master');
-          expect(res.body.borrowedBooks[0].book.description)
-            .to.equal('Learn and Master Haskell in 16 Months');
-          expect(res.body.borrowedBooks[0].book.quantity).to.equal(29);
-          expect(res.body.borrowedBooks[0].book.categoryId).to.equal(4);
-          done();
-        });
-    });
+  describe('All Borrowed Books route', () => {
+    it('should return all borrowed books if accessed by an authenticated user',
+      (done) => {
+        server
+          .get(`/api/v1/borrowed/${userId}/books?page=${1}&notify=${false}`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.numberOfPages).to.equal(1);
+            expect(res.body.numberOfPages).to.be.a('number');
+            expect(res.body.borrowedBooks).to.be.an('array');
+            expect(res.body.borrowedBooks[0]).to.have.property('dueDate');
+            expect(res.body.borrowedBooks[0].bookId)
+              .to.equal(res.body.borrowedBooks[0].book.id);
+            expect(res.body.borrowedBooks[0].book.isbn).to.equal(1);
+            expect(res.body.borrowedBooks[0].book.title)
+              .to.equal('Learn Haskell');
+            expect(res.body.borrowedBooks[0].book.author)
+              .to.equal('Haskell Master');
+            expect(res.body.borrowedBooks[0].book.description)
+              .to.equal('Learn and Master Haskell in 16 Months');
+            expect(res.body.borrowedBooks[0].book.quantity).to.equal(29);
+            expect(res.body.borrowedBooks[0].book.categoryId).to.equal(4);
+            done();
+          });
+      });
   });
 
-  describe('borrows listing of un-returned books by authenticated user', () => {
-    it('should return all books',
+  describe('Borrowed and Not Returned Books route', () => {
+    it('should return all books when accessed by an authenticated user',
       (done) => {
         server
           .get(`/api/v1/users/${userId}/books?returned=false&page=1`)
@@ -147,27 +149,29 @@ describe('Library books', () => {
             done();
           });
       });
-    it('should return (no-content) message for no books', (done) => {
-      server
-        .get(`/api/v1/users/${user2Id}/books?returned=false&page=1`)
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', normalToken)
-        .end((err, res) => {
-          expect(res.status).to.equal(204);
-          expect(Object.keys(res.body).length).to.equal(0);
-          done();
-        });
-    });
+    it('should return (no-content) message if no books have been borrowed',
+      (done) => {
+        server
+          .get(`/api/v1/users/${user2Id}/books?returned=false&page=1`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', normalToken)
+          .end((err, res) => {
+            expect(res.status).to.equal(204);
+            expect(Object.keys(res.body).length).to.equal(0);
+            done();
+          });
+      });
   });
 
-  describe('borrows return operations by authenticated user', () => {
+  describe('Borrowed Books Returns route', () => {
     before((done) => {
       jwt.verify(adminToken, process.env.JWT_SECRET, (error, decoded) => {
         userId = decoded.data.id;
       });
       done();
     });
-    it('should return updated(book, borrow and user) records', (done) => {
+    it('should return updated(book, borrow and user) records when' +
+    ' a user returns a borrowed book', (done) => {
       server
         .put(`/api/v1/users/${userId}/books?loan=borrowOrReturn`)
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -188,13 +192,14 @@ describe('Library books', () => {
           expect(res.body.borrowUpdated.returned).to.equal(true);
           expect(res.body.borrowUpdated.userId)
             .to.equal(res.body.userToUpdateInStore.id);
-          expect(res.body.userToUpdateInStore.borrowLimit).to.equal(2);
+          expect(res.body.userToUpdateInStore.borrowLimit).to.equal(9005);
           expect(res.body.borrowUpdated.bookId)
             .to.equal(res.body.updatedBook[1].id);
           done();
         });
     });
-    it('return not borrowed message', (done) => {
+    it('should return a (not borrowed) message if book' +
+    ' has not been borrowed by the user before', (done) => {
       server
         .get(`/api/v1/borrowed/${bookId}`)
         .set('Accept', 'application/x-www-form-urlencoded')

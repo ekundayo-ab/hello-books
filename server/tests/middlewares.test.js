@@ -46,7 +46,7 @@ describe('Middleware', () => {
 
     done();
   });
-  describe('An Authentication middleware', () => {
+  describe('AuthMiddleware', () => {
     it('should return error message if no token exists', (done) => {
       server
         .get('/api/v1/books')

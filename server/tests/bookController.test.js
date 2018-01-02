@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 import { expect } from 'chai';
 import app from '../../app';
-import helperBeforeHooks from './../helpers/helperBeforeHooks';
+import HelperBeforeHooks from './../helpers/HelperBeforeHooks';
 
 
 const server = supertest.agent(app);
@@ -10,63 +10,65 @@ let normalToken;
 let bookId;
 let book2Id;
 describe('Library book(s)', () => {
-  helperBeforeHooks.makeDataAvailable();
+  HelperBeforeHooks.makeDataAvailable();
   beforeEach((done) => {
     ({ adminToken, normalToken, bookId, book2Id } = process.env);
     done();
   });
-  describe('addition operation', () => {
-    it('should return book with success message for a new book', (done) => {
-      server
-        .post('/api/v1/books')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .send({
-          isbn: 20234,
-          title: 'Learn JAVA',
-          author: 'Java Master',
-          description: 'Learn & Master Java in 28 days',
-          category: 1,
-          quantity: 30,
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(201);
-          expect(res.body.message).to.equal('Learn JAVA, successfully added');
-          expect(res.body.book.isbn).to.equal(20234);
-          expect(res.body.book.title).to.equal('Learn JAVA');
-          expect(res.body.book.author).to.equal('Java Master');
-          expect(res.body.book.quantity).to.equal(30);
-          expect(res.body.book.categoryId).to.equal(1);
-          expect(res.body.book.description)
-            .to.equal('Learn & Master Java in 28 days');
-          expect(res.body.book.isbn).to.equal(20234);
-          expect(res.body.book.isbn).to.be.a('number');
-          expect(res.body.book.quantity).to.be.a('number');
-          expect(res.body.book.categoryId).to.be.a('number');
-          done();
-        });
-    });
-    it('should return error message for same book', (done) => {
-      server
-        .post('/api/v1/books')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .send({
-          isbn: 20234,
-          title: 'Learn JAVA',
-          author: 'Java Master',
-          description: 'Learn & Master Java in 28 days',
-          category: 1,
-          quantity: 30,
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(409);
-          expect(res.body.message)
-            .to.equal('Conflict! Learn JAVA exists already');
-          done();
-        });
-    });
-    it('should return error message for undefined or null required field(s)',
+  describe('Books Addition route', () => {
+    it('should return book with success message if it was successfully created',
+      (done) => {
+        server
+          .post('/api/v1/books')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .send({
+            isbn: 20234,
+            title: 'Learn JAVA',
+            author: 'Java Master',
+            description: 'Learn & Master Java in 28 days',
+            category: 1,
+            quantity: 30,
+          })
+          .end((err, res) => {
+            expect(res.status).to.equal(201);
+            expect(res.body.message).to.equal('Learn JAVA, successfully added');
+            expect(res.body.book.isbn).to.equal(20234);
+            expect(res.body.book.title).to.equal('Learn JAVA');
+            expect(res.body.book.author).to.equal('Java Master');
+            expect(res.body.book.quantity).to.equal(30);
+            expect(res.body.book.categoryId).to.equal(1);
+            expect(res.body.book.description)
+              .to.equal('Learn & Master Java in 28 days');
+            expect(res.body.book.isbn).to.equal(20234);
+            expect(res.body.book.isbn).to.be.a('number');
+            expect(res.body.book.quantity).to.be.a('number');
+            expect(res.body.book.categoryId).to.be.a('number');
+            done();
+          });
+      });
+    it('should return error message if same book is being added again',
+      (done) => {
+        server
+          .post('/api/v1/books')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .send({
+            isbn: 20234,
+            title: 'Learn JAVA',
+            author: 'Java Master',
+            description: 'Learn & Master Java in 28 days',
+            category: 1,
+            quantity: 30,
+          })
+          .end((err, res) => {
+            expect(res.status).to.equal(409);
+            expect(res.body.message)
+              .to.equal('Conflict! Learn JAVA exists already');
+            done();
+          });
+      });
+    it('should return error message if inputed field(s) are undefined',
       (done) => {
         server
           .post('/api/v1/books')
@@ -85,7 +87,7 @@ describe('Library book(s)', () => {
             done();
           });
       });
-    it('should return error message for empty book fields', (done) => {
+    it('should return error message if inputted fields are empty', (done) => {
       server
         .post('/api/v1/books')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -110,29 +112,31 @@ describe('Library book(s)', () => {
           done();
         });
     });
-    it('should return error message for non admin user', (done) => {
-      server
-        .post('/api/v1/books')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', normalToken)
-        .send({
-          isbn: 839483,
-          title: 'Learn SQL',
-          author: 'SQL Master',
-          description: 'Learn & Master SQL in 48hours',
-          category: 9,
-          quantity: 39,
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(403);
-          expect(res.body.message).to.equal('Permission Denied');
-          done();
-        });
-    });
+    it('should return error message when accessed by a non admin user',
+      (done) => {
+        server
+          .post('/api/v1/books')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', normalToken)
+          .send({
+            isbn: 839483,
+            title: 'Learn SQL',
+            author: 'SQL Master',
+            description: 'Learn & Master SQL in 48hours',
+            category: 9,
+            quantity: 39,
+          })
+          .end((err, res) => {
+            expect(res.status).to.equal(403);
+            expect(res.body.message).to.equal('Permission Denied');
+            done();
+          });
+      });
   });
 
-  describe('update operations by an admin user', () => {
-    it('should return modified book and success message', (done) => {
+  describe('Book Update route', () => {
+    it('should return modified book and success message ' +
+    'if book was successfully updated', (done) => {
       server
         .put(`/api/v1/books/${bookId}`)
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -162,7 +166,7 @@ describe('Library book(s)', () => {
           done();
         });
     });
-    it('should return error message if no such book', (done) => {
+    it('should return error message if book is not found', (done) => {
       server
         .put('/api/v1/books/345')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -182,7 +186,7 @@ describe('Library book(s)', () => {
           done();
         });
     });
-    it('should return error message for undefined or null required fields',
+    it('should return error message if input fields are undefined or null',
       (done) => {
         server
           .put(`/api/v1/books/${bookId}`)
@@ -202,7 +206,7 @@ describe('Library book(s)', () => {
             done();
           });
       });
-    it('should return error message for empty field(s)', (done) => {
+    it('should return error message if input field(s) are empty', (done) => {
       server
         .put(`/api/v1/books/${bookId}`)
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -229,8 +233,8 @@ describe('Library book(s)', () => {
     });
   });
 
-  describe('listing operations', () => {
-    it('should return all books for a logged in user',
+  describe('Books listing route', () => {
+    it('should return all books when accessed by an authenticated user',
       (done) => {
         server
           .get('/api/v1/books?page=1')
@@ -259,7 +263,19 @@ describe('Library book(s)', () => {
             done();
           });
       });
-    it('should return (no-content) message if no book(s)', (done) => {
+    it('should return (no-content) message if no book(s) exists in the library',
+      (done) => {
+        server
+          .get(`/api/v1/books?page=${8986521345}`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .end((err, res) => {
+            expect(res.status).to.equal(204);
+            expect(Object.keys(res.body)).to.have.lengthOf(0);
+            done();
+          });
+      });
+    it('should return error message if shelf page does not exist', (done) => {
       server
         .get(`/api/v1/books?page=${8986521345}`)
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -270,18 +286,8 @@ describe('Library book(s)', () => {
           done();
         });
     });
-    it('should return error message for not existing page', (done) => {
-      server
-        .get(`/api/v1/books?page=${8986521345}`)
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .end((err, res) => {
-          expect(res.status).to.equal(204);
-          expect(Object.keys(res.body)).to.have.lengthOf(0);
-          done();
-        });
-    });
-    it('should return all books for a logged in normal user', (done) => {
+    it('should return all books when accessed by a ' +
+      'user with normal authentication level', (done) => {
       server
         .get('/api/v1/books?page=1')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -309,7 +315,7 @@ describe('Library book(s)', () => {
           done();
         });
     });
-    it('should return error message for user not logged in',
+    it('should return error message when accessed by an unauthenticated user',
       (done) => {
         server
           .get('/api/v1/books')
@@ -321,7 +327,7 @@ describe('Library book(s)', () => {
             done();
           });
       });
-    it('should return error message for altered token user',
+    it('should return error message when accessed by a user with altered token',
       (done) => {
         server
           .get('/api/v1/books')
@@ -336,7 +342,7 @@ describe('Library book(s)', () => {
   });
 
   describe('single book request by an authenticated user', () => {
-    it('should return specific book', (done) => {
+    it('should return specific book if request is successful', (done) => {
       server
         .get(`/api/v1/books/${bookId}`)
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -394,7 +400,7 @@ describe('Library book(s)', () => {
   });
 
   describe('filtering operations by authenticated user', () => {
-    it('should return books matching a category', (done) => {
+    it('should return books matching a category if it successful', (done) => {
       server
         .get(`/api/v1/category/books?page=${1}&categoryId=${1}`)
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -471,7 +477,7 @@ describe('Library book(s)', () => {
           done();
         });
     });
-    it('should return error message for undefined book ID', (done) => {
+    it('should return error message if book ID is undefined', (done) => {
       server
         .delete(`/api/v1/books/${undefined}`)
         .set('Accept', 'application/x-www-form-urlencoded')

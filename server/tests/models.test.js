@@ -23,54 +23,59 @@ describe('Models', () => {
       .then((book) => { bookId = book.id; });
     done();
   });
-  describe('User model methods', () => {
-    it('should return created user', (done) => {
+  describe('User model', () => {
+    it('should return new user if it was successfully created', (done) => {
       User.create(helperUser.user6)
         .then((user) => {
           expect(user.username).to.equal(helperUser.user6.username);
           done();
         });
     });
-    it('should return validation error for unique username', (done) => {
-      User.create(helperUser.user6)
-        .then()
-        .catch((err) => {
-          expect(err.name).to.equal('SequelizeUniqueConstraintError');
-          expect(err.errors[0].message).to.equal('Username already taken');
-          done();
-        });
-    });
-    it('should return validation error for unique email', (done) => {
-      User.create(helperUser.user7)
-        .then()
-        .catch((err) => {
-          expect(err.name).to.equal('SequelizeUniqueConstraintError');
-          expect(err.errors[0].message).to.equal('User with this email exists');
-          done();
-        });
-    });
-    it('should return validation error for null values', (done) => {
-      User.create(helperUser.user002) // This value does not exist
-        .then()
-        .catch((err) => {
-          expect(err.name).to.equal('SequelizeValidationError');
-          expect(err.errors[0].message).to.equal('username cannot be null');
-          expect(err.errors[1].message).to.equal('password cannot be null');
-          expect(err.errors[2].message).to.equal('email cannot be null');
-          done();
-        });
-    });
-    it('should return validation error for empty username', (done) => {
-      User.create(helperUser.user8) // This value does not exist
-        .then()
-        .catch((err) => {
-          expect(err.name).to.equal('SequelizeValidationError');
-          expect(err.errors[0].message)
-            .to.equal('Validation is on username failed');
-          done();
-        });
-    });
-    it('should return found user', (done) => {
+    it('should return validation error message if new username already exists',
+      (done) => {
+        User.create(helperUser.user6)
+          .then()
+          .catch((err) => {
+            expect(err.name).to.equal('SequelizeUniqueConstraintError');
+            expect(err.errors[0].message).to.equal('Username already taken');
+            done();
+          });
+      });
+    it('should return validation error message if new email already exists',
+      (done) => {
+        User.create(helperUser.user7)
+          .then()
+          .catch((err) => {
+            expect(err.name).to.equal('SequelizeUniqueConstraintError');
+            expect(err.errors[0].message)
+              .to.equal('User with this email exists');
+            done();
+          });
+      });
+    it('should return validation error message for null inputed values',
+      (done) => {
+        User.create(helperUser.user002) // This value does not exist
+          .then()
+          .catch((err) => {
+            expect(err.name).to.equal('SequelizeValidationError');
+            expect(err.errors[0].message).to.equal('username cannot be null');
+            expect(err.errors[1].message).to.equal('password cannot be null');
+            expect(err.errors[2].message).to.equal('email cannot be null');
+            done();
+          });
+      });
+    it('should return validation error message if supplied username is empty',
+      (done) => {
+        User.create(helperUser.user8) // This value does not exist
+          .then()
+          .catch((err) => {
+            expect(err.name).to.equal('SequelizeValidationError');
+            expect(err.errors[0].message)
+              .to.equal('Validation is on username failed');
+            done();
+          });
+      });
+    it('should return found user if it was successfully found', (done) => {
       User.findOne({
         where: {
           email: helperUser.user6.email,
@@ -94,24 +99,25 @@ describe('Models', () => {
     });
   });
   describe('Book model methods', () => {
-    it('should return created book', (done) => {
+    it('should return new book if it was successfully created', (done) => {
       Book.create(helperBook.book8)
         .then((book) => {
           expect(book.isbn).to.equal(helperBook.book8.isbn);
           done();
         });
     });
-    it('should return error for unique isbn of book', (done) => {
-      Book.create(helperBook.book8)
-        .then((book) => {
-          expect(book.isbn).to.equal(helperBook.book8.isbn);
-        }).catch((err) => {
-          expect(err.name).to.equal('SequelizeUniqueConstraintError');
-          expect(err.errors[0].message).to.equal('isbn must be unique');
-          done();
-        });
-    });
-    it('should return validation error for null values', (done) => {
+    it('should return error message if new book isbn already exists',
+      (done) => {
+        Book.create(helperBook.book8)
+          .then((book) => {
+            expect(book.isbn).to.equal(helperBook.book8.isbn);
+          }).catch((err) => {
+            expect(err.name).to.equal('SequelizeUniqueConstraintError');
+            expect(err.errors[0].message).to.equal('isbn must be unique');
+            done();
+          });
+      });
+    it('should return validation error if null values are supplied', (done) => {
       Book.create(helperBook.book234) // This value does not exist
         .then()
         .catch((err) => {
@@ -124,7 +130,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should return validation error for invalid value in isbn', (done) => {
+    it('should return validation error if inputted isbn is invalid', (done) => {
       Book.create(helperBook.book9) // This value does not exist
         .then()
         .catch((err) => {
@@ -135,7 +141,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should return validation error for invalid value in quantity',
+    it('should return validation error if inputted quantity is invalid',
       (done) => {
         Book.create(helperBook.book10) // This value does not exist
           .then()
@@ -146,7 +152,7 @@ describe('Models', () => {
             done();
           });
       });
-    it('should return found book', (done) => {
+    it('should return found book if it was successfully found', (done) => {
       Book.findOne({
         where: {
           isbn: helperBook.book8.isbn,
@@ -157,34 +163,36 @@ describe('Models', () => {
           done();
         });
     });
-    it('should return all books', (done) => {
+    it('should return list of all books', (done) => {
       Book.findAll()
         .then((book) => {
           expect(book[1].dataValues.isbn).to.equal(helperBook.book14.isbn);
           done();
         });
     });
-    it('should return updated book', (done) => {
-      Book.update({
-        isbn: 4,
-        title: 'Learn Haskell Edition 2017',
-        author: 'New Man',
-        description: 'Learn Haskell and be happy',
-        quantity: 90 }, { where: { isbn: helperBook.book8.isbn } })
-        .then((book) => {
-          expect(book[0]).to.equal(1);
-          done();
-        });
-    });
-    it('should return error for unique isbn of book', (done) => {
-      Book.update(helperBook.book11, { where: { isbn: 4 } })
-        .then().catch((err) => {
-          expect(err.name).to.equal('SequelizeUniqueConstraintError');
-          expect(err.errors[0].message).to.equal('isbn must be unique');
-          done();
-        });
-    });
-    it('should return validation error for null values', (done) => {
+    it('should return updated book if book was successfully updated',
+      (done) => {
+        Book.update({
+          isbn: 4,
+          title: 'Learn Haskell Edition 2017',
+          author: 'New Man',
+          description: 'Learn Haskell and be happy',
+          quantity: 90 }, { where: { isbn: helperBook.book8.isbn } })
+          .then((book) => {
+            expect(book[0]).to.equal(1);
+            done();
+          });
+      });
+    it('should return error if supplied isbn of book already exists',
+      (done) => {
+        Book.update(helperBook.book11, { where: { isbn: 4 } })
+          .then().catch((err) => {
+            expect(err.name).to.equal('SequelizeUniqueConstraintError');
+            expect(err.errors[0].message).to.equal('isbn must be unique');
+            done();
+          });
+      });
+    it('should return validation error for null inputted values', (done) => {
       Book.update(helperBook.book12, { where: { isbn: helperBook.book8.isbn } })
         .then()
         .catch((err) => {
@@ -197,7 +205,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should return validation error for undefined values', (done) => {
+    it('should return validation error for undefined input values', (done) => {
       Book.update(helperBook.book13, { where: { isbn: helperBook.book8.isbn } })
         .then()
         .catch((err) => {
@@ -210,7 +218,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should return validation error for invalid value in isbn', (done) => {
+    it('should return validation error if supplied isbn is invalid', (done) => {
       Book.update(helperBook.book9, { where: { isbn: helperBook.book8.isbn } })
         .then()
         .catch((err) => {
@@ -220,7 +228,7 @@ describe('Models', () => {
           done();
         });
     });
-    it('should return validation error for invalid value in isbn', (done) => {
+    it('should return validation error if supplied isbn is invalid', (done) => {
       Book.update(helperBook.book10, { where: { isbn: helperBook.book8.isbn } })
         .then()
         .catch((err) => {
@@ -246,21 +254,22 @@ describe('Models', () => {
     });
   });
   describe('Borrow model methods', () => {
-    it('should return created borrow record', (done) => {
-      Borrow.create({
-        userId,
-        bookId,
-        returned: false,
-        dueDate: new Date(Date.now() + (3 * 24 * 60 * 60 * 1000)),
-        actualReturnDate: Date.now(),
-      }).then((borrow) => {
-        expect(borrow.userId).to.equal(userId);
-        expect(borrow.bookId).to.equal(bookId);
-        borrowId = borrow.id;
-        done();
+    it('should return new borrow record if it was successfully created',
+      (done) => {
+        Borrow.create({
+          userId,
+          bookId,
+          returned: false,
+          dueDate: new Date(Date.now() + (3 * 24 * 60 * 60 * 1000)),
+          actualReturnDate: Date.now(),
+        }).then((borrow) => {
+          expect(borrow.userId).to.equal(userId);
+          expect(borrow.bookId).to.equal(bookId);
+          borrowId = borrow.id;
+          done();
+        });
       });
-    });
-    it('should return error for no foreign key of book', (done) => {
+    it('should return error if no foreign key of book exists', (done) => {
       Borrow.create({
         userId,
         bookId: 76,
@@ -275,7 +284,7 @@ describe('Models', () => {
         done();
       });
     });
-    it('should return error for no foreign key of user', (done) => {
+    it('should return error if no foreign key of user exists', (done) => {
       Borrow.create({
         userId: 30,
         bookId,

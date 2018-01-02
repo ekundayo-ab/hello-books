@@ -3,7 +3,7 @@ import chai from 'chai';
 import bcrypt from 'bcrypt';
 import app from '../../app';
 import model from '../models';
-import helperBeforeHooks from './../helpers/helperBeforeHooks';
+import HelperBeforeHooks from './../helpers/HelperBeforeHooks';
 
 const User = model.User;
 const expect = chai.expect;
@@ -13,31 +13,9 @@ let specificUserToken;
 
 const server = supertest.agent(app);
 describe('AUTHENTICATION & USER Operations', () => {
-  helperBeforeHooks.clearDatabaseTables();
-  describe('A Typical User registration', () => {
-    it('should return seeded admin user', (done) => {
-      server
-        .post('/api/v1/users/signup')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .send({
-          username: 'ekundayo',
-          email: 'ekprogs@gmail.com',
-          password: '123456',
-          passwordConfirmation: '123456',
-          role: 'admin',
-        })
-        .end((err, res) => {
-          expect(res.body.message)
-            .to.equal('Hi ekundayo, registration successful!');
-          expect(res.status).to.equal(201);
-          expect(res.body.user).to.be.an('object');
-          expect(res.body.user.username).to.equal('ekundayo');
-          expect(res.body.user.email).to.equal('ekprogs@gmail.com');
-          expect(res.body.user.role).to.equal('admin');
-          done();
-        });
-    });
-    it('should return created user', (done) => {
+  HelperBeforeHooks.clearDatabaseTables();
+  describe('Sign-Up route', () => {
+    it('should return new user if registration inputs are valid', (done) => {
       server
         .post('/api/v1/users/signup')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -95,24 +73,25 @@ describe('AUTHENTICATION & USER Operations', () => {
         });
     });
 
-    it('should return error message if email exists', (done) => {
-      server
-        .post('/api/v1/users/signup')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .send({
-          username: 'spartan',
-          email: 'bootcamp@gmail.com',
-          password: '654321',
-          passwordConfirmation: '654321',
-        })
-        .end((err, res) => {
-          expect(res.body.message).to.equal('User with this email exists');
-          expect(res.status).to.equal(409);
-          done();
-        });
-    });
+    it('should return error message if new user email already exists',
+      (done) => {
+        server
+          .post('/api/v1/users/signup')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .send({
+            username: 'spartan',
+            email: 'bootcamp@gmail.com',
+            password: '654321',
+            passwordConfirmation: '654321',
+          })
+          .end((err, res) => {
+            expect(res.body.message).to.equal('User with this email exists');
+            expect(res.status).to.equal(409);
+            done();
+          });
+      });
 
-    it('should return error message if username exists', (done) => {
+    it('should return error message if new username already exists', (done) => {
       server
         .post('/api/v1/users/signup')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -130,8 +109,8 @@ describe('AUTHENTICATION & USER Operations', () => {
     });
   });
 
-  describe('A typical User Logging In', () => {
-    it('should return error message for no required fields', (done) => {
+  describe('Sign-In route', () => {
+    it('should return error message if required fields are absent', (done) => {
       server
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -147,7 +126,7 @@ describe('AUTHENTICATION & USER Operations', () => {
         });
     });
 
-    it('should return success message and token for normal user', (done) => {
+    it('should return success message & token on successful login', (done) => {
       server
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -162,7 +141,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should return success message and token for admin user', (done) => {
+    it('should return success message & token on successful login', (done) => {
       server
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -178,23 +157,24 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should return error message for wrong email or password', (done) => {
-      server
-        .post('/api/v1/users/signin')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .send({
-          identifier: 'ekundayo',
-          password: 'wrongpass',
-        })
-        .end((err, res) => {
-          expect(res.body.message)
-            .to.equal('Authentication failed, check password or email');
-          expect(res.status).to.equal(400);
-          done();
-        });
-    });
+    it('should return error message for wrong email or password on login',
+      (done) => {
+        server
+          .post('/api/v1/users/signin')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .send({
+            identifier: 'ekundayo',
+            password: 'wrongpass',
+          })
+          .end((err, res) => {
+            expect(res.body.message)
+              .to.equal('Authentication failed, check password or email');
+            expect(res.status).to.equal(400);
+            done();
+          });
+      });
 
-    it('should return error message if username is wrong', (done) => {
+    it('should return error message for wrong username on login', (done) => {
       server
         .post('/api/v1/users/signin')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -204,52 +184,57 @@ describe('AUTHENTICATION & USER Operations', () => {
         })
         .end((err, res) => {
           expect(res.body.message)
-            .to.equal('Authentication failed, check password or email');
-          expect(res.status).to.equal(400);
+            .to.equal('Authentication failed, Wrong password or email');
+          expect(res.status).to.equal(404);
           done();
         });
     });
-    it('should return success message and token for google signup', (done) => {
-      server
-        .post('/api/v1/auth/google')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .send({
-          username: 'emmanuel',
-          email: 'ekundayo.abiona@andela.com',
-          password: 'ekundayo',
-          passwordConfirmation: 'ekundayo',
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(201);
-          expect(res.body.message)
-            .to.equal('Hi emmanuel, registration successful!');
-          expect(res.body).to.be.an.instanceOf(Object);
-          expect(res.body).to.have.property('token');
-          done();
-        });
-    });
-    it('should return success and token for google signin', (done) => {
-      server
-        .post('/api/v1/auth/google')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .send({
-          username: 'emmanuel',
-          email: 'ekundayo.abiona@andela.com',
-          password: 'ekundayo',
-          passwordConfirmation: 'ekundayo',
-        })
-        .end((err, res) => {
-          normalUserToken = res.body.token;
-          expect(res.status).to.equal(200);
-          expect(res.body.message)
-            .to.equal('Hi emmanuel, you are logged in');
-          expect(res.body).to.be.an.instanceOf(Object);
-          expect(res.body).to.have.property('token');
-          expect(res.body.token).to.equal(normalUserToken);
-          done();
-        });
-    });
-    it('should return error for wrong inputs on google signin', (done) => {
+  });
+
+  describe('/Google Sign-Up', () => {
+    it('should return success message and token if google signup is successful',
+      (done) => {
+        server
+          .post('/api/v1/auth/google')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .send({
+            username: 'emmanuel',
+            email: 'ekundayo.abiona@andela.com',
+            password: 'ekundayo',
+            passwordConfirmation: 'ekundayo',
+          })
+          .end((err, res) => {
+            expect(res.status).to.equal(201);
+            expect(res.body.message)
+              .to.equal('Hi emmanuel, registration successful!');
+            expect(res.body).to.be.an.instanceOf(Object);
+            expect(res.body).to.have.property('token');
+            done();
+          });
+      });
+    it('should return success message and token if google signin is successful',
+      (done) => {
+        server
+          .post('/api/v1/auth/google')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .send({
+            username: 'emmanuel',
+            email: 'ekundayo.abiona@andela.com',
+            password: 'ekundayo',
+            passwordConfirmation: 'ekundayo',
+          })
+          .end((err, res) => {
+            normalUserToken = res.body.token;
+            expect(res.status).to.equal(200);
+            expect(res.body.message)
+              .to.equal('Hi emmanuel, you are logged in');
+            expect(res.body).to.be.an.instanceOf(Object);
+            expect(res.body).to.have.property('token');
+            expect(res.body.token).to.equal(normalUserToken);
+            done();
+          });
+      });
+    it('should return error messages for invalid inputs', (done) => {
       server
         .post('/api/v1/auth/google')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -270,7 +255,7 @@ describe('AUTHENTICATION & USER Operations', () => {
     });
   });
 
-  describe('When searching for a single user', () => {
+  describe('Users route', () => {
     it('should return success message if username is available', (done) => {
       server
         .post('/api/v1/users')
@@ -287,7 +272,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           done();
         });
     });
-    it('should return exists to be true if user exists', (done) => {
+    it('should return true if user exists', (done) => {
       server
         .post('/api/v1/users')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -305,25 +290,26 @@ describe('AUTHENTICATION & USER Operations', () => {
     });
   });
 
-  describe('Upon a user password change request', () => {
-    it('should return success message if password was updated', (done) => {
-      server
-        .post('/api/v1/users/pass')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminUserToken)
-        .send({
-          oldPass: '123456',
-          newPass: '1dayo2',
-          newPassConfirm: '1dayo2',
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body).to.be.an.instanceof(Object);
-          expect(res.body.message).to.equal('Password successfully changed');
-          expect(res.body).to.have.property('message');
-          done();
-        });
-    });
+  describe('Password Changing route', () => {
+    it('should return success message if password is successfully updated', 
+      (done) => {
+        server
+          .post('/api/v1/users/pass')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminUserToken)
+          .send({
+            oldPass: '123456',
+            newPass: '1dayo2',
+            newPassConfirm: '1dayo2',
+          })
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body).to.be.an.instanceof(Object);
+            expect(res.body.message).to.equal('Password successfully changed');
+            expect(res.body).to.have.property('message');
+            done();
+          });
+      });
     it('should return error message for password confirmation mismatch',
       (done) => {
         server
@@ -345,7 +331,7 @@ describe('AUTHENTICATION & USER Operations', () => {
             done();
           });
       });
-    it('should return error message for invalid input', (done) => {
+    it('should return error message for invalid inputs', (done) => {
       server
         .post('/api/v1/users/pass')
         .set('Accept', 'application/x-www-form-urlencoded')
@@ -383,7 +369,7 @@ describe('AUTHENTICATION & USER Operations', () => {
       });
   });
 
-  describe('Membership auto-upgrade', () => {
+  describe('User\'s Auto-upgrade route', () => {
     before(() => {
       User.update({
         totalBorrow: 10,
@@ -394,39 +380,42 @@ describe('AUTHENTICATION & USER Operations', () => {
         }
       });
     });
-    it('should return not-eligible message', (done) => {
-      server
-        .post('/api/v1/users/autoupgrade')
-        .set('x-access-token', adminUserToken)
-        .send({})
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body.message).to.equal('Not eligible');
-          expect(res.body).to.be.an.instanceof(Object);
-          done();
-        });
-    });
-    it('should return upgrade details if eligible', (done) => {
-      server
-        .post('/api/v1/users/autoupgrade')
-        .set('x-access-token', normalUserToken)
-        .send({})
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body.user.username).to.equal('emmanuel');
-          expect(res.body.user.email).to.equal('ekundayo.abiona@andela.com');
-          expect(res.body.user.role).to.equal('normal');
-          expect(res.body.user.level).to.equal('silver');
-          expect(res.body.user.borrowLimit).to.equal(3);
-          expect(res.body.user.totalBorrow).to.equal(10);
-          expect(res.body.message).to.equal('You\'ve been upgraded to silver');
-          done();
-        });
-    });
+    it('should return inegibility message if user does qualify for upgrade',
+      (done) => {
+        server
+          .post('/api/v1/users/autoupgrade')
+          .set('x-access-token', adminUserToken)
+          .send({})
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.message).to.equal('Not eligible');
+            expect(res.body).to.be.an.instanceof(Object);
+            done();
+          });
+      });
+    it('should return upgrade details if user qualifies for upgrade',
+      (done) => {
+        server
+          .post('/api/v1/users/autoupgrade')
+          .set('x-access-token', normalUserToken)
+          .send({})
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.user.username).to.equal('emmanuel');
+            expect(res.body.user.email).to.equal('ekundayo.abiona@andela.com');
+            expect(res.body.user.role).to.equal('normal');
+            expect(res.body.user.level).to.equal('silver');
+            expect(res.body.user.borrowLimit).to.equal(3);
+            expect(res.body.user.totalBorrow).to.equal(10);
+            expect(res.body.message)
+              .to.equal('You\'ve been upgraded to silver');
+            done();
+          });
+      });
   });
 
-  describe('Token verification', () => {
-    it('should return user details if token is valid', (done) => {
+  describe('Token verification route', () => {
+    it('should return user token details if token is valid', (done) => {
       server
         .post('/api/v1/verify-token')
         .set('x-access-token', adminUserToken)
@@ -438,7 +427,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           expect(res.body.user.username).to.equal('ekundayo');
           expect(res.body.user.role).to.equal('admin');
           expect(res.body.user.level).to.equal('bronze');
-          expect(res.body.user.borrowLimit).to.equal(2);
+          expect(res.body.user.borrowLimit).to.equal(9005);
           expect(res.body.user.totalBorrow).to.equal(0);
           done();
         });

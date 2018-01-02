@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import chai from 'chai';
 import app from '../../app';
 import model from '../models';
-import helperBeforeHooks from './../helpers/helperBeforeHooks';
+import HelperBeforeHooks from './../helpers/HelperBeforeHooks';
 
 const Category = model.Category;
 const { expect } = chai;
@@ -10,27 +10,28 @@ let adminToken;
 
 const server = supertest.agent(app);
 describe('Library', () => {
-  helperBeforeHooks.makeDataAvailable();
+  HelperBeforeHooks.makeDataAvailable();
   beforeEach((done) => {
     ({ adminToken } = process.env);
     done();
   });
-  describe('category addition', () => {
-    it('should return success message for added category', (done) => {
-      server
-        .post('/api/v1/category')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .send({
-          title: 'Music',
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(201);
-          expect(res.body.message).to.equal('Music, successfully added');
-          expect(res.body.category.title).to.equal('Music');
-          done();
-        });
-    });
+  describe('Category route', () => {
+    it('should return success message if category was successfully created',
+      (done) => {
+        server
+          .post('/api/v1/category')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .send({
+            title: 'Music',
+          })
+          .end((err, res) => {
+            expect(res.status).to.equal(201);
+            expect(res.body.message).to.equal('Music, successfully added');
+            expect(res.body.category.title).to.equal('Music');
+            done();
+          });
+      });
     it('should return error message if no title field exists', (done) => {
       server
         .post('/api/v1/category')
@@ -45,25 +46,27 @@ describe('Library', () => {
           done();
         });
     });
-    it('should return error message for same category', (done) => {
-      server
-        .post('/api/v1/category')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .send({
-          title: 'Music',
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(409);
-          expect(res.body.message).to.equal('Conflict! Music exists already');
-          expect(res.body.foundCat.title).to.equal('Music');
-          done();
-        });
-    });
+    it('should return error message if new category title already exists',
+      (done) => {
+        server
+          .post('/api/v1/category')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .send({
+            title: 'Music',
+          })
+          .end((err, res) => {
+            expect(res.status).to.equal(409);
+            expect(res.body.message).to.equal('Conflict! Music exists already');
+            expect(res.body.foundCat.title).to.equal('Music');
+            done();
+          });
+      });
   });
 
-  describe('category listing', () => {
-    it('should return all categories for authenticated user', (done) => {
+  describe('Categories route', () => {
+    it('should return all categories for an authenticated if all categories' +
+      'are successfully gotten', (done) => {
       server
         .get('/api/v1/categories')
         .set('Accept', 'application/x-www-form-urlencoded')
