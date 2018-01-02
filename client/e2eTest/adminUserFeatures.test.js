@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 const path = require('path');
 
 module.exports = {
@@ -41,7 +42,7 @@ module.exports = {
       .waitForElementVisible('.toast', 5000)
       .assert.visible('.toast')
       .assert
-      .containsText('.toast', 'Authentication failed, check password or email')
+      .containsText('.toast', 'Authentication failed, Wrong password or email')
       .pause(600);
   },
   'User can view registration page': (browser) => {
@@ -556,24 +557,32 @@ module.exports = {
       .pause(3000);
   },
   'User can delete book': (browser) => {
+    let bookToDelete;
+    let bookId;
     browser
       .url('http://localhost:3000/admin?page=1')
-      .waitForElementVisible('body', 5000)
-      .assert.visible('tr:nth-of-type(1) td:nth-of-type(3)')
-      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)',
+      .waitForElementVisible('body', 5000);
+    browser.getAttribute('tbody tr:nth-of-type(1)', 'id', (book) => {
+      bookToDelete = book.value;
+      bookId = book.value.slice(-1);
+      browser.expect.element(`#${bookToDelete}`).to.be.present;
+      browser.assert.visible('tr:nth-of-type(1) td:nth-of-type(3)');
+      browser.assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)',
         'Gilead New Revision')
-      .click('#delete-book-btn6')
-      .waitForElementVisible('div.swal-modal', 5000)
-      .pause(2000)
-      .click('.swal-button--confirm')
-      .pause(1000)
-      .waitForElementVisible('.toast', 5000)
-      .assert
-      .containsText('.toast', 'Poof! Book successfully deleted')
-      .assert.visible('tr:nth-of-type(1) td:nth-of-type(3)')
-      .assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)',
-        'Gilead02')
-      .pause(1000);
+        .click(`#delete-book-btn${bookId}`)
+        .waitForElementVisible('div.swal-modal', 5000)
+        .pause(2000)
+        .click('.swal-button--confirm')
+        .pause(1000)
+        .waitForElementVisible('.toast', 5000)
+        .assert
+        .containsText('.toast', 'Poof! Book successfully deleted')
+        .assert.visible('tr:nth-of-type(1) td:nth-of-type(3)')
+        .assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)',
+          'Gilead02');
+      browser.expect.element(`#${bookToDelete}`).to.not.be.present;
+      browser.pause(1000);
+    });
   },
   'User cannot change password with invalid details': (browser) => {
     browser
