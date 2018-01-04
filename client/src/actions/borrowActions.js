@@ -206,7 +206,7 @@ const returnBook = (userId, bookId, borrowId, username, borrow) =>
     ).then((res) => {
       const socket = io('https://hellobooks-e.herokuapp.com');
       socket.emit('return book', {
-        book: res.data.updatedBook[1],
+        book: res.data.updatedBook,
         username
       });
       let toDispatch;
