@@ -91,7 +91,7 @@ class BorrowMiddleware {
         return res.status(200).send({
           message: `${newBookRecord[1].dataValues.title} succesfully` +
           ' returned but pending review by Administrator',
-          updatedBook: newBookRecord,
+          updatedBook: newBookRecord[1],
           borrowUpdated: newBorrowRecord[1].dataValues,
           userToUpdateInStore
         });

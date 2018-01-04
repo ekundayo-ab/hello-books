@@ -186,15 +186,15 @@ describe('Library books', () => {
           expect(res.body.message)
             .to.equal('Learn Haskell succesfully returned ' +
             'but pending review by Administrator');
-          expect(res.body.updatedBook[1].isbn).to.equal(1);
-          expect(res.body.updatedBook[1].title).to.equal('Learn Haskell');
-          expect(res.body.updatedBook[1].quantity).to.equal(30);
+          expect(res.body.updatedBook.isbn).to.equal(1);
+          expect(res.body.updatedBook.title).to.equal('Learn Haskell');
+          expect(res.body.updatedBook.quantity).to.equal(30);
           expect(res.body.borrowUpdated.returned).to.equal(true);
           expect(res.body.borrowUpdated.userId)
             .to.equal(res.body.userToUpdateInStore.id);
           expect(res.body.userToUpdateInStore.borrowLimit).to.equal(9005);
           expect(res.body.borrowUpdated.bookId)
-            .to.equal(res.body.updatedBook[1].id);
+            .to.equal(res.body.updatedBook.id);
           done();
         });
     });

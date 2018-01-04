@@ -62,6 +62,8 @@ class BorrowController {
    * @memberOf BorrowController
    */
   static returnBook(req, res, next) {
+    const { borrowId } = req.body;
+    if (!borrowId) return res.status(400).send('Ensure borrowId is present');
     const { dueDate } = req.body.borrow;
     const surcharge = moment(Date.now()) > moment(dueDate);
     const bookToReturn = req.foundBook;
@@ -150,6 +152,9 @@ class BorrowController {
   static AllBorrowedOrNotReturnedBooks(req, res) {
     const { page } = req.query; // page number
     const { userId } = req.params;
+    if (!page || !userId) {
+      return res.status(400).send({ message: 'Supply bookId and userId' });
+    }
     const { notify, returned, more } = req.query;
 
     // number of records per page

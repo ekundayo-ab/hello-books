@@ -158,12 +158,12 @@ const fetchBook = id => dispatch =>
  *
  * @description Sends book to the server to save in database
  *
- * @param {object} data - Details of the book to be added
+ * @param {object} book - Details of the book to be added
  *
  * @returns {object} action
  */
-const saveBook = data => dispatch =>
-  axios.post('/api/v1/books', data)
+const saveBook = book => dispatch =>
+  axios.post('/api/v1/books', book)
     .then((res) => {
       dispatch(addBook(res.data.book));
       Materialize.toast(res.data.message, 2000, 'green');
@@ -179,12 +179,12 @@ const saveBook = data => dispatch =>
  *
  * @description Sends details of book to update to the server
  *
- * @param {object} data - Details of the book to be updated
+ * @param {object} book - Details of the book to be updated
  *
  * @returns {object} action
  */
-const updateBook = data => dispatch =>
-  axios.put(`/api/v1/books/${data.id}`, data)
+const updateBook = book => dispatch =>
+  axios.put(`/api/v1/books/${book.id}`, book)
     .then((res) => {
       dispatch(bookUpdated(res.data.book));
       Materialize.toast(res.data.message, 2000, 'green');

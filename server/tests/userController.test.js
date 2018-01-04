@@ -291,7 +291,7 @@ describe('AUTHENTICATION & USER Operations', () => {
   });
 
   describe('Password Changing route', () => {
-    it('should return success message if password is successfully updated', 
+    it('should return success message if password is successfully updated',
       (done) => {
         server
           .post('/api/v1/users/pass')

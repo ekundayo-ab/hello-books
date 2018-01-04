@@ -252,9 +252,9 @@ Router.post('/users/signup',
  *       500:
  *         description: Internal Server Error
  */
-// Route to sign in
 Router.post('/users/signin',
   checkIfDefinedAndValid, checkUser, checkPassword, signin);
+
 
 // Authentication for google signup and signin
 Router.post('/auth/google',
@@ -424,6 +424,7 @@ Router.post('/books', hasAdminRights,
  *       400:
  *         description: |
  *           All required fields must exist
+ *           Ensure book ID is supplied
  *           errors: {
  *             isbn: 'This field is required',
  *             title: 'This field is required',
@@ -617,7 +618,7 @@ Router.delete('/books/:bookId',
  *         description: Internal Server Error
  */
 
-// Route to list all books in library
+// Route to list all books in the library
 Router.get('/books', listBooks);
 
 /**
@@ -658,9 +659,6 @@ Router.get('/books', listBooks);
  *              "updatedAt": 2018-01-02T20:20:22.361Z,
  *              "createdAt": 2018-01-02T20:20:22.361Z
  *            }
- *       numberOfPages:
- *         type: integer
- *         example: 3
  */
 
 /**
@@ -730,6 +728,33 @@ Router.get('/books', listBooks);
 Router.post('/users/:userId/books', checkUser,
   validateAndCheckIfBookExist, checkIfBorrowExist, borrowBook,
   sendMailAndResponse);
+
+/**
+ * @swagger
+ * definitions:
+ *   BorrowingRecordToReturn:
+ *     properties:
+ *       bookId:
+ *         type: integer
+ *         default: 4
+ *         example: 4
+ *       borrowId:
+ *         type: integer
+ *         default: 25
+ *         example: 25
+ *       borrow:
+ *         type: object
+ *         example: {
+ *           "id": 25,
+ *           "returned": false,
+ *           "userId": 3,
+ *           "bookId": 6,
+ *           "dueDate": 2018-01-05T20:20:22.360Z,
+ *           "actualReturnDate": 2018-01-02T20:20:22.360Z,
+ *           "updatedAt": 2018-01-02T20:20:22.361Z,
+ *           "createdAt": 2018-01-02T20:20:22.361Z
+ *         }
+ */
 
 /**
  * @swagger
@@ -820,48 +845,13 @@ Router.post('/users/:userId/books', checkUser,
  *         in: path
  *         required: true
  *         type: integer
- *         default: 3
- *       - name: bookId
- *         description: ID of Book to Return
- *         in: body
- *         required: true
- *         type: integer
- *         default: 6
- *         schema:
- *           type: object
- *           required: true
- *           example: {
- *             "bookId": 6
- *           }
- *       - name: borrowId
- *         description: ID of borrowing record
- *         in: body
- *         required: true
- *         type: integer
- *         default: 25
- *         schema:
- *           type: object
- *           required: true
- *           example: {
- *             "borrowId": 25
- *           }
+ *         default: 5
  *       - name: borrow
- *         description: Payload of the borrowed record
+ *         description: Book object with updated information to update a book
  *         in: body
  *         required: true
  *         schema:
- *           type: object
- *           required: true
- *           example: {
- *             "id": 25,
- *             "returned": false,
- *             "userId": 3,
- *             "bookId": 6,
- *             "dueDate": 2018-01-05T20:20:22.360Z,
- *             "actualReturnDate": 2018-01-02T20:20:22.360Z,
- *             "updatedAt": 2018-01-02T20:20:22.361Z,
- *             "createdAt": 2018-01-02T20:20:22.361Z
- *           }
+ *           $ref: '#/definitions/BorrowingRecordToReturn'
  *       - name: x-access-token
  *         in: header
  *         description: An authentication header for secure library access
@@ -876,6 +866,8 @@ Router.post('/users/:userId/books', checkUser,
  *       400:
  *         description: |
  *           All fields are required
+ *           Ensure borrowId is present
+ *           Ensure bookId is present
  *           Oops! something happenned [error message]
  *       404:
  *         description: |
@@ -970,10 +962,17 @@ Router.put('/users/:userId/books', checkUser,
  *       - application/json
  *     parameters:
  *       - name: returned
+ *         description: Shows if book has been returned or not
  *         in: query
  *         required: true
  *         type: boolean
  *         default: false
+ *       - name: page
+ *         description: Current shelf/page number
+ *         in: query
+ *         required: true
+ *         type: integer
+ *         default: 1
  *       - name: userId
  *         in: path
  *         description: ID of the User yet to return the books
@@ -989,6 +988,10 @@ Router.put('/users/:userId/books', checkUser,
  *         description: An array of Books
  *         schema:
  *           $ref: '#/definitions/BookNotReturnedListResponse'
+ *       204:
+ *         description: "No content message"
+ *       400:
+ *         description: Supply bookId and userId
  */
 Router.get('/users/:userId/books', AllBorrowedOrNotReturnedBooks);
 
@@ -1085,6 +1088,12 @@ Router.get('/borrowed/:bookId', getBorrowedBook);
  *         description: ID of the User whose borrowing records are to be listed
  *         required: true
  *         type: integer
+ *       - name: page
+ *         in: query
+ *         description: Current page/shelf for borrow records
+ *         required: true
+ *         type: integer
+ *         default: 1
  *       - name: x-access-token
  *         in: header
  *         description: An authentication header for secure library access
@@ -1098,10 +1107,108 @@ Router.get('/borrowed/:bookId', getBorrowedBook);
  */
 Router.get('/borrowed/:userId/books', AllBorrowedOrNotReturnedBooks);
 
+/**
+ * @swagger
+ * definitions:
+ *   userPasswordChangePayload:
+ *     properties:
+ *       userId:
+ *         type: integer
+ *         default: 2
+ *         example: 2
+ *       oldPass:
+ *         type: string
+ *         default: myOldP4s5
+ *         example: myOldP4s5
+ *       newPass:
+ *         type: string
+ *         example: myNewP4s5
+ *         default: myNewP4s5
+ *       newPassConfirm:
+ *         type: string
+ *         example: myNewP4s5
+ *         default: myNewP4s5
+ */
+/**
+ * @swagger
+ * /users/pass:
+ *   post:
+ *     tags:
+ *       - Users & Authentication
+ *     summary:
+ *       - Ensures a user can change his/her password
+ *     description: Ensures a user can change his/her password
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: passwordData
+ *         description: Data details of password to be changed
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/userPasswordChangePayload'
+ *       - name: x-access-token
+ *         in: header
+ *         description: An authentication header for secure library access
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Password successfully changed
+ *       400:
+ *         description: |
+ *           All fields must exist
+ *           Authentication failed, Old password incorrect
+ *           message: {
+ *             mismatch: "Passwords do not match"
+ *             newpass: "6 or more characters allowed"
+ *             oldPass: "field required"
+ *             newPass: "field required"
+ *             newPassConfirm: "field required"
+ *           }
+ *       404:
+ *         description: User not found
+ *       403:
+ *         description: Permission Denied
+ *       500:
+ *         description: Internal Server Error
+ */
 Router.post('/users/pass', checkIfDefinedAndValid,
   checkUser, checkPassword, changePassword);
+
+/**
+ * Route is not available for public consumption
+ */
 Router.post('/users/autoupgrade', autoUpgrade);
 
+
+/**
+ * @swagger
+ * definitions:
+ *   newCategoryPayload:
+ *     properties:
+ *       title:
+ *         type: string
+ *         default: Sciences
+ *         example: Sciences
+ */
+/**
+ * @swagger
+ * definitions:
+ *   categoryResponse:
+ *     properties:
+ *       message:
+ *         type: string
+ *         example: Sciences, successfully added
+ *       category:
+ *         type: object
+ *         example: {
+ *           "id": 4,
+ *           "title": Sciences,
+ *           "updatedAt": 2018-01-04T01:31:13.920Z,
+ *           "createdAt": 2018-01-04T01:31:13.920Z
+ *         }
+ */
 /**
  * @swagger
  * /category:
@@ -1115,11 +1222,11 @@ Router.post('/users/autoupgrade', autoUpgrade);
  *       - application/json
  *     parameters:
  *       - name: title
- *         description: name of the category to add
+ *         description: title of the category to add
  *         in: body
  *         required: true
- *         type: string
- *         default: "Sciences"
+ *         schema:
+ *           $ref: '#/definitions/newCategoryPayload'
  *       - name: x-access-token
  *         in: header
  *         description: An authentication header for secure library access
@@ -1128,13 +1235,8 @@ Router.post('/users/autoupgrade', autoUpgrade);
  *     responses:
  *       201:
  *         description: Sciences successfully added
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *             properties:
- *               title: string
- *               example: Sciences
+ *         schema:
+ *           $ref: '#/definitions/categoryResponse'
  *       400:
  *         description: All fields must exist
  *       403:
