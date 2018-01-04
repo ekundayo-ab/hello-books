@@ -153,7 +153,7 @@ class BorrowController {
     const { page } = req.query; // page number
     const { userId } = req.params;
     if (!page || !userId) {
-      return res.status(400).send({ message: 'Supply bookId and userId' });
+      return res.status(400).send({ message: 'Supply page and userId' });
     }
     const { notify, returned, more } = req.query;
 

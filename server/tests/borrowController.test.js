@@ -120,6 +120,46 @@ describe('Library books', () => {
             done();
           });
       });
+    it('should return all borrowed books by all user if notify flag is true',
+      (done) => {
+        server
+          .get(`/api/v1/borrowed/${userId}/books` +
+          `?page=${1}&notify=${true}&more=${10}`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.numberOfPages).to.equal(1);
+            expect(res.body.numberOfPages).to.be.a('number');
+            expect(res.body.borrowedBooks).to.be.an('array');
+            expect(res.body.borrowedBooks[0]).to.have.property('dueDate');
+            expect(res.body.borrowedBooks[0].bookId)
+              .to.equal(res.body.borrowedBooks[0].book.id);
+            expect(res.body.borrowedBooks[0].book.isbn).to.equal(1);
+            expect(res.body.borrowedBooks[0].book.title)
+              .to.equal('Learn Haskell');
+            expect(res.body.borrowedBooks[0].book.author)
+              .to.equal('Haskell Master');
+            expect(res.body.borrowedBooks[0].book.description)
+              .to.equal('Learn and Master Haskell in 16 Months');
+            expect(res.body.borrowedBooks[0].book.quantity).to.equal(29);
+            expect(res.body.borrowedBooks[0].book.categoryId).to.equal(4);
+            done();
+          });
+      });
+    it('should return error message for unhandled error',
+      (done) => {
+        server
+          .get('/api/v1/borrowed/books' +
+          `?page&notify=${true}&more=${10}`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .end((err, res) => {
+            expect(res.status).to.equal(500);
+            expect(res.body.message).to.equal('Internal Server Error');
+            done();
+          });
+      });
   });
 
   describe('Borrowed and Not Returned Books route', () => {

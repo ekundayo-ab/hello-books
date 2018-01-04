@@ -991,7 +991,9 @@ Router.put('/users/:userId/books', checkUser,
  *       204:
  *         description: "No content message"
  *       400:
- *         description: Supply bookId and userId
+ *         description: Supply page and userId
+ *       500:
+ *         description: Internal Server Error
  */
 Router.get('/users/:userId/books', AllBorrowedOrNotReturnedBooks);
 
@@ -1104,6 +1106,10 @@ Router.get('/borrowed/:bookId', getBorrowedBook);
  *         description: An array of Books
  *         schema:
  *           $ref: '#/definitions/AllBorrowedBooks'
+ *       400:
+ *         description: Supply page and userId
+ *       500:
+ *         description: Internal Server Error
  */
 Router.get('/borrowed/:userId/books', AllBorrowedOrNotReturnedBooks);
 
