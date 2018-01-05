@@ -154,13 +154,14 @@ describe('Library book(s)', () => {
             expect(res.status).to.equal(200);
             expect(res.body.message)
               .to.equal('Learn Haskell successfully updated to Learn Haskell New Edition');
-            expect(res.body.book.description)
+            expect(res.body.newBook.description)
               .to.equal('Learn and Master Haskell in 16 Months Updated with more projects and examples');
-            expect(res.body.book.isbn).to.equal(1);
-            expect(res.body.book.title).to.equal('Learn Haskell New Edition');
-            expect(res.body.book.author).to.equal('Haskell Master');
-            expect(res.body.book.quantity).to.equal(30);
-            expect(res.body.book.categoryId).to.equal(6);
+            expect(res.body.newBook.isbn).to.equal(1);
+            expect(res.body.newBook.title)
+              .to.equal('Learn Haskell New Edition');
+            expect(res.body.newBook.author).to.equal('Haskell Master');
+            expect(res.body.newBook.quantity).to.equal(30);
+            expect(res.body.newBook.categoryId).to.equal(6);
             done();
           });
       });

@@ -35,7 +35,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: `An application that helps manage a library and its processes
     like stocking, tracking and renting of books. **NB: for Admin access use**
-    _username: 'ekundayo', password: 'dayo'_ Image filenames are generated from
+    ***username: 'ekundayo', password: 'dayo'** Image filenames are generated from
     cloudinary,  the ones used in the sample models are just for
     sample purposes`,
   },

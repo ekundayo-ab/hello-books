@@ -273,6 +273,21 @@ export const book = {
   updatedAt: '2017-11-22T15:54:07.464Z'
 };
 
+export const newBook = {
+  id: 7,
+  isbn: 7,
+  title: 'Gilead02',
+  author: 'Marilynne Robinson',
+  description: 'Gilead is a novel written by Marilynne Robinson',
+  image: `https://res.cloudinary.com/dcl7tqhww/image/
+  upload/v1509139554/kf18x2ukcnygh6bau1o2.png`,
+  status: true,
+  quantity: 11,
+  categoryId: 1,
+  createdAt: '2017-11-22T15:54:07.464Z',
+  updatedAt: '2017-11-22T15:54:07.464Z'
+};
+
 export const updatedBook = [0, {
   id: 7,
   isbn: 7,

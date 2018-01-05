@@ -5,7 +5,8 @@ import * as actionType from '../../src/actions/types';
 import * as bookAction from '../../src/actions/bookActions';
 import {
   book,
-  books
+  books,
+  newBook
 } from '../__mocks__/testData';
 
 const middlewares = [thunk];
@@ -113,12 +114,12 @@ describe('Book actions', () => {
       moxios.stubRequest('/api/v1/books/7', {
         status: 200,
         response: {
-          book
+          newBook
         }
       });
       const expectedActions = [{
         type: actionType.BOOK_UPDATED,
-        book
+        newBook
       }];
       const store = mockStore({});
       store.dispatch(bookAction.updateBook(book))
