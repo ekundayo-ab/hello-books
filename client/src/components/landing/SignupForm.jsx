@@ -111,7 +111,7 @@ export class SignUpForm extends Component {
   }
 
   /**
-   * @description handles callback during Google signup and signin
+   * @description handles callback during Google sign-up and sign-in
    *
    * @param {object} response - The response payload sent from google when
    * signing up a user through google

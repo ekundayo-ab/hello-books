@@ -8,7 +8,7 @@ import BookMiddleware from '../middlewares/BookMiddleware';
 import BorrowMiddleware from '../middlewares/BorrowMiddleware';
 import ValidationMiddleware from '../middlewares/ValidationMiddleware';
 
-const { signup, signin, googleAuth, changePassword, autoUpgrade, isUserTaken } =
+const { signUp, signIn, googleAuth, changePassword, autoUpgrade, isUserTaken } =
   UserController;
 const { addBook, updateBook, deleteBook, listBooks, findBook, filterBooks }
   = BookController;
@@ -189,7 +189,7 @@ Router.get('/', (req, res) => res.status(200).send({
  *         description: Internal Server Error
  */
 Router.post('/users/signup',
-  checkIfDefinedAndValid, signup); // Route to sign up
+  checkIfDefinedAndValid, signUp); // Route to sign up
 
 /**
  * @swagger
@@ -251,10 +251,10 @@ Router.post('/users/signup',
  *         description: Internal Server Error
  */
 Router.post('/users/signin',
-  checkIfDefinedAndValid, checkUser, checkPassword, signin);
+  checkIfDefinedAndValid, checkUser, checkPassword, signIn);
 
 
-// Authentication for google signup and signin
+// Authentication for google sign-up and sign-in
 Router.post('/auth/google',
   checkIfDefinedAndValid, checkUser, googleAuth);
 

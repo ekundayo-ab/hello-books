@@ -29,7 +29,7 @@ class Helper {
      *
      * @returns {object} - true, false, message and errors
      */
-    const signin = () => {
+    const signIn = () => {
       const { identifier, password } = req.body;
       errMessage = (!identifier || !password) ?
         errMessage = 'Check your username or email.' : '';
@@ -41,7 +41,7 @@ class Helper {
      *
      * @returns {object} - true, false, message and errors
      */
-    const signup = () => {
+    const signUp = () => {
       const { username, email, password, passwordConfirmation } = req.body;
       errMessage = (!username || !email || !password || !passwordConfirmation) ?
         'Check your username, email or password and try again!' : '';
@@ -87,9 +87,9 @@ class Helper {
     };
 
     const badRequestResponses = {
-      '/users/signin': signin,
-      '/users/signup': signup,
-      '/auth/google': signup,
+      '/users/signin': signIn,
+      '/users/signup': signUp,
+      '/auth/google': signUp,
       '/books': addBook,
       [`/books/${bookId}`]: addBook,
       '/users/pass': changePass,

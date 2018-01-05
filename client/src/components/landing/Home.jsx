@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, Route, withRouter, Redirect, Switch } from 'react-router-dom';
 import Header from './Header';
-import SignUpForm from './SignupForm';
-import SignInForm from './SigninForm';
+import SignUpForm from './SignUpForm';
+import SignInForm from './SignInForm';
 // import ForgotPassword from './ForgotPasswordForm'; // TODO:Write logic
 
 /**

@@ -80,7 +80,7 @@ export class SignInForm extends Component {
   }
 
   /**
-   * @description handles callback during Google signup and signin
+   * @description handles callback during Google sign-up and sign-in
    *
    * @param {object} response
    *

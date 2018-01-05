@@ -2,7 +2,7 @@
  * @description hardcoded users details for testing
  */
 export default {
-  user1: {
+  firstUser: {
     decoded: {
       data: {
         id: 10,
@@ -17,7 +17,7 @@ export default {
       exp: 1504042590,
     },
   },
-  user2: {
+  secondUser: {
     decoded: {
       data: {
         id: 10,
@@ -32,52 +32,52 @@ export default {
       exp: 1504042590,
     },
   },
-  user3: {
+  thirdUser: {
     username: 'ekundayo',
     password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
     email: 'ekprogs@gmail.com',
   },
-  user4: {
+  fourthUser: {
     username: 'ekundayo',
     password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
     email: 'ekprogs',
   },
-  user5: {
+  fifthUser: {
     username: 'ekundayo',
     password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
     email: 'ekprogs@gmail',
   },
-  user6: {
+  sixthUser: {
     username: 'emma',
     password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
     email: 'emma@gmail.com',
   },
-  user7: {
+  seventhUser: {
     username: 'kate',
     password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
     email: 'emma@gmail.com',
   },
-  user8: {
+  eighthUser: {
     username: '',
     password: 'calmsecret',
     email: 'calm@gmail.com',
   },
-  user8a: {
+  eigthUserVariantOne: {
     username: 'good',
     password: '',
     email: 'good@gmail.com',
   },
-  user8b: {
+  eightUserVariantTwo: {
     username: 'gentle',
     password: 'gentlesecret',
     email: '',
   },
-  user9: {
+  ninthUser: {
     username: 'pate',
     password: '$2a$10$bhVz30gNLdCmqbZYuRIPQulAB/SgDA5XwS9CIgKfSTYod1ezymF2.',
     email: 'pate@gmail.com',
   },
-  user9a: {
+  ninthUserVariantOne: {
     body: {
       username: '   murphus',
       password: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
@@ -85,7 +85,7 @@ export default {
       email: 'murphus@gmail.com'
     }
   },
-  user9b: {
+  ninthUserVariantTwo: {
     body: {
       username: '',
       password: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
@@ -93,7 +93,7 @@ export default {
       email: 'murphus@gmail.com'
     }
   },
-  user9c: {
+  ninthUserVariantThree: {
     body: {
       username: 'lincoln',
       password: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
@@ -101,14 +101,14 @@ export default {
       email: 'murphus@gmail.com'
     }
   },
-  user9d: {
+  ninthUserVariantFour: {
     body: {
       oldPass: '',
       newPass: '',
       newPassConfirm: '',
     }
   },
-  user9e: {
+  ninthUserVariantFive: {
     body: {
       username: 'l',
       password: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
@@ -116,7 +116,7 @@ export default {
       email: 'murphus@gmail.com'
     }
   },
-  user9f: {
+  ninthUserVariantSix: {
     body: {
       username: 'lincoln',
       password: 'bhVz',
@@ -124,22 +124,22 @@ export default {
       email: 'murphus@gmail.com'
     }
   },
-  user9g: {
+  ninthUserVariantSeven: {
     body: {
       oldPass: '',
       newPass: 'frlse',
       newPassConfirm: 'flsee',
     }
   },
-  upgradeToken1: {
+  firstUpgradeToken: {
     level: 'bronze',
     totalBorrow: 10
   },
-  upgradeToken2: {
+  secondUpgradeToken: {
     level: 'silver',
     totalBorrow: 20
   },
-  upgradeToken3: {
+  thirdUpgradeToken: {
     level: 'gold',
     totalBorrow: 30
   },
