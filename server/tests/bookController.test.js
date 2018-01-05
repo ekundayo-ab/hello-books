@@ -135,37 +135,35 @@ describe('Library book(s)', () => {
   });
 
   describe('Book Update route', () => {
-    it('should return modified book and success message ' +
-    'if book was successfully updated', (done) => {
-      server
-        .put(`/api/v1/books/${bookId}`)
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .send({
-          isbn: 1,
-          title: 'Learn Haskell New Edition',
-          author: 'Haskell Master',
-          description: 'Learn and Master Haskell in' +
-          ' 16 Months Updated with more projects and examples',
-          category: 6,
-          quantity: 30,
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body.message)
-            .to.equal('Learn Haskell successfully ' +
-            'updated to Learn Haskell New Edition');
-          expect(res.body.book.description)
-            .to.equal('Learn and Master Haskell in' +
-            ' 16 Months Updated with more projects and examples');
-          expect(res.body.book.isbn).to.equal(1);
-          expect(res.body.book.title).to.equal('Learn Haskell New Edition');
-          expect(res.body.book.author).to.equal('Haskell Master');
-          expect(res.body.book.quantity).to.equal(30);
-          expect(res.body.book.categoryId).to.equal(6);
-          done();
-        });
-    });
+    it(`should return modified book and success message if book
+    was successfully updated`,
+      (done) => {
+        server
+          .put(`/api/v1/books/${bookId}`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .send({
+            isbn: 1,
+            title: 'Learn Haskell New Edition',
+            author: 'Haskell Master',
+            description: 'Learn and Master Haskell in 16 Months Updated with more projects and examples',
+            category: 6,
+            quantity: 30,
+          })
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.message)
+              .to.equal('Learn Haskell successfully updated to Learn Haskell New Edition');
+            expect(res.body.book.description)
+              .to.equal('Learn and Master Haskell in 16 Months Updated with more projects and examples');
+            expect(res.body.book.isbn).to.equal(1);
+            expect(res.body.book.title).to.equal('Learn Haskell New Edition');
+            expect(res.body.book.author).to.equal('Haskell Master');
+            expect(res.body.book.quantity).to.equal(30);
+            expect(res.body.book.categoryId).to.equal(6);
+            done();
+          });
+      });
     it('should return error message if book is not found', (done) => {
       server
         .put('/api/v1/books/345')
@@ -175,8 +173,8 @@ describe('Library book(s)', () => {
           isbn: '001',
           title: 'Learn Haskell New Edition',
           author: 'Haskell Master',
-          description: 'Learn and Master Haskell in' +
-          '16 Months Updated with more projects and examples',
+          description: `Learn and Master Haskell in 16 Months Updated with more
+          projects and examples`,
           category: 4,
           quantity: 30,
         })
@@ -196,8 +194,8 @@ describe('Library book(s)', () => {
             isbn: '001',
             title: 'Learn Haskell New Edition',
             author: 'Haskell Master',
-            description: 'Learn and Master Haskell in' +
-            '16 Months Updated with more projects and examples',
+            description: `Learn and Master Haskell in 16 Months Updated with
+            more projects and examples`,
             quantity: 90,
           })
           .end((err, res) => {
@@ -249,8 +247,7 @@ describe('Library book(s)', () => {
               .to.equal('Learn Haskell New Edition');
             expect(res.body.books[0].author).to.equal('Haskell Master');
             expect(res.body.books[0].description)
-              .to.equal('Learn and Master Haskell in 16 Months'
-              + ' Updated with more projects and examples');
+              .to.equal('Learn and Master Haskell in 16 Months Updated with more projects and examples');
             expect(res.body.books[0].quantity).to.equal(30);
             expect(res.body.books[0].categoryId).to.equal(6);
             expect(res.body.books[1].title)
@@ -286,35 +283,35 @@ describe('Library book(s)', () => {
           done();
         });
     });
-    it('should return all books when accessed by a ' +
-      'user with normal authentication level', (done) => {
-      server
-        .get('/api/v1/books?page=1')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', normalToken)
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body.numberOfPages).to.equal(1);
-          expect(res.body.books).to.have.lengthOf(3);
-          expect(res.body.books).to.be.a('array');
-          expect(res.body.books[0].title)
-            .to.equal('Learn Haskell New Edition');
-          expect(res.body.books[0].author).to.equal('Haskell Master');
-          expect(res.body.books[0].description)
-            .to.equal('Learn and Master Haskell in 16 Months'
-            + ' Updated with more projects and examples');
-          expect(res.body.books[0].quantity).to.equal(30);
-          expect(res.body.books[0].categoryId).to.equal(6);
-          expect(res.body.books[1].title)
-            .to.equal('Learn JAVA');
-          expect(res.body.books[1].author).to.equal('Java Master');
-          expect(res.body.books[1].description)
-            .to.equal('Learn & Master Java in 28 days');
-          expect(res.body.books[1].quantity).to.equal(30);
-          expect(res.body.books[1].categoryId).to.equal(1);
-          done();
-        });
-    });
+    it(`should return all books when accessed by a user with normal
+    authentication level`,
+      (done) => {
+        server
+          .get('/api/v1/books?page=1')
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', normalToken)
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.numberOfPages).to.equal(1);
+            expect(res.body.books).to.have.lengthOf(3);
+            expect(res.body.books).to.be.a('array');
+            expect(res.body.books[0].title)
+              .to.equal('Learn Haskell New Edition');
+            expect(res.body.books[0].author).to.equal('Haskell Master');
+            expect(res.body.books[0].description)
+              .to.equal('Learn and Master Haskell in 16 Months Updated with more projects and examples');
+            expect(res.body.books[0].quantity).to.equal(30);
+            expect(res.body.books[0].categoryId).to.equal(6);
+            expect(res.body.books[1].title)
+              .to.equal('Learn JAVA');
+            expect(res.body.books[1].author).to.equal('Java Master');
+            expect(res.body.books[1].description)
+              .to.equal('Learn & Master Java in 28 days');
+            expect(res.body.books[1].quantity).to.equal(30);
+            expect(res.body.books[1].categoryId).to.equal(1);
+            done();
+          });
+      });
     it('should return error message when accessed by an unauthenticated user',
       (done) => {
         server
@@ -351,8 +348,7 @@ describe('Library book(s)', () => {
           expect(res.status).to.equal(200);
           expect(res.body.id).to.equal(parseInt(bookId, 10));
           expect(res.body.title).to.equal('Learn Haskell New Edition');
-          expect(res.body.description).to.equal('Learn and Master Haskell' +
-          ' in 16 Months Updated with more projects and examples');
+          expect(res.body.description).to.equal('Learn and Master Haskell in 16 Months Updated with more projects and examples');
           expect(res.body.quantity).to.equal(30);
           expect(res.body.categoryId).to.equal(6);
           done();

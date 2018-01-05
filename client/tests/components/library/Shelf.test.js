@@ -37,17 +37,17 @@ describe('Shelf Component', () => {
     expect(wrapper.find('#bk3').exists()).toBe(true);
   });
 
-  it('should call filterBooksByCategory when books' +
-    ' are filtered by category', () => {
-    const shelfWrapper = wrapper.instance();
-    const filterBooksByCategory =
-      jest.spyOn(shelfWrapper, 'filterBooksByCategory');
-    const event = {
-      preventDefault: jest.fn()
-    };
-    shelfWrapper.filterBooksByCategory(1, event, 1);
-    expect(filterBooksByCategory).toBeCalled();
-  });
+  it('should call filterBooksByCategory when books are filtered by category',
+    () => {
+      const shelfWrapper = wrapper.instance();
+      const filterBooksByCategory =
+        jest.spyOn(shelfWrapper, 'filterBooksByCategory');
+      const event = {
+        preventDefault: jest.fn()
+      };
+      shelfWrapper.filterBooksByCategory(1, event, 1);
+      expect(filterBooksByCategory).toBeCalled();
+    });
 
   it('should ensure mapStateToProps returns prop from redux store', () => {
     const storeState = {

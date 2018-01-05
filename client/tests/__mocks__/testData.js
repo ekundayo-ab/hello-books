@@ -24,8 +24,8 @@ export const book1 = {
   title: 'The Secret of the Lorax',
   author: 'O\'Hare',
   description: 'The secret of the lorax features a man selling air',
-  image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/' +
-  'v1510914293/fbuuwg6uqiab9b3rxpvh.jpg',
+  image: `https://res.cloudinary.com/dcl7tqhww/image/upload/
+  v1510914293/fbuuwg6uqiab9b3rxpvh.jpg`,
   status: true,
   quantity: 57,
   category: 'Sports',
@@ -39,8 +39,8 @@ export const book2 = {
   title: 'The Secret of the Lorax',
   author: 'O\'Hare',
   description: 'The secret of the lorax features a man selling air',
-  image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/' +
-  'v1510914293/fbuuwg6uqiab9b3rxpvh.jpg',
+  image: `https://res.cloudinary.com/dcl7tqhww/image/upload/
+  v1510914293/fbuuwg6uqiab9b3rxpvh.jpg`,
   status: true,
   quantity: 57,
   category: 'Sports',
@@ -53,9 +53,9 @@ export const book3 = {
   isbn: 456,
   title: 'Ancient Tips on travelling',
   author: 'O\'Hare',
-  description: 'This tips would help you become a better traveller',
-  image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/' +
-  'v1510914293/fbuuwg6uqiab9b3rxpvh.jpg',
+  description: `This tips would help you become a better traveller,
+  image: 'https://res.cloudinary.com/dcl7tqhww/image/upload/
+  v1510914293/fbuuwg6uqiab9b3rxpvh.jpg`,
   status: true,
   quantity: 57,
   category: 'Travels',
@@ -85,8 +85,8 @@ export const borrow1 = {
     title: 'Gilead',
     author: 'Marilynne Robinson',
     description: 'Gilead is a novel written by Marilynne Robinson',
-    image: 'http://res.cloudinary.com/dcl7tqhww/image/upload' +
-    '/v1509139554/kf18x2ukcnygh6bau1o2.png',
+    image: `http://res.cloudinary.com/dcl7tqhww/image/upload
+    /v1509139554/kf18x2ukcnygh6bau1o2.png`,
     status: true,
     quantity: 10,
     category: 'Arts',
@@ -110,8 +110,8 @@ export const borrow2 = {
     title: 'Wolf Hall',
     author: 'Hilary Mantel',
     description: 'Wolf Hall is a historical novel by English author Hilary',
-    image: 'http://res.cloudinary.com/dcl7tqhww/image/upload' +
-    '/v1509139539/w9wpuonkyguo32i90mg8.png',
+    image: `http://res.cloudinary.com/dcl7tqhww/image/upload
+    /v1509139539/w9wpuonkyguo32i90mg8.png`,
     status: true,
     quantity: 9,
     category: 'Arts',
@@ -164,11 +164,10 @@ export const user = {
   updatedAt: '2017-11-22T15:41:56.222Z'
 };
 
-export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e' +
-'yJkYXRhIjp7ImlkIjo0OSwicm9sZSI6ImFkbWl' +
-'uIiwidXNlcm5hbWUiOiJla3VuZGF5byJ9LCJpYXQi' +
-'OjE1MTA5NjI2OTYsImV4cCI6MzYxNTEwOTYyNjk2fQ.' +
-'TtaPVG2xai-CqEhLJMB8Nxenm7DIskx3pASF0pdFU2k';
+export const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e
+yJkYXRhIjp7ImlkIjo0OSwicm9sZSI6ImFkbWluIiwidXNlcm5hbWUiOiJla3VuZGF5byJ9LCJpYXQi
+OjE1MTA5NjI2OTYsImV4cCI6MzYxNTEwOTYyNjk2fQ.
+TtaPVG2xai-CqEhLJMB8Nxenm7DIskx3pASF0pdFU2k`;
 
 export const googleDetails = {
   El: '116643864639139228843',
@@ -177,16 +176,16 @@ export const googleDetails = {
     ig: 'Ekundayo Abiona',
     ofa: 'Ekundayo',
     wea: 'Abiona',
-    Paa: 'https://lh5.googleusercontent.com/-vI2PRePGAKU/' +
-    'AAAAAAAAAAI/AAAAAAAAAAc/2nvT9UwrvUs/s96-c/photo.jpg',
+    Paa: `https://lh5.googleusercontent.com/-vI2PRePGAKU/
+    AAAAAAAAAAI/AAAAAAAAAAc/2nvT9UwrvUs/s96-c/photo.jpg`,
     U3: 'ekundayo.abiona@andela.com'
   },
   googleId: '116643864639139228843',
   tokenObj: {
     token_type: 'Bearer',
-    access_token: 'ya29.GlwHBbqo-6eZvqDOPjKQ89C3pXqx08Nt_vxypcQQaB9KQ' +
-    '0HvNFd2_0' +
-    'PBh2lZK19xF5rV0YhuyxKWDXbTrImxuwV2BBjXrn255YYFULs7PhhvY23CUHUdYxUqu47IPg',
+    access_token: `ya29.GlwHBbqo-6eZvqDOPjKQ89C3pXqx08Nt_vxypcQQaB9KQ
+    0HvNFd2_0PBh2lZK19xF5rV0YhuyxKWDXbTrImxuwV2BBjXrn255YYFULs
+    7PhhvY23CUHUdYxUqu47IPg`,
     id_token: 'defualt872%^&#a!'
   }
 };
@@ -198,8 +197,8 @@ export const googleDetails2 = {
     ig: 'Ekundayo Abiona',
     ofa: 'Ekundayo',
     wea: 'Abiona',
-    Paa: 'https://lh5.googleusercontent.com/-vI2PRePGAKU/' +
-    'AAAAAAAAAAI/AAAAAAAAAAc/2nvT9UwrvUs/s96-c/photo.jpg',
+    Paa: `https://lh5.googleusercontent.com/-vI2PRePGAKU/
+    AAAAAAAAAAI/AAAAAAAAAAc/2nvT9UwrvUs/s96-c/photo.jpg`,
     U3: 'ekundayo.abiona@andela.com'
   },
   googleId: '116643864639139228843',
@@ -235,8 +234,8 @@ export const books = [
     title: 'Gilead01',
     author: 'Marilynne Robinson',
     description: 'Gilead is a novel written by Marilynne Robinson',
-    image: 'https://res.cloudinary.com/dcl7tqhww/image/' +
-    'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+    image: `https://res.cloudinary.com/dcl7tqhww/image/
+    upload/v1509139554/kf18x2ukcnygh6bau1o2.png`,
     status: true,
     quantity: 11,
     categoryId: 1,
@@ -249,8 +248,8 @@ export const books = [
     title: 'Gilead02',
     author: 'Marilynne Robinson',
     description: 'Gilead is a novel written by Marilynne Robinson',
-    image: 'https://res.cloudinary.com/dcl7tqhww/image/' +
-    'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+    image: `https://res.cloudinary.com/dcl7tqhww/image/
+    upload/v1509139554/kf18x2ukcnygh6bau1o2.png`,
     status: true,
     quantity: 11,
     categoryId: 1,
@@ -265,8 +264,8 @@ export const book = {
   title: 'Gilead02',
   author: 'Marilynne Robinson',
   description: 'Gilead is a novel written by Marilynne Robinson',
-  image: 'https://res.cloudinary.com/dcl7tqhww/image/'
-  + 'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+  image: `https://res.cloudinary.com/dcl7tqhww/image/
+  upload/v1509139554/kf18x2ukcnygh6bau1o2.png`,
   status: true,
   quantity: 11,
   categoryId: 1,
@@ -280,8 +279,8 @@ export const updatedBook = [0, {
   title: 'Gilead02',
   author: 'Marilynne Robinson',
   description: 'Gilead is a novel written by Marilynne Robinson',
-  image: 'https://res.cloudinary.com/dcl7tqhww/image/'
-  + 'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+  image: `https://res.cloudinary.com/dcl7tqhww/image/
+  upload/v1509139554/kf18x2ukcnygh6bau1o2.png`,
   status: true,
   quantity: 11,
   categoryId: 1,
@@ -317,8 +316,8 @@ export const borrowedBooks = [
       title: 'Gilead03',
       author: 'Marilynne Robinson',
       description: 'Gilead is a novel written by Marilynne Robinson',
-      image: 'https://res.cloudinary.com/dcl7tqhww/image/up' +
-      'load/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      image: `https://res.cloudinary.com/dcl7tqhww/image/
+      upload/v1509139554/kf18x2ukcnygh6bau1o2.png`,
       status: true,
       quantity: 11,
       categoryId: 1,
@@ -341,8 +340,8 @@ export const borrowedBooks = [
       title: 'Gilead01',
       author: 'Marilynne Robinson',
       description: 'Gilead is a novel written by Marilynne Robinson',
-      image: 'https://res.cloudinary.com/dcl7tqhww/image/'
-      + 'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      image: `https://res.cloudinary.com/dcl7tqhww/image/
+      upload/v1509139554/kf18x2ukcnygh6bau1o2.png`,
       status: true,
       quantity: 11,
       categoryId: 1,
@@ -368,8 +367,8 @@ export const borrowedNotReturnedBooks = [
       title: 'Gilead03',
       author: 'Marilynne Robinson',
       description: 'Gilead is a novel written by Marilynne Robinson',
-      image: 'https://res.cloudinary.com/dcl7tqhww/image/up' +
-      'load/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      image: `https://res.cloudinary.com/dcl7tqhww/image/
+      upload/v1509139554/kf18x2ukcnygh6bau1o2.png`,
       status: true,
       quantity: 11,
       categoryId: 1,
@@ -392,8 +391,8 @@ export const borrowedNotReturnedBooks = [
       title: 'Gilead01',
       author: 'Marilynne Robinson',
       description: 'Gilead is a novel written by Marilynne Robinson',
-      image: 'https://res.cloudinary.com/dcl7tqhww/image/'
-      + 'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+      image: `https://res.cloudinary.com/dcl7tqhww/image/
+      upload/v1509139554/kf18x2ukcnygh6bau1o2.png`,
       status: true,
       quantity: 11,
       categoryId: 1,

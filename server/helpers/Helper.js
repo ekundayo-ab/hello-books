@@ -230,7 +230,7 @@ class Helper {
    * @memberOf Helper
    */
   static validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line max-len
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   }
 
@@ -318,25 +318,22 @@ class Helper {
     const mailOptions = {
       from: 'admin@hellobooks.com',
       to: userToUpdateInStore.email,
-      subject: 'Notice of surcharge on late ' +
-      `return of ${updatedBook[1].dataValues.title}`,
-      html: `<p>Hi ${userToUpdateInStore.username}</p>` +
-      '<p>In a bid to satisfy hellobooks users, we ' +
-      'encourage all users to return book(s) borrowed' +
-      ' on or as at when due, so we can have books to serve' +
-      ' other users.</p>' +
-      '<p>In order to checkmate this we deduct a borrowing' +
-      ' credit per book returned late</p>' +
-      '<p>We have therefore deducted 1 credit point from your' +
-      ' total credit, find below the updated details of your' +
-      ' borrowing credit account</p>' +
-      `<p><b>Total Credit: </b>
-      ${userToUpdateInStore.borrowLimit}</p>` +
-      '<blockquote>To replenish your credit at the rate of $1' +
-      ' (One Dollar) per 10 credit points send funds to ' +
-      '<b>HelloBooks Account: AAABBBXXXXXX</b></blockquote>' +
-      '<p>Thanks. for more info visit' +
-      ' https://hellobooks-e.herokuapp.com</p>'
+      subject: `Notice of surcharge on late return of
+      ${updatedBook[1].dataValues.title},
+      html: <p>Hi ${userToUpdateInStore.username}</p>
+      <p>In a bid to satisfy hellobooks users, we
+      encourage all users to return book(s) borrowed
+       on or as at when due, so we can have books to serve' other users.</p>
+      <p>In order to checkmate this we deduct a borrowing
+       credit per book returned late</p>
+      <p>We have therefore deducted 1 credit point from your
+       total credit, find below the updated details of your
+       borrowing credit account</p>
+      <p><b>Total Credit: </b> ${userToUpdateInStore.borrowLimit}</p>
+      <blockquote>To replenish your credit at the rate of $1
+       (One Dollar) per 10 credit points send funds to
+      <b>HelloBooks Account: AAABBBXXXXXX</b></blockquote>
+      <p>Thanks. for more info visit https://hellobooks-e.herokuapp.com</p>`
     };
     transporter.sendMail(mailOptions, (err, info) => {
       /* eslint-disable no-console */

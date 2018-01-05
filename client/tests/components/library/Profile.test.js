@@ -136,15 +136,16 @@ describe('Profile Component', () => {
     expect(wrapInstance.handleBookReturn).toHaveBeenCalled();
   });
 
-  it('should call handleSubmit when submit' +
-  ' button is clicked to change password', () => {
-    const handleSubmitSpy = jest.spyOn(wrapInstance, 'handleSubmit');
-    const event = {
-      preventDefault: jest.fn()
-    };
-    wrapper.instance().handleSubmit(event);
-    expect(handleSubmitSpy).toHaveBeenCalled();
-  });
+  it(`should call handleSubmit when submit button is clicked to
+  change password`,
+    () => {
+      const handleSubmitSpy = jest.spyOn(wrapInstance, 'handleSubmit');
+      const event = {
+        preventDefault: jest.fn()
+      };
+      wrapper.instance().handleSubmit(event);
+      expect(handleSubmitSpy).toHaveBeenCalled();
+    });
 
   it('should ensure required elements are rendered', () => {
     expect(wrapper.find('h4').text()).toEqual('Info & Details');

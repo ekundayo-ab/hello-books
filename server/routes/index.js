@@ -245,8 +245,6 @@ Router.post('/users/signup',
  *           $ref: '#/definitions/SignInResponse'
  *       400:
  *         description: Check your username or email.
- *       404:
- *         description: Authentication failed, Wrong password or email
  *       401:
  *         description: Authentication failed. Wrong password or email
  *       500:

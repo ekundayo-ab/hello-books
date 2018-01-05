@@ -63,8 +63,7 @@ describe('Borrowing actions', () => {
   describe('Borrowed books listing action', () => {
     it('should return all books borrowed by a user', (done) => {
       moxios
-        .stubRequest(`/api/v1/borrowed/${1}/books?page=${1}` +
-        `&notify=${false}&more=${0}&returned=${0}`, {
+        .stubRequest(`/api/v1/borrowed/${1}/books?page=${1}&notify=${false}&more=${0}&returned=${0}`, {
           status: 200,
           response: {
             success: true,
@@ -86,8 +85,7 @@ describe('Borrowing actions', () => {
 
     it('should return empty array for no books', (done) => {
       moxios
-        .stubRequest(`/api/v1/borrowed/${1}/books?page=${1}` +
-        `&notify=${false}&more=${0}&returned=${0}`, {
+        .stubRequest(`/api/v1/borrowed/${1}/books?page=${1}&notify=${false}&more=${0}&returned=${0}`, {
           status: 200,
           response: {
             success: true,
@@ -108,8 +106,7 @@ describe('Borrowing actions', () => {
 
     it('should return error message on book listing failure', (done) => {
       moxios
-        .stubRequest(`/api/v1/borrowed/${1}/books?page=${1}` +
-        `&notify=${false}&more=${0}&returned=${0}`, {
+        .stubRequest(`/api/v1/borrowed/${1}/books?page=${1}&notify=${false}&more=${0}&returned=${0}`, {
           status: 500,
           response: { message: 'Internal Server Error' }
         });

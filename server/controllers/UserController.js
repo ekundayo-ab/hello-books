@@ -168,8 +168,7 @@ class UserController {
             plain: true
           }).then(userUpdated =>
             res.status(200).send({
-              message: 'You\'ve been upgraded to ' +
-              `${userUpdated[1].dataValues.level}`,
+              message: `You've been upgraded to ${userUpdated[1].dataValues.level}`,
               user: userUpdated[1]
             })).catch(() => {
             res.status(500).send({ message: 'Internal Server Error' });

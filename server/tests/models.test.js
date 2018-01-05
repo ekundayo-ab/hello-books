@@ -279,8 +279,7 @@ describe('Models', () => {
       }).then().catch((err) => {
         expect(err.name).to.equal('SequelizeForeignKeyConstraintError');
         expect(err.message)
-          .to.equal('insert or update on table "Borrows"' +
-          ' violates foreign key constraint "Borrows_bookId_fkey"');
+          .to.equal('insert or update on table "Borrows" violates foreign key constraint "Borrows_bookId_fkey"');
         done();
       });
     });
@@ -294,8 +293,7 @@ describe('Models', () => {
       }).then().catch((err) => {
         expect(err.name).to.equal('SequelizeForeignKeyConstraintError');
         expect(err.message)
-          .to.equal('insert or update on table "Borrows"' +
-          ' violates foreign key constraint "Borrows_userId_fkey"');
+          .to.equal('insert or update on table "Borrows" violates foreign key constraint "Borrows_userId_fkey"');
         done();
       });
     });

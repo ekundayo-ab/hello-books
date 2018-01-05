@@ -185,7 +185,7 @@ describe('AUTHENTICATION & USER Operations', () => {
         .end((err, res) => {
           expect(res.body.message)
             .to.equal('Authentication failed, Wrong password or email');
-          expect(res.status).to.equal(404);
+          expect(res.status).to.equal(401);
           done();
         });
     });

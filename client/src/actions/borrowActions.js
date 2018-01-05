@@ -117,8 +117,7 @@ const borrowBook = (userId, bookId, username) =>
 const fetchAllBorrowedBooks = (pageNumber, userId, notify, more) =>
   dispatch =>
     axios.get(
-      `/api/v1/borrowed/${userId}/books?` +
-      `page=${pageNumber}&notify=${notify}&more=${more}&returned=${0}`
+      `/api/v1/borrowed/${userId}/books?page=${pageNumber}&notify=${notify}&more=${more}&returned=${0}`
     ).then((res) => {
       let toDispatch;
       if (res.data.borrowedBooks) {
