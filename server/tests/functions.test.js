@@ -43,12 +43,14 @@ describe('Helper methods', () => {
         .errors.quantity, 'This field is required');
     });
     it('should return error value for isbn field not a number', () => {
-      assert.equal(inputValidation(helperBook.seventhBookVariantOne).isValid, false);
+      assert.equal(inputValidation(helperBook.seventhBookVariantOne)
+        .isValid, false);
       assert.equal(inputValidation(helperBook.seventhBookVariantOne)
         .errors.ISBNValidation, 'ISBN must be a number');
     });
     it('should return error value for quantity field not a number', () => {
-      assert.equal(inputValidation(helperBook.seventhBookVariantTwo).isValid, false);
+      assert.equal(inputValidation(helperBook.seventhBookVariantTwo)
+        .isValid, false);
       assert.equal(inputValidation(helperBook.seventhBookVariantTwo)
         .errors.numeric, 'quantity must be a number');
     });
@@ -66,39 +68,46 @@ describe('Helper methods', () => {
   });
   describe('field validation for registration inputs', () => {
     it('should return an error for invalid username supplied', () => {
-      assert.equal(userValidation(helperUser.ninthUserVariantOne).isValid, false);
+      assert.equal(userValidation(helperUser.ninthUserVariantOne)
+        .isValid, false);
       assert.equal(userValidation(helperUser.ninthUserVariantOne)
         .errors.username, 'One word, only letters or underscore');
     });
     it('should return error for username not supplied', () => {
-      assert.equal(userValidation(helperUser.ninthUserVariantTwo).isValid, false);
+      assert.equal(userValidation(helperUser.ninthUserVariantTwo)
+        .isValid, false);
       assert.equal(userValidation(helperUser.ninthUserVariantTwo)
         .errors.username, 'This field is required');
     });
     it('should return error for password mismatch', () => {
-      assert.equal(userValidation(helperUser.ninthUserVariantThree).isValid, false);
+      assert.equal(userValidation(helperUser.ninthUserVariantThree)
+        .isValid, false);
       assert.equal(userValidation(helperUser.ninthUserVariantThree)
         .errors.password, 'Passwords do not match');
     });
     it('should not allow username less than 2 characters', () => {
-      assert.equal(userValidation(helperUser.ninthUserVariantFive).isValid, false);
+      assert.equal(userValidation(helperUser.ninthUserVariantFive)
+        .isValid, false);
       assert.equal(userValidation(helperUser.ninthUserVariantFive)
         .errors.username, 'minimum of 2 characters word allowed');
     });
     it('should not allow password less than 6 characters', () => {
-      assert.equal(userValidation(helperUser.ninthUserVariantSix).isValid, false);
+      assert.equal(userValidation(helperUser.ninthUserVariantSix)
+        .isValid, false);
       assert.equal(userValidation(helperUser.ninthUserVariantSix)
         .errors.password, 'minimum of 6 characters word allowed');
     });
   });
   describe('field validation for password change inputs', () => {
     it('should return an error for invalid inputs supplied', () => {
-      assert.equal(validatePassForm(helperUser.ninthUserVariantFour).isValid, false);
+      assert.equal(validatePassForm(helperUser.ninthUserVariantFour)
+        .isValid, false);
       assert.equal(validatePassForm(helperUser.ninthUserVariantFour)
         .errors.oldPass, 'field required');
     });
     it('should return an error for password mismatch', () => {
-      assert.equal(validatePassForm(helperUser.ninthUserVariantSeven).isValid, false);
+      assert.equal(validatePassForm(helperUser.ninthUserVariantSeven)
+        .isValid, false);
       assert.equal(validatePassForm(helperUser.ninthUserVariantSeven)
         .errors.mismatch, 'Passwords do not match');
     });

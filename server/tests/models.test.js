@@ -166,7 +166,8 @@ describe('Models', () => {
     it('should return list of all books', (done) => {
       Book.findAll()
         .then((book) => {
-          expect(book[1].dataValues.isbn).to.equal(helperBook.fourteenthBook.isbn);
+          expect(book[1].dataValues.isbn)
+            .to.equal(helperBook.fourteenthBook.isbn);
           done();
         });
     });
@@ -193,7 +194,8 @@ describe('Models', () => {
           });
       });
     it('should return validation error for null inputted values', (done) => {
-      Book.update(helperBook.twelfthBook, { where: { isbn: helperBook.eightBook.isbn } })
+      Book.update(helperBook.twelfthBook,
+        { where: { isbn: helperBook.eightBook.isbn } })
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeValidationError');
@@ -206,7 +208,8 @@ describe('Models', () => {
         });
     });
     it('should return validation error for undefined input values', (done) => {
-      Book.update(helperBook.thirteenthBook, { where: { isbn: helperBook.eightBook.isbn } })
+      Book.update(helperBook.thirteenthBook,
+        { where: { isbn: helperBook.eightBook.isbn } })
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeValidationError');
@@ -219,7 +222,8 @@ describe('Models', () => {
         });
     });
     it('should return validation error if supplied isbn is invalid', (done) => {
-      Book.update(helperBook.ninthBook, { where: { isbn: helperBook.eightBook.isbn } })
+      Book.update(helperBook.ninthBook,
+        { where: { isbn: helperBook.eightBook.isbn } })
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeDatabaseError');
@@ -229,7 +233,8 @@ describe('Models', () => {
         });
     });
     it('should return validation error if supplied isbn is invalid', (done) => {
-      Book.update(helperBook.tenthBook, { where: { isbn: helperBook.eightBook.isbn } })
+      Book.update(helperBook.tenthBook,
+        { where: { isbn: helperBook.eightBook.isbn } })
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeDatabaseError');
