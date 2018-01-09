@@ -79,8 +79,8 @@ class BookController {
         res.status(200).send({
           message: `${req.foundBook.title}` +
           ` successfully updated to ${req.body.title}`,
-          old: req.foundBook,
-          book: newBook[1].dataValues
+          oldBook: req.foundBook,
+          newBook: newBook[1].dataValues
         }))
       .catch(() => res.status(500).send({ message: 'Internal Server Error' }));
   }

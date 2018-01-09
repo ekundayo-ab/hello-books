@@ -500,8 +500,8 @@ module.exports = {
         '.dropdown-content.select-dropdown li:nth-child(2)', 5000
       )
       .click('.dropdown-content.select-dropdown li:nth-child(2)')
-      .execute("document.querySelectorAll('input[type=file]')[0]" +
-      ".style.display = 'block';")
+      .execute(`document.querySelectorAll('input[type=file]')[0]
+      .style.display = 'block';`)
       .pause(2000)
       .useXpath()
       .setValue('//input[@type="file"]', path.resolve(`${__dirname}/vwt.jpg`))
@@ -659,8 +659,7 @@ module.exports = {
         'Michael Chabon')
       .click('#return-btn0')
       .waitForElementVisible('.toast', 5000)
-      .assert.containsText('.toast', 'Kavalier & Clay succesfully' +
-      ' returned but pending review by Administrator')
+      .assert.containsText('.toast', 'Kavalier & Clay succesfully returned but pending review by Administrator')
       .assert.visible('tr:nth-of-type(1) td:nth-of-type(3)')
       .assert.containsText('tr:nth-of-type(1) td:nth-of-type(3)',
         'Wolf Hall')

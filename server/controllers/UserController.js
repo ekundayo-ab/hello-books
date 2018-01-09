@@ -24,7 +24,7 @@ class UserController {
    *
    * @memberOf UserController
    */
-  static signup(req, res) {
+  static signUp(req, res) {
     const { password, username, email } = req.body;
     return User
       .create({
@@ -60,7 +60,7 @@ class UserController {
    *
    * @memberOf UserController
    */
-  static signin(req, res) {
+  static signIn(req, res) {
     const { foundUser } = req;
     const { id, role, username } = foundUser;
     const token = jwt.sign({
@@ -87,7 +87,7 @@ class UserController {
    * @memberof UserController
    */
   static googleAuth(req, res) {
-    if (req.foundUser) return UserController.signin(req, res);
+    if (req.foundUser) return UserController.signIn(req, res);
     const { username, email, password } = req.body;
     return User
       .create({
@@ -168,8 +168,7 @@ class UserController {
             plain: true
           }).then(userUpdated =>
             res.status(200).send({
-              message: 'You\'ve been upgraded to ' +
-              `${userUpdated[1].dataValues.level}`,
+              message: `You've been upgraded to ${userUpdated[1].dataValues.level}`,
               user: userUpdated[1]
             })).catch(() => {
             res.status(500).send({ message: 'Internal Server Error' });

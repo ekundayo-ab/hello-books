@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { SignUpForm } from '../../../src/components/landing/SignupForm';
+import { SignUpForm } from '../../../src/components/landing/SignUpForm';
 import { googleDetails } from '../../__mocks__/testData';
 
 

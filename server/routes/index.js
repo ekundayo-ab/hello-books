@@ -8,7 +8,7 @@ import BookMiddleware from '../middlewares/BookMiddleware';
 import BorrowMiddleware from '../middlewares/BorrowMiddleware';
 import ValidationMiddleware from '../middlewares/ValidationMiddleware';
 
-const { signup, signin, googleAuth, changePassword, autoUpgrade, isUserTaken } =
+const { signUp, signIn, googleAuth, changePassword, autoUpgrade, isUserTaken } =
   UserController;
 const { addBook, updateBook, deleteBook, listBooks, findBook, filterBooks }
   = BookController;
@@ -33,7 +33,8 @@ const Router = express.Router();
  *     description: Displays the application API welcome message
  *     responses:
  *       200:
- *         description: Welcome to Hello Books Library
+ *         description: |
+ *           { message: Welcome to Hello Books Library }
  */
 Router.get('/', (req, res) => res.status(200).send({
   message: 'Welcome to Hello Books Library',
@@ -162,34 +163,41 @@ Router.get('/', (req, res) => res.status(200).send({
  *           $ref: '#/definitions/Register'
  *     responses:
  *       201:
- *         description: Hi chieftester, registration successful!
+ *         description: Success message with created user
  *         schema:
  *           $ref: '#/definitions/UserCreationResponse'
  *       400:
- *         description: |
- *           Passwords do not match
- *           Check your username, email or password and try again!
- *           Invalid email address, try again
- *           errors: {
- *             username: 'This field is required',
- *             email: 'This field is required',
- *             password: 'This field is required',
- *             passwordConfirmation: 'This field is required',
- *             username: 'One word, only letters or underscore',
- *             username: 'minimum of 2 characters word allowed',
- *             password: 'minimum of 6 characters word allowed',
- *             password: 'Passwords do not match',
- *             email: 'Invalid email address, try again',
- *           }
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: Passwords do not match OR Check your username, email or password and try again! OR Invalid email address, try again
+ *           errors:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 example: 'This field is required'
+ *               email:
+ *                 example: 'This field is required'
+ *               password:
+ *                 example: 'This field is required'
+ *               passwordConfirmation:
+ *                 example: 'This field is required'
+ *         description: Error messages and/or specific errors for invalid or incorrect inputs, OR signifies various messages dependent on error caught
  *       409:
- *         description: |
- *           Username already taken
- *           User with this email exists
+ *         description: Already existing user details
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: Username already taken OR User with this email exists
  *       500:
- *         description: Internal Server Error
+ *         description: Other server errors
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: Internal Server Error
  */
 Router.post('/users/signup',
-  checkIfDefinedAndValid, signup); // Route to sign up
+  checkIfDefinedAndValid, signUp); // Route to sign up
 
 /**
  * @swagger
@@ -240,23 +248,33 @@ Router.post('/users/signup',
  *           $ref: '#/definitions/Login'
  *     responses:
  *       200:
- *         description: Hi chieftester, you are logged in
+ *         description: Success message if logged in
  *         schema:
  *           $ref: '#/definitions/SignInResponse'
  *       400:
- *         description: Check your username or email.
- *       404:
- *         description: Authentication failed, Wrong password or email
+ *         description: Undefined username or email
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: Check your username or email.
  *       401:
- *         description: Authentication failed. Wrong password or email
+ *         description: Authentication failure as a result of incorrect username or email
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: Authentication failed. Wrong password or email
  *       500:
- *         description: Internal Server Error
+ *         description: Other Server errors
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: Internal Server Error
  */
 Router.post('/users/signin',
-  checkIfDefinedAndValid, checkUser, checkPassword, signin);
+  checkIfDefinedAndValid, checkUser, checkPassword, signIn);
 
 
-// Authentication for google signup and signin
+// Authentication for google sign-up and sign-in
 Router.post('/auth/google',
   checkIfDefinedAndValid, checkUser, googleAuth);
 
@@ -317,28 +335,42 @@ Router.use(authenticate); // Authentication middleware
  *         type: string
  *     responses:
  *       201:
- *         description: Learn JAVA in two months successfully added
+ *         description: Success message after book is created
  *         schema:
  *           $ref: '#/definitions/BookCreationResponse'
  *       400:
- *         description: |
- *           All required fields must exist
- *           errors: {
- *             isbn: 'This field is required',
- *             title: 'This field is required',
- *             author: 'This field is required',
- *             description: 'This field is required',
- *             category: 'This field is required',
- *             isbn: 'ISBN must be a number',
- *             quantity: 'quantity must be a number,
- *             category: 'categoryId must be a number'
- *           }
+ *         description: Error messages for invalid inputs
+ *         properties:
+ *           message:
+ *             example: All required fields must exist
+ *           errors:
+ *             type: object
+ *             example: {
+ *               isbn: 'This field is required OR ISBN must be a number',
+ *               title: 'This field is required',
+ *               author: 'This field is required',
+ *               description: 'This field is required',
+ *               category: 'This field is required OR categoryId must be a number',
+ *               quantity: 'This field is required OR quantity must be a number',
+ *             }
  *       403:
- *         description: Permission Denied
+ *         description: User does not have administrative priviledges
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Permission Denied
  *       409:
- *         description: Conflict! Learn JAVA in two months exists already
+ *         description: Already existing book uses ISBN to compare
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Conflict! Learn JAVA in two months exists already
  *       500:
- *         description: Internal Server Error
+ *         description: Other server errors
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Internal Server Error
  */
 
 // Route to add new book
@@ -354,37 +386,36 @@ Router.post('/books', hasAdminRights,
  *         type: string
  *         example: Learn JAVA in two months, successfully updated to
  *           Learn JAVA in three months
- *       book:
+ *       oldBook:
  *         type: object
- *         example:
- *           old: {
- *             "id": 74,
- *             "isbn": 287,
- *             "title": "Learn JAVA in two months",
- *             "author": "JAVA Master",
- *             "description": "Learn and master the
- *              fundamentals of JAVA in two months",
- *             "image": "learn_java_two_months.jpg",
- *             "status": true,
- *             "quantity": 10,
- *             "category": "Unsorted",
- *             "updatedAt": "2017-11-06T06:15:58.583Z",
- *             "createdAt": "2017-11-06T06:15:58.583Z"
- *           }
- *           book: {
- *             "id": 74,
- *             "isbn": 287,
- *             "title": "Learn JAVA in three months",
- *             "author": "JAVA Master",
- *             "description": "Learn and master the |
- *                fundamentals of JAVA in three months",
- *             "image": "learn_java_three_months.jpg",
- *             "status": true,
- *             "quantity": 10,
- *             "category": "Unsorted",
- *             "updatedAt": "2017-11-06T06:15:58.583Z",
- *             "createdAt": "2017-11-06T20:52:10.169Z"
- *           }
+ *         example: {
+ *           "id": 74,
+ *           "isbn": 287,
+ *           "title": "Learn JAVA in two months",
+ *           "author": "JAVA Master",
+ *           "description": "Learn and master the fundamentals of JAVA in two months",
+ *           "image": "learn_java_two_months.jpg",
+ *           "status": true,
+ *           "quantity": 10,
+ *           "category": "Unsorted",
+ *           "updatedAt": "2017-11-06T06:15:58.583Z",
+ *           "createdAt": "2017-11-06T06:15:58.583Z"
+ *         }
+ *       newBook:
+ *         type: object
+ *         example: {
+ *         "id": 74,
+ *         "isbn": 287,
+ *         "title": "Learn JAVA in three months",
+ *         "author": "JAVA Master",
+ *         "description": "Learn and master the fundamentals of JAVA in three months",
+ *         "image": "learn_java_three_months.jpg",
+ *         "status": true,
+ *         "quantity": 10,
+ *         "category": "Unsorted",
+ *         "updatedAt": "2017-11-06T06:15:58.583Z",
+ *         "createdAt": "2017-11-06T20:52:10.169Z"
+ *        }
  */
 
 /**
@@ -422,25 +453,39 @@ Router.post('/books', hasAdminRights,
  *         schema:
  *           $ref: '#/definitions/BookUpdateResponse'
  *       400:
- *         description: |
- *           All required fields must exist
- *           Ensure book ID is supplied
- *           errors: {
- *             isbn: 'This field is required',
- *             title: 'This field is required',
- *             author: 'This field is required',
- *             description: 'This field is required',
- *             category: 'This field is required',
- *             isbn: 'ISBN must be a number',
- *             quantity: 'quantity must be a number,
- *             category: 'categoryId must be a number'
- *           }
+ *         description: Error messages for invalid inputs
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: All required fields must exist OR Ensure book ID is supplied
+ *           errors:
+ *             type: object
+ *             example: {
+ *               isbn: 'This field is required OR ISBN must be a number',
+ *               title: 'This field is required',
+ *               author: 'This field is required',
+ *               description: 'This field is required',
+ *               category: 'This field is required OR categoryId must be a number',
+ *               quantity: 'This field is required OR quantity must be a number',
+ *             }
  *       403:
- *         description: Permission Denied
+ *         description: User does not have administrative priviledge to modify book
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Permission Denied
  *       404:
- *         description: Book not found
+ *         description: Book to be modified does not exist
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Book not found
  *       500:
- *         description: Internal Server Error
+ *         description: Other server errors
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Internal Server Error
  */
 
 // Route to modify a book information
@@ -457,21 +502,19 @@ Router.put('/books/:bookId', hasAdminRights,
  *         example: Book successfully deleted
  *       book:
  *         type: object
- *         example:
- *           book: {
- *             "id": 74,
- *             "isbn": 287,
- *             "title": "Learn JAVA in two months",
- *             "author": "JAVA Master",
- *             "description": "Learn and master the
- *                fundamentals of JAVA in two months",
- *             "image": "learn_java_two_months.jpg",
- *             "status": true,
- *             "quantity": 10,
- *             "category": "Unsorted",
- *             "updatedAt": "2017-11-06T06:15:58.583Z",
- *             "createdAt": "2017-11-06T06:15:58.583Z"
- *           }
+ *         example: {
+ *           "id": 74,
+ *           "isbn": 287,
+ *           "title": "Learn JAVA in two months",
+ *           "author": "JAVA Master",
+ *           "description": "Learn and master the fundamentals of JAVA in two months",
+ *           "image": "learn_java_two_months.jpg",
+ *           "status": true,
+ *           "quantity": 10,
+ *           "category": "Unsorted",
+ *           "updatedAt": "2017-11-06T06:15:58.583Z",
+ *           "createdAt": "2017-11-06T06:15:58.583Z"
+ *         }
  */
 
 /**
@@ -498,20 +541,34 @@ Router.put('/books/:bookId', hasAdminRights,
  *         type: string
  *     responses:
  *       200:
- *         description: Book successfully deleted
+ *         description: Success message after book is deleted
  *         schema:
  *           $ref: '#/definitions/BookDeletionResponse'
  *       400:
- *         description: Ensure book ID is present
+ *         description: Invalid path input for ID of book to delete
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Ensure book ID is present
  *       403:
- *         description: Permission Denied
+ *         description: User has no administrative priviledges to delete a book
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Permission Denied
  *       404:
- *         description: Book not found
+ *         description: Book does not exist
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Book not found
  *       500:
- *         description: Internal Server Error
+ *         description: Other server errors
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Internal Server Error
  */
-
-// Route to delete a book
 Router.delete('/books/:bookId',
   hasAdminRights, validateAndCheckIfBookExist, deleteBook);
 
@@ -613,9 +670,17 @@ Router.delete('/books/:bookId',
  *         schema:
  *           $ref: '#/definitions/BookListingResponse'
  *       400:
- *         description: Ooops! something happened, ensure page is specified
+ *         description: Invalid input from path
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Ooops! something happened, ensure page is specified
  *       500:
- *         description: Internal Server Error
+ *         description: Other server errors
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Internal Server Error
  */
 
 // Route to list all books in the library
@@ -705,26 +770,40 @@ Router.get('/books', listBooks);
  *         type: string
  *     responses:
  *       200:
- *         description: Learn JAVA in two months successfully borrowed
+ *         description: Success message after book is borrowed
  *         schema:
  *           $ref: '#/definitions/BookBorrowedResponse'
  *       400:
- *         description: |
- *           Oops! something happened, [error message]
- *           Ensure book ID is supplied
+ *         description: Error message for invalid inputs
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Oops! something happened, [error message] OR Ensure book ID is supplied
  *       401:
- *         description: Loan credit exhausted, upgrade or return borrowed book
+ *         description: Insufficient borrowing credit
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Loan credit exhausted, upgrade or return borrowed book
  *       404:
- *         description: |
- *           Book not found
- *           User not found
+ *         description: Book does not exist or User does not exist
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Book not found OR User not found
  *       409:
- *         description: Book borrowed already please return
+ *         description: Book has been borrowed already by the same user
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Book borrowed already please return
  *       500:
- *         description: Internal Server Error
+ *         description: Other server errors
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Internal Server Error
  */
-
-// Route to borrow a book
 Router.post('/users/:userId/books', checkUser,
   validateAndCheckIfBookExist, checkIfBorrowExist, borrowBook,
   sendMailAndResponse);
@@ -859,26 +938,28 @@ Router.post('/users/:userId/books', checkUser,
  *         type: string
  *     responses:
  *       200:
- *         description: Learn JAVA in two months
- *           succesfully returned but pending review by Administrator
+ *         description: Success message after book is returned
  *         schema:
  *           $ref: '#/definitions/BookReturnedResponse'
  *       400:
- *         description: |
- *           All fields are required
- *           Ensure borrowId is present
- *           Ensure bookId is present
- *           Oops! something happenned [error message]
+ *         description: Error messages for invalid inputs
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: All fields are required OR Ensure borrowId is present OR Ensure bookId is present OR Oops! something happenned [error message]
  *       404:
- *         description: |
- *           User not found
- *           Book not found
- *           You have not borrowed this book
+ *         description: User does not exist OR Book does not exist
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: User not found OR Book not found OR You have not borrowed this book
  *       500:
- *         description: Internal Server Error
+ *         description: Other server errors
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Internal Server Error
  */
-
-// Route to return a book
 Router.put('/users/:userId/books', checkUser,
   validateAndCheckIfBookExist, returnBook, sendMailAndResponse);
 
@@ -989,11 +1070,21 @@ Router.put('/users/:userId/books', checkUser,
  *         schema:
  *           $ref: '#/definitions/BookNotReturnedListResponse'
  *       204:
- *         description: "No content message"
+ *         description: This contains no content given user has no book(s) to return
+ *         properties:
+ *             type: object
  *       400:
- *         description: Supply page and userId
+ *         description: Page or User ID is not supplied
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Supply page and userId
  *       500:
- *         description: Internal Server Error
+ *         description: Other server errors
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Internal Server Error
  */
 Router.get('/users/:userId/books', AllBorrowedOrNotReturnedBooks);
 
@@ -1106,10 +1197,22 @@ Router.get('/borrowed/:bookId', getBorrowedBook);
  *         description: An array of Books
  *         schema:
  *           $ref: '#/definitions/AllBorrowedBooks'
+ *       204:
+ *         description: This contains no content given user has no book(s) to return
+ *         properties:
+ *             type: object
  *       400:
- *         description: Supply page and userId
+ *         description: Page or User ID is not supplied
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Supply page and userId
  *       500:
- *         description: Internal Server Error
+ *         description: Other server errors
+ *         properties:
+ *           message:
+ *             type: string
+ *             example: Internal Server Error
  */
 Router.get('/borrowed/:userId/books', AllBorrowedOrNotReturnedBooks);
 
@@ -1162,22 +1265,33 @@ Router.get('/borrowed/:userId/books', AllBorrowedOrNotReturnedBooks);
  *       200:
  *         description: Password successfully changed
  *       400:
- *         description: |
- *           All fields must exist
- *           Authentication failed, Old password incorrect
- *           message: {
- *             mismatch: "Passwords do not match"
- *             newpass: "6 or more characters allowed"
- *             oldPass: "field required"
- *             newPass: "field required"
- *             newPassConfirm: "field required"
- *           }
+ *         description: Errors from invalid inputs and specific field errors
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: All fields must exist OR Authentication failed, Old password incorrect
+ *           errors:
+ *             type: object
+ *             example:
+ *               {
+ *                mismatch: "Passwords do not match",
+ *                newpass: "6 or more characters allowed",
+ *                oldPass: "field required",
+ *                newPass: "field required",
+ *                newPassConfirm: "field required"
+ *               }
  *       404:
- *         description: User not found
- *       403:
- *         description: Permission Denied
+ *         description: User does not exist
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: User not found
  *       500:
  *         description: Internal Server Error
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: Internal Server Error
  */
 Router.post('/users/pass', checkIfDefinedAndValid,
   checkUser, checkPassword, changePassword);
@@ -1240,17 +1354,33 @@ Router.post('/users/autoupgrade', autoUpgrade);
  *         type: string
  *     responses:
  *       201:
- *         description: Sciences successfully added
+ *         description: Success message after category is created
  *         schema:
  *           $ref: '#/definitions/categoryResponse'
  *       400:
- *         description: All fields must exist
+ *         description: Error message for invalid inputs
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: All fields must exist
  *       403:
- *         description: Permission Denied
+ *         description: User does not have administrative priviledge to create a category
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: Permission Denied
  *       409:
- *         description: Conflict! Sciences exists already
+ *         description: Category exists already
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: Conflict! Sciences exists already
  *       500:
- *         description: Internal Server Error
+ *         description: Other server errors
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: Internal Server Error
  */
 Router.post('/category', hasAdminRights, checkIfDefinedAndValid, addCategory);
 
@@ -1305,9 +1435,15 @@ Router.post('/category', hasAdminRights, checkIfDefinedAndValid, addCategory);
  *                  "updatedAt": "2017-10-14T17:58:29.869Z",
  *                 }
  *       204:
- *         description: No Content
+ *         description: This contains no content given user has no book(s) to return
+ *         properties:
+ *             type: object
  *       500:
- *         description: Internal Server Error
+ *         description: Other server errors
+ *         properties:
+ *           message:
+ *             type: object
+ *             example: Internal Server Error
  */
 Router.get('/categories', listCategory);
 

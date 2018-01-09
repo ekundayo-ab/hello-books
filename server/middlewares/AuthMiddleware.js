@@ -105,7 +105,7 @@ class AuthMiddleware {
         if (!foundUser) {
           const message = req.url === '/users/signin' ?
             'Authentication failed, Wrong password or email' : 'User not found';
-          return res.status(404).send({ message });
+          return res.status(401).send({ message });
         }
         req.foundUser = foundUser;
         return next();
@@ -128,14 +128,14 @@ class AuthMiddleware {
    */
   static checkPassword(req, res, next) {
     if (req.url === '/users/signin' && !req.foundUser) {
-      return res.status(400)
+      return res.status(401)
         .send({ message: 'Authentication failed, Wrong password or email' });
     }
     if (!bcrypt.compareSync(req.body.password || req.body.oldPass,
       req.foundUser.password)) {
       const message = `Authentication failed, ${req.url === '/users/pass' ?
         'Old password incorrect' : 'check password or email'}`;
-      return res.status(400).send({ message });
+      return res.status(401).send({ message });
     }
     return next();
   }

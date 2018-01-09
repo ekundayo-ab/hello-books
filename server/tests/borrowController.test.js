@@ -123,8 +123,8 @@ describe('Library books', () => {
     it('should return all borrowed books by all user if notify flag is true',
       (done) => {
         server
-          .get(`/api/v1/borrowed/${userId}/books` +
-          `?page=${1}&notify=${true}&more=${10}`)
+          .get(`/api/v1/borrowed/${userId}/books?page=${1}
+          &notify=${true}&more=${10}`)
           .set('Accept', 'application/x-www-form-urlencoded')
           .set('x-access-token', adminToken)
           .end((err, res) => {
@@ -150,8 +150,7 @@ describe('Library books', () => {
     it('should return error message for unhandled error',
       (done) => {
         server
-          .get('/api/v1/borrowed/books' +
-          `?page&notify=${true}&more=${10}`)
+          .get(`/api/v1/borrowed/books?page&notify=${true}&more=${10}`)
           .set('Accept', 'application/x-www-form-urlencoded')
           .set('x-access-token', adminToken)
           .end((err, res) => {
@@ -210,48 +209,49 @@ describe('Library books', () => {
       });
       done();
     });
-    it('should return updated(book, borrow and user) records when' +
-    ' a user returns a borrowed book', (done) => {
-      server
-        .put(`/api/v1/users/${userId}/books?loan=borrowOrReturn`)
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .send({
-          bookId,
-          borrowId,
-          borrow: { id: borrowId, book: { id: bookId } }
-        })
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body.message)
-            .to.equal('Learn Haskell succesfully returned ' +
-            'but pending review by Administrator');
-          expect(res.body.updatedBook.isbn).to.equal(1);
-          expect(res.body.updatedBook.title).to.equal('Learn Haskell');
-          expect(res.body.updatedBook.quantity).to.equal(30);
-          expect(res.body.borrowUpdated.returned).to.equal(true);
-          expect(res.body.borrowUpdated.userId)
-            .to.equal(res.body.userToUpdateInStore.id);
-          expect(res.body.userToUpdateInStore.borrowLimit).to.equal(9005);
-          expect(res.body.borrowUpdated.bookId)
-            .to.equal(res.body.updatedBook.id);
-          done();
-        });
-    });
-    it('should return a (not borrowed) message if book' +
-    ' has not been borrowed by the user before', (done) => {
-      server
-        .get(`/api/v1/borrowed/${bookId}`)
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .set('x-access-token', adminToken)
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body.message).to.equal('Cleared, Not borrowed by you!');
-          expect(res.body)
-            .to.be.an.instanceOf(Object);
-          done();
-        });
-    });
+    it(`should return updated(book, borrow and user) records when a user returns
+    a borrowed book`,
+      (done) => {
+        server
+          .put(`/api/v1/users/${userId}/books?loan=borrowOrReturn`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .send({
+            bookId,
+            borrowId,
+            borrow: { id: borrowId, book: { id: bookId } }
+          })
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.message)
+              .to.equal('Learn Haskell succesfully returned but pending review by Administrator');
+            expect(res.body.updatedBook.isbn).to.equal(1);
+            expect(res.body.updatedBook.title).to.equal('Learn Haskell');
+            expect(res.body.updatedBook.quantity).to.equal(30);
+            expect(res.body.borrowUpdated.returned).to.equal(true);
+            expect(res.body.borrowUpdated.userId)
+              .to.equal(res.body.userToUpdateInStore.id);
+            expect(res.body.userToUpdateInStore.borrowLimit).to.equal(9005);
+            expect(res.body.borrowUpdated.bookId)
+              .to.equal(res.body.updatedBook.id);
+            done();
+          });
+      });
+    it(`should return a (not borrowed) message if book has not been borrowed by
+    the user before`,
+      (done) => {
+        server
+          .get(`/api/v1/borrowed/${bookId}`)
+          .set('Accept', 'application/x-www-form-urlencoded')
+          .set('x-access-token', adminToken)
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.message).to.equal('Cleared, Not borrowed by you!');
+            expect(res.body)
+              .to.be.an.instanceOf(Object);
+            done();
+          });
+      });
     it('should return error message if user is not found', (done) => {
       server
         .put(`/api/v1/users/${28}/books?loan=borrowOrReturn`)

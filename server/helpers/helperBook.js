@@ -2,7 +2,7 @@
  * @description hardcoded books details for testing
  */
 export default {
-  book1: {
+  firstBook: {
     body: {
       isbn: '001',
       title: 'Learn Haskell',
@@ -11,7 +11,7 @@ export default {
       quantity: 20,
     },
   },
-  book2: {
+  secondBook: {
     body: {
       isbn: '001',
       title: 'Learn Haskell',
@@ -19,7 +19,7 @@ export default {
       description: 'Learn and Master Haskell in 16 Months',
     },
   },
-  book3: {
+  thirdBook: {
     body: {
       isbn: '',
       title: 'Learn Haskell',
@@ -28,7 +28,7 @@ export default {
       quantity: 100,
     },
   },
-  book4: {
+  fourthBook: {
     body: {
       isbn: '001',
       title: '',
@@ -37,7 +37,7 @@ export default {
       quantity: 120,
     },
   },
-  book5: {
+  fifthBook: {
     body: {
       isbn: '001',
       title: 'Learn Haskell',
@@ -46,7 +46,7 @@ export default {
       quantity: 300,
     },
   },
-  book6: {
+  sixthBook: {
     body: {
       isbn: '001',
       title: 'Learn Haskell',
@@ -55,7 +55,7 @@ export default {
       quantity: 200,
     },
   },
-  book7: {
+  seventhBook: {
     body: {
       isbn: '001',
       title: 'Learn Haskell',
@@ -64,7 +64,7 @@ export default {
       quantity: '',
     },
   },
-  book7a: {
+  seventhBookVariantOne: {
     body: {
       isbn: 'asd',
       title: 'Learn Haskell',
@@ -73,7 +73,7 @@ export default {
       quantity: '201',
     },
   },
-  book7b: {
+  seventhBookVariantTwo: {
     body: {
       isbn: '003',
       title: 'Learn Haskell',
@@ -82,49 +82,49 @@ export default {
       quantity: 'bookQuantity',
     },
   },
-  book8: {
+  eightBook: {
     isbn: 1,
     title: 'Learn Haskell',
     author: 'Haskell Master',
     description: 'Learn and Master Haskell in 16 Months',
     quantity: 20,
   },
-  book9: {
+  ninthBook: {
     isbn: 'number',
     title: 'Learn Haskell',
     author: 'Haskell Master',
     description: 'Learn and Master Haskell in 16 Months',
     quantity: 20,
   },
-  book10: {
+  tenthBook: {
     isbn: 21,
     title: 'Learn Haskell',
     author: 'Haskell Master',
     description: 'Learn and Master Haskell in 16 Months',
     quantity: 'number',
   },
-  book11: {
+  eleventhBook: {
     isbn: 45,
     title: 'Learn JAVA',
     author: 'JAVAMan',
     description: 'Learn JAVA in 8 weeks',
     quantity: 20,
   },
-  book12: {
+  twelfthBook: {
     isbn: null,
     title: null,
     author: null,
     description: null,
     quantity: null,
   },
-  book13: {
+  thirteenthBook: {
     isbn: undefined,
     title: undefined,
     author: undefined,
     description: undefined,
     quantity: undefined,
   },
-  book14: {
+  fourteenthBook: {
     isbn: 23,
     title: 'Learn Android',
     author: 'AndroidMan',

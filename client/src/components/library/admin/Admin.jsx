@@ -170,7 +170,7 @@ export class Admin extends Component {
           &nbsp;Returned on {(moment(borrowedBook.updatedAt)
               .format('MMMM Do YYYY, h:mm a'))}
           </span> :
-          <span className="red-badge"> Not yet returned</span>}
+          <span className="red-badge">Not yet returned</span>}
       </li>),
     );
     return (
