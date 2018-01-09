@@ -1,56 +1,38 @@
 import { isEmpty } from 'lodash';
 /**
  * @class Helper
+ *
  * @description Abstracts validation functions
  */
 class Helper {
   /**
-   * Check for Admin priviledge
-   * @description Checks Admin priviledge to perform certain operations
-   * @param {object} req
-   * @returns {boolean} true or false
-   * @memberOf Helper
-   */
-  static isAdmin(req) {
-    if (req.decoded.data.role !== 'admin') {
-      return false;
-    }
-    return true;
-  }
-
-  /**
-   * Validates Book Input Fields
-   * @description Ensures all fields are present when adding or updating book
-   * @param {object} req
-   * @returns {boolean} true or false
-   * @memberOf Helper
-   */
-  static isDefined(req) {
-    if (Object.keys(req.body).length < 5) return false;
-    return true;
-  }
-
-  /**
    * Also Validates Book Input Fields
+   *
    * @description Ensures all inputs are validated
-   * @param {object} req
+   *
+   * @param {object} req - The request payload sent to the function
+   *
    * @returns {object } isValid and errors
+   *
    * @memberOf Helper
    */
   static inputValidation(req) {
+    const { isbn, title, author, quantity, description, category } = req.body;
     const errors = {};
+    if (!isbn || !title || !author || !quantity || !description || !category) {
+      errors.all = 'All required fields must exist';
+    }
     for (let i = 0; i < 5; i += 1) {
-      const field = Object.values(req.body)[i].trim();
+      const field = (Object.values(req.body)[i]);
+      const theKey = Object.keys(req.body)[i];
+      if (typeof field === 'string') Object.values(req.body)[i].trim();
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
-        const theKey = Object.keys(req.body)[i];
         errors[theKey] = 'This field is required';
       }
-      if (Object.keys(req.body)[i] === 'isbn'
-        && typeof (Object.values(req.body)[i]) !== 'number') {
+      if (theKey === 'isbn' && isNaN(field)) {
         errors.ISBNValidation = 'ISBN must be a number';
       }
-      if (Object.keys(req.body)[i] === 'quantity'
-        && typeof (parseInt(Object.values(req.body)[i], 10)) !== 'number') {
+      if (theKey === 'quantity' && isNaN(field)) {
         errors.numeric = 'quantity must be a number';
       }
     }
@@ -62,13 +44,21 @@ class Helper {
 
   /**
    * Validates Register Input Fields
+   *
    * @description Ensures all inputs are validated when registering
-   * @param {object} req
+   *
+   * @param {object} req - The request payload sent to the function
+   *
    * @returns {object} isValid and errors
+   *
    * @memberOf Helper
    */
   static userValidation(req) {
+    const { username, email, password, passwordConfirmation } = req;
     const errors = {};
+    if (!username || !email || !password || !passwordConfirmation) {
+      errors.all = 'username, email or password must be present';
+    }
     if (!/^[a-z_]+$/i.test(req.username)) {
       errors.username = 'One word, only letters or underscore';
     }
@@ -87,8 +77,8 @@ class Helper {
         && field.trim().length < 6) {
         errors[theKey] = 'minimum of 6 characters word allowed';
       }
-      if (Object.keys(req)[i] === 'username' && field.trim().length < 3) {
-        errors[theKey] = 'minimum of 3 characters word allowed';
+      if (Object.keys(req)[i] === 'username' && field.trim().length < 2) {
+        errors[theKey] = 'minimum of 2 characters word allowed';
       }
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
         errors[theKey] = 'This field is required';
@@ -102,13 +92,21 @@ class Helper {
 
   /**
    * Validates Login Input Fields
+   *
    * @description Ensures all inputs are validated when logging in
-   * @param {object} req
+   *
+   * @param {object} req - The request payload sent to the function
+   *
    * @returns {object} isValid and errors
+   *
    * @memberof Helper
    */
   static loginValidation(req) {
+    const { identifier, password } = req;
     const errors = {};
+    if (!identifier || !password) {
+      errors.all = 'Check your username or email.';
+    }
     for (let i = 0; i < 2; i += 1) {
       const field = Object.values(req)[i];
       if (field === (undefined || null || '') || /^\s+$/.test(field)) {
@@ -124,14 +122,41 @@ class Helper {
 
   /**
    * Validates Email
+   *
    * @description Ensures email supplied is a valid email address
-   * @param {any} email
+   *
+   * @param {string} email - The email to be validated
+   *
    * @returns {boolean} true or false
+   *
    * @memberOf Helper
    */
   static validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line max-len
     return re.test(email);
+  }
+
+  /**
+   * Validates Email
+   *
+   * @description Ensures email supplied is a valid email address
+   *
+   * @param {object} state - The current state sent to the function
+   * @param {object} event - The current event being executed
+   *
+   * @returns {boolean} true or false
+   * @memberOf Helper
+   */
+  static handleFormChange(state, event) {
+    if (!state.errors[event.target.name]) {
+      const errors = Object.assign({}, state.errors);
+      delete errors[event.target.name];
+      return {
+        [event.target.name]: event.target.value,
+        errors,
+      };
+    }
+    return { [event.target.name]: event.target.value };
   }
 }
 

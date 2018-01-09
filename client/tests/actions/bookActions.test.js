@@ -6,7 +6,7 @@ import * as bookAction from '../../src/actions/bookActions';
 import {
   book,
   books
-} from '../reducers/testData';
+} from '../__mocks__/testData';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -131,18 +131,31 @@ describe('Book actions', () => {
 
   describe('Book deletion action', () => {
     it('should return ID of book to delete', (done) => {
-      moxios.stubRequest(`/api/v1/books/${7}`, {
+      moxios.stubRequest('/api/v1/books/7', {
         status: 200,
         response: {
           book
         }
       });
-      const expectedActions = [{
-        type: actionType.BOOK_DELETED,
-        bookId: 7
-      }];
+      const expectedActions = [
+        { type: actionType.BOOK_DELETED, bookId: 7 }
+      ];
       const store = mockStore({});
-      store.dispatch(bookAction.deleteBook(book.id))
+      store.dispatch(bookAction.deleteBook(book.id, 1))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+          done();
+        });
+    });
+
+    it('should return error message on book deletion failure', (done) => {
+      moxios.stubRequest(`/api/v1/books/${7}`, {
+        status: 500,
+        response: { message: 'Internal Server Error' }
+      });
+      const expectedActions = [];
+      const store = mockStore({});
+      store.dispatch(bookAction.deleteBook(book.id, 1))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
           done();

@@ -6,7 +6,7 @@ import * as categoryAction from '../../src/actions/categoryActions';
 import {
   categories1,
   category1
-} from '../reducers/testData';
+} from '../__mocks__/testData';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

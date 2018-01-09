@@ -1,21 +1,29 @@
 import { isEmpty } from 'lodash';
-import { SET_CURRENT_USER, UNSET_CURRENT_USER } from '../actions/types';
+import { SET_CURRENT_USER, UNSET_CURRENT_USER, SET_EXISTENCE }
+  from '../actions/types';
 
 // Declare the initial state for Authentication
 const initialState = {
   isAuthenticated: false,
   user: {},
+  userExists: ''
 };
 
 /**
  * Authentication Reducer
+ *
  * @description Returns each action by its type
- * @param {array} [state=[]]
- * @param {object} [action={}]
- * @returns {object} User(s)
+ *
+ * @param {array} state - The state passed to the authReducer
+ * @param {object} action - The action passed to the authReducer
+ *
+ * @returns {object} User(s), isAuthenticated - Returns user(s) and their
+ * authentication state
  */
-export default (state = initialState, action = {}) => {
+const authReducer = (state = initialState, action = {}) => {
   switch (action.type) {
+    case SET_EXISTENCE:
+      return { ...state, userExists: action.message };
     case SET_CURRENT_USER:
       return {
         ...state,
@@ -31,3 +39,5 @@ export default (state = initialState, action = {}) => {
     default: return state;
   }
 };
+
+export default authReducer;

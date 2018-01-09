@@ -1,18 +1,21 @@
-/* eslint-disable no-case-declarations, no-underscore-dangle */
 import { BOOK_FETCHED } from './../actions/types';
 
 // Declare the initial state for a single book
 const initialState = {
   book: {}
 };
+
 /**
  * Single Book Reducer
+ *
  * @description Return each action by its type
- * @param {any} [state={}]
- * @param {any} [action={}]
- * @returns {object} // Single Book
+ *
+ * @param {object} state - The state passed to the singleBookReducer
+ * @param {object} action - The action passed to the singleBookReducer
+ *
+ * @returns {object} - Single Book
  */
-const bookReducer = (state = initialState, action = {}) => {
+const singleBookReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case BOOK_FETCHED: {
       return { ...state, book: action.book };
@@ -22,4 +25,4 @@ const bookReducer = (state = initialState, action = {}) => {
   }
 };
 
-export default bookReducer;
+export default singleBookReducer;

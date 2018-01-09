@@ -7,3 +7,5 @@ client/dist
 client/public/lib
 .nyc_output
 coverage
+selenium-debug.log
+reports

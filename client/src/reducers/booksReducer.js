@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations, no-underscore-dangle */
 import { SET_BOOKS, BOOK_DELETED,
   BOOK_UPDATED, ADD_BOOK } from './../actions/types';
 
@@ -9,10 +8,13 @@ const initialState = {
 
 /**
  * Book Reducer
+ *
  * @description Return each action by its type
- * @param {any} [state={}]
- * @param {any} [action={}]
- * @returns {object} // Book(s)
+ *
+ * @param {object} state - The state passed to the booksReducer
+ * @param {object} action - The action passed to the booksReducer
+ *
+ * @returns {object} Book(s)
  */
 const booksReducer = (state = initialState, action = {}) => {
   switch (action.type) {

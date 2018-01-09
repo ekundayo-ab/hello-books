@@ -4,8 +4,11 @@ import classname from 'classnames';
 
 /**
  * Abstracts Input form fields with Icon
+ *
  * @description abstracts the input form fields with icons
- * @param {object} props
+ *
+ * @param {object} props - The properties passed into the component
+ *
  * @returns {void} returns nothing
  */
 const SingleInputWithIcon = props => (
@@ -52,7 +55,7 @@ SingleInputWithIcon.propTypes = {
 };
 
 SingleInputWithIcon.defaultProps = {
-  fieldError: null,
+  fieldError: '',
   inputClass: '',
   placeholder: '',
   content: undefined

@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 
 /**
  * @description displays list of books
+ *
  * @param {object} props
+ *
  * @returns {string} - HTML markup of CategoryList component
+ *
  * @memberof BookList
  */
 const BookList = (props) => {
@@ -30,7 +33,7 @@ const BookList = (props) => {
       <tbody>
         {props.books.map((book, index) =>
           (
-            <tr key={book.id}>
+            <tr id={`book${book.id}`} key={book.id}>
               <td className="teal-text">{ index + 1}</td>
               <td className="green-text admin-book-list">
                 <img src={book.image} alt="" /></td>

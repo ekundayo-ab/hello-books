@@ -1,4 +1,8 @@
 // For authentication operations
+export const userExistence = {
+  userExists: 'User exists'
+};
+
 export const userAuthenticated = {
   isAuthenticated: true,
   user: {
@@ -187,6 +191,20 @@ export const googleDetails = {
   }
 };
 
+export const googleDetails2 = {
+  El: '116643864639139228843',
+  w3: {
+    Eea: '116643864639139228843',
+    ig: 'Ekundayo Abiona',
+    ofa: 'Ekundayo',
+    wea: 'Abiona',
+    Paa: 'https://lh5.googleusercontent.com/-vI2PRePGAKU/' +
+    'AAAAAAAAAAI/AAAAAAAAAAc/2nvT9UwrvUs/s96-c/photo.jpg',
+    U3: 'ekundayo.abiona@andela.com'
+  },
+  googleId: '116643864639139228843',
+};
+
 export const googleUser = {
   token: googleDetails.tokenObj.access_token,
   username: googleDetails.w3.ig.split(' ')[0],
@@ -255,6 +273,21 @@ export const book = {
   createdAt: '2017-11-22T15:54:07.464Z',
   updatedAt: '2017-11-22T15:54:07.464Z'
 };
+
+export const updatedBook = [0, {
+  id: 7,
+  isbn: 7,
+  title: 'Gilead02',
+  author: 'Marilynne Robinson',
+  description: 'Gilead is a novel written by Marilynne Robinson',
+  image: 'https://res.cloudinary.com/dcl7tqhww/image/'
+  + 'upload/v1509139554/kf18x2ukcnygh6bau1o2.png',
+  status: true,
+  quantity: 11,
+  categoryId: 1,
+  createdAt: '2017-11-22T15:54:07.464Z',
+  updatedAt: '2017-11-22T15:54:07.464Z'
+}];
 
 // For Borrow Actions
 export const borrow = {
@@ -369,3 +402,63 @@ export const borrowedNotReturnedBooks = [
     }
   }
 ];
+
+// For validation functions
+export const req = {
+  username: 'ekpr1ogs',
+  password: 'pasek10',
+  passwordConfirmation: 'pasekr10'
+};
+
+export const req1 = {
+  username: 'e',
+  email: 'ekprogs@mail.com',
+  password: 'pa',
+  passwordConfirmation: 'pa'
+};
+
+export const req2 = {
+  username: '',
+  email: '',
+  password: '',
+  passwordConfirmation: ''
+};
+
+export const req3 = {
+  username: 'ekprogs',
+  email: 'ekprogs@mail.com',
+  password: 'pasek10',
+  passwordConfirmation: 'pasek10'
+};
+
+export const req4 = {
+  identifier: '',
+  password: '',
+};
+
+export const req5 = {
+  identifier: 'winterman',
+  password: 'win10pa!',
+};
+
+export const req6 = {
+  body: {
+    isbn: 'one',
+    title: 'The new book',
+    author: '',
+    description: 'Intrigue, Thrilling & Beautiful',
+    quantity: 'thirty-four',
+  }
+};
+
+export const req7 = {
+  body: {
+    isbn: 1,
+    title: 'The new book',
+    author: 'Newman',
+    description: 'Intrigue, Thrilling & Beautiful',
+    quantity: 30,
+    category: 7,
+  }
+};
+

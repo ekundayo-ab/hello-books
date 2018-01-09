@@ -4,51 +4,37 @@ import moment from 'moment';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { fetchAllBorrowedBooks } from '../../actions/borrowActions';
-import paginate from '../../helpers/paginate';
 import Paginator from '../../helpers/Paginator';
 
 /**
  * @description represents History Page
+ *
  * @class History
+ *
  * @extends {Component}
  */
 export class History extends Component {
   /**
    * Creates an instance of Shelf.
-   * @param {object} props
+   *
+   * @param {object} props - The properties passed into the component
+   *
    * @memberof History
+   *
    * @constructor
    */
   constructor(props) {
     super(props);
-    this.state = {
-      pages: [],
-      pageId: 1,
-    };
-    this.query = (this.props.history.location.search).split('=')[1];
-  }
-
-  /**
-   * @description Invoked before History Page loads
-   * @param {void} null
-   * @returns {void} null
-   * @memberof History
-   */
-  componentDidMount() {
-    const userId = JSON.parse(localStorage.getItem('userDetails')).id;
-    paginate(this.props.fetchAllBorrowedBooks, this.query, userId, false)
-      .then((res) => {
-        this.setState({
-          pages: res.pages,
-          pageId: res.pageId
-        });
-      });
+    this.userId = JSON.parse(localStorage.getItem('userDetails')).id;
   }
 
   /**
    * @description Displays the History Page
-   * @param {void} null
+   *
+   * @param {void} null - Has no parameter
+   *
    * @returns {string} - HTML markup of the History Page
+   *
    * @memberof History
    */
   render() {
@@ -105,14 +91,12 @@ export class History extends Component {
                     </tbody>
                   </table> : noBorrowHistory }
               </div>
-              {this.state.pages.length > 1 ?
-                <Paginator
-                  pages={this.state.pages}
-                  pageId={this.state.pageId.toString()}
-                  redirect={this.props.history.push}
-                  pageName={this.props.history.location.pathname}
-                /> : ''
-              }
+              <Paginator
+                fetchData={this.props.fetchAllBorrowedBooks}
+                redirect={this.props.history}
+                pageName={this.props.history.location.pathname}
+                userId={this.userId}
+              />
             </div>
           </div>
         </div>
@@ -134,7 +118,9 @@ History.propTypes = {
 /**
  *
  * @description maps the state in redux store to Shelf props
- * @param {object} state
+ *
+ * @param {object} state - The application state payload gotten from the store
+ *
  * @returns {object} userId and books
  */
 export function mapStateToProps(state) {

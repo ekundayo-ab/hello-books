@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 
 /**
  * @description Abstracts each book into a functional component
- * @param {object} book
+ *
+ * @param {object} book - The book property of the BookCard component
+ *
  * @returns {string} HTML markup of BookCard component
  */
 const BookCard = ({ book }) =>

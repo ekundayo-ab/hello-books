@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import swal from 'sweetalert';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Modal, Button } from 'react-materialize';
-import swal from 'sweetalert';
 import BookForm from './BookForm';
 import CategoryForm from './CategoryForm';
 import CategoryList from './../category/CategoryList';
@@ -12,111 +12,97 @@ import { fetchBooks, deleteBook, fetchBooksByCategory }
   from './../../../actions/bookActions';
 import { fetchCategories } from './../../../actions/categoryActions';
 import { fetchAllBorrowedBooks } from '../../../actions/borrowActions';
-import paginate from './../../../helpers/paginate';
 import Paginator from './../../../helpers/Paginator';
 
 /**
  * @description represents admin dashboard of the library
+ *
  * @class Admin
+ *
  * @extends {Component}
  */
 export class Admin extends Component {
   /**
    * Creates an instance of Admin.
-   * @param {object} props
+   *
+   * @param {object} props - The properties passed into the component
+   *
    * @memberof Admin
+   *
    * @constructor
    */
   constructor(props) {
     super(props);
     this.state = {
-      pages: [],
-      pageId: 1,
       showCategoryTitle: false,
       categoryTitle: '',
-      more: 0,
+      more: 10,
       loadMore: false,
-      scrollPages: 2,
+      numberOfPages: 2,
       bookToEdit: {},
       wouldEdit: false
     };
+    this.query = (this.props.history.location.search).split('=')[1];
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.filterBooksByCategory = this.filterBooksByCategory.bind(this);
-    this.handleScroll = this.handleScroll.bind(this);
-    this.query = (this.props.history.location.search).split('=')[1];
-  }
-
-  /**
-   * @description Invoked before the component mounts
-   * @param {void} null
-   * @returns {void} returns nothing
-   * @memberof Admin
-   */
-  componentWillMount() {
-    const { role } = JSON.parse(localStorage.getItem('userDetails'));
-    if (role === 'normal' || role === undefined) {
-      this.props.history.push('/shelf');
-    }
+    this.handleMoreNotification = this.handleMoreNotification.bind(this);
   }
 
   /**
    * @description Invoked after component has mounted
-   * @param {void} null
+   *
+   * @param {void} null - Has no parameter
+   *
    * @returns {void} returns nothing
+   *
    * @memberof Admin
    */
   componentDidMount() {
     this.props.fetchCategories();
     this.props.fetchAllBorrowedBooks(1, 1, true, 0);
-    paginate(this.props.fetchBooks, this.query)
-      .then((res) => {
-        this.setState({
-          pages: res.pages,
-          pageId: res.pageId
-        });
-      });
   }
 
   /**
+   * @description Handles editing of a specific book
+   *
    * @param {object} book
+   *
    * @returns {void} - none
+   *
    * @memberof Admin
    */
   handleEdit(book) {
-    this.setState({
-      bookToEdit: { ...book },
-      wouldEdit: true
-    }, () => {
-      $('#update-book-modal').modal('open');
-    });
+    this.setState({ bookToEdit: { ...book }, wouldEdit: true },
+      () => { $('#update-book-modal').modal('open'); });
   }
 
   /**
    * @description Invoked after component has mounted
-   * @param {void} null
+   *
+   * @param {void} null - Has no parameter
+   *
    * @returns {void} returns nothing
+   *
    * @memberof Admin
    */
-  handleScroll() {
-    const wrapper = $('.notify-section .card-panel');
-    if (
-      $(wrapper).scrollTop() +
-      $(wrapper).innerHeight() >=
-      $(wrapper)[0].scrollHeight && this.state.scrollPages > 1
-    ) {
-      this.setState({ more: this.state.more + 10, loadMore: true });
-      this.props.fetchAllBorrowedBooks(1, 1, true, this.state.more)
-        .then((res) => {
-          this.setState({ loadMore: false, scrollPages: res.numberOfPages });
-        });
-    }
+  handleMoreNotification() {
+    const { more } = this.state;
+    this.setState({ more: more + 10 });
+    this.props.fetchAllBorrowedBooks(1, 1, true, more)
+      .then((res) => {
+        const { numberOfPages } = res;
+        this.setState({ numberOfPages });
+      });
   }
 
   /**
    * @description deletes a book from the library
-   * @param {number} bookId
+   *
+   * @param {number} bookId - ID of the book to be deleted
+   *
    * @returns {function} action
+   *
    * @memberof Admin
    */
   handleDelete(bookId) {
@@ -128,57 +114,47 @@ export class Admin extends Component {
       dangerMode: true,
     })
       .then((willDelete) => {
-        if (willDelete) {
-          const pageId = this.query;
-          this.setState({ pageId });
-          this.props.deleteBook(bookId)
-            .then(() =>
-              paginate(this.props.fetchBooks, this.query)
-                .then((res) => {
-                  this.setState({
-                    pages: res.pages,
-                    pageId: res.pageId
-                  });
-                }));
-        }
-        return false;
+        const deleteAction =
+          willDelete ? this.props.deleteBook(bookId, this.query) : false;
+        return deleteAction;
       });
   }
 
   /**
    * @description deletes a book from the library
-   * @param {number} categoryId - id of the category to filter by
-   * @param {object} event - click event
-   * @param {string} title - category name
+   *
+   * @param {number} categoryId - ID of the category to filter by
+   * @param {object} event - Click event executed when filtering by category
+   * @param {string} title - The name of the category to filter books by
+   *
    * @returns {function} action
+   *
    * @memberof Admin
    */
   filterBooksByCategory(categoryId, event, title) {
     event.preventDefault();
-    this.props.fetchBooksByCategory(this.state.pageId, categoryId)
+    this.props.fetchBooksByCategory(this.state.pageId, categoryId, title)
       .then((res) => {
-        if (res.isDone) {
-          return this.setState({
-            showCategoryTitle: true,
-            categoryTitle: title
-          });
-        }
-        this.setState({
+        const { isDone } = res;
+        return this.setState({
           showCategoryTitle: true,
-          categoryTitle: `${title} Sorry! ${res.message}`
+          categoryTitle: isDone ? title : `${title} Sorry! no books`
         });
       });
   }
 
   /**
    * @description displays the admin dashboard
+   *
    * @param {void} null
+   *
    * @returns {string} - HTML markup for the dashboard
+   *
    * @memberof Admin
    */
   render() {
     const noBorrowHistory = (
-      <h5>You have not borrowed any book(s)!</h5>
+      <h5>You have no borrowed book(s)!</h5>
     );
     const historySingle = this.props.borrows.map((borrowedBook, index) =>
       (<li key={borrowedBook.id} className="collection-item">
@@ -212,12 +188,14 @@ export class Admin extends Component {
             <div className="col s12 m12 l3">
               <div className="row">
                 <CategoryList
+                  id="category-list"
                   handleFilterBooksByCategory={this.filterBooksByCategory}
                   categories={this.props.categories}
                 />
-                {this.props.categories > 10 ? <p className="white-text">
-                Scroll inside above list to see remaining categories
-                </p> : ''}
+                {this.props.categories > 10 ?
+                  <p className="category-note white-text">
+                    Scroll inside above list to see remaining categories
+                  </p> : ''}
               </div>
             </div>
             <div className="col s12 m12 l9">
@@ -238,6 +216,7 @@ export class Admin extends Component {
                 </Modal>
               </div>
               <BookList
+                id="book-list"
                 books={this.props.books}
                 handleDelete={this.handleDelete}
                 handleEdit={this.handleEdit}
@@ -248,11 +227,10 @@ export class Admin extends Component {
               >
                 <BookForm book={this.state.bookToEdit} />
               </Modal>}
-              {!this.state.showCategoryTitle && this.state.pages.length > 1 ?
+              {!this.state.showCategoryTitle ?
                 <Paginator
-                  pages={this.state.pages}
-                  pageId={this.state.pageId.toString()}
-                  redirect={this.props.history.push}
+                  fetchData={this.props.fetchBooks}
+                  redirect={this.props.history}
                   pageName={this.props.history.location.pathname}
                 /> : ''
               }
@@ -261,16 +239,24 @@ export class Admin extends Component {
           <div className="notify-section row">
             <h3 className="col s12"> All Notifications</h3>
             <div className="col s12">
-              <div onScroll={this.handleScroll} className="card-panel">
-                <b>Scroll to see more notifications</b>
+              <div className="card-panel">
                 {this.props.books.length > 0 ?
-                  <ul className="collection">
-                    {historySingle}
-                  </ul> : noBorrowHistory }
-                {this.state.loadMore &&
-                  <div className="progress">
-                    <div className="indeterminate" />
-                  </div>}
+                  <div>
+                    <b className="notify-note">
+                      Click below for more notifications
+                    </b>
+                    <ul className="collection">
+                      {historySingle}
+                    </ul>
+                    {this.state.numberOfPages > 1 &&
+                      <div className="center-align">
+                        <button
+                          onClick={this.handleMoreNotification}
+                          className="btn center-align"
+                        > See More
+                        </button>
+                      </div>}
+                  </div> : noBorrowHistory }
               </div>
             </div>
           </div>
@@ -293,12 +279,14 @@ Admin.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchBooksByCategory: PropTypes.func.isRequired,
   deleteBook: PropTypes.func.isRequired,
-  fetchAllBorrowedBooks: PropTypes.func.isRequired
+  fetchAllBorrowedBooks: PropTypes.func.isRequired,
 };
 
 /**
  * @description maps the state in redux store to Admin props
- * @param {object} state
+ *
+ * @param {object} state - The application state gotten from the store
+ *
  * @returns {object} book
  */
 export function mapStateToProps(state) {

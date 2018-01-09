@@ -8,10 +8,13 @@ const initialState = {
 
 /**
  * Category Reducer
+ *
  * @description Return each action by its type
- * @param {array} [state=[]]
- * @param {object} [action={}]
- * @returns {object} // Category/Categories
+ *
+ * @param {array} state - The state passed to the categoryReducer
+ * @param {object} action - The action passed to the categoryReducer
+ *
+ * @returns {object} - Category/Categories
  */
 const categoryReducer = (state = initialState, action = {}) => {
   switch (action.type) {

@@ -1,13 +1,17 @@
 /**
  * @description represents logics used in validating inputs
  * when updating or creating a book
+ *
  * @class Validators
  */
 class Validators {
   /**
    * @description validates some input fields for the form
+   *
    * @param {object} formState - state data in the form
-   * @returns {object} - This contains errors and isvalid a boolean
+   *
+   * @returns {object} - This contains errors and isvalid which is a boolean
+   *
    * @memberof Validators
    */
   static validateBookForm(formState) {
@@ -33,13 +37,19 @@ class Validators {
 
   /**
    * @description validates some input fields for the form
+   *
    * @param {object} formState - state data in the form
+   *
    * @returns {object} - This contains errors and isvalid a boolean
+   *
    * @memberof Validators
    */
   static validatePassForm(formState) {
     const { oldPass, newPass, newPassConfirm } = formState;
     const errors = {};
+    if (newPass.trim().length < 6) {
+      errors.newPass = '6 or more characters allowed';
+    }
     if (oldPass.trim() === '') errors.oldPass = 'field required';
     if (newPass.trim() === '') errors.newPass = 'field required';
     if (newPassConfirm.trim() === '') errors.newPassConfirm = 'field required';

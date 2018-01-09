@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations, no-underscore-dangle */
 import { SET_BORROWED_NOT_RETURNED_BOOKS, BORROWED_RETURNED }
   from './../actions/types';
 
@@ -9,10 +8,13 @@ const initialState = {
 
 /**
  * Borrowing Reducer
+ *
  * @description Return each action by its type
- * @param {any} [state=[]]
- * @param {any} [action={}]
- * @returns {object} // Borrowed/Returned Book(s)
+ *
+ * @param {object} state - The state passed to the returnsReducer
+ * @param {object} action - The action passed to the returnsReducer
+ *
+ * @returns {object} - Borrowed/Returned Book(s)
  */
 const returnsReducer = (state = initialState, action = {}) => {
   switch (action.type) {

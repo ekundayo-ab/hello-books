@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, Route, withRouter, Redirect, Switch } from 'react-router-dom';
 import Header from './Header';
-import SignUp from './SignupForm';
-import SignIn from './SigninForm';
+import SignUpForm from './SignupForm';
+import SignInForm from './SigninForm';
 // import ForgotPassword from './ForgotPasswordForm'; // TODO:Write logic
 
 /**
@@ -11,11 +11,14 @@ import SignIn from './SigninForm';
  * @class Home
  * @extends {Component}
  */
-class Home extends Component {
+export class Home extends Component {
   /**
    * @description Invoked before component mounts
-   * @param {void} null
+   *
+   * @param {void} null - Has no parameter
+   *
    * @returns {void} returns nothing, but redirects conditionally
+   *
    * @memberof Home
    */
   componentWillMount() {
@@ -26,8 +29,11 @@ class Home extends Component {
 
   /**
    * @description displays the application's landing page
+   *
    * @param {void} null
+   *
    * @returns {string} - HTML markup for the landing page
+   *
    * @memberof Home
    */
   render() {
@@ -65,9 +71,9 @@ class Home extends Component {
                 </div>
                 <div className="card-content">
                   <Switch>
-                    <Route exact path="/" component={SignUp} />
-                    <Route exact path="/register" component={SignUp} />
-                    <Route exact path="/login" component={SignIn} />
+                    <Route exact path="/" component={SignUpForm} />
+                    <Route exact path="/register" component={SignUpForm} />
+                    <Route exact path="/login" component={SignInForm} />
                     {/* TODO: Forgot password logic implementation
                     <Route exact path="/forgot" component={ForgotPassword} />
                     */}

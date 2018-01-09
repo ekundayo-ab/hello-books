@@ -5,7 +5,7 @@ import { BookForm, mapStateToProps }
   from '../../../../src/components/library/admin/BookForm';
 import {
   categories
-} from '../../mockData';
+} from '../../../__mocks__/mockData';
 
 
 const props = {

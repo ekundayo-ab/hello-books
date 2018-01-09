@@ -4,7 +4,7 @@ import BookList
   from '../../../../src/components/library/admin/BookList';
 import {
   books
-} from '../../mockData';
+} from '../../../__mocks__/mockData';
 
 
 const props = {

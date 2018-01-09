@@ -4,25 +4,31 @@ import PropTypes from 'prop-types';
 import { Input } from 'react-materialize';
 import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
+import Helper from '../../../helpers/Helper';
 import SingleInputWithIcon from '../../forms/SingleInputWithIcon';
 import TextAreaInput from '../../forms/TextAreaInput';
 import { saveBook, updateBook } from './../../../actions/bookActions';
 import { fetchCategories } from './../../../actions/categoryActions';
-import Validators from './../../../helpers/validators';
-import handleDrop from './../../../helpers/utilities';
+import Validators from './../../../helpers/Validators';
+import handleDrop from './../../../helpers/handleDrop';
 import droploader from '../../../../public/images/dropzone.gif';
 import UpdateBookDetails from '../../library/admin/UpdateBookDetails';
 
 /**
  * @description represents form used in Adding a Book detail
+ *
  * @class BookForm
+ *
  * @extends {Component}
  */
 export class BookForm extends Component {
   /**
    * Creates an instance of BookForm.
+   *
    * @param {object} props
+   *
    * @memberof BookForm
+   *
    * @constructor
    */
   constructor(props) {
@@ -48,27 +54,26 @@ export class BookForm extends Component {
 
   /**
    * @description handles changes to the input fields value
+   *
    * @param {object} event
+   *
    * @returns {void} returns nothing
+   *
    * @memberof BookForm
    */
   onChange(event) {
-    if (!this.state.errors[event.target.name]) {
-      const errors = Object.assign({}, this.state.errors);
-      delete errors[event.target.name];
-      this.setState({
-        [event.target.name]: event.target.value,
-        errors,
-      });
-    } else {
-      this.setState({ [event.target.name]: event.target.value });
-    }
+    const categoryState = this.state;
+    const formChanges = Helper.handleFormChange(categoryState, event);
+    this.setState(formChanges);
   }
 
   /**
    * @description handles file upload to cloudinary
+   *
    * @param {array} files
+   *
    * @returns {string} // Image url from cloudinary
+   *
    * @memberof BookForm
    */
   handleFileUpload(files) {
@@ -86,8 +91,11 @@ export class BookForm extends Component {
 
   /**
    * @description handles Book update form submission
+   *
    * @param {object} event
+   *
    * @returns {void} returns nothing
+   *
    * @memberof BookForm
    */
   handleSubmit(event) {
@@ -112,6 +120,7 @@ export class BookForm extends Component {
             if (!res.isDone) {
               this.setState({ errors: res.result.errors, loading: false });
             } else {
+              $('#update-book-modal').modal('close');
               this.setState({ errors: {} });
               this.props.fetchCategories();
             }
@@ -149,8 +158,11 @@ export class BookForm extends Component {
 
   /**
    * @description displays the form for updating
+   *
    * @param {void} null
+   *
    * @returns {string} - HTML markup for the form
+   *
    * @memberof BookForm
    */
   render() {
@@ -319,7 +331,9 @@ BookForm.propTypes = {
 
 /**
  * @description maps the state in redux store to BookForm props
+ *
  * @param {object} state
+ *
  * @returns {object} categories
  */
 export function mapStateToProps(state) {

@@ -5,7 +5,7 @@ import { Shelf, mapStateToProps } from '../../../src/components/library/Shelf';
 import {
   books,
   categories
-} from './../mockData';
+} from '../../__mocks__/mockData';
 
 const props = {
   fetchCategories: () => Promise.resolve(1),
@@ -24,10 +24,17 @@ describe('Shelf Component', () => {
   });
 
   it('should have state with keys as tested below', () => {
-    expect(wrapper.instance().state).toHaveProperty('pages');
-    expect(wrapper.instance().state).toHaveProperty('pageId');
-    expect(wrapper.instance().state).toHaveProperty('showCategoryTitle');
-    expect(wrapper.instance().state).toHaveProperty('categoryTitle');
+    expect(wrapper.instance().state.showCategoryTitle).toEqual(false);
+    expect(wrapper.instance().state.categoryTitle).toEqual('');
+  });
+
+  it('should render category-list component and individual books', () => {
+    expect(wrapper.find('BookCard')).toHaveLength(4);
+    expect(wrapper.find('#category-list').exists()).toBe(true);
+    expect(wrapper.find('#bk0').exists()).toBe(true);
+    expect(wrapper.find('#bk1').exists()).toBe(true);
+    expect(wrapper.find('#bk2').exists()).toBe(true);
+    expect(wrapper.find('#bk3').exists()).toBe(true);
   });
 
   it('should call filterBooksByCategory when books' +

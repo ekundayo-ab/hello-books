@@ -5,7 +5,7 @@ import BookCard
   from '../../../src/components/library/BookCard';
 import {
   book,
-} from './../mockData';
+} from '../../__mocks__/mockData';
 
 
 const props = {

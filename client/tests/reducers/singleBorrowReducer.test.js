@@ -2,7 +2,7 @@ import singleBorrowReducer from '../../src/reducers/singleBorrowReducer';
 import * as actionTypes from '../../src/actions/types';
 import {
   borrow1,
-} from './testData';
+} from '../__mocks__/testData';
 
 describe('single borrow reducer', () => {
   it('should return the initial state', () => {

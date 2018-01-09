@@ -4,8 +4,11 @@ import PropTypes from 'prop-types';
 
 /**
  * @description displays categories of books
- * @param {object} props
+ *
+ * @param {object} props - The properties passed in the component
+ *
  * @returns {string} - HTML markup of CategoryList component
+ *
  * @memberof CategoryList
  */
 const CategoryList = props =>

@@ -102,13 +102,15 @@ export default {
     }
   },
   user9d: {
-    oldPass: '',
-    newPass: '',
-    newPassConfirm: '',
+    body: {
+      oldPass: '',
+      newPass: '',
+      newPassConfirm: '',
+    }
   },
   user9e: {
     body: {
-      username: 'li',
+      username: 'l',
       password: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
       passwordConfirmation: 'bhVz30gNLdCmqbZYuRIPQulAB/Sg',
       email: 'murphus@gmail.com'
@@ -123,9 +125,11 @@ export default {
     }
   },
   user9g: {
-    oldPass: '',
-    newPass: 'frlse',
-    newPassConfirm: 'flsee',
+    body: {
+      oldPass: '',
+      newPass: 'frlse',
+      newPassConfirm: 'flsee',
+    }
   },
   upgradeToken1: {
     level: 'bronze',

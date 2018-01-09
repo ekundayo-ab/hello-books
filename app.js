@@ -5,7 +5,9 @@ import morgan from 'morgan';
 import swagger from 'swagger-jsdoc';
 import socketIO from 'socket.io';
 import router from './server/routes/';
-import authMiddleware from './server/middlewares/auth';
+import AuthMiddleware from './server/middlewares/AuthMiddleware';
+
+const { authenticate, verifyToken } = AuthMiddleware;
 
 require('dotenv').config();
 
@@ -25,6 +27,7 @@ app.use((req, res, next) => {
 
 // Initialize swagger
 const swaggerJSDoc = swagger;
+
 // swagger definition
 const swaggerDefinition = {
   info: {
@@ -38,7 +41,6 @@ const swaggerDefinition = {
     ' the ones used in the sample models are just for sample purposes',
   },
   host: 'hellobooks-e.herokuapp.com',
-  // host: 'localhost:8000', // This can be enabled for localhost
   basePath: '/api/v1',
 };
 
@@ -68,8 +70,7 @@ app.use(express.static('./client/public/'));
 
 // Serve directory with url as static files
 app.use('/api/docs/', express.static(path.join(__dirname, 'server/api-docs/')));
-app.post('/api/v1/verify-token',
-  authMiddleware.authenticate, authMiddleware.verifyToken);
+app.post('/api/v1/verify-token', authenticate, verifyToken);
 app.use('/api/v1', router);
 
 // serve swagger

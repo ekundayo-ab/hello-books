@@ -1,11 +1,9 @@
 import { assert } from 'chai';
-import helper from '../helpers/index';
+import helper from '../helpers/Helper';
 import helperUser from '../helpers/helperUser';
 import helperBook from '../helpers/helperBook';
 
 const {
-  isAdmin,
-  isDefined,
   inputValidation,
   userValidation,
   validateEmail,
@@ -13,65 +11,49 @@ const {
   autoUpgradeJudge
 } = helper;
 
-describe('Helper Functions', () => {
-  describe('Checks if user is an Admin', () => {
-    it('should return true if user an admin', () => {
-      assert.equal(isAdmin(helperUser.user1), true);
-    });
-    it('should return false is user is a normal user', () => {
-      assert.equal(isAdmin(helperUser.user2), false);
-    });
-  });
-  describe('Checks if fields exists for book operations', () => {
-    it('should return true since all book fields are present', () => {
-      assert.equal(isDefined(helperBook.book1), true);
-    });
-    it('should return false since one field is missing', () => {
-      assert.equal(isDefined(helperBook.book2), false);
-    });
-  });
-  describe('Validates fields for book operations', () => {
-    it('should raise no error since all field are valid', () => {
+describe('Helper methods', () => {
+  describe('fields validation for book operations', () => {
+    it('should return empty errors object for valid fields', () => {
       assert.equal(inputValidation(helperBook.book1).isValid, true);
       assert.deepEqual(inputValidation(helperBook.book1).errors, {});
     });
-    it('should raise error for isbn field which is invalid', () => {
+    it('should return error value for invalid isbn field ', () => {
       assert.equal(inputValidation(helperBook.book3).isValid, false);
       assert.equal(inputValidation(helperBook.book3)
         .errors.isbn, 'This field is required');
     });
-    it('should raise error for title field which is invalid', () => {
+    it('should return error value for invalid title field', () => {
       assert.equal(inputValidation(helperBook.book4).isValid, false);
       assert.equal(inputValidation(helperBook.book4)
         .errors.title, 'This field is required');
     });
-    it('should raise error for author field which is invalid', () => {
+    it('should return error value for invalid author field', () => {
       assert.equal(inputValidation(helperBook.book5).isValid, false);
       assert.equal(inputValidation(helperBook.book5)
         .errors.author, 'This field is required');
     });
-    it('should raise error for description field which is invalid', () => {
+    it('should return error value for invalid description field', () => {
       assert.equal(inputValidation(helperBook.book6).isValid, false);
       assert.equal(inputValidation(helperBook.book6)
         .errors.description, 'This field is required');
     });
-    it('should raise error for quantity field which is invalid', () => {
+    it('should return error value for invalid quantity field', () => {
       assert.equal(inputValidation(helperBook.book7).isValid, false);
       assert.equal(inputValidation(helperBook.book7)
         .errors.quantity, 'This field is required');
     });
-    it('should raise error when isbn field is not a number', () => {
+    it('should return error value for isbn field not a number', () => {
       assert.equal(inputValidation(helperBook.book7a).isValid, false);
       assert.equal(inputValidation(helperBook.book7a)
         .errors.ISBNValidation, 'ISBN must be a number');
     });
-    it('should raise error when quantity field is not a number', () => {
+    it('should return error value for quantity field not a number', () => {
       assert.equal(inputValidation(helperBook.book7b).isValid, false);
       assert.equal(inputValidation(helperBook.book7b)
         .errors.numeric, 'quantity must be a number');
     });
   });
-  describe('Validates email for sign up & sign in', () => {
+  describe('field validation for email on signup or signin', () => {
     it('should return true for ekprogs@gmail.com', () => {
       assert.equal(validateEmail(helperUser.user3.email), true);
     });
@@ -82,7 +64,7 @@ describe('Helper Functions', () => {
       assert.equal(validateEmail(helperUser.user5.email), false);
     });
   });
-  describe('Validation of user inputs when registering', () => {
+  describe('field validation for registration inputs', () => {
     it('should return an error for invalid username supplied', () => {
       assert.equal(userValidation(helperUser.user9a).isValid, false);
       assert.equal(userValidation(helperUser.user9a)
@@ -98,10 +80,10 @@ describe('Helper Functions', () => {
       assert.equal(userValidation(helperUser.user9c)
         .errors.password, 'Passwords do not match');
     });
-    it('should not allow username less than 3 characters', () => {
+    it('should not allow username less than 2 characters', () => {
       assert.equal(userValidation(helperUser.user9e).isValid, false);
       assert.equal(userValidation(helperUser.user9e)
-        .errors.username, 'minimum of 3 characters word allowed');
+        .errors.username, 'minimum of 2 characters word allowed');
     });
     it('should not allow password less than 6 characters', () => {
       assert.equal(userValidation(helperUser.user9f).isValid, false);
@@ -109,7 +91,7 @@ describe('Helper Functions', () => {
         .errors.password, 'minimum of 6 characters word allowed');
     });
   });
-  describe('Validation of inputs when changing password', () => {
+  describe('field validation for password change inputs', () => {
     it('should return an error for invalid inputs supplied', () => {
       assert.equal(validatePassForm(helperUser.user9d).isValid, false);
       assert.equal(validatePassForm(helperUser.user9d)
@@ -121,7 +103,7 @@ describe('Helper Functions', () => {
         .errors.mismatch, 'Passwords do not match');
     });
   });
-  describe('Determination of user eligible for upgrade', () => {
+  describe('user upgrade eligibility', () => {
     it('should return silver update details', () => {
       assert.equal(autoUpgradeJudge(helperUser.upgradeToken1)
         .upgradeToken.levelName, 'silver');

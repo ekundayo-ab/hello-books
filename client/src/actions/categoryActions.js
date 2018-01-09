@@ -3,8 +3,11 @@ import * as actionTypes from '../actions/types';
 
 /**
  * Set Categories
+ *
  * @description Set the categories in the store
- * @param {object} categories - details categories to set
+ *
+ * @param {object} categories - Payload of categories to dispatch to store
+ *
  * @returns {object} action
  */
 const setCategories = categories =>
@@ -12,8 +15,11 @@ const setCategories = categories =>
 
 /**
  * Add Category
+ *
  * @description Adds a new category to the store
- * @param {object} category - category to add
+ *
+ * @param {object} category - Payload of single category to add to store
+ *
  * @returns {object} action
  */
 const addCategory = category =>
@@ -21,8 +27,11 @@ const addCategory = category =>
 
 /**
  * Get Categories
+ *
  * @description Makes request to the server to get categories
- * @param {void} null
+ *
+ * @param {void} null - Has no parameter
+ *
  * @returns {object} action
  */
 const fetchCategories = () =>
@@ -39,18 +48,22 @@ const fetchCategories = () =>
 
 /**
  * Create/Add Category
+ *
  * @description Sends category to be saved to the server
- * @param {object} categoryDetails
+ *
+ * @param {object} categoryDetails - Details of the category to be added to the
+ * library
+ *
  * @returns {object} action
  */
 const saveCategory = categoryDetails =>
   dispatch =>
     axios.post('/api/v1/category', categoryDetails)
       .then((res) => {
-        const { category } = res.data;
+        const { category, message } = res.data;
         category.cat = [];
         dispatch(addCategory(category));
-        Materialize.toast(res.data.message, 4000, 'green');
+        Materialize.toast(message, 4000, 'green');
         return { res: res.data, isDone: true };
       })
       .catch((err) => {

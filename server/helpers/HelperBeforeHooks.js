@@ -1,20 +1,21 @@
-import supertest from 'supertest';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import app from '../../app';
 import models from '../models/';
 
 const { User, Book, Borrow, Category } = models;
-
-const server = supertest.agent(app);
+const server = require('supertest');
+// const server = supertest.agent(app);
 
 /**
  * @class BeforeHooks
  */
-class BeforeHooks {
+class HelperBeforeHooks {
   /**
-   * Basically performed before any test runs
-   * @param {void} null
-   * @return {object} action
+   * @description This is executed before the userController test runs
+   *
+   * @return {null} nothing - Returns nothing
+   *
    * @memberof BeforeHooks
    */
   static clearDatabaseTables() {
@@ -24,15 +25,24 @@ class BeforeHooks {
       Book.destroy({ where: {} });
       Borrow.destroy({ where: {} });
       Category.destroy({ where: {} });
+      User
+        .create({
+          username: 'ekundayo',
+          email: 'ekprogs@gmail.com',
+          password: bcrypt.hashSync('123456', 10),
+          role: 'admin',
+          borrowLimit: 9005,
+        });
       setTimeout(done, 5000);
       done();
     });
   }
 
   /**
-   * Basically performed before any test runs
-   * @param {void} null
-   * @return {object} action
+   * @description This is executed before the tests in which it is placed runs
+   *
+   * @return {null} nothing - Returns nothing
+   *
    * @memberof BeforeHooks
    */
   static makeDataAvailable() {
@@ -54,18 +64,27 @@ class BeforeHooks {
           Category.create({ id: 4, title: 'Anything' });
           process.env.bookId = book.id;
         });
-      server
-        .post('/api/v1/users/signup')
-        .set('Accept', 'application/x-www-form-urlencoded')
-        .send({
+      Book
+        .create({
+          isbn: 612,
+          title: 'Theory of Music',
+          author: 'Jazz Fingers',
+          description: 'Learn and Master Music basics',
+          quantity: 50,
+          categoryId: 9
+        }).then((book) => {
+          Category.create({ id: 9, title: 'Sciences' });
+          process.env.book2Id = book.id;
+        });
+      User
+        .create({
           username: 'ekundayo',
           email: 'ekprogs@gmail.com',
-          password: '123456',
-          passwordConfirmation: '123456',
+          password: bcrypt.hashSync('123456', 10),
           role: 'admin',
-        })
-        .end(() => {
-          server
+          borrowLimit: 9005,
+        }).then(() => {
+          server(app)
             .post('/api/v1/users/signin')
             .set('Accept', 'application/x-www-form-urlencoded')
             .send({
@@ -80,7 +99,7 @@ class BeforeHooks {
                 });
             });
         });
-      server
+      server(app)
         .post('/api/v1/users/signup')
         .set('Accept', 'application/x-www-form-urlencoded')
         .send({
@@ -90,7 +109,7 @@ class BeforeHooks {
           passwordConfirmation: '123456',
         })
         .end(() => {
-          server
+          server(app)
             .post('/api/v1/users/signin')
             .set('Accept', 'application/x-www-form-urlencoded')
             .send({
@@ -110,4 +129,4 @@ class BeforeHooks {
   }
 }
 
-export default BeforeHooks;
+export default HelperBeforeHooks;

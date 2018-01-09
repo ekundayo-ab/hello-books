@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 
 /**
  * @description functional component for 404 Page
- * @param {void} null
+ *
+ * @param {void} null - Has no parameter
+ *
  * @returns {string} - HTML markup of the 404 component
  */
 const NotFoundPage = () =>

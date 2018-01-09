@@ -1,3 +1,7 @@
+# HelloBooks Library Application
+![HelloBooks Homepage](client/public/images/hellobooks_screenshot.png?raw=true "Landing Page")
+
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/hyperium/hyper/master/LICENSE)
 [![Build Status](https://travis-ci.org/ekundayo-ab/hello-books.svg?branch=develop)](https://travis-ci.org/ekundayo-ab/hello-books)
 [![Code Climate](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/gpa.svg?branch=develop)](https://codeclimate.com/github/ekundayo-ab/hello-books)
 [![Test Coverage](https://codeclimate.com/github/ekundayo-ab/hello-books/badges/coverage.svg?branch=develop)](https://codeclimate.com/github/ekundayo-ab/hello-books/coverage)
@@ -7,7 +11,7 @@
 
 HelloBooks is an application that helps manage a library and its processes like stocking, tracking and renting of books.
 
-With this application users are able to find and rent books. The application also has an admin section where the admin can do things like add books, delete books, increase the quantity of a book etc.
+With this application users are able to find and rent books. The application also has an admin section where the admin can do things like add books, delete books, increase the quantity of a book etc. Access here [HelloBooks](https://hellobooks-e.herokuapp.com/)
 
 ## Table of Contents
 
@@ -129,7 +133,7 @@ Contributions to this project are welcomed, If you need to contribute to this pr
 * Follow [Installation and Setup](#installation-and-setup) as explained earlier
 * Create a branch off **master** for the feature you wish to add
 * Make neccessary changes, commit and raise a pull request against develop
-**Note** when making contributions, please endevour to follow the [Airbnb](https://github.com/airbnb/javascript) javascript style guide. check out the [wiki]
+**Note** when making contributions, please endevour to follow the [Airbnb](https://github.com/airbnb/javascript) javascript style guide. Also, check out the [wiki](https://github.com/ekundayo-ab/hello-books/wiki) for details on contributing.
 
 ## License
 This project is authored by **Ekundayo Abiona** (ekundayo.abiona@andela.com) and is licensed for your use, modification and distribution under the **MIT** license.

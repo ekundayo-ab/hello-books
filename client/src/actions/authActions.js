@@ -1,68 +1,83 @@
 import axios from 'axios';
-import { SET_CURRENT_USER, UNSET_CURRENT_USER } from '../actions/types';
+import { SET_CURRENT_USER, UNSET_CURRENT_USER, SET_EXISTENCE }
+  from '../actions/types';
 import setAuthorizationHeader from '../utils/setAuthorizationToken';
 
 /**
  * Set Current User
+ *
  * @description Set the current user
- * @param {object} user - user to set
+ *
+ * @param {object} user - The current user payload to be dispatched
+ *
  * @returns {object} action
  */
 const setCurrentUser = user =>
-  ({ type: SET_CURRENT_USER, user, });
+  ({ type: SET_CURRENT_USER, user });
 
 /**
  * Unset Current User
+ *
  * @description Unset the current user
- * @param {object} user - user to unset
+ *
+ * @param {object} user - current user to payload to be dispatched
+ *
  * @returns {object} action
  */
 const unsetCurrentUser = user =>
   ({ type: UNSET_CURRENT_USER, user, });
 
 /**
+ * Unset Current User
+ *
+ * @description Sets message if user exists or not
+ *
+ * @param {object} message - The message to be dispatched
+ *
+ * @returns {object} action
+ */
+export const setUserExists = message =>
+  ({ type: SET_EXISTENCE, message, });
+
+/**
  * Log in User
+ *
  * @description Sign in user to the library
- * @param {object} userData - user details
+ *
+ * @param {object} userData - The user details to log into the application
+ *
  * @returns {object} action
  */
 const login = userData =>
   dispatch => axios.post('/api/v1/users/signin', userData)
     .then((res) => {
-      const token = res.data.token;
+      const { token, user, message } = res.data;
       localStorage.setItem('jwtToken', token);
-      dispatch(setCurrentUser(res.data.user));
+      dispatch(setCurrentUser(user));
       setAuthorizationHeader(token);
       return {
         isAuthenticated: true,
-        message: res.data.message,
+        message,
       };
     })
-    .catch(err =>
-      ({
-        isAuthenticated: false,
-        message: err.response.data.message,
-      }),
-    );
+    .catch((err) => {
+      const { message } = err.response.data;
+      Materialize.toast(message, 2000, 'red');
+      return { isAuthenticated: false, message };
+    });
 
 /**
  * Register and Logs in User with Google
+ *
  * @description Gets user details from google,
  * then signs in the user with the detail gotten
- * @param {object} userData - user details
+ *
+ * @param {object} userData - The user details to Sign-Up or Log-in through
+ * google
+ *
  * @returns {object} action
  */
 const googleAuth = (userData) => {
-  if (!userData.tokenObj) {
-    return new Promise(() => {
-      Materialize.toast(
-        'Please sign in to your google account',
-        4000,
-        'red'
-      );
-      return { success: false };
-    });
-  }
   const user = {
     token: userData.tokenObj.access_token,
     username: userData.w3.ig.split(' ')[0],
@@ -73,29 +88,30 @@ const googleAuth = (userData) => {
   };
   return dispatch => axios.post('/api/v1/auth/google', user)
     .then((res) => {
-      Materialize.toast(res.data.message, 4000, 'green');
-      const token = res.data.token;
+      const { token, message } = res.data;
+      Materialize.toast(message, 2000, 'green');
       localStorage.setItem('jwtToken', token);
       dispatch(setCurrentUser(user));
       setAuthorizationHeader(token);
       return {
-        success: res.data.success,
-        message: res.data.message,
+        success: true,
+        message,
       };
     })
     .catch((err) => {
-      Materialize.toast(err.response.data.message, 4000, 'red');
-      return {
-        success: err.response.data.success,
-        message: err.response.data.message,
-      };
+      const { message } = err.response.data;
+      Materialize.toast(message, 2000, 'red');
+      return { success: false, message };
     });
 };
 
 /**
  * Logout User
+ *
  * @description Signs out user from the library
- * @param {void} none - takes no argument
+ *
+ * @param {void} none - Has no parameter
+ *
  * @returns {object} action
  */
 const logout = () => (dispatch) => {
@@ -107,39 +123,61 @@ const logout = () => (dispatch) => {
 
 /**
  * Registers User
+ *
  * @description Gets user details by registering them
- * @param {object} userData - user details
+ *
+ * @param {object} userData - The user details to sign-up
+ *
  * @returns {object} action
  */
 const userSignUpRequest = userData =>
-  axios.post('/api/v1/users/signup', userData)
-    .then((res) => {
-      Materialize.toast(`${res.data.message} You're logged in`, 3000, 'green');
-      return {
-        isDone: res.data.success,
-        message: res.data.message
-      };
-    })
-    .catch(err => Materialize.toast(err.response.data.message, 3000, 'red'));
+  dispatch =>
+    axios.post('/api/v1/users/signup', userData)
+      .then((res) => {
+        const { message } = res.data;
+        const { username, password } = userData;
+        const loginDetails = { identifier: username, password };
+        return dispatch(login(loginDetails)).then((res) => {
+          Materialize.toast(`${message} You're logged in`, 3000, 'green');
+          return { isDone: res.isAuthenticated, message };
+        });
+      })
+      .catch((err) => {
+        Materialize.toast(err.response.data.message, 2000, 'red');
+        return err.response.data;
+      });
 
 
 /**
  * Check User existence
+ *
  * @description Checks if a users exists in the library
- * @param {object} userData - user details
+ *
+ * @param {object} userData - The user details to to check if existing
+ *
  * @returns {object} action
  */
-const isUserExists = userData =>
-  axios.post('/api/v1/users', userData)
-    .catch((err) => {
-      Materialize.toast(err.response.data.message, 2000, 'red');
-      return err.response.data;
-    });
+const doesUserExist = userData =>
+  dispatch =>
+    axios.post('/api/v1/users', userData)
+      .then((res) => {
+        const { exists } = res.data;
+        const toDispatch = exists ? 'User exists' : 'Available cleared!';
+        dispatch(setUserExists(toDispatch));
+        return res.data;
+      })
+      .catch((err) => {
+        Materialize.toast(err.response.data.message, 2000, 'red');
+        return err.response.data;
+      });
 
 /**
  * Check User existence
+ *
  * @description Checks if a users exists in the library
- * @param {object} passwordData - user details
+ *
+ * @param {object} passwordData - The password details to be changed
+ *
  * @returns {object} action
  */
 const changePassword = passwordData =>
@@ -149,15 +187,15 @@ const changePassword = passwordData =>
       return res.data;
     })
     .catch((err) => {
-      const message = err.response ? err.response.data.message : err;
-      Materialize.toast(message, 2000, 'red');
+      Materialize.toast(err.response.data.message, 2000, 'red');
+      return err.response.data;
     });
 
 export {
   setCurrentUser,
   userSignUpRequest,
   login,
-  isUserExists,
+  doesUserExist,
   logout,
   googleAuth,
   changePassword
