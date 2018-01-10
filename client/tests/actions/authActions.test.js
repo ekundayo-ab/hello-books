@@ -62,27 +62,27 @@ describe('Authentication actions', () => {
   });
 
   describe('Register action', () => {
-    it('should return success message when a' +
-    ' user successfully registers', (done) => {
-      moxios.stubRequest('/api/v1/users/signup', {
-        status: 200,
-        response: {
-          success: true,
-          message: 'Hi ekundayo, registration successful'
-        }
-      });
-      const expectedResponse = {
-        isDone: true,
-        message: 'Hi ekundayo, registration successful'
-      };
-      const store = mockStore({});
-      store.dispatch(authAction.userSignUpRequest(regUserData))
-        .then((res) => {
-          expect(res).toEqual(expectedResponse);
-          done();
+    it('should return success message when a user successfully registers',
+      (done) => {
+        moxios.stubRequest('/api/v1/users/signup', {
+          status: 200,
+          response: {
+            success: true,
+            message: 'Hi ekundayo, registration successful'
+          }
         });
-      done();
-    });
+        const expectedResponse = {
+          isDone: true,
+          message: 'Hi ekundayo, registration successful'
+        };
+        const store = mockStore({});
+        store.dispatch(authAction.userSignUpRequest(regUserData))
+          .then((res) => {
+            expect(res).toEqual(expectedResponse);
+            done();
+          });
+        done();
+      });
 
     it('should return error message on registration failure', (done) => {
       moxios.stubRequest('/api/v1/users/signup', {
@@ -100,27 +100,27 @@ describe('Authentication actions', () => {
   });
 
   describe('Google authentication action', () => {
-    it('should return success message when a' +
-    ' user registers and logs in with google', (done) => {
-      moxios.stubRequest('/api/v1/auth/google', {
-        status: 200,
-        response: {
-          success: true,
-          message: 'Hi ekundayo, you are logged in',
-          token,
-        }
-      });
-      const store = mockStore({});
-      const expectedActions = [{
-        type: actionType.SET_CURRENT_USER,
-        user: googleUser
-      }];
-      store.dispatch(authAction.googleAuth(googleDetails))
-        .then(() => {
-          expect(store.getActions()).toEqual(expectedActions);
-          done();
+    it(`should return success message when a user registers and logs in
+    with google`, (done) => {
+        moxios.stubRequest('/api/v1/auth/google', {
+          status: 200,
+          response: {
+            success: true,
+            message: 'Hi ekundayo, you are logged in',
+            token,
+          }
         });
-    });
+        const store = mockStore({});
+        const expectedActions = [{
+          type: actionType.SET_CURRENT_USER,
+          user: googleUser
+        }];
+        store.dispatch(authAction.googleAuth(googleDetails))
+          .then(() => {
+            expect(store.getActions()).toEqual(expectedActions);
+            done();
+          });
+      });
 
     it('should return error message on google login failure', (done) => {
       moxios.stubRequest('/api/v1/auth/google', {

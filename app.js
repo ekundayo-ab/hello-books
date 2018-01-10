@@ -33,12 +33,11 @@ const swaggerDefinition = {
   info: {
     title: 'HelloBooks API',
     version: '1.0.0',
-    description: 'An application that helps manage a library' +
-    ' and its processes like stocking, tracking and renting of books.' +
-    ' \n\n **NB: for Admin access use**' +
-    '\n _username: `ekundayo`, \n password: `dayo`_' +
-    '\n\n Image filenames are generated from cloudinary,' +
-    ' the ones used in the sample models are just for sample purposes',
+    description: `An application that helps manage a library and its processes
+    like stocking, tracking and renting of books. **NB: for Admin access use**
+    ***username: 'ekundayo', password: 'dayo'** Image filenames are generated from
+    cloudinary,  the ones used in the sample models are just for
+    sample purposes`,
   },
   host: 'hellobooks-e.herokuapp.com',
   basePath: '/api/v1',

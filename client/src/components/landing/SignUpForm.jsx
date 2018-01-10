@@ -111,7 +111,7 @@ export class SignUpForm extends Component {
   }
 
   /**
-   * @description handles callback during Google signup and signin
+   * @description handles callback during Google sign-up and sign-in
    *
    * @param {object} response - The response payload sent from google when
    * signing up a user through google
@@ -149,9 +149,7 @@ export class SignUpForm extends Component {
             <div className="center-align col s12">
               <GoogleLogin
                 className="red darken-2 google-btn"
-                clientId={'1037424306341' +
-                '-av656qd87qifs0vsbhp67ej5n' +
-                '04359us.apps.googleusercontent.com'}
+                clientId={'1037424306341-av656qd87qifs0vsbhp67ej5n04359us.apps.googleusercontent.com'}
                 buttonText="Login"
                 onSuccess={this.responseGoogle}
                 onFailure={

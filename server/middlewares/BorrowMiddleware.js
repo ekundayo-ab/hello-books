@@ -71,8 +71,7 @@ class BorrowMiddleware {
     if (req.method === 'POST') {
       Helper.updateBorrowLimitAndTotalBorrows(userToUpdate);
       return res.status(200).send({
-        message: `${newBookRecord.title}` +
-        ' succesfully borrowed',
+        message: `${newBookRecord.title} succesfully borrowed`,
         updatedBorrowedBook: newBookRecord,
         borrowingRecord: newBorrowRecord
       });
@@ -89,8 +88,7 @@ class BorrowMiddleware {
           Helper.sendEmail(userToUpdateInStore, newBookRecord);
         }
         return res.status(200).send({
-          message: `${newBookRecord[1].dataValues.title} succesfully` +
-          ' returned but pending review by Administrator',
+          message: `${newBookRecord[1].dataValues.title} succesfully returned but pending review by Administrator`,
           updatedBook: newBookRecord[1],
           borrowUpdated: newBorrowRecord[1].dataValues,
           userToUpdateInStore

@@ -169,7 +169,7 @@ describe('AUTHENTICATION & USER Operations', () => {
           .end((err, res) => {
             expect(res.body.message)
               .to.equal('Authentication failed, check password or email');
-            expect(res.status).to.equal(400);
+            expect(res.status).to.equal(401);
             done();
           });
       });
@@ -185,14 +185,14 @@ describe('AUTHENTICATION & USER Operations', () => {
         .end((err, res) => {
           expect(res.body.message)
             .to.equal('Authentication failed, Wrong password or email');
-          expect(res.status).to.equal(404);
+          expect(res.status).to.equal(401);
           done();
         });
     });
   });
 
   describe('/Google Sign-Up', () => {
-    it('should return success message and token if google signup is successful',
+    it('should return success message and token if google sign-up is successful',
       (done) => {
         server
           .post('/api/v1/auth/google')
@@ -212,7 +212,7 @@ describe('AUTHENTICATION & USER Operations', () => {
             done();
           });
       });
-    it('should return success message and token if google signin is successful',
+    it('should return success message and token if google sign-in is successful',
       (done) => {
         server
           .post('/api/v1/auth/google')
@@ -361,7 +361,7 @@ describe('AUTHENTICATION & USER Operations', () => {
             newPassConfirm: 'dayodayo',
           })
           .end((err, res) => {
-            expect(res.status).to.equal(400);
+            expect(res.status).to.equal(401);
             expect(res.body.message)
               .to.equal('Authentication failed, Old password incorrect');
             done();

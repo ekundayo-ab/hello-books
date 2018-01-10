@@ -48,7 +48,7 @@ const deleteSuccess = bookId =>
  * @returns {object} action
  */
 export const bookUpdated = book =>
-  ({ type: actionTypes.BOOK_UPDATED, book });
+  ({ type: actionTypes.BOOK_UPDATED, newBook: book });
 
 /**
  * Get Single Book
@@ -186,7 +186,7 @@ const saveBook = book => dispatch =>
 const updateBook = book => dispatch =>
   axios.put(`/api/v1/books/${book.id}`, book)
     .then((res) => {
-      dispatch(bookUpdated(res.data.book));
+      dispatch(bookUpdated(res.data.newBook));
       Materialize.toast(res.data.message, 2000, 'green');
       return { isDone: true, result: res.data };
     })
