@@ -98,7 +98,7 @@ class AuthMiddleware {
         }
         if (req.query.loan === 'borrowOrReturn') {
           const message = 'User not found';
-          if (!foundUser) return res.status(404).send({ message });
+          if (!foundUser) return res.status(401).send({ message });
           res.locals.borrowStatus = foundUser.borrowLimit < 1;
           return next();
         }
