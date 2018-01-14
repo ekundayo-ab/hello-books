@@ -97,8 +97,8 @@ class AuthMiddleware {
           return next();
         }
         if (req.query.loan === 'borrowOrReturn') {
-          const message = 'User not found';
-          if (!foundUser) return res.status(404).send({ message });
+          const message = 'You are not authorized to perform this action';
+          if (!foundUser) return res.status(401).send({ message });
           res.locals.borrowStatus = foundUser.borrowLimit < 1;
           return next();
         }

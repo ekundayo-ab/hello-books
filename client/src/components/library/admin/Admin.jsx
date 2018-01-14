@@ -8,8 +8,10 @@ import BookForm from './BookForm';
 import CategoryForm from './CategoryForm';
 import CategoryList from './../category/CategoryList';
 import BookList from './BookList';
-import { fetchBooks, deleteBook, fetchBooksByCategory }
+import { fetchBooks, deleteBook, fetchBooksByCategory, saveBook, updateBook }
   from './../../../actions/bookActions';
+import Validators from './../../../helpers/Validators';
+import handleDrop from './../../../helpers/handleDrop';
 import { fetchCategories } from './../../../actions/categoryActions';
 import { fetchAllBorrowedBooks } from '../../../actions/borrowActions';
 import Paginator from './../../../helpers/Paginator';
@@ -39,14 +41,38 @@ export class Admin extends Component {
       more: 10,
       loadMore: false,
       numberOfPages: 2,
-      bookToEdit: {},
-      wouldEdit: false
+      bookToEdit: {
+        isbn: 0,
+        title: '',
+        author: '',
+        quantity: 0,
+        description: '',
+        image: '',
+        categoryId: 0,
+      },
+      newBook: {
+        title: '',
+        author: '',
+        quantity: 0,
+        description: '',
+        image: '',
+        categoryId: 0,
+      },
+      wouldEdit: false,
+
+      errors: {},
+      loading: false,
+      coverUploaded: false,
+      dropzoneLoader: false,
     };
     this.query = (this.props.history.location.search).split('=')[1];
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.filterBooksByCategory = this.filterBooksByCategory.bind(this);
     this.handleMoreNotification = this.handleMoreNotification.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFileUpload = this.handleFileUpload.bind(this);
   }
 
   /**
@@ -62,6 +88,117 @@ export class Admin extends Component {
     this.props.fetchCategories();
     this.props.fetchAllBorrowedBooks(1, 1, true, 0);
   }
+
+  /**
+   * @description handles changes to the input fields value
+   *
+   * @param {object} event
+   * @param {object} formValues
+   *
+   * @returns {void} returns nothing
+   *
+   * @memberof BookForm
+   */
+  handleChange(event, formValues) {
+    let { value } = event.target;
+    const { name } = event.target;
+    if (name === 'isbn' || name === 'quantity' || name === 'categoryId') {
+      value = parseInt(value, 10);
+    }
+    this.setState({
+      [formValues]: {
+        ...this.state[formValues],
+        [event.target.name]: value }
+    });
+  }
+
+  /**
+   * @description handles file upload to cloudinary
+   *
+   * @param {array} files - array of files to be uploaded
+   *
+   * @param {array} book - book for which image is uploaded
+   *
+   * @returns {string} // Image url from cloudinary
+   *
+   * @memberof BookForm
+   */
+  handleFileUpload(files, book) {
+    this.setState({ dropzoneLoader: true });
+    handleDrop(files).then((cloudinaryResponse) => {
+      if (cloudinaryResponse.imageUploaded) {
+        this.setState({ coverUploaded: true });
+        return this.setState({
+          dropzoneLoader: false,
+          [book]: {
+            ...this.state[book],
+            image: cloudinaryResponse.data.secure_url
+          }
+        });
+      }
+      return cloudinaryResponse;
+    });
+  }
+
+  /**
+   * @description handles Book update form submission
+   *
+   * @param {object} event
+   *
+   * @param {object} bookDetails
+   *
+   * @returns {void} returns nothing
+   *
+   * @memberof BookForm
+   */
+  handleSubmit(event, bookDetails) {
+    event.preventDefault();
+    const { isValid, errors } =
+      Validators.validateBookForm(this.state[bookDetails]);
+    if (!isValid) this.setState({ errors });
+    if (isValid) {
+      const { id, isbn, title, author,
+        description, quantity, categoryId, image } = this.state[bookDetails];
+      if (id) {
+        this.props.updateBook({
+          id,
+          isbn,
+          title,
+          author,
+          description,
+          quantity,
+          category: categoryId,
+          image
+        })
+          .then((res) => {
+            if (!res.isDone) {
+              this.setState({ errors: res.result.errors, loading: false });
+            } else {
+              $('#update-book-modal').modal('close');
+              this.setState({ errors: {} });
+              this.props.fetchCategories();
+            }
+          });
+      } else {
+        this.props.saveBook({
+          isbn,
+          title,
+          author,
+          description,
+          quantity,
+          category: categoryId,
+          image
+        })
+          .then((res) => {
+            if (res.isDone) {
+              $('#book-form-modal').modal('close');
+              this.props.fetchCategories();
+            }
+          });
+      }
+    }
+  }
+
 
   /**
    * @description Handles editing of a specific book
@@ -205,7 +342,17 @@ export class Admin extends Component {
                   trigger={<Button id="book-form-btn">ADD BOOK</Button>}
                   id="book-form-modal"
                 >
-                  <BookForm />
+                  <BookForm
+                    formChange={event => this.handleChange(event, 'newBook')}
+                    submitForm={event => this.handleSubmit(event, 'newBook')}
+                    uploadFile={files => this.handleFileUpload(files, 'newBook')}
+                    errors={this.state.errors}
+                    loading={this.state.loading}
+                    coverUploaded={this.state.coverUploaded}
+                    dropzoneLoader={this.state.dropzoneLoader}
+                    categories={this.props.categories}
+                    book={this.state.newBook}
+                  />
                 </Modal>&nbsp;&nbsp;
                 <Modal
                   header="Add New Category"
@@ -225,7 +372,18 @@ export class Admin extends Component {
                 header="Update Book"
                 id="update-book-modal"
               >
-                <BookForm book={this.state.bookToEdit} />
+                <BookForm
+                  id="editing-form"
+                  formChange={event => this.handleChange(event, 'bookToEdit')}
+                  submitForm={event => this.handleSubmit(event, 'bookToEdit')}
+                  uploadFile={() => this.handleFileUpload('bookToEdit')}
+                  errors={this.state.errors}
+                  loading={this.state.loading}
+                  coverUploaded={this.state.coverUploaded}
+                  dropzoneLoader={this.state.dropzoneLoader}
+                  categories={this.props.categories}
+                  book={this.state.bookToEdit}
+                />
               </Modal>}
               {!this.state.showCategoryTitle ?
                 <Paginator
@@ -278,6 +436,8 @@ Admin.propTypes = {
   }).isRequired,
   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchBooksByCategory: PropTypes.func.isRequired,
+  saveBook: PropTypes.func.isRequired,
+  updateBook: PropTypes.func.isRequired,
   deleteBook: PropTypes.func.isRequired,
   fetchAllBorrowedBooks: PropTypes.func.isRequired,
 };
@@ -302,5 +462,7 @@ export default connect(mapStateToProps, {
   fetchCategories,
   fetchBooksByCategory,
   deleteBook,
-  fetchAllBorrowedBooks
+  fetchAllBorrowedBooks,
+  saveBook,
+  updateBook
 })(Admin);

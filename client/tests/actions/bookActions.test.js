@@ -119,7 +119,7 @@ describe('Book actions', () => {
       });
       const expectedActions = [{
         type: actionType.BOOK_UPDATED,
-        newBook
+        book: newBook
       }];
       const store = mockStore({});
       store.dispatch(bookAction.updateBook(book))

@@ -259,9 +259,9 @@ describe('Library books', () => {
         .set('x-access-token', adminToken)
         .send({ bookId, borrowId })
         .end((err, res) => {
-          expect(res.status).to.equal(404);
+          expect(res.status).to.equal(401);
           expect(res.body.message)
-            .to.equal('User not found');
+            .to.equal('You are not authorized to perform this action');
           done();
         });
     });
