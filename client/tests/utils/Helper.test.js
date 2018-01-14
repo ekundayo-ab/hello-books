@@ -4,9 +4,7 @@ import * as testData from '../__mocks__/testData';
 const {
   userValidation,
   loginValidation,
-  inputValidation,
   validateEmail,
-  handleFormChange
 } = Helper;
 
 describe('Helper Functions', () => {
@@ -59,49 +57,12 @@ describe('Helper Functions', () => {
     });
   });
 
-  describe('Book form validation', () => {
-    it('should return errors with isValid false for invalid inputs', () => {
-      expect(inputValidation(testData.req6).isValid).toEqual(false);
-      expect(inputValidation(testData.req6).errors.all)
-        .toEqual('All required fields must exist');
-      expect(inputValidation(testData.req6).errors.ISBNValidation)
-        .toEqual('ISBN must be a number');
-      expect(inputValidation(testData.req6).errors.numeric)
-        .toEqual('quantity must be a number');
-      expect(inputValidation(testData.req6).errors.author)
-        .toEqual('This field is required');
-    });
-    it('should return no errors and isValid true for valid inputs', () => {
-      expect(inputValidation(testData.req7).isValid).toEqual(true);
-      expect(inputValidation(testData.req7).errors).toEqual({});
-    });
-  });
-
   describe('Email validation', () => {
     it('should return false if email is invalid', () => {
       expect(validateEmail(testData.req2.email)).toEqual(false);
     });
     it('should return true if email is valid', () => {
       expect(validateEmail(testData.req1.email)).toEqual(true);
-    });
-  });
-
-  describe('Form change handle', () => {
-    const state = {
-      errors: {}
-    };
-    const event = {
-      target: { name: 'isbn', value: 10 }
-    };
-    it('should return filled field value and delete span error', () => {
-      expect(handleFormChange(state, event))
-        .toEqual({ ...state, [event.target.name]: event.target.value });
-    });
-
-    it('should return field value', () => {
-      state.errors.isbn = 'This field is required';
-      expect(handleFormChange(state, event))
-        .toEqual({ [event.target.name]: event.target.value });
     });
   });
 });

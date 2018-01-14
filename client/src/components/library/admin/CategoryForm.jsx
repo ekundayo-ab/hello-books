@@ -45,9 +45,10 @@ export class CategoryForm extends Component {
    * @memberof CategoryForm
    */
   onChange(event) {
-    const categoryState = this.state;
-    const formChanges = Helper.handleFormChange(categoryState, event);
-    this.setState(formChanges);
+    this.setState({
+      ...this.state,
+      [event.target.name]: event.target.value
+    });
   }
 
   /**

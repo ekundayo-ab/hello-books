@@ -56,9 +56,10 @@ export class Profile extends Component {
    * @memberof Profile
    */
   onChange(event) {
-    const categoryState = this.state;
-    const changeResults = Helper.handleFormChange(categoryState, event);
-    this.setState(changeResults);
+    this.setState({
+      ...this.state,
+      [event.target.name]: event.target.value
+    });
   }
 
   /**

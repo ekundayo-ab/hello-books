@@ -48,7 +48,7 @@ const deleteSuccess = bookId =>
  * @returns {object} action
  */
 export const bookUpdated = book =>
-  ({ type: actionTypes.BOOK_UPDATED, newBook: book });
+  ({ type: actionTypes.BOOK_UPDATED, book });
 
 /**
  * Get Single Book

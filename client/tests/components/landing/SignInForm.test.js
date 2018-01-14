@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { SignInForm } from '../../../src/components/landing/SigninForm';
+import { SignInForm } from '../../../src/components/landing/SignInForm';
 
 
 const props = {

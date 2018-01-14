@@ -28,8 +28,8 @@ class Validators {
     if (formState.description.trim() === '') {
       errors.description = 'Can\'t be empty';
     }
-    if (formState.category.toString().trim() === '') {
-      errors.category = 'Can\'t be empty';
+    if (formState.categoryId.toString().trim() === '') {
+      errors.categoryId = 'Can\'t be empty';
     }
     const isValid = Object.keys(errors).length === 0;
     return { isValid, errors };
