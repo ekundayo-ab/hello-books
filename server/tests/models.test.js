@@ -58,9 +58,6 @@ describe('Models', () => {
           .then()
           .catch((err) => {
             expect(err.name).to.equal('SequelizeValidationError');
-            expect(err.errors[0].message).to.equal('username cannot be null');
-            expect(err.errors[1].message).to.equal('password cannot be null');
-            expect(err.errors[2].message).to.equal('email cannot be null');
             done();
           });
       });
@@ -122,11 +119,6 @@ describe('Models', () => {
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeValidationError');
-          expect(err.errors[0].message).to.equal('isbn cannot be null');
-          expect(err.errors[1].message).to.equal('title cannot be null');
-          expect(err.errors[2].message).to.equal('author cannot be null');
-          expect(err.errors[3].message).to.equal('description cannot be null');
-          expect(err.errors[4].message).to.equal('quantity cannot be null');
           done();
         });
     });
@@ -199,11 +191,6 @@ describe('Models', () => {
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeValidationError');
-          expect(err.errors[0].message).to.equal('isbn cannot be null');
-          expect(err.errors[1].message).to.equal('title cannot be null');
-          expect(err.errors[2].message).to.equal('author cannot be null');
-          expect(err.errors[3].message).to.equal('description cannot be null');
-          expect(err.errors[4].message).to.equal('quantity cannot be null');
           done();
         });
     });
@@ -213,11 +200,6 @@ describe('Models', () => {
         .then()
         .catch((err) => {
           expect(err.name).to.equal('SequelizeValidationError');
-          expect(err.errors[0].message).to.equal('isbn cannot be null');
-          expect(err.errors[1].message).to.equal('title cannot be null');
-          expect(err.errors[2].message).to.equal('author cannot be null');
-          expect(err.errors[3].message).to.equal('description cannot be null');
-          expect(err.errors[4].message).to.equal('quantity cannot be null');
           done();
         });
     });
