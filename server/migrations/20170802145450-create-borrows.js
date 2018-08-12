@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
-          model: 'Users',
+          model: 'User',
           key: 'id',
           as: 'userId',
         },
@@ -28,7 +28,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
-          model: 'Books',
+          model: 'Book',
           key: 'id',
           as: 'bookId',
         },
@@ -66,4 +66,3 @@ module.exports = {
     queryInterface.dropTable('Borrows');
   },
 };
-

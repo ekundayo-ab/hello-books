@@ -1,6 +1,6 @@
 import supertest from 'supertest';
 import chai from 'chai';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import app from '../../app';
 import model from '../models';
 import HelperBeforeHooks from './../helpers/HelperBeforeHooks';
