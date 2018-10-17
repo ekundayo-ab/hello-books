@@ -143,7 +143,7 @@ This project is authored by **Ekundayo Abiona** (ekundayo.abiona@andela.com) and
 [author]: ekundayo-ab
 
 ### FAQs
-For more details contact ekprogs@gmail.com
+For more details contact ekundayoabiona@gmail.com
 
 ### Support or New Features
 Having new features you feel I can add to HelloBooks? Kindly contact as above, I'll look into it. Thanks.
