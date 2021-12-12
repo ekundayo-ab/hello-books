@@ -147,3 +147,6 @@ For more details contact ekundayoabiona@gmail.com
 
 ### Support or New Features
 Having new features you feel I can add to HelloBooks? Kindly contact as above, I'll look into it. Thanks.
+
+### New Features
+- Register User added
